@@ -12,17 +12,20 @@ export async function StoryTitle(params: StoryTitleParams){
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
     const query = gql`
-        query {
-            story(id:"${params.storyId}"){
+        query($storyId: UUID){
+            story(id:$storyId){
                 name
             }
         }
     `;
+    const variables = {
+        storyId: params.storyId
+    };
 
     const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
-    const response = await websitesApiClient.query(query);
+    const response = await websitesApiClient.query(query, variables);
 
     const title = _.get(response, 'data.story.name');
-    return <h1>${title}</h1>;
+    return <h1>{title}</h1>;
 }
 

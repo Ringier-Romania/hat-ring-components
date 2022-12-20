@@ -23,29 +23,34 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StoryTitle = void 0;
+exports.StoryMainImage = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
-async function StoryTitle(params) {
+async function StoryMainImage(params) {
     const accessKey = process.env.WEBSITE_API_PUBLIC;
     const secretKey = process.env.WEBSITE_API_SECRET;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
     const query = (0, graphql_tag_1.gql) `
-        query($storyId: UUID){
+        query($storyId: UUID, $imageWidth:Int!, $imageHeight:Int!){
             story(id:$storyId){
-                name
+                image{
+                    url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}})
+                }
             }
         }
     `;
     const variables = {
-        storyId: params.storyId
+        storyId: params.storyId,
+        imageWidth: params.width,
+        imageHeight: params.height,
     };
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);
-    const title = _.get(response, 'data.story.name');
-    return (0, jsx_runtime_1.jsx)("h1", { children: title });
+    console.log(response);
+    const imgSrc = _.get(response, 'data.story.image.url');
+    return (0, jsx_runtime_1.jsx)("img", { src: imgSrc });
 }
-exports.StoryTitle = StoryTitle;
-//# sourceMappingURL=StoryTitle.js.map
+exports.StoryMainImage = StoryMainImage;
+//# sourceMappingURL=StoryMainImage.js.map
