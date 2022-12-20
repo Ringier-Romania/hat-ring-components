@@ -3,14 +3,17 @@ import * as _ from 'lodash';
 import {WebsitesApiClient} from '@ringpublishing/graphql-api-client';
 import {gql} from 'graphql-tag';
 
-export async function StoryTitle() {
+export type StoryTitleParams = {
+    storyId: string,
+}
+export async function StoryTitle(params: StoryTitleParams){
     const accessKey = process.env.WEBSITE_API_PUBLIC!;
     const secretKey = process.env.WEBSITE_API_SECRET!;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
     const query = gql`
         query {
-            story(id:"a491092e-52bd-4114-8a41-1fc74e5b2157"){
+            story(id:"${params.storyId}"){
                 name
             }
         }

@@ -28,13 +28,13 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
-async function StoryTitle() {
+async function StoryTitle(params) {
     const accessKey = process.env.WEBSITE_API_PUBLIC;
     const secretKey = process.env.WEBSITE_API_SECRET;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
     const query = (0, graphql_tag_1.gql) `
         query {
-            story(id:"a491092e-52bd-4114-8a41-1fc74e5b2157"){
+            story(id:"${params.storyId}"){
                 name
             }
         }
