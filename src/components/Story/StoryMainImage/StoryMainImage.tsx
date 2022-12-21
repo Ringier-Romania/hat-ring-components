@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import {WebsitesApiClient} from '@ringpublishing/graphql-api-client';
 import {gql} from 'graphql-tag';
 import {ComponentParams} from "../../../types/types";
-import {StoryMainImageDesc} from "./StoryMainImageDesc";
+import {StoryMainImageCaption} from "./StoryMainImageCaption";
 
 
 export interface StoryMainImageParams extends ComponentParams {
@@ -22,7 +22,8 @@ export async function StoryMainImage(params: StoryMainImageParams) {
         query($storyId: UUID, $imageWidth:Int!, $imageHeight:Int!){
             story(id:$storyId){
                 image{
-                    url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}})
+                    url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}}),
+                    caption
                 }
             }
         }
@@ -38,10 +39,11 @@ export async function StoryMainImage(params: StoryMainImageParams) {
 
 
     const imgSrc = _.get(response, 'data.story.image.url');
+    const caption = _.get(response, 'data.story.image.caption');
+
     return <>
         <img src={imgSrc}/>
-        {/* @ts-expect-error Server Component */}
-        <StoryMainImageDesc {...params}/>
+        <StoryMainImageCaption {...params } caption={caption}/>
     </>;
 }
 
