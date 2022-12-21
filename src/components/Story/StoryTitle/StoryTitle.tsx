@@ -2,11 +2,13 @@ import React from 'react';
 import * as _ from 'lodash';
 import {WebsitesApiClient} from '@ringpublishing/graphql-api-client';
 import {gql} from 'graphql-tag';
+import {ComponentParams} from "../../../types/types";
 
-export type StoryTitleParams = {
-    storyId: string,
+export interface StoryTitleParams extends ComponentParams {
+    config: {}
 }
-export async function StoryTitle(params: StoryTitleParams){
+
+export async function StoryTitle(params: StoryTitleParams) {
     const accessKey = process.env.WEBSITE_API_PUBLIC!;
     const secretKey = process.env.WEBSITE_API_SECRET!;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
@@ -19,7 +21,7 @@ export async function StoryTitle(params: StoryTitleParams){
         }
     `;
     const variables = {
-        storyId: params.storyId
+        storyId: params.context.id
     };
 
     const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});

@@ -2,11 +2,14 @@ import React from 'react';
 import * as _ from 'lodash';
 import {WebsitesApiClient} from '@ringpublishing/graphql-api-client';
 import {gql} from 'graphql-tag';
+import {ComponentParams} from "../../../types/types";
 
-export type StoryMainImageParams = {
-    storyId: string,
-    width: number,
-    height: number,
+
+export interface StoryMainImageParams extends ComponentParams{
+    config: {
+        width: number,
+        height: number,
+    }
 }
 export async function StoryMainImage(params: StoryMainImageParams){
     const accessKey = process.env.WEBSITE_API_PUBLIC!;
@@ -23,15 +26,14 @@ export async function StoryMainImage(params: StoryMainImageParams){
         }
     `;
     const variables = {
-        storyId: params.storyId,
-        imageWidth: params.width,
-        imageHeight: params.height,
+        storyId: params.context.id,
+        imageWidth: params.config.width,
+        imageHeight: params.config.height,
     };
 
     const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
     const response = await websitesApiClient.query(query,variables);
 
-    console.log(response);
     const imgSrc = _.get(response, 'data.story.image.url');
     return <img src={imgSrc} />;
 }

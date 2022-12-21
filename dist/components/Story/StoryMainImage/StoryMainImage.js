@@ -42,14 +42,14 @@ async function StoryMainImage(params) {
         }
     `;
     const variables = {
-        storyId: params.storyId,
-        imageWidth: params.width,
-        imageHeight: params.height,
+        storyId: params.context.id,
+        imageWidth: params.config.width,
+        imageHeight: params.config.height,
     };
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);
-    const title = _.get(response, 'data.story.name');
-    return (0, jsx_runtime_1.jsx)("h1", { children: title });
+    const imgSrc = _.get(response, 'data.story.image.url');
+    return (0, jsx_runtime_1.jsx)("img", { src: imgSrc });
 }
 exports.StoryMainImage = StoryMainImage;
-//# sourceMappingURL=StoryTitle.js.map
+//# sourceMappingURL=StoryMainImage.js.map
