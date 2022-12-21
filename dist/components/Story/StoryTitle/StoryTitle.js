@@ -44,6 +44,7 @@ async function StoryTitle(params) {
     };
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);
+    console.log(params.context.customData);
     const title = _.get(response, 'data.story.name');
     return (0, jsx_runtime_1.jsx)("h1", { children: title });
 }

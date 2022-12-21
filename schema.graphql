@@ -1,0 +1,3184 @@
+# Represents the entire archive of objects published on the site, divided into years, months and days
+type Archive {
+  # List of years for which content is available in the service
+  years: [ArchiveYear!]!
+}
+
+# Represents a fragment of the archive of objects published on the site, limited to one day
+type ArchiveDay {
+  # Count (for specific year, month, and day) of available published objects
+  count: Int!
+
+  # Day
+  day: Int!
+}
+
+# Represents a fragment of the archive of objects published on the site, limited to one month
+type ArchiveMonth {
+  # List of days (of the specific year and month) for which content is available in the service
+  days: [ArchiveDay!]!
+
+  # Month, its consecutive number
+  month: Int!
+}
+
+# Represents a fragment of the archive of objects published on the site, limited to one year
+type ArchiveYear {
+  # List of months (of the specific year) for which content is available in the service
+  months: [ArchiveMonth!]!
+
+  # Year
+  year: Int!
+}
+
+# Author is an object describing content creator
+type Author {
+  # Description of the Author
+  description: ContentDescription
+
+  # List of extensions
+  extensions(
+    # Allows to filter extensions by extension type
+    type: String
+  ): [Extension!]!
+
+  # Identifier of an Author object
+  id: UUID!
+
+  # Main image
+  image: MainImageReference
+
+  # List of images of the Author, based on roles of images
+  images(
+    # Role of the image
+    role: String
+  ): [MainImageReference!]! @deprecated(reason: "Use `image`.")
+
+  # Author name
+  name: String!
+
+  # Current publication point of the Author
+  publicationPoint: PublicationPoint
+
+  # All publication points of the Author
+  publicationPoints: [PublicationPoint!]!
+
+  # List of social profiles
+  socialProfiles(
+    # Allows to filter social profiles by role
+    role: String
+  ): [AuthorSocialProfile!]!
+
+  # System information of the Author
+  system: SystemData!
+
+  # Author punchline or motto
+  tagline: String
+
+  # Author topics
+  topics(
+    # Allows to filter topics by kind
+    kind: String
+  ): [AuthorTopicReference!]!
+}
+
+# Represents a single reference to an Author, when using cursor-based pagination.
+# Read more about https://graphql.org/learn/pagination/
+type AuthorEdge {
+  # Pointer used for cursor-based pagination
+  cursor: ContentCursor
+
+  # Details of the Author
+  node: Author!
+}
+
+# Represents options which allows to filter Authors
+input AuthorFilterInput {
+  # Filter based on creation time range
+  creationTime: DateTimeFilterInput
+
+  # Filter based on IDs
+  id: UuidFilterInput
+
+  # Filter based on markers
+  marker: MarkerFilterInput
+
+  # Filter based on title comparison
+  name: ExpressionFilterInput
+}
+
+# Represents results of searching Authors, including pagination
+type AuthorSearchResult {
+  # List of Authors, which were found
+  edges: [AuthorEdge!]!
+
+  # Information about actual page of the results
+  pageInfo: PageInfo
+
+  # Total number of results, which were found
+  total: Int
+}
+
+# Describes social profiles of an Author
+type AuthorSocialProfile {
+  # Kind of social profile, like, emal, facebook, twitter, etc...
+  role: Term!
+
+  # Url to social profile of an Author
+  url: URL!
+}
+
+# Represents sorting options used when requesting for a list of Authors
+input AuthorSortByInput {
+  # Field which is used for sorting a list of Authors
+  field: SimpleTypeSortFieldsEnum!
+
+  # Type of order which is used for sorting a list of Authors
+  order: SimpleSortOrderEnum = ASC
+}
+
+# Describes Author Topic
+type AuthorTopicReference {
+  topic: Topic!
+}
+
+# Represents the data of service settings for authors, used to create or update them
+input AuthorsSettingsInput {
+  # URL prefix for author items
+  path: String
+}
+
+scalar BigInt
+
+# Represents a single item of breadcrumbs for a specific node of the service (website)
+type Breadcrumb {
+  # Name of the item in breadcrumbs
+  name: String!
+
+  # Slugified name of the item in breadcrumbs
+  slug: String
+
+  # URL of the breadcrumbs item
+  # [available only if "routing" feature enabled]
+  url: URL
+}
+
+# Represents a reference to a category, used to connect the category with a node
+type CategoryReference {
+  # Information about the category
+  data: Topic
+
+  # ID of the category
+  id: UUID!
+}
+
+# Represents list of changes made in the configuration of the site variants
+type ChangeLog {
+  # Returns date of the change in variant's configuration, based on time zone and format
+  creationTime(
+    # Format of the date which will be returned (by default set as ISO 8601)
+    # Read more about [POSIX date conversion specifiers](https://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html)
+    format: String
+
+    # Time zone, valid IANA time zone database entry or 'UTC'
+    tz: String = "UTC"
+  ): DateTime!
+
+  # Configuration of the variant
+  data: JSONObject
+
+  # Change mode
+  mode: ChangeLogModeEnum
+
+  # Name of the module for which configuration was changed
+  moduleName: String!
+
+  # Node from the structure of the service for which the configuration was changed
+  node: Node!
+
+  # User who made the change in configuration of a module
+  user: RingUser
+}
+
+# Represents a mode in which the change in configuration of the variant was introduced
+enum ChangeLogModeEnum {
+  # Change introduced using API
+  API
+
+  # Change introduced using Websites Manager
+  PANEL
+}
+
+# Represents the data of variant, used to clone variant from another one
+input CloneVariantInput {
+  # Alias of the configuration template that is to be used to parameterize variant configuration
+  configurationTemplateAlias: String
+
+  # Version of the configuration template that is to be used to parameterize variant configuration
+  configurationTemplateVersion: String
+
+  # Name of the variant
+  name: String!
+
+  # Reference to variant from which to clone data
+  sourceVariantID: ID!
+}
+
+# Collection is an object aggregating other objects into a list (collection of recommendations)
+type Collection {
+  # Collection identifier
+  id: UUID!
+
+  # Name of Collection
+  name: String!
+
+  # List of Recommendations
+  recommendations: [CollectionRecommendationReference!]!
+}
+
+# Reference to Recommendation
+type CollectionRecommendationReference {
+  # Referenced recommendation
+  recommendation: Recommendation!
+}
+
+# Represents a structure for organizing the parameters used to parameterize service Variant.
+type ConfigurationTemplate {
+  # Aliases which have been created for specific versions of the configuration template
+  aliases: [ConfigurationTemplateAlias]!
+
+  # Name of the configuration template
+  name: String!
+
+  # Versions of the configuration template, based on array of IDs to retrieve
+  versions(
+    # IDs of the versions
+    ids: [ID!]
+  ): [ConfigurationTemplateVersion]!
+}
+
+# Represents a pointer to a specific version of configuration template
+type ConfigurationTemplateAlias {
+  # Version of the configuration template pointed by this alias
+  configurationTemplateVersion: ConfigurationTemplateVersion!
+
+  # Name of the alias
+  name: String!
+
+  # List of website variants which were created using this alias of configuration template
+  variants: [Variant]!
+}
+
+# Represents the result of mutations that create new or updates configuration template alias,
+# returns whether is was done correctly and the data of configuration template alias
+type ConfigurationTemplateAliasMutationResult implements SimpleResult {
+  # Identifier of affected variant
+  affectedId: ID
+
+  # Reference to affected objects
+  data: ConfigurationTemplateAlias
+
+  # Errors, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Mutation's result status
+  status: SimpleResultStatusEnum!
+}
+
+# Represents a specific version of the configuration template
+type ConfigurationTemplateVersion {
+  # Reference to configuration template
+  configurationTemplateReference: ConfigurationTemplate!
+
+  # ID of the version
+  id: ID!
+
+  # Structure of the version, containing parameters, definitions and default values
+  structure: JSONObject!
+
+  # List of website variants which were created using this version of configuration template
+  variants: [Variant]!
+}
+
+# Represents the result of mutation that creates new configuration template version,
+# returns whether is was done correctly and the data of configuration template version
+type ConfigurationTemplateVersionMutationResult implements SimpleResult {
+  # Identifier of affected configuration template version
+  affectedId: ID
+
+  # Reference to affected configuration template version
+  data: ConfigurationTemplateVersion
+
+  # Errors, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Mutation's result status
+  status: SimpleResultStatusEnum!
+}
+
+# Content representation, can contain various content, described by role field
+#
+# Roles:
+#
+# - \"main\" - content is an article, blocks can contain all possible ContentBlock implementations
+# - \"gallery\" - content is a gallery, blocks can contain only Images and Embeds
+type Content {
+  # Content blocks
+  blocks: [ContentBlock!]!
+
+  # Role of the Content
+  role: Term!
+}
+
+# Interface of content blocks, contains only *type* field containing name of kind of cotent block.
+#
+# Text inside blocks can be styled using HTML markups, following HTML tags are allowed:
+#
+# | Tag               | Description                                      |
+# |-------------------|--------------------------------------------------|
+# | ``a``             | link, accepts attributes: ``title``, ``data-*``  |
+# | ``b``, ``strong`` | bold font                                        |
+# | ``em``            | italic font                                      |
+# | ``br``            | new line                                         |
+# | ``del``, ``s``    | strike trough line                               |
+# | ``mark``          | marked text                                      |
+# | ``sub``, ``sup``  | subscript and superscript                        |
+# | ``q``, ``code``   | quotation and code markup                        |
+# | ``u``             | some text that should be stylistically different |
+interface ContentBlock {
+  # block type value depends on interface implementation
+  type: String!
+}
+
+# Represents a pointer to a specific item on the list of results, used for cursor-based pagination.
+# Read more about https://graphql.org/learn/pagination/
+scalar ContentCursor
+
+# Describes content associated with given Websites.
+#
+# Descriptions are related with publication services via \"website\" field.
+# There can exists also default description without specified publication services,
+# that will be used as a fallback for missing description per website.
+type ContentDescription {
+  # Content
+  content(
+    # Filter contents by role, allow to retrieve content of specific role only,
+    # please read documentation of Content type to learn more
+    role: String
+  ): [Content!]!
+
+  # Main image of description
+  image: MainImageReference @deprecated(reason: "Use `images`.")
+
+  # Description images
+  images(
+    # Allows to filter images by role
+    role: String
+  ): [ImageReference!]!
+}
+
+# Represents a single reference to a Content, when using cursor-based pagination.
+# Read more about https://graphql.org/learn/pagination/
+type ContentEdge {
+  # Pointer used for cursor-based pagination
+  cursor: ContentCursor
+
+  # Details of the content
+  node: PublishedContent!
+}
+
+# Content element alignment
+enum ContentElementAlignmentEnum {
+  CENTER
+  LEFT
+  RIGHT
+}
+
+# Represents options for filtering any type of content
+input ContentFilterInput {
+  # Filter by creation time range
+  creationTime: DateTimeFilterInput
+
+  # Filter by IDs
+  id: UuidFilterInput
+
+  # Filter by markers
+  marker: MarkerFilterInput
+
+  # Filter by the types of the content
+  type: ContentTypeFilterInput
+}
+
+# Represents results of searching content, including pagination
+type ContentSearchResult {
+  # List of content, which were found
+  edges: [ContentEdge!]!
+
+  # Information about actual page of the results
+  pageInfo: PageInfo
+
+  # Total number of results, which were found
+  total: Int
+}
+
+# Represents sorting options used when requesting for a list of content
+input ContentSortByInput {
+  # Field which is used for sorting a list of content
+  field: ContentSortFieldsEnum!
+
+  # Type of order which is used for sorting a list of content
+  order: SimpleSortOrderEnum = ASC
+}
+
+# Represents fields available when sorting a list of content
+enum ContentSortFieldsEnum {
+  # Sorting using a creation time of the content
+  CREATION_TIME
+
+  # Sorting using an identifier of the content
+  ID
+}
+
+# Represents a list of available types of published content
+enum ContentTypeEnum {
+  AUTHOR
+  SOURCE
+  STORY
+  TOPIC
+}
+
+# Represents options which allows to filter results based on the types of the content
+input ContentTypeFilterInput {
+  # List of types which allow to define **include** condition, when filtering the results
+  in: [ContentTypeEnum!]
+
+  # List of types which allow to define **exclude** condition, when filtering the results
+  notIn: [ContentTypeEnum!]
+}
+
+# Represents the data of configuration template alias, used to create configuration template alias
+input CreateConfigurationTemplateAliasInput {
+  # Name of the configuration template, to which specific version the alias is to be created
+  configurationTemplateName: String!
+
+  # Version of configuration template that is to be aliased by the new alias
+  configurationTemplateVersion: String!
+
+  # Name of the configuration template alias
+  name: String!
+}
+
+# Represents the data of configuration template version, used to create configuration template version
+input CreateConfigurationTemplateVersionInput {
+  # Name of the configuration template
+  configurationTemplateName: String!
+
+  # Id of the configuration template version
+  id: ID!
+
+  # Structure of the configuration template vesrion
+  structure: JSONObject!
+}
+
+# Represents the input data for the create custom action mutation
+input CreateCustomActionInput {
+  # Handler action of the custom action
+  action: String!
+
+  # Priority of the custom action, used in case of more than one custom action matching to url
+  priority: Int = 1
+
+  # Regexp of the custom action, used to check if urls are matching to custom action
+  regexp: String!
+}
+
+# Represents the data of node, used to create node
+input CreateNodeInput {
+  # Additional properties of the node
+  additionalProperties: NodeAdditionalPropertiesInput
+
+  # Id of the category to be connected with the node
+  categoryId: UUID!
+
+  # Name of the node
+  name: String!
+
+  # Id of parent of the node
+  parentId: ID!
+}
+
+# Represents the data of variant, used to create variant
+input CreateVariantInput {
+  # Alias of the configuration template that is to be used to parameterize variant configuration
+  configurationTemplateAlias: String
+
+  # Name of the configuration template that is to be used to parameterize variant configuration
+  configurationTemplateName: String
+
+  # Version of the configuration template that is to be used to parameterize variant configuration
+  configurationTemplateVersion: String
+
+  # Name of the variant
+  name: String!
+}
+
+# Represents an action which can be proceed for a given URL patterns
+# [available only if "routing" feature enabled]
+type CustomAction {
+  # Handler of the custom action
+  action: String!
+
+  # ID of the custom action
+  id: UUID!
+
+  # Priority of the custom action, used in case of more than one custom action matching URLs
+  priority: Int
+
+  # Regular Expression used to define URLs on which the custom action will be proceed
+  regexp: String!
+}
+
+# Represents the result of create and update mutations on custom actions, returns
+# whether is was done correctly and data of the custom action
+type CustomActionMutationResult implements SimpleResult {
+  # Identifier of the affected variant
+  affectedId: ID!
+
+  # Reference to affected objects of the mutation
+  data: CustomAction
+
+  # Errors of the mutation, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Status of the mutation
+  status: SimpleResultStatusEnum!
+}
+
+# ISO 8601 date-time scalar type.
+#
+# Input accepts ISO8601 date-time sting i.e: ``2020-01-01T01:00:00Z``
+#
+# Output by default return date-time value in ISO8601 format, but output format
+# can be changed using POSTX date conversion specifiers provided in argument
+# ``format`` on field, i.e: ``dateTimeField(format: "%Y-%m-%d %H:%M:%S")``.
+# Output value is returned in ``UTC`` timezone by default but this can  be changed
+# using ``tz`` argument on field. This argument accepts timezone in IANA timezone
+# format, i.e: ``dateTimeField(tz: "Europe/Warsaw")``
+scalar DateTime
+
+# Date time filter, allow to filter by time.
+#
+# Example use:
+#
+# Before specific date:
+# {
+#     lt: "1970-01-01T00:00:00Z"
+# }
+#
+# After specific date:
+# {
+#     gt: "1970-01-01T00:00:00Z"
+# }
+input DateTimeFilterInput {
+  # Greather than
+  gt: DateTime
+
+  # Less than
+  lt: DateTime
+}
+
+# Represents the result of mutation that deletes configuration template alias,
+# returns whether is was done correctly
+type DeleteConfigurationTemplateAliasResult implements SimpleResult {
+  # Identifier of affected variant
+  affectedId: ID
+
+  # Errors, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Mutation's result status
+  status: SimpleResultStatusEnum!
+}
+
+# Represents the result of mutation that deletes configuration template version,
+# returns whether is was done correctly
+type DeleteConfigurationTemplateVersionResult implements SimpleResult {
+  # Identifier of affected variant
+  affectedId: ID
+
+  # Errors, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Mutation's result status
+  status: SimpleResultStatusEnum!
+}
+
+# Represents the result of delete mutations on custom actions, returns whether is was done correctly
+type DeleteCustomActionResult implements SimpleResult {
+  # Identifier of the affected variant
+  affectedId: ID!
+
+  # Errors of the mutation, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Status of the mutation
+  status: SimpleResultStatusEnum!
+}
+
+# Represents the result of mutation that deletes node, returns whether is was done correctly
+type DeleteNodeResult implements SimpleResultUUID {
+  # Identifier of affected node
+  affectedId: UUID!
+
+  # Errors, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Mutation's result status
+  status: SimpleResultStatusEnum!
+}
+
+# Represents the result of mutation that deletes variant, returns whether is was done correctly
+type DeleteVariantResult implements SimpleResult {
+  # Identifier of affected variant
+  affectedId: ID!
+
+  # Errors, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Mutation's result status
+  status: SimpleResultStatusEnum!
+}
+
+# Fully Qualified Domain Name. Its format is described in section 2.3.1 of [RFC
+# 1035](https://tools.ietf.org/html/rfc1035#section-2.3.1)
+scalar Domain
+
+# Embed is an object describing an embedded content like YouTube videos or Facebook posts
+type Embed {
+  # Embed HTML code to use in service
+  html: String!
+
+  # Embed identifier
+  id: ID!
+
+  # Image, it can be either embed provider logo or movie screen shoot, depends on source
+  image: MainImageReference
+
+  # Kind of an embed object, ex. youtube, facebook, pulsevideo
+  kind: Term!
+
+  # Embed parameters
+  params: JSONObject
+
+  # Embed title
+  title: String!
+
+  # Embed object source URL
+  url: URL!
+}
+
+# Embedded object block
+type EmbedBlock implements ContentBlock {
+  # Element alignment
+  alignment: ContentElementAlignmentEnum!
+
+  # Embed object reference
+  embed: Embed
+
+  # Embed title
+  title: String
+
+  # Type, constant value: ``embed``
+  type: String!
+}
+
+# Represents one of emotions describing the story
+type Emotion {
+  # Code name of the emotion
+  code: String!
+
+  # Counter's value of the emotion
+  value: Float!
+}
+
+# Represents dates of an event
+type EventDates {
+  # End date of the event
+  endTime(format: String, tz: String = "UTC"): DateTime
+
+  # Start date of the event, based on time zone and format
+  startTime(format: String, tz: String = "UTC"): DateTime
+}
+
+# Represents options which allows to filter results based on expresions using string values
+input ExpressionFilterInput {
+  # Value which allows to define a **match exactly** condition, when filtering the results
+  eq: String
+
+  # Value which allows to define a **starts any part of word with** condition, when filtering the results
+  startsAnyWordWith: String
+
+  # Value which allows to define a **starts with** condition, when filtering the results
+  startsWith: String
+}
+
+# User defined additional data
+type Extension {
+  # JSON Serialized data
+  data: JSONObject!
+
+  # Type of extension
+  type: String!
+}
+
+# Group block, allows for Content Blocks grouping
+type GroupBlock implements ContentBlock {
+  # Element alignment
+  alignment: ContentElementAlignmentEnum!
+
+  # Group name
+  name: String!
+
+  # Type, constant values ``groupStart`` and ``groupEnd``, represents start and
+  # end of the group created by blocks between them.
+  type: String!
+}
+
+enum HasPermissionsDirectivePolicy {
+  # Field resolver is responsible to evaluate it using `missingPermissions` injected argument
+  RESOLVER
+
+  # Field resolver is not called if permissions are missing, it throws `ForbiddenError`
+  THROW
+}
+
+# Represents headers which will be returned for a recognized URL
+# [available only if "routing" feature enabled]
+type Headers {
+  # Location header of the headers
+  location: URL
+}
+
+# Block representing Header, HTML <h/> tag
+type HeadingBlock implements ContentBlock {
+  # Heading level, default value is 1
+  level: Int
+
+  # Heading text
+  text: String!
+
+  # Type, constant value: ``heading``
+  type: String!
+}
+
+# Image is an object describing images
+type Image {
+  # List of Authors
+  authors: [ImageAuthorReference!]!
+
+  # Image related dates
+  date: ImageDates
+
+  # Image description
+  description: String
+
+  # Image related flags
+  flags: [Term!]!
+
+  # Image height
+  height: Int!
+
+  # Image identifier
+  id: UUID!
+
+  # Describes licensing data
+  license: ImageLicenseReference!
+
+  # Alias of "title" field
+  name: String!
+
+  # Image size in bytes
+  size: Int!
+
+  # List of Sources
+  sources: [ImageSourceReference!]!
+
+  # Image title
+  title: String!
+
+  # List of Topics related with an Image
+  topics(
+    # Allows to filter topics by kind
+    kind: String
+  ): [ImageTopicReference!]!
+
+  # Original image URL
+  url(transforms: [ImageTransformInput!]): ImageURL
+
+  # Image width
+  width: Int!
+}
+
+# Describes Image Author
+type ImageAuthorReference {
+  author: Author!
+}
+
+# Image block
+type ImageBlock implements ContentBlock {
+  # Element alignment
+  alignment: ContentElementAlignmentEnum!
+
+  # Image text alternative
+  alt: String
+
+  # Image cropping
+  crop: ImageCrop
+
+  # Image object reference
+  image: Image!
+
+  # External link to the image target.
+  link: LinkObject
+
+  # Image roles
+  roles: [String!]!
+
+  # Image caption
+  title: String
+
+  # Type, constant value: ``image``
+  type: String!
+
+  # Url of cropped image
+  url(transforms: [ImageTransformInput!]): ImageURL!
+}
+
+# Describes how the image should be cropped
+type ImageCrop {
+  # Crop height
+  height: Int
+
+  # Crop width
+  width: Int
+
+  # Crop start x position
+  x: Int
+
+  # Crop start y position
+  y: Int
+}
+
+# Describes dates related with an image
+type ImageDates {
+  # Image expiration date, after this date image should not be displayed
+  expirationTime(
+    # Result format, default format is ISO 8601, can be changed using [POSIX date conversion specifiers](https://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html)
+    format: String
+
+    # Time zone, valid IANA time zone database entry or 'UTC'
+    tz: String = "UTC"
+  ): DateTime
+}
+
+# Licensing data of an Image
+type ImageLicenseReference {
+  # License object reference
+  license: License!
+
+  # License copyright note
+  note: String
+}
+
+# Image reference, contains informations like caption, role, cropping, URL to
+# cropped image and reference to original Image object.
+type ImageReference {
+  # Image caption
+  caption: String
+
+  # Image cropping definition
+  crop: ImageCrop
+
+  # Reference to original image
+  image: Image!
+
+  # Role of the image
+  role: Term
+
+  # Url of cropped image
+  url(transforms: [ImageTransformInput!]): ImageURL!
+}
+
+# Describes Image Source
+type ImageSourceReference {
+  source: Source!
+}
+
+# Describes Image Topic
+type ImageTopicReference {
+  topic: Topic!
+}
+
+# Preserve animation in gifs
+input ImageTransformAnimationInput {
+  enabled: Boolean!
+}
+
+# Adjusts the image orientation so that it's suitable for viewing (uses the orientation tag obtained from the image file)
+input ImageTransformAutoOrientationInput {
+  enabled: Boolean!
+}
+
+# Add a background with alpha channel
+input ImageTransformBackgroundInput {
+  alpha: Int!
+  blue: Int!
+  green: Int!
+  red: Int!
+}
+
+# Blur image using Gaussian operator
+input ImageTransformBlurInput {
+  # Blur strength
+  strength: Int!
+}
+
+# Crop image
+input ImageTransformCropInput {
+  # Height of the cropped area
+  height: Int!
+
+  # Width of the cropped area
+  width: Int!
+
+  # X offset for starting point
+  x: Int!
+
+  # Y offset for starting point
+  y: Int!
+}
+
+enum ImageTransformFormatEnum {
+  BMP
+  JPEG
+  ORIGINAL
+  PNG
+  TIFF
+  WEBP
+}
+
+# Change image format
+input ImageTransformFormatInput {
+  format: ImageTransformFormatEnum!
+}
+
+# Converts image to grayscale
+input ImageTransformGrayscaleInput {
+  enabled: Boolean!
+}
+
+input ImageTransformInput {
+  animation: ImageTransformAnimationInput
+  autoOrientation: ImageTransformAutoOrientationInput
+  background: ImageTransformBackgroundInput
+  blur: ImageTransformBlurInput
+  crop: ImageTransformCropInput
+  format: ImageTransformFormatInput
+  grayscale: ImageTransformGrayscaleInput
+  name: ImageTransformNameInput
+  overlay: ImageTransformOverlayInput
+  quality: ImageTransformQualityInput
+  resize: ImageTransformResizeInput
+  resizeCropAuto: ImageTransformResizeCropAutoInput
+  rotate: ImageTransformRotateInput
+}
+
+# Add SEO friendly name to image
+input ImageTransformNameInput {
+  name: String!
+}
+
+# Combine two images using chosen overlay methods
+input ImageTransformOverlayInput {
+  # How the images should be combined
+  mode: ImageTransformOverlayModeEnum!
+
+  # Anchor point of image to combine with
+  position: ImageTransformOverlayPositionEnum!
+
+  # Swap the images so that combined image becomes the basic
+  reverse: Boolean!
+
+  # Path of the image to be combined
+  url: URL!
+}
+
+enum ImageTransformOverlayModeEnum {
+  ADD
+  ATOP
+  BUMPMAP
+  COPY
+  COPY_BLACK
+  COPY_BLUE
+  COPY_CYAN
+  COPY_GREEN
+  COPY_MAGENTA
+  COPY_OPACITY
+  COPY_RED
+  COPY_YELLOW
+  DIFFERENCE
+  DIVIDE
+  IN
+  MINUS
+  MULTIPLY
+  OUT
+  OVER
+  PLUS
+  SUBSTRACT
+  XOR
+}
+
+enum ImageTransformOverlayPositionEnum {
+  BOTTOM_CENTER
+  BOTTOM_LEFT
+  BOTTOM_RIGHT
+  CENTER_CENTER
+  CENTER_LEFT
+  CENTER_RIGHT
+  TOP_CENTER
+  TOP_LEFT
+  TOP_RIGHT
+}
+
+enum ImageTransformQualityEnum {
+  HIGH
+  LOW
+  MEDIUM
+  VERY_HIGH
+}
+
+# Set the quality of an image (applies to jpg files only)
+input ImageTransformQualityInput {
+  quality: ImageTransformQualityEnum!
+}
+
+# Automatically crop and resize image to the biggest covering area possible
+input ImageTransformResizeCropAutoInput {
+  # Height of the designated image
+  height: Int!
+
+  # Width of the designated image
+  width: Int!
+}
+
+# Change the size of an image without clipping
+input ImageTransformResizeInput {
+  # Height of the image (if not given, it will be calculated to preserve the aspect ratio)
+  height: Int!
+
+  # Allow scaling down the image, i.e. if both dimensions are smaller than the original’s. don’t resize it
+  scaleDown: Boolean!
+
+  # Allow scaling up the image, i.e. if both dimensions are bigger than the original’s, don’t resize it
+  scaleUp: Boolean!
+
+  # Width of the image (if not given, it will be calculated to preserve the aspect ratio)
+  width: Int!
+}
+
+enum ImageTransformRotateAngleEnum {
+  ROTATE_90
+  ROTATE_180
+  ROTATE_270
+}
+
+# Rotate image clockwise
+input ImageTransformRotateInput {
+  # Rotation angle
+  angle: ImageTransformRotateAngleEnum!
+}
+
+# Universal Resource Locator, formalized information for location and access of resources via the Internet.
+# *ImageURL* supports Common Internet Scheme Syntax described in section 3.1 of
+# [RFC 1738](https://tools.ietf.org/html/rfc1738#section-3.1)
+# *ImageURL* fields accept following arguments:
+#
+# - *transforms* - list of image transforms which will be applied on source image
+scalar ImageURL
+
+# The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+scalar JSONObject
+
+# Legacy block, representing no longer supported type of content
+type LegacyBlock implements ContentBlock {
+  # Block data, JSON object
+  data: JSONObject
+
+  # Type, constant value: ``legacy``
+  type: String!
+}
+
+enum LengthValidateDirectivePolicy {
+  # Field resolver is responsible to evaluate it using `validationErrors` injected in GraphQLResolverInfo
+  RESOLVER
+
+  # Field resolver is not called if occurs a validation error, it throws `UserInputError`
+  THROW
+}
+
+# License is an object describing a license
+type License {
+  # License identifier
+  id: UUID!
+
+  # Name of a license
+  name: String!
+}
+
+# Data of the external link
+type LinkObject {
+  url: URL!
+}
+
+# List styles
+enum ListStyleEnum {
+  # Circle style of unordered list, equivatent of ``style="list-style-type: circle;"``
+  CIRCLE
+
+  # Disk style of unordered list, equivatent of ``style="list-style-type: disk;"``
+  DISK
+
+  # Lowercase letters list style, equivatent of ``style="list-style-type: lower-alpha;"``
+  LOWERCASE_LETTERS
+
+  # Lowercase roman letters list style, equivatent of ``style="list-style-type: lower-roman;"``
+  LOWERCASE_ROMAN
+
+  # No marker for list, equivatent of ``style="list-style-type: none;"``
+  NONE
+
+  # Numbered list, equivatent of ``style="list-style-type: circle;"``
+  NUMBERS
+
+  # Square style of unordered list, equivatent of ``style="list-style-type: square;"``
+  SQUARE
+
+  # Uppercase letters list style, equivatent of ``style="list-style-type: upper-alpha;"``
+  UPPERCASE_LETTERS
+
+  # Upper roman letters list style, equivatent of ``style="list-style-type: upper-roman;"``
+  UPPERCASE_ROMAN
+}
+
+# Main Image reference, contains informations like caption, cropping, URL to
+# cropped image and reference to original Image object.
+type MainImageReference {
+  # Image caption
+  caption: String
+
+  # Image cropping definition
+  crop: ImageCrop
+
+  # Reference to original image
+  image: Image!
+
+  # Role of the image
+  role: Term @deprecated
+
+  # Url of cropped image
+  url(transforms: [ImageTransformInput!]): ImageURL!
+}
+
+# Represents available markers for search queries
+enum MarkerEnum {
+  # Marker for objects which do not have leading image
+  WITHOUT_PICTURE
+
+  # Marker for objects which have leading image
+  WITH_PICTURE
+}
+
+# Represents a lists of markers which can be used as filters of results
+input MarkerFilterInput {
+  # List of markers
+  in: [MarkerEnum!]
+}
+
+# Represents a configuration of specific module being a part of whole variant's configuration
+type ModuleConfiguration {
+  # Code name of the configuration module
+  codeName: String!
+
+  # Data of the configuration module
+  data: JSONObject!
+
+  # Name of the configuration module
+  name: String!
+}
+
+type Mutation {
+  # Clones variant in service, returns whether is was done correctly and data of the variant
+  cloneVariant(
+    # Data of the variant, used to create variant by cloning another one
+    input: CloneVariantInput!
+  ): VariantMutationResult!
+
+  # Creates new configuration template returns whether is was done correctly and data of the configuration template version
+  createConfigurationTemplate(
+    # Data of the configuration template version, used to create configuration template version
+    input: CreateConfigurationTemplateVersionInput!
+  ): ConfigurationTemplateVersionMutationResult!
+
+  # Creates new configuration template alias, returns whether is was done
+  # correctly and data of the configuration template alias
+  createConfigurationTemplateAlias(
+    # Data of the configuration template alias, used to create configuration template alias
+    input: CreateConfigurationTemplateAliasInput!
+  ): ConfigurationTemplateAliasMutationResult!
+
+  # Creates new configuration template version for existing configuration
+  # template, returns whether is was done correctly and data of the configuration
+  # template version
+  createConfigurationTemplateVersion(
+    # Data of the configuration template version, used to create configuration template version
+    input: CreateConfigurationTemplateVersionInput!
+  ): ConfigurationTemplateVersionMutationResult!
+
+  # Creates new custom action for specified variant, returns whether is was done correctly and data of the custom action
+  # [available only if "routing" feature enabled]
+  createCustomAction(
+    # Data of the custom action, used to create new custom action
+    input: CreateCustomActionInput!
+
+    # Id of the variant
+    variantId: ID!
+  ): CustomActionMutationResult!
+
+  # Creates new node in service structure, returns whether is was done correctly and data of the node
+  createNode(
+    # Data of the node, used to create new node
+    input: CreateNodeInput!
+  ): NodeMutationResult!
+
+  # Creates new variant for service, returns whether is was done correctly and data of the variant
+  createVariant(
+    # Data of the variant, used to update the variant
+    input: CreateVariantInput!
+  ): VariantMutationResult!
+
+  # Deletes configuration template alias from service, returns whether is was done correctly
+  deleteConfigurationTemplateAlias(
+    # Name of the configuratiuon template, for which the alias has been created
+    configurationTemplateName: String!
+
+    # Name of the configuration template alias
+    name: String!
+  ): DeleteConfigurationTemplateAliasResult!
+
+  # Deletes configuration template version from service, returns whether is was done correctly
+  deleteConfigurationTemplateVersion(
+    # Name of the configuration template version, for which the alias has been created
+    configurationTemplateName: String!
+
+    # Id of configuration template version
+    id: ID!
+  ): DeleteConfigurationTemplateAliasResult!
+
+  # Deletes custom action for specified variant, returns whether is was done correctly
+  # [available only if "routing" feature enabled]
+  deleteCustomAction(
+    # Id of the custom action
+    id: UUID!
+
+    # Id of the variant
+    variantId: ID!
+  ): DeleteCustomActionResult
+
+  # Delete node from service structure
+  # Deletes node from service structure, returns whether is was done correctly
+  deleteNode(
+    # Id of the node
+    id: UUID!
+  ): DeleteNodeResult!
+
+  # Deletes variant from service, returns whether is was done correctly
+  deleteVariant(
+    # Id of the variant
+    id: ID!
+  ): DeleteVariantResult!
+
+  # Creates new or updates settings for authors, returns whether is was done correctly
+  # and new settings of authors
+  setAuthorSettings(
+    # Input for authors settings, used to create new or update existing ones
+    input: AuthorsSettingsInput!
+  ): SetSimpleSettingsResult!
+
+  # Updates one module configuration's values for a specific service variant, returns whether is was done correctly
+  # and data of the changed module configuration
+  setModuleConfiguration(
+    # Configuration of the module
+    configuration: JSONObject!
+
+    # Code name of the configuration module
+    moduleCodeName: String!
+
+    # Id of the node
+    nodeId: UUID!
+
+    # Id of the variant
+    variantId: ID!
+  ): SetModuleConfigurationResult!
+
+  # Creates new or update settings for sources, returns whether is was done correctly
+  # and new settings of sources
+  setSourceSettings(
+    # Input for sources settings, used to create new or update existing ones
+    input: SourcesSettingsInput!
+  ): SetSimpleSettingsResult!
+
+  # Creates new or updates settings for different taxonomies, returns whether is was done correctly
+  # and new settings of taxonomies
+  setTaxonomiesSettings(
+    # Input for taxonomies settings, used to create new or update existing ones
+    input: TaxonomiesSettingsInput!
+
+    # Id of the taxonomy
+    taxonomyCode: ID!
+  ): SetTaxonomiesSettingsResult!
+
+  # Updates configuration template alias, returns whether is was done correctly and data of the configuration template alias
+  updateConfigurationTemplateAlias(
+    # Name of the configuratiuon template, for which the alias has been created
+    configurationTemplateName: String!
+
+    # Data of the configuration template alias, used to update configuration template alias
+    input: UpdateConfigurationTemplateAliasInput!
+
+    # Name of the configuration template alias
+    name: String!
+  ): ConfigurationTemplateAliasMutationResult!
+
+  # Updates custom action for specified variant, returns whether is was done correctly and data of the custom action
+  # [available only if "routing" feature enabled]
+  updateCustomAction(
+    # Id of the custom action
+    id: UUID!
+
+    # Data of the custom action, used to update custom action
+    input: UpdateCustomActionInput!
+
+    # Id of the variant
+    variantId: ID!
+  ): CustomActionMutationResult!
+
+  # Updates existing node in service structure, returns whether is was done correctly and data of the updated node
+  updateNode(
+    # Id of the node
+    id: UUID!
+
+    # Data of the node, used to update the node
+    input: UpdateNodeInput!
+  ): NodeMutationResult!
+}
+
+# Represents a single element from the service (website) tree. Nodes help to aggregate the content published
+# to the service (website) into its appropriate sections.
+type Node {
+  # Additional properties of the node
+  additionalProperties: JSONObject
+
+  # Ancestors of the node
+  ancestors: [Node!]!
+
+  # List of bredcrumbs for current node
+  breadcrumbs: [Breadcrumb!]!
+
+  # Category connected with given node.
+  # This node of the service (website) will contain content related to this category.
+  category: CategoryReference
+
+  # Child nodes of the node
+  children: [Node!]!
+
+  # Configuration of a specific variant defined for the node, based on ID of the variant
+  config(
+    # ID of the variant
+    variantId: ID!
+  ): VariantConfiguration
+
+  # Domain of the node, which defines URLs of the content published inside the node (including its children)
+  # [available only if "routing" feature enabled]
+  domain: Domain
+
+  # ID of the node
+  id: UUID!
+
+  # ID path of the node, containing the ID of the node and identifiers of node's ancestors (separated using dots)
+  idPath: ID!
+
+  # Name of the Node
+  name: String!
+
+  # Parent of the node
+  parent: Node
+
+  # Sligified name of the node
+  slug: String!
+}
+
+# Represents the data of service settings for nodes additional params, used to create or update them
+input NodeAdditionalPropertiesInput {
+  # Node id
+  id: String
+}
+
+# Represents the result of mutations that creates or updates node, , returns
+# whether is was done correctly and the data of the node
+type NodeMutationResult implements SimpleResultUUID {
+  # Id of the affected node
+  affectedId: UUID!
+
+  # Reference to affected node
+  data: Node
+
+  # Errors that occured while executing the mutation
+  errors: [ResultError!]
+
+  # Status of the mutation
+  status: SimpleResultStatusEnum!
+}
+
+# Represents a reference to Node in a service (website) structure
+type NodeReference {
+  # Node in a service (website) structure
+  node: Node!
+}
+
+enum NotNullValueValidateDirectivePolicy {
+  # Field resolver is responsible to evaluate it using `validationErrors` injected in GraphQLResolverInfo
+  RESOLVER
+
+  # Field resolver is not called if occurs a validation error, it throws `UserInputError`
+  THROW
+}
+
+# Block representing Ordered list, HTML <ol/> tag
+type OrderedListBlock implements ContentBlock {
+  # List items, list of strings
+  entries: [String!]!
+
+  # Indentaton level
+  indentLevel: Int!
+
+  # Start counting value
+  startValue: Int!
+
+  # Proper CSS style of ordered list, property: "list-style-type"
+  style: String!
+
+  # List style
+  styleType: ListStyleEnum!
+
+  # Type, constant value: ``orderedList``
+  type: String!
+}
+
+# Represents information about the page used for cursor-based pagination.
+# Read more about https://graphql.org/learn/pagination/
+type PageInfo {
+  # Cursor corresponding to last node in edges
+  endCursor: ContentCursor
+
+  # Indicates whether more edges exist, following the set defined by the clients arguments
+  hasNextPage: Boolean
+
+  # Indicates whether more edges exist, prior to the set defined by the clients arguments.
+  hasPreviousPage: Boolean
+
+  # Cursor corresponding to first node in edges
+  startCursor: ContentCursor
+}
+
+# Block representing paragraph, HTML <p/> tag
+type ParagraphBlock implements ContentBlock {
+  # Paragraph content, text containing HTML tags, equivalent of <p/> tag.
+  text: String!
+
+  # Type, constant value: ``paragraph``
+  type: String!
+}
+
+# Block representing preformatted text
+type PreformattedBlock implements ContentBlock {
+  # Block content
+  text: String!
+
+  # Type, constant value: ``preformatted``
+  type: String!
+}
+
+# Describes publication dates
+type PublicationDates {
+  # Creation date visible in website
+  creationTime(
+    # Result format, default format is ISO 8601, can be changed using [POSIX date conversion specifiers](https://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html)
+    format: String
+
+    # Time zone, valid IANA time zone database entry or 'UTC'
+    tz: String = "UTC"
+  ): DateTime
+
+  # Expiration date of object in website
+  expirationTime(
+    # Result format, default format is ISO 8601, can be changed using [POSIX date conversion specifiers](https://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html)
+    format: String
+
+    # Time zone, valid IANA time zone database entry or 'UTC'
+    tz: String = "UTC"
+  ): DateTime
+
+  # Last modification date visible in website
+  modificationTime(
+    # Result format, default format is ISO 8601, can be changed using [POSIX date conversion specifiers](https://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html)
+    format: String
+
+    # Time zone, valid IANA time zone database entry or 'UTC'
+    tz: String = "UTC"
+  ): DateTime
+}
+
+# Publication point
+type PublicationPoint {
+  # The category within which the publication point was created for the published object
+  category: Topic!
+
+  # Publication point ID
+  id: ID!
+
+  # Determines whether the given publication point is a main, in the context of the service (website)
+  isMain: Boolean!
+
+  # Determines whether the given publication point is primary
+  isPrimary: Boolean! @deprecated(reason: "Use `isMain`.")
+
+  # Node in a structure of the service (website) to which the object has been published pinned
+  node: Node!
+
+  # URL of the publication point
+  # [available only if "routing" feature enabled]
+  url: URL
+}
+
+# Represents all types of published content
+union PublishedContent = Author | Source | Story | Topic
+
+type Query {
+  # Archive of the namespace, containing all published content (aggregated by dates)
+  archive: Archive
+
+  # Returns published Author, based on the ID of the Author or a publication point and (optional) revision
+  author(
+    # ID of the Author
+    id: UUID
+
+    # ID of the publication point on which the Author was published
+    publicationId: ID
+
+    # Number of specific version of the Author
+    revision: BigInt
+  ): Author
+
+  # Returns a list of Authors, based on given conditions
+  authors(
+    # Forward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    after: String
+
+    # Backward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    before: String
+
+    # Filters used to precise which Authors will be returned
+    filter: AuthorFilterInput
+
+    # Chunk size for 'after' cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    first: Int
+
+    # Chunk size for 'before' cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    last: Int
+
+    # Limit to limit/offset pagination
+    limit: Int
+
+    # Offset to limit/offset pagination
+    offset: Int
+
+    # Sorting options defining the order of the list. By default sorting by the creation time (descending)
+    sortBy: [AuthorSortByInput!] = [{ field: CREATION_TIME, order: DESC }]
+  ): AuthorSearchResult!
+
+  # Returns a Collection, based on the ID. Collection is a list of recommendations with a defined order.
+  collection(
+    # ID of the collection
+    id: UUID!
+  ): Collection
+
+  # Template for configuration for variants
+  configurationTemplate(
+    # Name of the configuration template
+    name: String!
+  ): ConfigurationTemplate
+
+  # Templates for configurations for variants
+  configurationTemplates: [ConfigurationTemplate]!
+
+  # Returns a published content (Story, Author, Source or Topic), based on ID and (optional) revision
+  content(
+    # ID of the content
+    id: UUID!
+
+    # Number of specific version of the content
+    revision: BigInt
+  ): PublishedContent
+
+  # Returns a list of published content (Story, Author, Source or Topic), based on given conditions
+  contents(
+    # Forward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    after: String
+
+    # Backward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    before: String
+
+    # Filters used to precise which content will be returned
+    filter: ContentFilterInput
+
+    # Chunk size for 'after' cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    first: Int
+
+    # Chunk size for 'before' cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    last: Int
+
+    # Limit to limit/offset pagination
+    limit: Int
+
+    # Offset to limit/offset pagination
+    offset: Int
+
+    # Sorting options defining the order of the list. By default sorting by the creation time (descending)
+    sortBy: [ContentSortByInput!] = [{ field: CREATION_TIME, order: DESC }]
+  ): ContentSearchResult!
+
+  # List of available features
+  features: [String!]!
+
+  # Name of the namespace
+  name: String!
+
+  # ID of the namespace
+  namespaceId: ID!
+    @deprecated(reason: "field will be removed in next api version")
+
+  # Returns a node from the structure of service (website), based on its ID or an ID of category, connected with a node
+  node(
+    # ID of the category
+    categoryId: UUID
+
+    # ID of the node
+    id: ID
+  ): Node
+
+  # Hierarchically arranged sections of the service (website), where the publication of story objects takes place
+  nodes: [Node!]!
+
+  # Section of the namespace, based on the code name and a node, in which a saction was created
+  section(
+    # Code name of the section
+    codeName: ID!
+
+    # ID of the node
+    nodeId: ID!
+  ): Section
+
+  # A group of sections that contain deduplicated items
+  sectionGroup(
+    # Code name of the section group
+    codeName: ID!
+
+    # ID of the node
+    nodeId: ID!
+  ): SectionGroup
+
+  # ID of the service (website)
+  serviceId: ID!
+    @deprecated(reason: "field will be removed in next api version")
+
+  # Details about recognized website, based on URL and ID of the variant
+  # [available only if "routing" feature enabled]
+  site(
+    # URL of the website. It must be a valid URL, with a domain belonging to the namespace.
+    # Otherwise it will not retrieve data about URL.
+    url: URL!
+
+    # ID of the variant
+    variantId: ID!
+  ): Site
+
+  # Returns published Source, based on the ID of the Source or a publication point and (optional) revision
+  source(
+    # ID of the Source
+    id: UUID
+
+    # ID of the publication point on which the Source was published
+    publicationId: ID
+
+    # Number of specific version of the Source
+    revision: BigInt
+  ): Source
+
+  # Returns a list of Sources, based on given conditions
+  sources(
+    # Forward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    after: String
+
+    # Backward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    before: String
+
+    # Filters used to precise which Sources will be returned
+    filter: SourceFilterInput
+
+    # Chunk size for 'after' cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    first: Int
+
+    # Chunk size for 'before' cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    last: Int
+
+    # Limit to limit/offset pagination
+    limit: Int
+
+    # Offset to limit/offset pagination
+    offset: Int
+
+    # Sorting options defining the order of the list. By default sorting by the creation time (descending)
+    sortBy: [SourceSortByInput!] = [{ field: CREATION_TIME, order: DESC }]
+  ): SourceSearchResult!
+
+  # Returns a list of Stories, based on given conditions
+  stories(
+    # Forward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    after: String
+
+    # Backward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    before: String
+
+    # Filters used to precise which Stories will be returned
+    filter: StoryFilterInput
+
+    # Chunk size for 'after' cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    first: Int
+
+    # Chunk size for 'before' cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    last: Int
+
+    # Limit to limit/offset pagination
+    limit: Int
+
+    # Offset to limit/offset pagination
+    offset: Int
+
+    # Phrase used to search stories
+    phrase: String
+
+    # Identifier of the story, used to find similar stories
+    similarTo: UUID
+
+    # Sorting options defining the order of the list. By default sorting by the creation time (descending)
+    sortBy: [StorySortByInput!] = [{ field: CREATION_TIME, order: DESC }]
+  ): StorySearchResult!
+
+  # Returns published Story, based on the ID of the Story or a publication point and (optional) revision
+  story(
+    # ID of the Story
+    id: UUID
+
+    # ID of the publication point on which the Story was published
+    publicationId: ID
+
+    # Number of specific version of the Story
+    revision: BigInt
+  ): Story
+
+  # Returns published Topic, based on the ID of the Topic or a publication point and (optional) revision
+  topic(
+    # ID of the Topic
+    id: UUID
+
+    # ID of the publication point on which the Topic was published
+    publicationId: ID
+
+    # Number of specific version of the Topic
+    revision: BigInt
+  ): Topic
+
+  # Returns a list of Topics, based on given conditions
+  topics(
+    # Forward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    after: String
+
+    # Backward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    before: String
+
+    # Filters used to precise which Topics will be returned
+    filter: TopicFilterInput
+
+    # Chunk size for 'after' cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    first: Int
+
+    # Chunk size for 'before' cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    last: Int
+
+    # Limit to limit/offset pagination
+    limit: Int
+
+    # Offset to limit/offset pagination
+    offset: Int
+
+    # Sorting options defining the order of the list. By default sorting by the creation time (descending)
+    sortBy: [TopicSortByInput!] = [{ field: CREATION_TIME, order: DESC }]
+  ): TopicSearchResult!
+
+  # General settings for objects (Topic, Source, Author) in a namespace
+  typesSettings: TypesSettings
+
+  # Returns variant of the service (website), based on the ID
+  variant(
+    # Id of the Variant
+    id: ID!
+  ): Variant
+
+  # Variants of the service (website)
+  variants: [Variant!]!
+}
+
+enum RangeValidateDirectivePolicy {
+  # Field resolver is responsible to evaluate it using `validationErrors` injected in GraphQLResolverInfo
+  RESOLVER
+
+  # Field resolver is not called if occurs a validation error, it throws `UserInputError`
+  THROW
+}
+
+# Recommendation is an object describing story recommended for collection
+type Recommendation {
+  # Recommendation data allows to select right variant of recommendation by providing *variantName* argument.
+  # When there is no variant with name *variantName* the main recommendation variant is returned,
+  data(
+    # Allows to retrieve recommendation data for specific variant
+    variantName: String
+  ): RecommendationData
+
+  # Describes period for event associated with Recommendation
+  event: RecommendationPeriod
+
+  # List of extensions used for recommendation
+  extensions(
+    # Allows to filter extensions by type
+    type: String
+  ): [Extension!]!
+
+  # Recommendation identifier
+  id: UUID!
+
+  # Alternative Recommendation leads
+  leads(
+    # Allows to filter leads by role
+    role: String
+  ): [RecommendationLead!]!
+}
+
+# Describes reference to Author
+type RecommendationAuthorReference {
+  # Author of the Recommendation
+  author: Author
+
+  # preferred name of an author used to override original name
+  name: String
+}
+
+# Describes Reference to a Story
+type RecommendationData {
+  # List of authors
+  authors: [RecommendationAuthorReference!]!
+
+  # Reference to Image
+  image: MainImageReference
+
+  # Kind of recommended story
+  kind: Term
+
+  # Prefix for recommendation name
+  prefix: String
+
+  # List of sources
+  sources: [RecommendationSourceReference!]!
+
+  # Reference to Story, empty for external stories
+  story: Story
+
+  # Subtitile
+  subtitle: String
+
+  # Summary
+  summary: String
+
+  # Title
+  title: String
+
+  # List of topics
+  topics(
+    # Allows to filter topics by kind
+    kind: String
+  ): [RecommendationTopicReference!]
+
+  # Story URL may point to a publication point or external story
+  url: URL
+}
+
+# Describes alternative Recommendation Leads
+type RecommendationLead {
+  # Lead ID
+  id: String!
+
+  # Lead Image
+  image: MainImageReference
+
+  # Lead role
+  role: Term
+
+  # Lead content
+  text: String
+
+  # Lead title
+  title: String
+}
+
+# Describes start/end date of event associated with Recommendation
+type RecommendationPeriod {
+  # Period end date
+  endTime(
+    # Result format, default format is ISO 8601, can be changed using [POSIX date conversion specifiers](https://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html)
+    format: String
+
+    # Time zone, valid IANA time zone database entry or 'UTC'
+    tz: String = "UTC"
+  ): DateTime!
+
+  # Period start date
+  startTime(
+    # Result format, default format is ISO 8601, can be changed using [POSIX date conversion specifiers](https://pubs.opengroup.org/onlinepubs/9699919799/functions/strftime.html)
+    format: String
+
+    # Time zone, valid IANA time zone database entry or 'UTC'
+    tz: String = "UTC"
+  ): DateTime!
+}
+
+# Describes reference to Source
+type RecommendationSourceReference {
+  # preferred name of a source used to override original name
+  name: String
+
+  # Source of the Recommendation
+  source: Source
+}
+
+# Describes reference to Topic
+type RecommendationTopicReference {
+  # preferred name of a topic used to override original name
+  name: String
+
+  # Topic of the Recommendation
+  topic: Topic
+}
+
+# Represents the mutation result error object, containing detailed information
+# about the errors encountered while executing mutation
+type ResultError {
+  # Code of the error
+  code: String!
+
+  # Message of the error
+  message: String!
+
+  # Path to the error
+  path: [String!]
+}
+
+# User structure
+type RingUser {
+  # User email
+  email: String
+
+  # User identifier
+  id: UUID!
+
+  # User name
+  name: String
+}
+
+# Represents a single section.
+# Section may contain elements defined in a specific collection of recommendations.
+# The list may be fulfilled with additional elements (until a section will reach a defined size).
+type Section {
+  # Code name of the section
+  codeName: ID!
+
+  # List of items in the section, which contains elements defined manually and automaticaly
+  items(
+    # Forward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    after: String
+
+    # Backward pagination cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    before: String
+
+    # Chunk size for 'after' cursor, see https://relay.dev/graphql/connections.htm#sec-Forward-pagination-arguments
+    first: Int
+
+    # Chunk size for 'before' cursor, see https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    last: Int
+  ): SectionItemsResult
+
+  # ID of the node for which the section was created
+  nodeId: ID!
+
+  # Additional parameters of the section
+  options: JSONObject
+
+  # Title of the section
+  title: String
+
+  # URL of the section (defined in configuration)
+  url: URL @deprecated(reason: "Use `options`.")
+}
+
+# Represents a reference to the Author
+type SectionAuthorReference {
+  # Name of the Author
+  name: String
+}
+
+# Represents a group of sections with deduplicated content
+type SectionGroup {
+  # Code name of the sections group
+  codeName: ID!
+
+  # List of sections
+  sections(codeName: ID): [Section!]!
+
+  # Title of the sections group
+  title: String
+
+  # URL of the sections group (defined in configuration)
+  url: URL
+}
+
+# Represents a single item of the section.
+# Format of the data is based on the configuration of the section.
+type SectionItem {
+  # Authors of the section item
+  authors: [SectionAuthorReference!]!
+
+  # Creation date of the section item, based on time zone and format
+  creationTime(format: String, tz: String = "UTC"): DateTime
+
+  # Emotions of the section item
+  emotions: [Emotion!]
+
+  # Event dates of the section item
+  event: EventDates
+
+  # External URL of the section item, if exists
+  externalUrl: URL
+
+  # Flags of the section item
+  flags: [Term!]
+
+  # ID of the section item
+  id: UUID
+
+  # Image of the section item
+  image: MainImageReference
+
+  # Lead of the section item
+  lead: String
+
+  # Alternative leads of the section item
+  leads(role: [String!]): [StoryLead!]!
+
+  # License of the section item
+  license: License
+
+  # Last modification date of the section item
+  modificationTime(format: String, tz: String = "UTC"): DateTime
+
+  # Order number of the section item
+  ordering: Float
+
+  # Ordinal number of the section item
+  ordinalNumber: Float
+
+  # Story reference of the section item
+  orginalContent: PublishedContent @deprecated(reason: "Use `originalContent`.")
+
+  # Story reference of the section item
+  originalContent: PublishedContent
+
+  # Pinned position of the section item
+  pinnedPosition: Int
+
+  # Prefix of the section item
+  prefix: String
+
+  # Role of the section item
+  role: Term
+
+  # Links as **see also** of the section item
+  seeAlsoLinks: [SeeAlsoLink!]!
+
+  # Sources of the section item
+  sources: [SectionSourceReference!]!
+
+  # Statistics of the section item
+  statistics: [StoryStatistic!]!
+
+  # Subtitle of the section item
+  subtitle: String
+
+  # System of the section item
+  system: SectionItemSystemEnum
+
+  # Teasers of the section item
+  teasers(role: [String!]): [StoryLead!]!
+
+  # Title of the section item
+  title: String
+
+  # Alternative titles of the section item
+  titles(role: String): [StoryExtraTitle!]!
+
+  # Taxonomies topics of the section item
+  topics(taxonomy: String): [SectionTopicReference!]!
+
+  # URL of the section item
+  # [available only if "routing" feature enabled]
+  url: URL!
+
+  # Section item variants
+  variants: [SectionItemVariant!]!
+}
+
+# Represents a single connection with an item from section, used in case of cursor-based pagination.
+# Read more about https://graphql.org/learn/pagination/
+type SectionItemEdge {
+  # Pointer used in cursor-based pagination
+  cursor: ContentCursor!
+
+  # Item of the section
+  node: SectionItem!
+}
+
+# Represents available types of section items
+enum SectionItemSystemEnum {
+  # Section items retrieved on the basis of the configuration parameters specified in the Section
+  BASE
+
+  # Section items retrieved from Collection defined in Section's configuration
+  RECOMMENDATION
+}
+
+# Represents a variant of the story
+type SectionItemVariant {
+  # Image of the story's variant
+  image: MainImageReference
+
+  # Determines if story variant is selected as preferred
+  isPreferred: Boolean
+
+  # Title of the story's variant
+  title: String
+}
+
+# Represents information about the items of the section, including pagination
+type SectionItemsResult {
+  # Connection between search results and content item
+  edges: [SectionItemEdge!]!
+
+  # Information about the actual page of the results
+  pageInfo: PageInfo
+
+  # Number of total results found
+  total: Int!
+}
+
+# Represents a reference to the Source
+type SectionSourceReference {
+  # Name of the Source
+  name: String
+}
+
+# Represents a reference to the Topic
+type SectionTopicReference {
+  # Name of the Topic
+  name: String
+}
+
+# Represents a see-also link
+type SeeAlsoLink {
+  # Nofollow of the link
+  noFollow: Boolean
+
+  # Role of the link
+  role: Term
+
+  # Title of the link
+  title: String
+
+  # URL of the link
+  url: URL
+}
+
+# Represents the result of mutation that sets module configuration,
+# returns whether is was done correctly
+type SetModuleConfigurationResult implements SimpleResult {
+  # Identifier of affected variant
+  affectedId: ID!
+
+  # Reference to affected module configuration
+  data: ModuleConfiguration
+
+  # Errors, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Mutation's result status
+  status: SimpleResultStatusEnum!
+}
+
+# Represents the result of mutation that creates or updates service settings for authors and sources,
+# returns whether is was done correctly and the data of authors and sources settings
+type SetSimpleSettingsResult implements SimpleResult {
+  # Identifier of type settings
+  affectedId: ID
+
+  # Reference to affected objects
+  data: SimpleTypeSettings
+
+  # Errors, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Mutation's result status
+  status: SimpleResultStatusEnum!
+}
+
+# Represents the result of mutation that creates or updates service settings for taxonomies,
+# returns whether is was done correctly and the data of taxonomies settings
+type SetTaxonomiesSettingsResult implements SimpleResult {
+  # Identifier of taxonomy
+  affectedId: ID!
+
+  # Reference to affected taxonomies settings
+  data: TaxonomiesSettings
+
+  # Errors, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Mutation's result status
+  status: SimpleResultStatusEnum!
+}
+
+# Represents the mutation result object, containing information about the status of the mutation,
+# errors that may have occured and the id of the object that has been affected by the mutation
+interface SimpleResult {
+  # Id of the affected object
+  affectedId: ID
+
+  # Errors that occured while executing the mutation
+  errors: [ResultError!]
+
+  # Status of the mutation
+  status: SimpleResultStatusEnum!
+}
+
+# Represents all statuses which with mutations can end up
+enum SimpleResultStatusEnum {
+  ERROR
+  OK
+}
+
+# Represents the mutation result object, containing information about the status of the mutation,
+# errors that may have occured and the id (represented by UUID) of the object that has been affected by the mutation
+interface SimpleResultUUID {
+  # Id of the affected object
+  affectedId: UUID!
+
+  # Errors that occured while executing the mutation
+  errors: [ResultError!]
+
+  # Status of the mutation
+  status: SimpleResultStatusEnum!
+}
+
+# Represents available types of ordering
+enum SimpleSortOrderEnum {
+  # Ordering ascending way
+  ASC
+
+  # Ordering descending way
+  DESC
+}
+
+# Represents publication settings for simple types (Author and Source)
+type SimpleTypeSettings {
+  # Path which will be add to the URL in case of Authors and Sources
+  path: String
+}
+
+# Represents fields available when sorting a simple types (Author, Source, Topic)
+enum SimpleTypeSortFieldsEnum {
+  # Sorting using the creation time
+  CREATION_TIME
+
+  # Sorting using the ID
+  ID
+
+  # Sorting using the last modification time
+  MODIFICATION_TIME
+
+  # Sorting using the name
+  NAME
+
+  # Sorting using the slug name
+  NAME_SLUG
+
+  # Sorting using the scoring of the results
+  SCORE
+}
+
+# Represents information about recognized URL in context of specific variant
+# [available only if "routing" feature enabled]
+type Site {
+  # All basic data of the website content, recognized for given URL
+  data: SiteData
+
+  # Headers of the website
+  headers: Headers
+
+  # Status code of the website
+  statusCode: Int!
+}
+
+# Represents list of all available site content types that can be recognized by site query
+union SiteContent = Author | CustomAction | SiteNode | Source | Story | Topic
+
+# Represents a set of information about the content and service (website),
+# including localization and configuration in the context of a specific variant
+# [available only if "routing" feature enabled]
+type SiteData {
+  # Detailed data for the identified action
+  content: SiteContent
+
+  # Node in service (website) structure which has been recognized for URL
+  node: SiteNode!
+}
+
+# Represents a node in a service (website) structure which (if any) has been
+# recognized for the URL being processed by site query
+# [available only if "routing" feature enabled]
+type SiteNode {
+  # Additional properties of the node
+  additionalProperties: JSONObject
+
+  # Ancestors of the node
+  ancestors: [SiteNode!]!
+
+  # List of breadcrumbs
+  breadcrumbs: [Breadcrumb!]!
+
+  # Category of the node.
+  # Content published to this category will be available in this node of the service (website) structure
+  category: CategoryReference
+
+  # Child nodes of the node
+  children: [SiteNode!]!
+
+  # Configuration of a specific variant defined for the node, in context of a variant for which site query is executed
+  config: VariantConfiguration!
+
+  # ID of the node
+  id: UUID!
+
+  # ID path of the node, containing the ID of the node and identifiers of node's ancestors (separated using dots)
+  idPath: ID!
+
+  # Name of the node
+  name: String!
+
+  # Parent of the node
+  parent: SiteNode
+
+  # Slugified name of the node
+  slug: String!
+}
+
+# Block of type slot
+type SlotBlock implements ContentBlock {
+  # Element alignment
+  alignment: ContentElementAlignmentEnum!
+
+  # Slot data, JSON object
+  data: JSONObject
+
+  # Kind of Slot
+  kind: Term
+
+  # Slot name
+  name: String! @deprecated(reason: "Use field \"kind\".")
+
+  # Type, constant value: ``slot``
+  type: String!
+}
+
+# Source
+type Source {
+  # Description of the Source
+  description: ContentDescription
+
+  # Extensions used in Source
+  extensions(
+    # Allows to filter extensions by type
+    type: String
+  ): [Extension!]!
+
+  # Source identifier
+  id: UUID!
+
+  # Main image
+  image: MainImageReference
+
+  # List of images of the Source, based on roles of images
+  images(
+    # Role of the image
+    role: String
+  ): [MainImageReference!]! @deprecated(reason: "Use `image`.")
+
+  # name of content source
+  name: String!
+
+  # Current publication point of the Source
+  publicationPoint: PublicationPoint
+
+  # All publication points of the Source
+  publicationPoints: [PublicationPoint!]!
+
+  # System information of the Source
+  system: SystemData!
+
+  # punchline of motto of content source
+  tagline: String
+
+  # URL to source website
+  url: URL
+}
+
+# Represents a single reference to a Source, when using cursor-based pagination.
+# Read more about https://graphql.org/learn/pagination/
+type SourceEdge {
+  # Pointer used for cursor-based pagination
+  cursor: ContentCursor
+
+  # Details of the Source
+  node: Source!
+}
+
+# Represents options which allows to filter Sources
+input SourceFilterInput {
+  # Filter based on creation time range
+  creationTime: DateTimeFilterInput
+
+  # Filter based on IDs
+  id: UuidFilterInput
+
+  # Filter based on markers
+  marker: MarkerFilterInput
+}
+
+# Represents results of searching Sources, including pagination
+type SourceSearchResult {
+  # List of Sources, which were found
+  edges: [SourceEdge!]!
+
+  # Information about actual page of the results
+  pageInfo: PageInfo
+
+  # Total number of results, which were found
+  total: Int
+}
+
+# Represents sorting options used when requesting for a list of Sources
+input SourceSortByInput {
+  # Field which is used for sorting a list of Sources
+  field: SimpleTypeSortFieldsEnum!
+
+  # Type of order which is used for sorting a list of Sources
+  order: SimpleSortOrderEnum = ASC
+}
+
+# Represents the data of service settings for sources, used to create or update them
+input SourcesSettingsInput {
+  # URL prefix for sourc items
+  path: String
+}
+
+# Story is an object describing Content
+type Story {
+  # Story authors
+  authors: [StoryAuthorReference!]!
+
+  # Canonical data of the Story
+  canonical: StoryCanonical
+
+  # Story Content
+  content(
+    # Filter contents by role, allow to retrieve content of specific role only.
+    # Please read documentation of Content type to learn more
+    role: String
+  ): [Content!]!
+  date: PublicationDates
+
+  # User defined additional data
+  extensions(
+    # Allows to filter extensions by type
+    type: String
+  ): [Extension!]!
+
+  # Story flags
+  flags: [Term!]!
+
+  # Story ID
+  id: UUID!
+
+  # Main Story Image
+  image: MainImageReference
+
+  # Kind of story (way the content should be shown on Front-End)
+  kind: Term
+
+  # Alternative Story leads
+  leads(
+    # Allows to filter leads by role
+    role: String
+  ): [StoryLead!]!
+  license: License
+
+  # External link to the story target.
+  link: LinkObject
+
+  # Main publication point of the Story (exactly one for one content in the context of service)
+  mainPublicationPoint: PublicationPoint!
+
+  # Alias to title field
+  name: String!
+
+  # Ordinal number
+  ordinalNumber: Float
+
+  # Primary publication point of the Story (exactly one per each Story)
+  primaryPublicationPoint: PublicationPoint!
+    @deprecated(reason: "Use `mainPublicationPoint`.")
+
+  # Current publication point of the Story.
+  # Typically this is the main publication point which was created for the Story,
+  # unless the Story is beeing retrieved in the context of a specific category.
+  # Then, the publication point created within the publication for that particular category is referenced here.
+  publicationPoint: PublicationPoint!
+
+  # All publication points of the Story (places, to which the Story was published)
+  publicationPoints: [PublicationPoint!]!
+
+  # Story sources
+  sources: [StorySourceReference!]!
+
+  # Statistics of the Story
+  statistics: [StoryStatistic!]!
+
+  # Related stories
+  stories(
+    # Allows to filter related stories by role
+    role: String
+  ): [StoryRelatedStory!]!
+
+  # System information of the Story
+  system: SystemData!
+
+  # Main Story title
+  title: String!
+
+  # Alternative Story titles
+  titles(role: String): [StoryExtraTitle!]!
+
+  # Story topics
+  topics(
+    # Allows to filter topics by kind
+    kind: String
+  ): [StoryTopicReference]
+}
+
+# Describes Story Author
+type StoryAuthorReference {
+  # Reference to Author
+  author: Author!
+}
+
+# Represents canonical data for a Story
+type StoryCanonical {
+  # Canonical URL of the Story
+  url: URL
+}
+
+# Represents a single reference to a Story, when using cursor-based pagination.
+# Read more about https://graphql.org/learn/pagination/
+type StoryEdge {
+  # Pointer used for cursor-based pagination
+  cursor: ContentCursor
+
+  # Details of the Story
+  node: Story!
+}
+
+# Describes additional Story titles
+type StoryExtraTitle {
+  # Title ID
+  id: ID
+
+  # Title role
+  role: Term
+
+  # Title text
+  text: String
+}
+
+# Represents options which allows to filter Stories
+input StoryFilterInput {
+  # Filter based on Authors
+  author: UuidFilterInput
+
+  # Filter based on categories
+  category: UuidFilterInput
+
+  # Filter based on Collection
+  collection: UuidFilterInput
+
+  # Filter based on creation time range
+  creationTime: DateTimeFilterInput
+
+  # Filter based on expiration time range
+  expirationTime: DateTimeFilterInput
+
+  # Filter based on flags
+  flag: StringFilterInput
+
+  # Filter based on a Story
+  id: UuidFilterInput
+
+  # Filter based on a kind
+  kind: StringFilterInput
+
+  # Filter based on markers
+  marker: MarkerFilterInput
+
+  # Filter based on modification time range
+  modificationTime: DateTimeFilterInput
+
+  # Filter based on Sources
+  source: UuidFilterInput
+
+  # Filter based on Topics
+  topic: UuidFilterInput
+}
+
+# Describes alternative Story Leads
+type StoryLead {
+  # Lead ID
+  id: String!
+
+  # Lead Image
+  image: MainImageReference
+
+  # Lead role
+  role: Term
+
+  # Lead content
+  text: String
+
+  # Lead title
+  title: String
+}
+
+# Story related to object
+type StoryRelatedStory {
+  # Role of related story
+  role: Term
+
+  # Reference to Story
+  story: Story
+
+  # Title of external story or override in case of internal Story
+  title: String
+
+  # URL to External Story
+  url: URL
+}
+
+# Represents results of searching Stories, including pagination
+type StorySearchResult {
+  # List of Stories, which were found
+  edges: [StoryEdge!]!
+
+  # Information about actual page of the results
+  pageInfo: PageInfo
+
+  # Total number of results, which were found
+  total: Int
+}
+
+# Represents sorting options used when requesting for a list of Stories
+input StorySortByInput {
+  # Field which is used for sorting a list of Stories
+  field: StorySortFieldsEnum!
+
+  # Type of order which is used for sorting a list of Stories
+  order: SimpleSortOrderEnum = ASC
+}
+
+# Represents fields available when sorting a list of Stories
+enum StorySortFieldsEnum {
+  # Sorting using the creation time of the Story
+  CREATION_TIME
+
+  # Sorting using the ID of the Story
+  ID
+
+  # Sorting using the last modification time of the Story
+  MODIFICATION_TIME
+
+  # Sorting using the ordinal number of the Story
+  ORDINAL_NUMBER
+
+  # Sorting using the scoring of the results
+  SCORE
+
+  # Sorting using the title of the Story
+  TITLE
+
+  # Sorting using the slug title of the Story
+  TITLE_SLUG
+}
+
+# Describes Story Source
+type StorySourceReference {
+  # Source name override
+  name: String
+
+  # Reference to Source
+  source: Source!
+
+  # Source URL override
+  url: String
+}
+
+# Represents a single statistics item for a Story
+type StoryStatistic {
+  # Name of the statistics item
+  name: String!
+
+  # Value of the statistics item
+  value: Float!
+}
+
+# Describes Story Topic
+type StoryTopicReference {
+  # Reference to Topic
+  topic: Topic
+}
+
+# Represents options which allows to filter results based on string values
+input StringFilterInput {
+  # List of values which allow to define **include** condition, when filtering the results
+  in: [String!]
+
+  # List of values which allow to define **exclude** condition, when filtering the results
+  notIn: [String!]
+}
+
+# Represents information about the system
+type SystemData {
+  # Number of specific version of the object
+  revision: BigInt
+}
+
+# Table block, HTML <table/> tag
+type TableBlock implements ContentBlock {
+  # List of rows
+  rows: [TableBlockRow!]!
+
+  # Type, constant value: table
+  type: String!
+}
+
+# Table cell, equivalent of <td/> or <th/> HTML tag
+type TableBlockCell {
+  # Content alignment
+  alignment: ContentElementAlignmentEnum
+
+  # List of custom cell styles
+  classes: [String!]!
+
+  # Column spanning property
+  colspan: Int
+
+  # Heading marker, decides about HTML tag <td/> / <th/>
+  isHeader: Boolean
+
+  # Content link
+  link: LinkObject
+
+  # Row spanning property
+  rowspan: Int
+
+  # Cell content
+  text: String
+}
+
+# Table row, HTML <tr/> tag.
+type TableBlockRow {
+  # List of cells in row
+  cells: [TableBlockCell!]!
+}
+
+# Represents publication settings for specific Taxonomies
+type TaxonomiesSettings {
+  # Path which will be add to the URL in case of this type of the content
+  path: String
+
+  # List of paths which have been previously used as path for a Taxonomy.
+  # Useful when you need to create redirects for URLs containing one of previous Taxonomy paths.
+  previousPaths: [String!]!
+
+  # Code of the Taxonomy
+  taxonomyCode: ID!
+
+  # Name of the Taxonomy
+  taxonomyName: String!
+}
+
+# Represents the data of service settings for taxonomies, used to create or update them
+input TaxonomiesSettingsInput {
+  # URL prefix for taxonomy items
+  path: String
+
+  # Taxonomy name
+  taxonomyName: String
+}
+
+# Dictionary term, used to describe kinds or roles of speficic types and properties
+type Term {
+  # Code name of Term, unique across specific dictionary
+  code: String!
+
+  # User visible display name
+  name: String!
+}
+
+# Topic is an object describing Taxonomy (how content is categorized)
+type Topic {
+  # Description of the Topic
+  description: ContentDescription
+
+  # Editorial (unique) name of the Topic
+  editorialName: String!
+
+  # User defined additional data
+  extensions(
+    # Allows to filter extensions by type
+    type: String
+  ): [Extension!]!
+
+  # Topic ID
+  id: UUID!
+
+  # Main image
+  image: MainImageReference
+
+  # List of images of the Topic, based on roles of images
+  images(
+    # Role of the image
+    role: String
+  ): [MainImageReference!]! @deprecated(reason: "Use `image`.")
+
+  # Kind of Topic (Taxonomy)
+  kind: Term!
+  name: String!
+
+  # Reference to a node in a service (website) structure (if a Topic is pinned to it)
+  nodeReference: NodeReference
+
+  # Current publication point of the Topic
+  publicationPoint: PublicationPoint
+
+  # All publication points of the Topic
+  publicationPoints: [PublicationPoint!]!
+
+  # System information of the Topic
+  system: SystemData!
+
+  # Topic topics
+  topics: [TopicTopicReference!]!
+}
+
+# Represents a single reference to a Topic, when using cursor-based pagination.
+# Read more about https://graphql.org/learn/pagination/
+type TopicEdge {
+  # Pointer used for cursor-based pagination
+  cursor: ContentCursor
+
+  # Details of the Topic
+  node: Topic!
+}
+
+# Represents options which allows to filter Topics
+input TopicFilterInput {
+  # Filter based on creation time range
+  creationTime: DateTimeFilterInput
+
+  # Filter based on flags
+  flag: StringFilterInput
+
+  # Filter based on IDs
+  id: UuidFilterInput
+
+  # Filter based on a kind
+  kind: StringFilterInput
+
+  # Filter based on markers
+  marker: MarkerFilterInput
+
+  # Filter based on title comparison
+  name: ExpressionFilterInput
+
+  # Filter based on Topics
+  topic: UuidFilterInput
+}
+
+# Represents results of searching Topics, including pagination
+type TopicSearchResult {
+  # List of Topics, which were found
+  edges: [TopicEdge!]!
+
+  # Information about actual page of the results
+  pageInfo: PageInfo
+
+  # Total number of results, which were found
+  total: Int
+}
+
+# Represents sorting options used when requesting for a list of Topics
+input TopicSortByInput {
+  # Field which is used for sorting a list of Topics
+  field: SimpleTypeSortFieldsEnum!
+
+  # Type of order which is used for sorting a list of Topics
+  order: SimpleSortOrderEnum = ASC
+}
+
+# Describe Topic Topic
+type TopicTopicReference {
+  topic: Topic
+}
+
+# Represents settings for publication of the content (Author, Source, and different types of Topics)
+type TypesSettings {
+  # URL's settings for Authors
+  author: SimpleTypeSettings!
+
+  # URL's settings for Sources
+  source: SimpleTypeSettings!
+
+  # URL's settings for Taxonomies
+  taxonomies: [TaxonomiesSettings!]!
+}
+
+# A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt.
+scalar URL
+
+# A field whose value is a generic universally unique identifier, a octet string
+# representation of 128bit number in format specified by section 3 of RFC 4122:
+# https://www.ietf.org/rfc/rfc4122.txt .
+scalar UUID
+
+# Block representing Ordered list, HTML <ul/> tag
+type UnorderedListBlock implements ContentBlock {
+  # List items, list of strings
+  entries: [String!]!
+
+  # Indentaton level
+  indentLevel: Int!
+
+  # Proper CSS style of unordered list, property: "list-style-type"
+  style: String!
+
+  # List style
+  styleType: ListStyleEnum!
+
+  # Type, constant value: ``unorderedList``
+  type: String!
+}
+
+# Represents the data of configuration template alias, used to update configuration template alias
+input UpdateConfigurationTemplateAliasInput {
+  # Version of configuration template that is to be aliased by the updated alias
+  configurationTemplateVersion: String!
+}
+
+# Represents the input data for the update custom action mutation
+input UpdateCustomActionInput {
+  # Handler action of the custom action
+  action: String
+
+  # Priority of the custom action, used in case of more than one custom action matching to url
+  priority: Int
+
+  # Regexp of the custom action, used to check if urls are matching to custom action
+  regexp: String
+}
+
+# Represents the data of node, used to update node
+input UpdateNodeInput {
+  # Additional properties of the node
+  additionalProperties: NodeAdditionalPropertiesInput
+
+  # Id of the category to be connected with the node
+  categoryId: UUID
+
+  # Name of the node
+  name: String!
+}
+
+# Represents options for filtering based on UUID
+input UuidFilterInput {
+  # List of UUIDs which allow to define **include** condition, when filtering the results
+  in: [UUID!]
+
+  # List of UUIDs which allow to define **exclude** condition, when filtering the results
+  notIn: [UUID!]
+}
+
+# type of the list entry given as `validationErrors` argument that is injected
+# into every field resolver with validated arguments
+input ValidatedInputError {
+  # The actual error instance
+  error: ValidatedInputErrorInstance!
+
+  # The error/exception message that caused the validation error
+  message: String!
+
+  # Path to the value that caused the validation error
+  path: [String!]!
+}
+
+# The error/exception that caused the validation error
+input ValidatedInputErrorInstance {
+  message: String!
+}
+
+# Output/return version of ValidatedInputError
+type ValidatedInputErrorOutput {
+  # The error/exception message that caused the validation error
+  message: String!
+
+  # Path to the value that caused the validation error
+  path: [String!]!
+}
+
+# Represents a version of the service (website) for which specific configuration is set
+type Variant {
+  # List of changes in configuration of the variant, based on creation time
+  changelog(
+    # Change creation time
+    creationTime: String
+  ): [ChangeLog!]!
+
+  # Config structure (with field's detailed description)
+  configurationStructure: VariantConfigurationStructure!
+
+  # Custom actions of the variant
+  # [available only if "routing" feature enabled]
+  customActions: [CustomAction!]!
+
+  # ID of the variant
+  id: ID!
+
+  # Structure of variant's configuration (with detailed description of the fields)
+  structure: JSONObject!
+}
+
+# Represents object containing site configuration parameters (auxiliary variables useful for creating view templates)
+# populated with values
+type VariantConfiguration {
+  # Configuration of the variant for a specific module, based on the code name of the module
+  config(
+    # Code name of the module
+    codeName: String!
+  ): [ModuleConfiguration!]!
+
+  # Details of the variant
+  variant: Variant
+}
+
+type VariantConfigurationStructure {
+  # Alias of configuration's template version
+  configurationTemplateAlias: ConfigurationTemplateAlias
+
+  # Version of configuration template
+  configurationTemplateVersion: ConfigurationTemplateVersion!
+}
+
+# Represents the result of mutations that create new or clone variant, returns whether is was done correctly
+# and the data of the variant
+type VariantMutationResult implements SimpleResult {
+  # Identifier of affected variant
+  affectedId: ID!
+
+  # Reference to affected variant
+  data: Variant
+
+  # Errors, present when mutation was unsuccessful
+  errors: [ResultError!]
+
+  # Mutation's result status
+  status: SimpleResultStatusEnum!
+}
+
+# Website is an object which creates a relation between Topics and Front-End
+type Website {
+  # Objects belonging to this category or its descendants will be published to this Website
+  category: Topic
+
+  # User defined additional data
+  extensions(
+    # Allows to filter extensions by type
+    type: String
+  ): [Extension!]!
+
+  # Website ID
+  id: UUID!
+
+  # Website name
+  name: String!
+}

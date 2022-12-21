@@ -28,6 +28,7 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
+const StoryMainImageDesc_1 = require("./StoryMainImageDesc");
 async function StoryMainImage(params) {
     const accessKey = process.env.WEBSITE_API_PUBLIC;
     const secretKey = process.env.WEBSITE_API_SECRET;
@@ -49,7 +50,7 @@ async function StoryMainImage(params) {
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);
     const imgSrc = _.get(response, 'data.story.image.url');
-    return (0, jsx_runtime_1.jsx)("img", { src: imgSrc });
+    return (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("img", { src: imgSrc }), (0, jsx_runtime_1.jsx)(StoryMainImageDesc_1.StoryMainImageDesc, { ...params })] });
 }
 exports.StoryMainImage = StoryMainImage;
 //# sourceMappingURL=StoryMainImage.js.map

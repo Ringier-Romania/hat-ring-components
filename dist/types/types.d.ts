@@ -9,6 +9,7 @@ export declare enum SiteContentType {
 export interface AppContext {
     siteContentType: SiteContentType;
     id: string | null;
+    customData: any;
 }
 export interface ComponentParams {
     context: AppContext;

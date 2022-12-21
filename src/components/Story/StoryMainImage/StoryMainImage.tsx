@@ -3,15 +3,17 @@ import * as _ from 'lodash';
 import {WebsitesApiClient} from '@ringpublishing/graphql-api-client';
 import {gql} from 'graphql-tag';
 import {ComponentParams} from "../../../types/types";
+import {StoryMainImageDesc} from "./StoryMainImageDesc";
 
 
-export interface StoryMainImageParams extends ComponentParams{
+export interface StoryMainImageParams extends ComponentParams {
     config: {
         width: number,
         height: number,
     }
 }
-export async function StoryMainImage(params: StoryMainImageParams){
+
+export async function StoryMainImage(params: StoryMainImageParams) {
     const accessKey = process.env.WEBSITE_API_PUBLIC!;
     const secretKey = process.env.WEBSITE_API_SECRET!;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
@@ -32,9 +34,14 @@ export async function StoryMainImage(params: StoryMainImageParams){
     };
 
     const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
-    const response = await websitesApiClient.query(query,variables);
+    const response = await websitesApiClient.query(query, variables);
+
 
     const imgSrc = _.get(response, 'data.story.image.url');
-    return <img src={imgSrc} />;
+    return <>
+        <img src={imgSrc}/>
+        {/* @ts-expect-error Server Component */}
+        <StoryMainImageDesc {...params}/>
+    </>;
 }
 
