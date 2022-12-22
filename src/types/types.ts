@@ -10,6 +10,7 @@ export enum SiteContentType {
 export interface AppContext {
     siteContentType: SiteContentType,
     id: string | null,
+    url: string,
     customData: any,
 }
 
