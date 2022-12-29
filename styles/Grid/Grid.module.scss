@@ -1,0 +1,14 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(12, [col-start] 1fr);
+  gap: 20px;
+
+  :global {
+    .gridBox {
+      &.gridCol12 {
+        grid-column: col-start / span 12;
+      }
+    }
+  }
+}
+

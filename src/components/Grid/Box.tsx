@@ -2,7 +2,7 @@ import React from "react";
 import * as _ from "lodash";
 import {AppContext} from "../../types/types";
 import {Widget} from "./Widget";
-
+import styles from "../../../styles/Grid/Grid.module.scss";
 //@TODO section config type
 interface GridBoxParams {
     context: AppContext;
@@ -18,7 +18,7 @@ export function Box({boxName, widgets, context, size, tagName}: GridBoxParams) {
     const BoxTag = `${tagName || 'div'}`;
 
     // @ts-ignore
-    return <BoxTag className={['gridBox', boxName, 'gridCol' + size].join(' ')}>
+    return <BoxTag className={['gridBox', boxName, 'gridCol' + size, styles.box].join(' ')}>
         {widgets.map(widgetConfig => {
             return <Widget widgetConfig={widgetConfig} context={context}/>
         })}

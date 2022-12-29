@@ -20,9 +20,11 @@
 		"resolveJsonModule": true,
 		"lib": [
 			"dom"
-		]
+		],
 	},
 	"include": [
-		"./src",
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx"
 	]
 }

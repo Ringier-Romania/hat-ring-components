@@ -3,6 +3,8 @@ import * as _ from "lodash";
 import {AppContext} from "../../types/types";
 import {Box} from "./Box";
 
+import styles from "../../../styles/Grid/Grid.module.scss";
+
 //@TODO section config type
 interface GridContainerParams {
     sectionName: string;
@@ -16,7 +18,7 @@ export function Container({sectionName, sectionConfig, context, boxes}: GridCont
 
     const ContainerTag = `${sectionConfig.container_html_tag || 'main'}`;
     // @ts-ignore
-    return <ContainerTag className={['gridContainer', sectionName].join(' ')}>
+    return <ContainerTag className={['gridContainer', sectionName, styles.gridContainer].join(' ')}>
         {boxes.map(boxName => {
             return <Box
                 context={context}
