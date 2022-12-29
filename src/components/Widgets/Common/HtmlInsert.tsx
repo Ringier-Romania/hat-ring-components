@@ -9,6 +9,6 @@ interface HtmlInsertParams extends WidgetParams {
     }
 }
 
-export function HtmlInsert({widgetConfig, context}: WidgetParams) {
+export function HtmlInsert({widgetConfig, context}: HtmlInsertParams) {
     return <div dangerouslySetInnerHTML={{__html: widgetConfig.plainHtml}}/>;
 }

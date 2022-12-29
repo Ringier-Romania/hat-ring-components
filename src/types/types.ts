@@ -31,6 +31,7 @@ export interface WidgetParams {
     widgetConfig: any,
 }
 
+
 export interface AbstractWidgetConfig{
     module: string,
     widgetType: string,
@@ -40,3 +41,5 @@ export interface AbstractWidgetConfig{
     customPosition: string,
     customWidth: string
 }
+
+
