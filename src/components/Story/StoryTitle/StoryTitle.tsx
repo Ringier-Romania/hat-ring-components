@@ -27,7 +27,6 @@ export async function StoryTitle(params: StoryTitleParams) {
     const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
     const response = await websitesApiClient.query(query, variables);
 
-    console.log(params.context.customData);
     const title = _.get(response, 'data.story.name');
     return <h1>{title}</h1>;
 }

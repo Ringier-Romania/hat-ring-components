@@ -23,29 +23,45 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StoryTitle = void 0;
+exports.Grid = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
-const _ = __importStar(require("lodash"));
-const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
-async function StoryTitle(params) {
+const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
+const _ = __importStar(require("lodash"));
+const Container_1 = require("./Container");
+async function Grid(params) {
     const accessKey = process.env.WEBSITE_API_PUBLIC;
     const secretKey = process.env.WEBSITE_API_SECRET;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
+    const variant = process.env.WEBSITE_API_VARIANT;
+    const domain = process.env.WEBSITE_API_DOMAIN;
+    let variablesQuery = '';
+    let configQuery = '';
+    params.config.sections.forEach(section => {
+        configQuery += section + ':config(codeName: "' + section + '"){ data } ';
+    });
+    console.log(variablesQuery);
     const query = (0, graphql_tag_1.gql) `
-        query($storyId: UUID){
-            story(id:$storyId){
-                name
+        query($url: URL!, $variant:ID!){
+            site(url:$url, variantId: $variant){
+                data {
+                    node {
+                        config {
+                            ${configQuery}
+                        }
+                    }
+                }
             }
         }
     `;
     const variables = {
-        storyId: params.context.id
+        url: domain + params.context.url,
+        variant: variant,
     };
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);
-    const title = _.get(response, 'data.story.name');
-    return (0, jsx_runtime_1.jsx)("h1", { children: title });
+    const sectionsConfig = _.get(response, 'data.site.data.node.config');
+    return params.config.sections.map(sectionName => (0, jsx_runtime_1.jsx)(Container_1.Container, { context: params.context, boxes: params.config.boxes, sectionName: sectionName, sectionConfig: _.get(sectionsConfig, `${sectionName}.0.data`) }));
 }
-exports.StoryTitle = StoryTitle;
-//# sourceMappingURL=StoryTitle.js.map
+exports.Grid = Grid;
+//# sourceMappingURL=Grid.js.map

@@ -23,29 +23,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StoryTitle = void 0;
+exports.Widget = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
-const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
-const graphql_tag_1 = require("graphql-tag");
-async function StoryTitle(params) {
-    const accessKey = process.env.WEBSITE_API_PUBLIC;
-    const secretKey = process.env.WEBSITE_API_SECRET;
-    const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
-    const query = (0, graphql_tag_1.gql) `
-        query($storyId: UUID){
-            story(id:$storyId){
-                name
-            }
-        }
-    `;
-    const variables = {
-        storyId: params.context.id
-    };
-    const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
-    const response = await websitesApiClient.query(query, variables);
-    const title = _.get(response, 'data.story.name');
-    return (0, jsx_runtime_1.jsx)("h1", { children: title });
+;
+function Widget({ widgetConfig, context }) {
+    const availableWidgets = context.customData.widgets;
+    const widgetName = _.upperFirst(widgetConfig.widgetType);
+    const Component = availableWidgets[widgetName];
+    if (!Component) {
+        console.error(`No widget with name ${widgetConfig.widgetType}`);
+        return (0, jsx_runtime_1.jsx)("span", { className: widgetName, style: { display: 'none' }, dangerouslySetInnerHTML: { __html: `<!-- No widget found ${widgetName} -->` } });
+    }
+    const customClass = widgetConfig.customClass || '';
+    return (0, jsx_runtime_1.jsx)("div", { className: 'gridWidget ' + widgetName + ' ' + customClass, children: (0, jsx_runtime_1.jsx)(Component, { widgetConfig: widgetConfig, context: context }) });
 }
-exports.StoryTitle = StoryTitle;
-//# sourceMappingURL=StoryTitle.js.map
+exports.Widget = Widget;
+//# sourceMappingURL=Widget.js.map

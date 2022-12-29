@@ -1,0 +1,30 @@
+import React from "react";
+import * as _ from "lodash";
+import {AppContext} from "../../types/types";
+import {Box} from "./Box";
+
+//@TODO section config type
+interface GridContainerParams {
+    sectionName: string;
+    sectionConfig: any;
+    boxes: Array<string>,
+    context: AppContext;
+
+};
+
+export function Container({sectionName, sectionConfig, context, boxes}: GridContainerParams) {
+
+    const ContainerTag = `${sectionConfig.container_html_tag || 'main'}`;
+    // @ts-ignore
+    return <ContainerTag className={'gridContainer '+ sectionName}>
+        {boxes.map(boxName => {
+            return <Box
+                        context={context}
+                        boxName={boxName}
+                        widgets={sectionConfig[boxName]}
+                        size={sectionConfig[boxName + '_size']}
+                        tagName={sectionConfig[boxName + '_htmlTag']}
+            />
+        })}
+    </ContainerTag>;
+}
