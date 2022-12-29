@@ -19,7 +19,7 @@ export function Widget({widgetConfig, context}: GridWidgetParams) {
                      dangerouslySetInnerHTML={{__html: `<!-- No widget found ${widgetName} -->`}}/>;
     }
     const customClass = widgetConfig.customClass || '';
-    return <div className={'gridWidget ' + widgetName + ' ' + customClass}>
+    return <div className={['gridWidget', widgetName, customClass].join(' ')}>
         <Component widgetConfig={widgetConfig}
                    context={context}/>
     </div>;

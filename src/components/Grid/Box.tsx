@@ -18,8 +18,8 @@ export function Box({boxName, widgets, context, size, tagName}: GridBoxParams) {
     const BoxTag = `${tagName || 'div'}`;
 
     // @ts-ignore
-    return <BoxTag className={'gridBox ' + boxName + ' gridCol'+size}>
-        {widgets.map(widgetConfig =>{
+    return <BoxTag className={['gridBox', boxName, 'gridCol' + size].join(' ')}>
+        {widgets.map(widgetConfig => {
             return <Widget widgetConfig={widgetConfig} context={context}/>
         })}
     </BoxTag>;
