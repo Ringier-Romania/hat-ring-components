@@ -29,7 +29,7 @@ export async function StoryMainImage(params: StoryMainImageParams) {
         }
     `;
     const variables = {
-        storyId: params.context.id,
+        storyId: params.context.controllerParams.gqlResponse.data?.site.data.content.id,
         imageWidth: params.config.width,
         imageHeight: params.config.height,
     };

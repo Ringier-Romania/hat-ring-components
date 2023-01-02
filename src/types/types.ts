@@ -1,26 +1,18 @@
 import React, {ComponentState} from "react";
-
-export enum SiteContentType {
-    Author = "Author",
-    CustomAction = 'CustomAction',
-    SiteNode = 'SiteNode',
-    Source = 'Source',
-    Story = 'Story',
-    Topic = 'Topic'
-}
+import {
+    DefaultControllerParams
+} from "hat-server";
 
 export interface AppContext {
-    siteContentType: SiteContentType,
-    id: string | null,
-    url: string,
     customData: any,
+    url: string;
+    controllerParams: DefaultControllerParams
 }
 
 export interface ComponentParams {
     context: AppContext,
     config: any
 }
-
 
 export interface AbstractWidget extends React.ComponentClass<WidgetParams> {
 

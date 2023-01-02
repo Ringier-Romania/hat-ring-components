@@ -21,7 +21,7 @@ export async function StoryTitle(params: StoryTitleParams) {
         }
     `;
     const variables = {
-        storyId: params.context.id
+        storyId: params.context.controllerParams.gqlResponse.data?.site.data.content.id
     };
 
     const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});

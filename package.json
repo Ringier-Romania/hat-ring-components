@@ -1,6 +1,6 @@
 {
 	"name": "hat-ring-components",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "Head App Template - RING components",
 	"license": "MIT",
 	"repository": {},
@@ -14,17 +14,18 @@
 	"private": false,
 	"dependencies": {
 		"@ringieraxelspringer/tsconfig": "^4.0.0",
+		"@ringpublishing/graphql-api-client": "^1.0.0",
 		"@types/node": "*",
-		"react": "18.2.0",
-		"react-dom": "18.2.0",
+		"hat-server": "git+http://stash.grupa.onet/scm/hat/hat-server.git",
 		"lodash": "^4.17.21",
-		"@ringpublishing/graphql-api-client": "^1.0.0"
+		"react": "18.2.0",
+		"react-dom": "18.2.0"
 	},
 	"devDependencies": {
-		"typescript": "~4.7.4",
 		"@types/node": "^12.12.21",
 		"@types/react": "18.0.26",
-		"@types/react-dom": "18.0.9"
+		"@types/react-dom": "18.0.9",
+		"typescript": "~4.7.4"
 	},
 	"scripts": {
 		"build": "tsc --jsx react-jsx",
