@@ -2,7 +2,7 @@
 import { ComponentParams } from "../../types/types";
 export interface GridParams extends ComponentParams {
     config: {
-        sections: string[];
+        containers: string[];
         boxes: string[];
     };
 }

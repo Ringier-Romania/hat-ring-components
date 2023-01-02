@@ -35,9 +35,12 @@ async function Grid(params) {
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
     const variant = process.env.WEBSITE_API_VARIANT;
     const domain = process.env.WEBSITE_API_DOMAIN;
+    if (!params.config.boxes) {
+        params.config.boxes = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom'];
+    }
     let variablesQuery = '';
     let configQuery = '';
-    params.config.sections.forEach(section => {
+    params.config.containers.forEach(section => {
         configQuery += section + ':config(codeName: "' + section + '"){ data } ';
     });
     console.log(variablesQuery);
@@ -61,7 +64,7 @@ async function Grid(params) {
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);
     const sectionsConfig = _.get(response, 'data.site.data.node.config');
-    return params.config.sections.map(sectionName => (0, jsx_runtime_1.jsx)(Container_1.Container, { context: params.context, boxes: params.config.boxes, sectionName: sectionName, sectionConfig: _.get(sectionsConfig, `${sectionName}.0.data`) }));
+    return params.config.containers.map(sectionName => (0, jsx_runtime_1.jsx)(Container_1.Container, { context: params.context, boxes: params.config.boxes, sectionName: sectionName, sectionConfig: _.get(sectionsConfig, `${sectionName}.0.data`) }));
 }
 exports.Grid = Grid;
 //# sourceMappingURL=Grid.js.map

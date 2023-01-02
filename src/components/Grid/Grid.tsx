@@ -8,7 +8,7 @@ import {Container} from "./Container";
 
 export interface GridParams extends ComponentParams {
     config: {
-        sections: string[],
+        containers: string[],
         boxes: string[],
     }
 }
@@ -20,10 +20,14 @@ export async function Grid(params: GridParams) {
     const variant = process.env.WEBSITE_API_VARIANT;
     const domain = process.env.WEBSITE_API_DOMAIN;
 
+    if (!params.config.boxes) {
+        params.config.boxes = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom'];
+    }
+
 
     let variablesQuery = '';
     let configQuery = '';
-    params.config.sections.forEach(section => {
+    params.config.containers.forEach(section => {
         configQuery += section + ':config(codeName: "' + section + '"){ data } ';
     })
 
@@ -52,7 +56,7 @@ export async function Grid(params: GridParams) {
 
     const sectionsConfig = _.get(response, 'data.site.data.node.config');
 
-    return params.config.sections.map(
+    return params.config.containers.map(
         sectionName => <Container
             context={params.context}
             boxes={params.config.boxes}
