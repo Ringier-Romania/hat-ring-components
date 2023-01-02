@@ -29,7 +29,6 @@ const _ = __importStar(require("lodash"));
 const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
 async function StoryTitle(params) {
-    var _a;
     const accessKey = process.env.WEBSITE_API_PUBLIC;
     const secretKey = process.env.WEBSITE_API_SECRET;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
@@ -41,7 +40,7 @@ async function StoryTitle(params) {
         }
     `;
     const variables = {
-        storyId: (_a = params.context.controllerParams.gqlResponse.data) === null || _a === void 0 ? void 0 : _a.site.data.content.id
+        storyId: params.context.id,
     };
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);

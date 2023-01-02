@@ -1,9 +1,18 @@
 import React from "react";
-import { DefaultControllerParams } from "hat-server";
+export declare enum SiteContentType {
+    Author = "Author",
+    CustomAction = "CustomAction",
+    SiteNode = "SiteNode",
+    Source = "Source",
+    Story = "Story",
+    Topic = "Topic"
+}
 export interface AppContext {
-    customData: any;
+    siteContentType: SiteContentType;
+    id: string | null;
     url: string;
-    controllerParams: DefaultControllerParams;
+    customData: any;
+    controllerParams: any;
 }
 export interface ComponentParams {
     context: AppContext;

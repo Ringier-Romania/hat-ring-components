@@ -1,6 +1,6 @@
 {
 	"name": "hat-ring-components",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "Head App Template - RING components",
 	"license": "MIT",
 	"repository": {},
@@ -16,7 +16,6 @@
 		"@ringieraxelspringer/tsconfig": "^4.0.0",
 		"@ringpublishing/graphql-api-client": "^1.0.0",
 		"@types/node": "*",
-		"hat-server": "git+http://stash.grupa.onet/scm/hat/hat-server.git",
 		"lodash": "^4.17.21",
 		"react": "18.2.0",
 		"react-dom": "18.2.0"
