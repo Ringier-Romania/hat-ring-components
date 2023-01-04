@@ -5,4 +5,4 @@ export default function Image({ context, widgetConfig, data }: {
     context: AppContext;
     widgetConfig: BasicWidgetConfig;
     data: BasicWidgetResponseNode;
-}): JSX.Element;
+}): JSX.Element | null;

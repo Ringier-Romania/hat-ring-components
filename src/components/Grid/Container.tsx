@@ -20,13 +20,14 @@ export function Container({sectionName, sectionConfig, context, boxes}: GridCont
     // @ts-ignore
     return <ContainerTag className={['gridContainer', sectionName, styles.gridContainer].join(' ')}>
         {boxes.map(boxName => {
-            return <Box
-                context={context}
-                boxName={boxName}
-                widgets={sectionConfig[boxName]}
-                size={sectionConfig[boxName + '_size']}
-                tagName={sectionConfig[boxName + '_htmlTag']}
-            />
+            return !!sectionConfig[boxName + '_hide'] ? null :
+                <Box
+                    context={context}
+                    boxName={boxName}
+                    widgets={sectionConfig[boxName]}
+                    size={sectionConfig[boxName + '_size']}
+                    tagName={sectionConfig[boxName + '_html_tag']}
+                />
         })}
     </ContainerTag>;
 }
