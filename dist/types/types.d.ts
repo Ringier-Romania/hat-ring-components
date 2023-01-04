@@ -8,8 +8,8 @@ export declare enum SiteContentType {
     Topic = "Topic"
 }
 export interface AppContext {
-    siteContentType: SiteContentType;
-    id: string | null;
+    siteContentType: SiteContentType | undefined | null;
+    id: string | undefined | null;
     url: string;
     customData: any;
     controllerParams: any;

@@ -32,7 +32,6 @@ export async function Grid(params: GridParams) {
     })
 
 
-    console.log(variablesQuery);
     const query = gql`
         query($url: URL!, $variant:ID!){
             site(url:$url, variantId: $variant){

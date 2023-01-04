@@ -6,12 +6,12 @@ export enum SiteContentType {
     SiteNode = 'SiteNode',
     Source = 'Source',
     Story = 'Story',
-    Topic = 'Topic'
+    Topic = 'Topic',
 }
 
 export interface AppContext {
-    siteContentType: SiteContentType,
-    id: string | null,
+    siteContentType: SiteContentType | undefined | null,
+    id: string | undefined | null,
     url: string,
     customData: any,
     controllerParams: any

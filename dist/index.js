@@ -20,4 +20,5 @@ __exportStar(require("./components/Story/StoryMainImage/StoryMainImage"), export
 __exportStar(require("./components/Grid/Grid"), exports);
 __exportStar(require("./components/widgets/common/HtmlInsert"), exports);
 __exportStar(require("./components/widgets/common/ExternalApplication"), exports);
+__exportStar(require("./components/widgets/common/BasicWidget/BasicWidget"), exports);
 //# sourceMappingURL=index.js.map

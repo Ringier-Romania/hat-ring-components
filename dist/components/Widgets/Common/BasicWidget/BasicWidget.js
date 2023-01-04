@@ -22,48 +22,55 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Grid = void 0;
+exports.BasicWidget = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const graphql_tag_1 = require("graphql-tag");
 const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
+const GeneralParts = __importStar(require("./generalParts"));
 const _ = __importStar(require("lodash"));
-const Container_1 = require("./Container");
-async function Grid(params) {
+const BasicWidget_module_scss_1 = __importDefault(require("../../../../../styles/widgets/common/BasicWidget.module.scss"));
+async function BasicWidget({ widgetConfig, context }) {
     const accessKey = process.env.WEBSITE_API_PUBLIC;
     const secretKey = process.env.WEBSITE_API_SECRET;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
-    const variant = process.env.WEBSITE_API_VARIANT;
-    const domain = process.env.WEBSITE_API_DOMAIN;
-    if (!params.config.boxes) {
-        params.config.boxes = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom'];
-    }
-    let variablesQuery = '';
-    let configQuery = '';
-    params.config.containers.forEach(section => {
-        configQuery += section + ':config(codeName: "' + section + '"){ data } ';
-    });
     const query = (0, graphql_tag_1.gql) `
-        query($url: URL!, $variant:ID!){
-            site(url:$url, variantId: $variant){
-                data {
-                    node {
-                        config {
-                            ${configQuery}
+        query($codeName:  ID!, $nodeId:  ID!){
+            section(codeName: $codeName, nodeId: $nodeId) {
+                items{
+                    edges {
+                        node {
+                            title
+                            lead
+                            image {
+                                url
+                            }
+                            url
                         }
                     }
                 }
             }
+            
         }
     `;
     const variables = {
-        url: domain + params.context.url,
-        variant: variant,
+        codeName: widgetConfig.section_name,
+        nodeId: context.controllerParams.gqlResponse.data.site.data.node.id
     };
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);
-    const sectionsConfig = _.get(response, 'data.site.data.node.config');
-    return params.config.containers.map(sectionName => (0, jsx_runtime_1.jsx)(Container_1.Container, { context: params.context, boxes: params.config.boxes, sectionName: sectionName, sectionConfig: _.get(sectionsConfig, `${sectionName}.0.data`) }));
+    const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
+        const Component = GeneralParts[_.upperFirst(showOption)];
+        if (!Component) {
+            console.error(`No general show option name support ${showOption}`);
+            return (0, jsx_runtime_1.jsxs)("div", { style: { display: 'none' }, children: [showOption, " not supported, yet"] });
+        }
+        return (0, jsx_runtime_1.jsx)(Component, { context: context, widgetConfig: widgetConfig, response: response }, index);
+    });
+    return (0, jsx_runtime_1.jsx)("div", { className: ['BasicWidget', BasicWidget_module_scss_1.default.BasicWidget].join(' '), children: generalComponents });
 }
-exports.Grid = Grid;
-//# sourceMappingURL=Grid.js.map
+exports.BasicWidget = BasicWidget;
+//# sourceMappingURL=BasicWidget.js.map
