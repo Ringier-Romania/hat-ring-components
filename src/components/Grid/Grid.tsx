@@ -18,7 +18,7 @@ export async function Grid(params: GridParams) {
     const secretKey = process.env.WEBSITE_API_SECRET!;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
     const variant = process.env.WEBSITE_API_VARIANT;
-    const domain = process.env.WEBSITE_API_DOMAIN;
+    const domain = process.env.WEBSITE_DOMAIN;
 
     if (!params.config.boxes) {
         params.config.boxes = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom'];
