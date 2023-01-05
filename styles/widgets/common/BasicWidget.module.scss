@@ -1,15 +1,18 @@
 .BasicWidget {
-  :global {
-    .SectionElements {
-      display: grid;
-      grid-template-columns: repeat(12, [col-start] 1fr);
-      gap: var(--basicWidgetGap, var(--ringGap,20px));
-      .Item{
+  @media only screen and (min-width: 768px) {
+    :global {
+      .SectionElements {
+        display: grid;
+        grid-template-columns: repeat(12, [col-start] 1fr);
+        gap: var(--basicWidgetGap, var(--ringGap, 20px));
+
+        .Item {
           @for $i from 1 through 12 {
             &.col#{$i} {
               grid-column: auto / span $i;
             }
           }
+        }
       }
     }
   }
