@@ -21,7 +21,8 @@ export async function BasicWidget({widgetConfig, context}: BasicWidgetParams) {
                             title
                             lead
                             image {
-                                url
+                                url,
+                                caption
                             }
                             url
                         }
