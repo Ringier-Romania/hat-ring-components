@@ -23,20 +23,49 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StoryTitle = void 0;
+exports.StoryContent = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
 const process = __importStar(require("process"));
-async function StoryTitle(params) {
+const BlocksTypes = __importStar(require("./StoryContentBlocks/index"));
+;
+async function StoryContent(params) {
     const accessKey = process.env.WEBSITE_API_PUBLIC;
     const secretKey = process.env.WEBSITE_API_SECRET;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID){
             story(id:$storyId){
-                name
+                content {
+                    blocks {
+                        ... on ImageBlock {
+                            type
+                            title
+                            url
+                            alt
+                            link {
+                                url
+                            }
+                            image {
+                                description
+                                title
+                                width
+                                height
+                                sources {
+                                    source {
+                                        name
+                                    }
+                                }
+                            }
+                        }
+                        ... on ParagraphBlock {
+                            type
+                            text
+                        }
+                    }
+                }
             }
         }
     `;
@@ -45,8 +74,13 @@ async function StoryTitle(params) {
     };
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);
-    const title = _.get(response, 'data.story.name');
-    return (0, jsx_runtime_1.jsx)("h1", { children: title });
+    const content = _.get(response, 'data.story.content[0].blocks');
+    return content.map((block, index) => {
+        console.log(`block-#${index} ->`, JSON.stringify(block, null, 4));
+        const blockType = block.type ? _.upperFirst(block.type) + 'Block' : 'NotHandledBlock';
+        const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
+        return ((0, jsx_runtime_1.jsx)(Block, { blockData: block, index: `block_${index}` }));
+    });
 }
-exports.StoryTitle = StoryTitle;
-//# sourceMappingURL=StoryTitle.js.map
+exports.StoryContent = StoryContent;
+//# sourceMappingURL=StoryContent.js.map

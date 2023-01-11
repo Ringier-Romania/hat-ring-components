@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import {WebsitesApiClient} from '@ringpublishing/graphql-api-client';
 import {gql} from 'graphql-tag';
 import {ComponentParams} from "../../../types/types";
+import * as process from "process";
 
 export interface StoryTitleParams extends ComponentParams {
     config: {}
