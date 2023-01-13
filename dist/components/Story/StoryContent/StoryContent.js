@@ -29,7 +29,6 @@ const _ = __importStar(require("lodash"));
 const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
 const StoryContentSwitcher_1 = require("./StoryContentSwitcher");
-;
 async function StoryContent(params) {
     const accessKey = process.env.WEBSITE_API_PUBLIC;
     const secretKey = process.env.WEBSITE_API_SECRET;

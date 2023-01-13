@@ -5,8 +5,6 @@ import {gql} from 'graphql-tag';
 import {ComponentParams} from "../../../types/types";
 import {StoryContentSwitcher} from "./StoryContentSwitcher";
 
-;
-
 export interface StoryContentParams extends ComponentParams {
     config: {}
 }
