@@ -55,6 +55,7 @@ export interface BasicWidgetResponseNode {
     lead: string;
     image: {
         url: string;
+        caption: string;
     };
 }
 export interface BasicWidgetResponse {

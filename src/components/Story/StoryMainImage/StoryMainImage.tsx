@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {CSSProperties} from 'react';
 import * as _ from 'lodash';
 import {WebsitesApiClient} from '@ringpublishing/graphql-api-client';
 import {gql} from 'graphql-tag';
 import {ComponentParams} from "../../../types/types";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
+import RingImage, {TransformType} from "../../common/RingImage";
+import Head from "next/head";
 
 
 export interface StoryMainImageParams extends ComponentParams {
@@ -41,8 +43,9 @@ export async function StoryMainImage(params: StoryMainImageParams) {
     const imgSrc = _.get(response, 'data.story.image.url');
     const caption = _.get(response, 'data.story.image.caption');
 
+    // TransformType.None because we do transform on API level
     return <>
-        <img src={imgSrc}/>
+        <RingImage priority={true} transform={TransformType.None} src={imgSrc} alt={caption || ''} width={params.config.width} height={params.config.height}/>
         <StoryMainImageCaption {...params } caption={caption}/>
     </>;
 }

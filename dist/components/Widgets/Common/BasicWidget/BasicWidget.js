@@ -46,7 +46,8 @@ async function BasicWidget({ widgetConfig, context }) {
                             title
                             lead
                             image {
-                                url
+                                url,
+                                caption
                             }
                             url
                         }

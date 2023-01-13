@@ -1,4 +1,4 @@
-export let GridWebsitesConfig = {
+export let GridHomeWebsitesConfig = {
     "sections": [
         {
             "title": "Home (page)",
