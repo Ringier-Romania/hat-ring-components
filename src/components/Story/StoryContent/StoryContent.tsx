@@ -2,9 +2,6 @@ import React from 'react';
 import * as _ from 'lodash';
 import {WebsitesApiClient} from '@ringpublishing/graphql-api-client';
 import {gql} from 'graphql-tag';
-import * as process from "process"
-
-import * as BlocksTypes from './StoryContentBlocks/index'
 import {ComponentParams} from "../../../types/types";
 import {StoryContentSwitcher} from "./StoryContentSwitcher";
 

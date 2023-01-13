@@ -28,7 +28,6 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
-const process = __importStar(require("process"));
 async function StoryTitle(params) {
     const accessKey = process.env.WEBSITE_API_PUBLIC;
     const secretKey = process.env.WEBSITE_API_SECRET;
