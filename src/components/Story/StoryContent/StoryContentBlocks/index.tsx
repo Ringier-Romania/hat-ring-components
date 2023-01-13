@@ -1,3 +1,9 @@
 export { default as ImageBlock } from './ImageBlock';
 export { default as ParagraphBlock } from './ParagraphBlock';
+export { default as HeadingBlock } from './HeadingBlock';
+export { default as UnorderedListBlock } from './UnorderedListBlock';
+export { default as OrderedListBlock } from './OrderedListBlock';
+export { default as Embedded_applicationBlock } from './Embedded_applicationBlock';
+export { default as TableBlock } from './TableBlock';
+export { default as GroupBlock } from './GroupBlock';
 export { default as NotHandledBlock } from './NotHandledBlock';

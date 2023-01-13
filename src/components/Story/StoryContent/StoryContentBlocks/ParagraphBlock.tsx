@@ -1,7 +1,14 @@
 import React from "react";
 
-export default function ParagraphBlock() {
-    return (
-        <p>Paragraph block</p>
-    )
+export interface ParagraphBlockParams {
+    blockData: {
+        type: string;
+        text: string;
+    }
+}
+
+export default function ParagraphBlock({blockData}: ParagraphBlockParams) {
+    return <div className="paragraphBlock">
+        <p>{blockData.text}</p>
+    </div>
 }

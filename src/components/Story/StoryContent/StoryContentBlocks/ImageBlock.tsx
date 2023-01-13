@@ -28,7 +28,7 @@ export interface ImageBlockParams {
 
 export default function ImageBlock({blockData}: ImageBlockParams) {
     const {title, alt, image, url, link} = blockData
-    return <div>
+    return <div className="imageBlock">
         {
             link ?
                 <a href={link.url}>

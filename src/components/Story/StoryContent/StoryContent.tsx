@@ -5,7 +5,10 @@ import {gql} from 'graphql-tag';
 import * as process from "process"
 
 import * as BlocksTypes from './StoryContentBlocks/index'
-import {ComponentParams} from "../../../types/types";;
+import {ComponentParams} from "../../../types/types";
+import {StoryContentSwitcher} from "./StoryContentSwitcher";
+
+;
 
 export interface StoryContentParams extends ComponentParams {
     config: {}
@@ -45,6 +48,51 @@ export async function StoryContent(params: StoryContentParams) {
                             type
                             text
                         }
+                        ... on HeadingBlock {
+                            type
+                            level
+                            text
+                        }
+                        ... on UnorderedListBlock {
+                            type
+                            styleType
+                            entries
+                            indentLevel
+                        }
+                        ... on OrderedListBlock {
+                            type
+                            styleType
+                            entries
+                            indentLevel
+                            startValue
+                        }
+                        ... on EmbedBlock {
+                            type
+                            embed {
+                                html
+                            }
+                        }
+                        ... on TableBlock {
+                            type
+                            rows {
+                                cells {
+                                    alignment
+                                    classes
+                                    colspan
+                                    isHeader
+                                    link {
+                                        url
+                                    }
+                                    rowspan
+                                    text
+                                }
+                            }
+                        }
+                        ... on GroupBlock {
+                            name
+                            type
+                            alignment
+                        }
                     }
                 }
             }
@@ -57,14 +105,9 @@ export async function StoryContent(params: StoryContentParams) {
     const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
     const response = await websitesApiClient.query(query, variables);
     const content = _.get(response, 'data.story.content[0].blocks');
-    return content.map((block, index) => {
-        console.log(`block-#${index} ->`, JSON.stringify(block, null, 4))
-        const blockType = block.type ? _.upperFirst(block.type)+'Block' : 'NotHandledBlock';
-        const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
-
-        return (
-            <Block blockData={block} index={`block_${index}`}/>
-        );
-    })
+    return <div>
+        {/* @ts-expect-error Server Component */}
+        <StoryContentSwitcher content={content} />
+    </div>
 }
 

@@ -29,7 +29,7 @@ const _ = __importStar(require("lodash"));
 const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
 const process = __importStar(require("process"));
-const BlocksTypes = __importStar(require("./StoryContentBlocks/index"));
+const StoryContentSwitcher_1 = require("./StoryContentSwitcher");
 ;
 async function StoryContent(params) {
     const accessKey = process.env.WEBSITE_API_PUBLIC;
@@ -64,6 +64,51 @@ async function StoryContent(params) {
                             type
                             text
                         }
+                        ... on HeadingBlock {
+                            type
+                            level
+                            text
+                        }
+                        ... on UnorderedListBlock {
+                            type
+                            styleType
+                            entries
+                            indentLevel
+                        }
+                        ... on OrderedListBlock {
+                            type
+                            styleType
+                            entries
+                            indentLevel
+                            startValue
+                        }
+                        ... on EmbedBlock {
+                            type
+                            embed {
+                                html
+                            }
+                        }
+                        ... on TableBlock {
+                            type
+                            rows {
+                                cells {
+                                    alignment
+                                    classes
+                                    colspan
+                                    isHeader
+                                    link {
+                                        url
+                                    }
+                                    rowspan
+                                    text
+                                }
+                            }
+                        }
+                        ... on GroupBlock {
+                            name
+                            type
+                            alignment
+                        }
                     }
                 }
             }
@@ -75,12 +120,7 @@ async function StoryContent(params) {
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);
     const content = _.get(response, 'data.story.content[0].blocks');
-    return content.map((block, index) => {
-        console.log(`block-#${index} ->`, JSON.stringify(block, null, 4));
-        const blockType = block.type ? _.upperFirst(block.type) + 'Block' : 'NotHandledBlock';
-        const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
-        return ((0, jsx_runtime_1.jsx)(Block, { blockData: block, index: `block_${index}` }));
-    });
+    return (0, jsx_runtime_1.jsx)("div", { children: (0, jsx_runtime_1.jsx)(StoryContentSwitcher_1.StoryContentSwitcher, { content: content }) });
 }
 exports.StoryContent = StoryContent;
 //# sourceMappingURL=StoryContent.js.map

@@ -1,2 +1,8 @@
 /// <reference types="react" />
-export default function ParagraphBlock(): JSX.Element;
+export interface ParagraphBlockParams {
+    blockData: {
+        type: string;
+        text: string;
+    };
+}
+export default function ParagraphBlock({ blockData }: ParagraphBlockParams): JSX.Element;
