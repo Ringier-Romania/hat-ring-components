@@ -21,7 +21,7 @@ export default function Image(
     return (
         data.image ?
             <div className={['Image'].join(' ')}>
-                <RingImage priority={false} alt={data.image.caption || data.title || ''} transform={TransformType.ResizeCropAuto} src={ data.image.url} width={Number(sizes[0])} height={Number(sizes[1])}/>
+                <RingImage  priority={false} alt={data.image.caption || data.title || ''} transform={TransformType.ResizeCropAuto} src={ data.image.url} width={Number(sizes[0])} height={Number(sizes[1])}/>
             </div> :
             <></>
 

@@ -14,6 +14,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./components/Grid/GridWebsitesConfig"), exports);
+__exportStar(require("./components/Grid/GridHomeWebsitesConfig"), exports);
 __exportStar(require("./components/widgets/common/BasicWidget/BasicWidgetWebsitesConfig"), exports);
 //# sourceMappingURL=websitesApiConfigs.js.map

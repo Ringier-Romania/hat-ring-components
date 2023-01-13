@@ -7,6 +7,7 @@ exports.ocdnLoader = exports.TransformType = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const image_1 = __importDefault(require("next/image"));
 const { OcdnUrl } = require('@ras-tech/ocdn');
+const RingImage_module_scss_1 = __importDefault(require("../../../styles/common/RingImage.module.scss"));
 var TransformType;
 (function (TransformType) {
     TransformType["ResizeCropAuto"] = "resizeCropAuto";
@@ -57,7 +58,7 @@ function RingImage(props) {
             src = ocdnLoader(src, props.width, props.height, props.transform);
         }
     }
-    return (0, jsx_runtime_1.jsx)(image_1.default, { ...props, src: src, width: props.width, height: props.height, unoptimized: unoptimized, placeholder: placeholder, blurDataURL: blurDataURL });
+    return (0, jsx_runtime_1.jsx)(image_1.default, { ...props, className: ['RingImage', RingImage_module_scss_1.default.RingImage, props.className].join(' '), src: src, width: props.width, height: props.height, unoptimized: unoptimized, placeholder: placeholder, blurDataURL: blurDataURL });
 }
 exports.default = RingImage;
 //# sourceMappingURL=RingImage.js.map

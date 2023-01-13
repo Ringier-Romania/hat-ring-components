@@ -4,6 +4,7 @@ import {gql} from "graphql-tag";
 import {WebsitesApiClient} from "@ringpublishing/graphql-api-client";
 import * as GeneralParts from './generalParts';
 import * as _ from 'lodash';
+// @TODO alias
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 
 

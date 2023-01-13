@@ -1,6 +1,7 @@
 import Image, {ImageProps, ImageLoaderProps} from "next/image";
 import React from "react";
 const { OcdnUrl } = require('@ras-tech/ocdn');
+import styles from "../../../styles/common/RingImage.module.scss";
 
 export interface RingImageProps extends ImageProps {
     transform: TransformType
@@ -63,5 +64,5 @@ export default function RingImage(props: RingImageProps) {
         }
     }
 
-    return <Image {...props} src={src} width={props.width} height={props.height} unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
+    return <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src} width={props.width} height={props.height} unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
 }
