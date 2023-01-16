@@ -96,7 +96,6 @@ export async function StoryContent(params: StoryContentParams) {
     const variables = {
         storyId: params.context.id,
     };
-
     const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
     const response = await websitesApiClient.query(query, variables);
     const content = _.get(response, 'data.story.content[0].blocks');
