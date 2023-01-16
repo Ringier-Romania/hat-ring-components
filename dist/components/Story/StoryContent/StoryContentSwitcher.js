@@ -46,7 +46,7 @@ function StoryContentSwitcher({ content }) {
         }
         const blockType = block.type ? _.upperFirst(block.type) + 'Block' : 'NotHandledBlock';
         const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
-        return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsx)(Block, { blockData: block }) });
+        return (0, jsx_runtime_1.jsx)(Block, { blockData: block });
     });
 }
 exports.StoryContentSwitcher = StoryContentSwitcher;

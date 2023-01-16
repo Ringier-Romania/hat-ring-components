@@ -30,8 +30,7 @@ export function StoryContentSwitcher({content}: StoryContentSwitcherParams) {
 
         const blockType = block.type ? _.upperFirst(block.type) + 'Block' : 'NotHandledBlock';
         const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
-        return <>
-            <Block blockData={block}/>
-        </>
+        return <Block blockData={block}/>
+
     })
 }
