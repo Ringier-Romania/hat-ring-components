@@ -12,7 +12,7 @@ export interface Embedded_applicationBlockParams {
     }
 }
 
-export default function Embedded_applicationBlock({blockData}: Embedded_applicationBlockParams) {
+export default function EmbeddedApplicationBlock({blockData}: Embedded_applicationBlockParams) {
 
     useEffect(()=>{
         //@ts-ignore

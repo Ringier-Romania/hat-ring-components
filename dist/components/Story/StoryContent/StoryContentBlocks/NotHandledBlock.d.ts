@@ -1,2 +1,4 @@
 /// <reference types="react" />
-export default function NotHandledBlock(): JSX.Element;
+export default function NotHandledBlock({ blockData }: {
+    blockData: any;
+}): JSX.Element;

@@ -107,6 +107,10 @@ async function StoryContent(params) {
                             type
                             alignment
                         }
+                        ... on PreformattedBlock {
+                            text
+                            type
+                        }
                     }
                 }
             }
@@ -118,7 +122,7 @@ async function StoryContent(params) {
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);
     const content = _.get(response, 'data.story.content[0].blocks');
-    return (0, jsx_runtime_1.jsx)("div", { children: (0, jsx_runtime_1.jsx)(StoryContentSwitcher_1.StoryContentSwitcher, { content: content }) });
+    return (0, jsx_runtime_1.jsx)("div", { className: "StoryContent", children: (0, jsx_runtime_1.jsx)(StoryContentSwitcher_1.StoryContentSwitcher, { content: content, config: params.config }) });
 }
 exports.StoryContent = StoryContent;
 //# sourceMappingURL=StoryContent.js.map

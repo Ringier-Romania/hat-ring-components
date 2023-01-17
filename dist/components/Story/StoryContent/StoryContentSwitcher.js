@@ -27,9 +27,12 @@ exports.StoryContentSwitcher = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const BlocksTypes = __importStar(require("./StoryContentBlocks"));
-function StoryContentSwitcher({ content }) {
+function StoryContentSwitcher({ content, config }) {
     let isGroupBlock = false;
     const groupElements = [];
+    const buildBlockName = (name) => {
+        return _.upperFirst(_.camelCase(name)) + 'Block';
+    };
     return content.map((block) => {
         if (block.type === 'groupStart') {
             isGroupBlock = true;
@@ -44,9 +47,9 @@ function StoryContentSwitcher({ content }) {
             groupElements.push(block);
             return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
         }
-        const blockType = block.type ? _.upperFirst(block.type) + 'Block' : 'NotHandledBlock';
+        const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
         const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
-        return (0, jsx_runtime_1.jsx)(Block, { blockData: block });
+        return (0, jsx_runtime_1.jsx)(Block, { blockData: block, config: config });
     });
 }
 exports.StoryContentSwitcher = StoryContentSwitcher;

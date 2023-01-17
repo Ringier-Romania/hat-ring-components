@@ -8,7 +8,7 @@ export interface ParagraphBlockParams {
 }
 
 export default function ParagraphBlock({blockData}: ParagraphBlockParams) {
-    return <div className="paragraphBlock">
+    return <div className="ParagraphBlock">
         <p dangerouslySetInnerHTML={{__html: blockData.text}}></p>
     </div>
 }

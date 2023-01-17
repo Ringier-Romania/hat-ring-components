@@ -22,5 +22,9 @@ export interface ImageBlockParams {
             ];
         };
     };
+    config: {
+        width: number;
+        height: number;
+    };
 }
-export default function ImageBlock({ blockData }: ImageBlockParams): JSX.Element;
+export default function ImageBlock({ blockData, config }: ImageBlockParams): JSX.Element;

@@ -10,7 +10,7 @@ export interface UnorderedListBlockParams {
 }
 
 export default function UnorderedListBlock({blockData}: UnorderedListBlockParams) {
-    return <div className="unorderedListBlock">
+    return <div className="UnorderedListBlock">
         <ul>
             {
              blockData.entries.map(entry => <li>{entry}</li>)

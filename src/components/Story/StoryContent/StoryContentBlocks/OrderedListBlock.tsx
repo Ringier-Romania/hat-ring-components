@@ -11,7 +11,7 @@ export interface OrderedListBlockParams {
 }
 
 export default function OrderedListBlock({blockData}: OrderedListBlockParams) {
-    return <div className="orderedListBlock">
+    return <div className="OrderedListBlock">
         <ol>
             {
                 blockData.entries.map(entry => <li>{entry}</li>)

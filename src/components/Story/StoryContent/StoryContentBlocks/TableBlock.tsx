@@ -26,14 +26,14 @@ export interface TableBlockParams {
 export default function TableBlock({blockData}: TableBlockParams) {
     const {rows} = blockData
 
-    return <table className="tableBlock">
+    return <table className="TableBlock">
         <tbody>
         {
             rows.map(row =>
                  <tr>
                     {
                         row.cells.map((cell) => {
-                            let allCellClasses = cell.alignment ? `align-${cell.alignment} `: '';
+                            let allCellClasses = cell.alignment ? `align${cell.alignment} `: '';
                             cell.classes.forEach(cellClass => allCellClasses + `${cellClass} ` )
 
                             return cell.isHeader ? (

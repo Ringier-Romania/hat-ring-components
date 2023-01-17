@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import RingImage, {TransformType} from "../../../common/RingImage";
+import RingLink from "../../../common/RingLink";
 
 export interface ImageBlockParams {
     blockData: {
@@ -24,17 +26,22 @@ export interface ImageBlockParams {
             ]
         }
     }
+    config: {
+        width: number;
+        height: number;
+    }
 }
 
-export default function ImageBlock({blockData}: ImageBlockParams) {
+export default function ImageBlock({blockData, config}: ImageBlockParams) {
     const {title, alt, image, url, link} = blockData
-    return <div className="imageBlock">
+
+    return <div className="ImageBlock">
         {
             link ?
-                <a href={link.url}>
-                    <Image src={url} alt={alt} width={image.width} height={image.height} />
-                </a> :
-                <Image src={url} alt={alt} width={image.width} height={image.height} />
+                <RingLink href={link.url}>
+                    <RingImage priority={true} src={url} alt={alt || ''} width={config.width} height={config.height} transform={TransformType.ResizeCropAuto}/>
+                </RingLink> :
+                <RingImage priority={true} src={url} alt={alt || ''} width={config.width} height={config.height} transform={TransformType.ResizeCropAuto}/>
         }
         <div className="imgMetaData">
             {title && <span className="caption">{title}</span>}

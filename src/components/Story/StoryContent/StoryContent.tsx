@@ -6,7 +6,10 @@ import {ComponentParams} from "../../../types/types";
 import {StoryContentSwitcher} from "./StoryContentSwitcher";
 
 export interface StoryContentParams extends ComponentParams {
-    config: {}
+    config: {
+        width: number;
+        height: number;
+    }
 }
 
 export async function StoryContent(params: StoryContentParams) {
@@ -88,6 +91,10 @@ export async function StoryContent(params: StoryContentParams) {
                             type
                             alignment
                         }
+                        ... on PreformattedBlock {
+                            text
+                            type
+                        }
                     }
                 }
             }
@@ -99,9 +106,9 @@ export async function StoryContent(params: StoryContentParams) {
     const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
     const response = await websitesApiClient.query(query, variables);
     const content = _.get(response, 'data.story.content[0].blocks');
-    return <div>
+    return <div className="StoryContent">
         {/* @ts-expect-error Server Component */}
-        <StoryContentSwitcher content={content} />
+        <StoryContentSwitcher content={content} config={params.config} />
     </div>
 }
 

@@ -9,9 +9,8 @@ export interface GroupBlockParams {
 }
 
 export default function GroupBlock({blockData}) {
-    console.log('groupBlock', blockData.elements)
 
-    return <section className={`groupBlock align-${blockData.alignment} ${blockData.name}`}>
+    return <section className={`GroupBlock align${blockData.alignment} ${blockData.name}`}>
         {/* @ts-expect-error Server Component */}
         <StoryContentSwitcher content={blockData.elements} />
     </section>

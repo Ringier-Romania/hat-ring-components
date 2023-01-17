@@ -3,12 +3,21 @@ import * as _ from 'lodash';
 import * as BlocksTypes from "./StoryContentBlocks";
 
 interface StoryContentSwitcherParams {
-    content: any[]
+    content: any[];
+    config: {
+        width: number;
+        height: number;
+    }
 }
 
-export function StoryContentSwitcher({content}: StoryContentSwitcherParams) {
+export function StoryContentSwitcher({content, config}: StoryContentSwitcherParams) {
     let isGroupBlock = false;
     const groupElements: any[] = [];
+
+
+    const buildBlockName = (name) =>{
+        return _.upperFirst(_.camelCase(name)) + 'Block'
+    }
 
     return content.map((block) => {
 
@@ -28,9 +37,8 @@ export function StoryContentSwitcher({content}: StoryContentSwitcherParams) {
             return <></>
         }
 
-        const blockType = block.type ? _.upperFirst(block.type) + 'Block' : 'NotHandledBlock';
+        const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
         const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
-        return <Block blockData={block}/>
-
+        return <Block blockData={block} config={config}/>
     })
 }
