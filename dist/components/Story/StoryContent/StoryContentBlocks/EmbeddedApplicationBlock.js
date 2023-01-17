@@ -13,7 +13,7 @@ function EmbeddedApplicationBlock({ blockData }) {
             window.pulsembed();
         }
     }, []);
-    return (0, jsx_runtime_1.jsxs)("div", { className: "embeddedApplicationBlock", children: [(0, jsx_runtime_1.jsx)(script_1.default, { id: "pulseembed", src: "https://pulsembed.eu/pulsembed.js", strategy: "lazyOnload" }), (0, jsx_runtime_1.jsx)("div", { dangerouslySetInnerHTML: { __html: blockData.embed.html } })] });
+    return (0, jsx_runtime_1.jsxs)("div", { className: "EmbeddedApplicationBlock", children: [(0, jsx_runtime_1.jsx)(script_1.default, { id: "pulseembed", src: "https://pulsembed.eu/pulsembed.js", strategy: "lazyOnload" }), (0, jsx_runtime_1.jsx)("div", { dangerouslySetInnerHTML: { __html: blockData.embed.html } })] });
 }
 exports.default = EmbeddedApplicationBlock;
 //# sourceMappingURL=EmbeddedApplicationBlock.js.map

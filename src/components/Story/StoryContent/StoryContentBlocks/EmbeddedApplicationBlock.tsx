@@ -22,7 +22,7 @@ export default function EmbeddedApplicationBlock({blockData}: Embedded_applicati
         }
     },[]);
 
-    return <div className="embeddedApplicationBlock">
+    return <div className="EmbeddedApplicationBlock">
         <Script id="pulseembed" src="https://pulsembed.eu/pulsembed.js" strategy="lazyOnload"/>
         <div dangerouslySetInnerHTML={{ __html: blockData.embed.html }}/>
     </div>
