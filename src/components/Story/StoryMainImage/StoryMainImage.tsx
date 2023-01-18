@@ -32,9 +32,6 @@ export async function StoryMainImage(params: StoryMainImageParams) {
     };
 
     const response = await WebsiteApiProvider.call(query, variables);
-
-    console.log(response)
-
     const imgSrc = _.get(response, 'data.story.image.url');
     const caption = _.get(response, 'data.story.image.caption');
 

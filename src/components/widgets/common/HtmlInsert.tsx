@@ -1,5 +1,4 @@
 import React from "react";
-import * as _ from "lodash";
 import {AbstractWidgetConfig, WidgetParams} from "../../../types/types";
 
 

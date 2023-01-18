@@ -47,7 +47,6 @@ async function StoryMainImage(params) {
         imageHeight: params.config.height,
     };
     const response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
-    console.log(response);
     const imgSrc = _.get(response, 'data.story.image.url');
     const caption = _.get(response, 'data.story.image.caption');
     return (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(RingImage_1.default, { priority: true, transform: RingImage_1.TransformType.None, src: imgSrc, alt: caption || '', width: params.config.width, height: params.config.height }), (0, jsx_runtime_1.jsx)(StoryMainImageCaption_1.StoryMainImageCaption, { ...params, caption: caption })] });
