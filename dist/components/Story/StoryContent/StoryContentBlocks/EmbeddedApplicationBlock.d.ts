@@ -1,5 +1,5 @@
 /// <reference types="react" />
-export interface Embedded_applicationBlockParams {
+export interface EmbeddedApplicationBlockParams {
     blockData: {
         type: string;
         embed: {
@@ -7,4 +7,4 @@ export interface Embedded_applicationBlockParams {
         };
     };
 }
-export default function EmbeddedApplicationBlock({ blockData }: Embedded_applicationBlockParams): JSX.Element;
+export default function EmbeddedApplicationBlock({ blockData }: EmbeddedApplicationBlockParams): JSX.Element;

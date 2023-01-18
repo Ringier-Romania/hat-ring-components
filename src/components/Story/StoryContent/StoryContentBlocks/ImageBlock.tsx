@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import RingImage, {TransformType} from "../../../common/RingImage";
 import RingLink from "../../../common/RingLink";
 
@@ -33,7 +32,7 @@ export interface ImageBlockParams {
 }
 
 export default function ImageBlock({blockData, config}: ImageBlockParams) {
-    const {title, alt, image, url, link} = blockData
+    const {title, alt, image, url, link} = blockData;
 
     return <div className="ImageBlock">
         {

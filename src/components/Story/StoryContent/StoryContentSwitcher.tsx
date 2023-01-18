@@ -1,23 +1,20 @@
 import React from 'react';
 import * as _ from 'lodash';
 import * as BlocksTypes from "./StoryContentBlocks";
+import {AppContext} from "../../../types/types";
 
 interface StoryContentSwitcherParams {
     content: any[];
+    context: AppContext;
     config: {
         width: number;
         height: number;
     }
 }
 
-export function StoryContentSwitcher({content, config}: StoryContentSwitcherParams) {
+export function StoryContentSwitcher({content, config, context}: StoryContentSwitcherParams) {
     let isGroupBlock = false;
     const groupElements: any[] = [];
-
-
-    const buildBlockName = (name) =>{
-        return _.upperFirst(_.camelCase(name)) + 'Block'
-    }
 
     return content.map((block) => {
 
@@ -39,6 +36,6 @@ export function StoryContentSwitcher({content, config}: StoryContentSwitcherPara
 
         const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
         const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
-        return <Block blockData={block} config={config}/>
+        return <Block blockData={block} config={config} context={context} />
     })
 }

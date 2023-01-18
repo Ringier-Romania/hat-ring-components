@@ -29,7 +29,7 @@ const _ = __importStar(require("lodash"));
 const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
 const StoryContentSwitcher_1 = require("./StoryContentSwitcher");
-async function StoryContent(params) {
+async function StoryContent({ config, context }) {
     const accessKey = process.env.WEBSITE_API_PUBLIC;
     const secretKey = process.env.WEBSITE_API_SECRET;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
@@ -117,12 +117,12 @@ async function StoryContent(params) {
         }
     `;
     const variables = {
-        storyId: params.context.id,
+        storyId: context.id,
     };
     const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
     const response = await websitesApiClient.query(query, variables);
     const content = _.get(response, 'data.story.content[0].blocks');
-    return (0, jsx_runtime_1.jsx)("div", { className: "StoryContent", children: (0, jsx_runtime_1.jsx)(StoryContentSwitcher_1.StoryContentSwitcher, { content: content, config: params.config }) });
+    return (0, jsx_runtime_1.jsx)("div", { className: "StoryContent", children: (0, jsx_runtime_1.jsx)(StoryContentSwitcher_1.StoryContentSwitcher, { content: content, config: config, context: context }) });
 }
 exports.StoryContent = StoryContent;
 //# sourceMappingURL=StoryContent.js.map

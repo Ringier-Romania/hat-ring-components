@@ -12,7 +12,7 @@ export interface StoryContentParams extends ComponentParams {
     }
 }
 
-export async function StoryContent(params: StoryContentParams) {
+export async function StoryContent({config, context}: StoryContentParams) {
     const accessKey = process.env.WEBSITE_API_PUBLIC!;
     const secretKey = process.env.WEBSITE_API_SECRET!;
     const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
@@ -101,14 +101,15 @@ export async function StoryContent(params: StoryContentParams) {
         }
     `;
     const variables = {
-        storyId: params.context.id,
+        storyId: context.id,
     };
+
     const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
     const response = await websitesApiClient.query(query, variables);
     const content = _.get(response, 'data.story.content[0].blocks');
     return <div className="StoryContent">
         {/* @ts-expect-error Server Component */}
-        <StoryContentSwitcher content={content} config={params.config} />
+        <StoryContentSwitcher content={content} config={config} context={context} />
     </div>
 }
 

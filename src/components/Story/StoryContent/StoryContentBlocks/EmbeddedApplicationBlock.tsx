@@ -3,7 +3,7 @@
 import React, {useEffect} from "react";
 import Script from "next/script";
 
-export interface Embedded_applicationBlockParams {
+export interface EmbeddedApplicationBlockParams {
     blockData: {
         type: string;
         embed: {
@@ -12,7 +12,7 @@ export interface Embedded_applicationBlockParams {
     }
 }
 
-export default function EmbeddedApplicationBlock({blockData}: Embedded_applicationBlockParams) {
+export default function EmbeddedApplicationBlock({blockData}: EmbeddedApplicationBlockParams) {
 
     useEffect(()=>{
         //@ts-ignore

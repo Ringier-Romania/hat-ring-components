@@ -6,4 +6,4 @@ export interface StoryContentParams extends ComponentParams {
         height: number;
     };
 }
-export declare function StoryContent(params: StoryContentParams): Promise<JSX.Element>;
+export declare function StoryContent({ config, context }: StoryContentParams): Promise<JSX.Element>;
