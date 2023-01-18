@@ -26,14 +26,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StoryMainImage = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
-const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
 const StoryMainImageCaption_1 = require("./StoryMainImageCaption");
 const RingImage_1 = __importStar(require("../../common/RingImage"));
+const WebsiteApiProvider_1 = require("../../../providers/WebsiteApiProvider");
 async function StoryMainImage(params) {
-    const accessKey = process.env.WEBSITE_API_PUBLIC;
-    const secretKey = process.env.WEBSITE_API_SECRET;
-    const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID, $imageWidth:Int!, $imageHeight:Int!){
             story(id:$storyId){
@@ -49,8 +46,8 @@ async function StoryMainImage(params) {
         imageWidth: params.config.width,
         imageHeight: params.config.height,
     };
-    const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
-    const response = await websitesApiClient.query(query, variables);
+    const response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
+    console.log(response);
     const imgSrc = _.get(response, 'data.story.image.url');
     const caption = _.get(response, 'data.story.image.caption');
     return (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(RingImage_1.default, { priority: true, transform: RingImage_1.TransformType.None, src: imgSrc, alt: caption || '', width: params.config.width, height: params.config.height }), (0, jsx_runtime_1.jsx)(StoryMainImageCaption_1.StoryMainImageCaption, { ...params, caption: caption })] });

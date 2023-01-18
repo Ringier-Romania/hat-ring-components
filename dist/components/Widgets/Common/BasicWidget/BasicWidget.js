@@ -29,14 +29,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BasicWidget = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const graphql_tag_1 = require("graphql-tag");
-const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const GeneralParts = __importStar(require("./generalParts"));
 const _ = __importStar(require("lodash"));
 const BasicWidget_module_scss_1 = __importDefault(require("../../../../../styles/widgets/common/BasicWidget.module.scss"));
+const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
 async function BasicWidget({ widgetConfig, context }) {
-    const accessKey = process.env.WEBSITE_API_PUBLIC;
-    const secretKey = process.env.WEBSITE_API_SECRET;
-    const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
     const query = (0, graphql_tag_1.gql) `
         query($codeName:  ID!, $nodeId:  ID!){
             section(codeName: $codeName, nodeId: $nodeId) {
@@ -61,8 +58,7 @@ async function BasicWidget({ widgetConfig, context }) {
         codeName: widgetConfig.section_name,
         nodeId: context.controllerParams.gqlResponse.data.site.data.node.id
     };
-    const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
-    const response = await websitesApiClient.query(query, variables);
+    const response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = GeneralParts[_.upperFirst(showOption)];
         if (!Component) {
