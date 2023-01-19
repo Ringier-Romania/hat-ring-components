@@ -26,12 +26,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StoryTitle = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
-const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const graphql_tag_1 = require("graphql-tag");
+const WebsiteApiProvider_1 = require("../../../providers/WebsiteApiProvider");
 async function StoryTitle(params) {
-    const accessKey = process.env.WEBSITE_API_PUBLIC;
-    const secretKey = process.env.WEBSITE_API_SECRET;
-    const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID){
             story(id:$storyId){
@@ -42,8 +39,7 @@ async function StoryTitle(params) {
     const variables = {
         storyId: params.context.id,
     };
-    const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
-    const response = await websitesApiClient.query(query, variables);
+    const response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     const title = _.get(response, 'data.story.name');
     return (0, jsx_runtime_1.jsx)("h1", { children: title });
 }

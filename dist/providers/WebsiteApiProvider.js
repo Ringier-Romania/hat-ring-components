@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.WebsiteApiProvider = void 0;
+const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
+class WebsiteApiProvider {
+    static async call(query, variables) {
+        const accessKey = process.env.WEBSITE_API_PUBLIC;
+        const secretKey = process.env.WEBSITE_API_SECRET;
+        const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
+        const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
+        return await websitesApiClient.query(query, variables);
+    }
+}
+exports.WebsiteApiProvider = WebsiteApiProvider;
+//# sourceMappingURL=WebsiteApiProvider.js.map

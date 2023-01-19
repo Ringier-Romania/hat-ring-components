@@ -1,9 +1,9 @@
 import {ComponentParams} from "../../types/types";
 import {gql} from "graphql-tag";
-import {WebsitesApiClient} from "@ringpublishing/graphql-api-client";
 import React from "react";
 import * as _ from "lodash";
 import {Container} from "./Container";
+import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 
 
 export interface GridParams extends ComponentParams {
@@ -14,9 +14,6 @@ export interface GridParams extends ComponentParams {
 }
 
 export async function Grid(params: GridParams) {
-    const accessKey = process.env.WEBSITE_API_PUBLIC!;
-    const secretKey = process.env.WEBSITE_API_SECRET!;
-    const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
     const variant = process.env.WEBSITE_API_VARIANT;
     const domain = process.env.WEBSITE_DOMAIN;
 
@@ -50,9 +47,7 @@ export async function Grid(params: GridParams) {
         variant: variant,
     };
 
-    const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
-    const response = await websitesApiClient.query(query, variables);
-
+    const response = await WebsiteApiProvider.call(query, variables);
     const sectionsConfig = _.get(response, 'data.site.data.node.config');
 
     return params.config.containers.map(

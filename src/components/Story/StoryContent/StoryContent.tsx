@@ -1,9 +1,9 @@
 import React from 'react';
 import * as _ from 'lodash';
-import {WebsitesApiClient} from '@ringpublishing/graphql-api-client';
 import {gql} from 'graphql-tag';
 import {ComponentParams} from "../../../types/types";
 import {StoryContentSwitcher} from "./StoryContentSwitcher";
+import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 
 export interface StoryContentParams extends ComponentParams {
     config: {
@@ -13,9 +13,6 @@ export interface StoryContentParams extends ComponentParams {
 }
 
 export async function StoryContent({config, context}: StoryContentParams) {
-    const accessKey = process.env.WEBSITE_API_PUBLIC!;
-    const secretKey = process.env.WEBSITE_API_SECRET!;
-    const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
     const query = gql`
         query($storyId: UUID){
@@ -104,8 +101,7 @@ export async function StoryContent({config, context}: StoryContentParams) {
         storyId: context.id,
     };
 
-    const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
-    const response = await websitesApiClient.query(query, variables);
+    const response = await WebsiteApiProvider.call(query, variables);
     const content = _.get(response, 'data.story.content[0].blocks');
     return <div className="StoryContent">
         {/* @ts-expect-error Server Component */}

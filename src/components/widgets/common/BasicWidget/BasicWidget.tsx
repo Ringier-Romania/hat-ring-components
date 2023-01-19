@@ -1,18 +1,14 @@
 import React from "react";
 import {BasicWidgetParams, BasicWidgetResponse} from "./types";
 import {gql} from "graphql-tag";
-import {WebsitesApiClient} from "@ringpublishing/graphql-api-client";
 import * as GeneralParts from './generalParts';
 import * as _ from 'lodash';
 // @TODO alias
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
+import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 
 
 export async function BasicWidget({widgetConfig, context}: BasicWidgetParams) {
-    const accessKey = process.env.WEBSITE_API_PUBLIC!;
-    const secretKey = process.env.WEBSITE_API_SECRET!;
-    const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
-
     const query = gql`
         query($codeName:  ID!, $nodeId:  ID!){
             section(codeName: $codeName, nodeId: $nodeId) {
@@ -34,15 +30,12 @@ export async function BasicWidget({widgetConfig, context}: BasicWidgetParams) {
         }
     `;
 
-
     const variables = {
         codeName: widgetConfig.section_name,
         nodeId: context.controllerParams.gqlResponse.data.site.data.node.id
     };
 
-    const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
-    const response = await websitesApiClient.query(query, variables) as BasicWidgetResponse;
-
+    const response = await WebsiteApiProvider.call(query, variables);
     const generalComponents =  widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = GeneralParts[_.upperFirst(showOption)];
         if (!Component) {

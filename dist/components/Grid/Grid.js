@@ -26,13 +26,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Grid = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const graphql_tag_1 = require("graphql-tag");
-const graphql_api_client_1 = require("@ringpublishing/graphql-api-client");
 const _ = __importStar(require("lodash"));
 const Container_1 = require("./Container");
+const WebsiteApiProvider_1 = require("../../providers/WebsiteApiProvider");
 async function Grid(params) {
-    const accessKey = process.env.WEBSITE_API_PUBLIC;
-    const secretKey = process.env.WEBSITE_API_SECRET;
-    const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID;
     const variant = process.env.WEBSITE_API_VARIANT;
     const domain = process.env.WEBSITE_DOMAIN;
     if (!params.config.boxes) {
@@ -60,8 +57,7 @@ async function Grid(params) {
         url: domain + params.context.url,
         variant: variant,
     };
-    const websitesApiClient = new graphql_api_client_1.WebsitesApiClient({ accessKey, secretKey, spaceUuid });
-    const response = await websitesApiClient.query(query, variables);
+    const response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     const sectionsConfig = _.get(response, 'data.site.data.node.config');
     return params.config.containers.map(sectionName => (0, jsx_runtime_1.jsx)(Container_1.Container, { context: params.context, boxes: params.config.boxes, sectionName: sectionName, sectionConfig: _.get(sectionsConfig, `${sectionName}.0.data`) }));
 }
