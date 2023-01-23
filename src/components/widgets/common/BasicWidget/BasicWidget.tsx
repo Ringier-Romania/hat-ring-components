@@ -22,11 +22,18 @@ export async function BasicWidget({widgetConfig, context}: BasicWidgetParams) {
                                 caption
                             }
                             url
+                            originalContent {
+                                ... on Story {
+                                    image {
+                                        url,
+                                        caption
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
-            
         }
     `;
 
@@ -36,14 +43,14 @@ export async function BasicWidget({widgetConfig, context}: BasicWidgetParams) {
     };
 
     const response = await WebsiteApiProvider.call(query, variables);
-    const generalComponents =  widgetConfig.generalShowOptions.map((showOption, index) => {
+    const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = GeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
             return <div style={{display: 'none'}}>{showOption} not supported, yet</div>;
         }
-        return <Component key={ index } context={context} widgetConfig={ widgetConfig } response={ response }/>;
-    })
+        return <Component key={index} context={context} widgetConfig={widgetConfig} response={response}/>;
+    });
 
 
     return <div className={['BasicWidget', styles.BasicWidget].join(' ')}>

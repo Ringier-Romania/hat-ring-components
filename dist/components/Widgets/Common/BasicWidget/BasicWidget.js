@@ -47,11 +47,18 @@ async function BasicWidget({ widgetConfig, context }) {
                                 caption
                             }
                             url
+                            originalContent {
+                                ... on Story {
+                                    image {
+                                        url,
+                                        caption
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
-            
         }
     `;
     const variables = {
