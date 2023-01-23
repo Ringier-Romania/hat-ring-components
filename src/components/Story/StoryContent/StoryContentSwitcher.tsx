@@ -9,7 +9,7 @@ interface StoryContentSwitcherParams {
     config: {
         width: number;
         height: number;
-    }
+    };
 }
 
 export function StoryContentSwitcher({content, config, context}: StoryContentSwitcherParams) {
@@ -18,24 +18,24 @@ export function StoryContentSwitcher({content, config, context}: StoryContentSwi
 
     return content.map((block) => {
 
-        if(block.type === 'groupStart') {
+        if (block.type === 'groupStart') {
             isGroupBlock = true;
-            return <></>
+            return <></>;
         }
 
-        if(block.type === 'groupEnd') {
+        if (block.type === 'groupEnd') {
             isGroupBlock = false;
             block.type = 'group';
             block.elements = [...groupElements];
         }
 
-        if(isGroupBlock === true) {
+        if (isGroupBlock === true) {
             groupElements.push(block);
-            return <></>
+            return <></>;
         }
 
         const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
         const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
-        return <Block blockData={block} config={config} context={context} />
-    })
+        return <Block blockData={block} config={config} context={context}/>;
+    });
 }

@@ -1,4 +1,4 @@
-import React, {CSSProperties} from 'react';
+import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import RingImage, {TransformType} from "../../../../common/RingImage";
@@ -11,7 +11,7 @@ export default function Image(
             data: BasicWidgetResponseNode,
         }) {
 
-    if(!data.image){
+    if(!data.image && !data.originalContent.image){
         return null;
     }
 
@@ -19,9 +19,9 @@ export default function Image(
 
     // @TODO: add priority from config and other props
     return (
-        data.image ?
+        (data.image || data.originalContent.image) ?
             <div className={['Image'].join(' ')}>
-                <RingImage  priority={false} alt={data.image.caption || data.title || ''} transform={TransformType.ResizeCropAuto} src={ data.image.url} width={Number(sizes[0])} height={Number(sizes[1])}/>
+                <RingImage priority={false} alt={data.originalContent.image.caption || data.title || ''} transform={TransformType.ResizeCropAuto} src={ data.image?.url || data.originalContent.image?.url } width={Number(sizes[0])} height={Number(sizes[1])}/>
             </div> :
             <></>
 
