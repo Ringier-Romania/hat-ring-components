@@ -32,9 +32,10 @@ const _ = __importStar(require("lodash"));
 const RingLink_1 = __importDefault(require("../../../../common/RingLink"));
 function SectionElements({ context, widgetConfig, response }) {
     const colClass = Math.floor(12 / parseInt(widgetConfig.columns));
+    const allItemParts = context.customData.itemParts || ItemParts;
     return ((0, jsx_runtime_1.jsx)("div", { className: ['SectionElements'].join(' '), children: response.data.section.items.edges.map(edge => {
             const itemParts = widgetConfig.showOptions.map((showOption, index) => {
-                const Component = ItemParts[_.upperFirst(showOption)];
+                const Component = allItemParts[_.upperFirst(showOption)];
                 if (!Component) {
                     console.error(`No item part support ${showOption}`);
                     return (0, jsx_runtime_1.jsxs)("div", { style: { display: "none" }, children: [showOption, " item part not supported, yet"] });

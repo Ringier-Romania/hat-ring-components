@@ -45,9 +45,12 @@ export interface BasicWidgetConfig {
     decorators: [];
     lazyload: 'enabled';
     additionalOptions: ['useCroppedImage'];
+    dedicatedStyleForWidget: string;
 }
 export interface BasicWidgetParams extends WidgetParams {
     widgetConfig: BasicWidgetConfig;
+    generalParts: any | undefined;
+    itemParts: any | undefined;
 }
 export interface BasicWidgetResponseNode {
     title: string;

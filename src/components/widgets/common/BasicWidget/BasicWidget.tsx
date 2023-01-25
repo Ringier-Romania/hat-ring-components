@@ -7,26 +7,27 @@ import * as _ from 'lodash';
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 
-
-export async function BasicWidget({widgetConfig, context}: BasicWidgetParams) {
-    const query = gql`
-        query($codeName:  ID!, $nodeId:  ID!){
-            section(codeName: $codeName, nodeId: $nodeId) {
-                items{
-                    edges {
-                        node {
-                            title
-                            lead
-                            image {
-                                url,
-                                caption
-                            }
-                            url
-                            originalContent {
-                                ... on Story {
-                                    image {
-                                        url,
-                                        caption
+export async function BasicWidget({widgetConfig, context, generalParts, itemParts}: BasicWidgetParams) {
+    async function generateResponse() {
+        const query = gql`
+            query($codeName:  ID!, $nodeId:  ID!){
+                section(codeName: $codeName, nodeId: $nodeId) {
+                    items{
+                        edges {
+                            node {
+                                title
+                                lead
+                                image {
+                                    url,
+                                    caption
+                                }
+                                url
+                                originalContent {
+                                    ... on Story {
+                                        image {
+                                            url,
+                                            caption
+                                        }
                                     }
                                 }
                             }
@@ -34,17 +35,22 @@ export async function BasicWidget({widgetConfig, context}: BasicWidgetParams) {
                     }
                 }
             }
-        }
-    `;
+        `;
 
-    const variables = {
-        codeName: widgetConfig.section_name,
-        nodeId: context.controllerParams.gqlResponse.data.site.data.node.id
-    };
+        const variables = {
+            codeName: widgetConfig.section_name,
+            nodeId: context.controllerParams.gqlResponse.data.site.data.node.id
+        };
+        return await WebsiteApiProvider.call(query, variables);
+    }
 
-    const response = await WebsiteApiProvider.call(query, variables);
+    const response = await generateResponse();
+
+    const allGeneralParts = generalParts || GeneralParts;
+    context.customData.itemParts = itemParts;
+
     const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
-        const Component = GeneralParts[_.upperFirst(showOption)];
+        const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
             return <div style={{display: 'none'}}>{showOption} not supported, yet</div>;
@@ -53,7 +59,11 @@ export async function BasicWidget({widgetConfig, context}: BasicWidgetParams) {
     });
 
 
-    return <div className={['BasicWidget', styles.BasicWidget].join(' ')}>
-        {generalComponents}
-    </div>;
+    function render(){
+        return <div className={['BasicWidget', styles.BasicWidget].join(' ')}>
+            {generalComponents}
+        </div>;
+    }
+
+    return render();
 }
