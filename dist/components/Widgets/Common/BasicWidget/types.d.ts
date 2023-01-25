@@ -49,8 +49,11 @@ export interface BasicWidgetConfig {
 }
 export interface BasicWidgetParams extends WidgetParams {
     widgetConfig: BasicWidgetConfig;
-    generalParts: any | undefined;
-    itemParts: any | undefined;
+    extendableAttributes?: {
+        generalParts?: any;
+        itemParts?: any;
+        render?: any;
+    };
 }
 export interface BasicWidgetResponseNode {
     title: string;

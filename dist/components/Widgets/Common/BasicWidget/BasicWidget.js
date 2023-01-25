@@ -33,8 +33,8 @@ const GeneralParts = __importStar(require("./generalParts"));
 const _ = __importStar(require("lodash"));
 const BasicWidget_module_scss_1 = __importDefault(require("../../../../../styles/widgets/common/BasicWidget.module.scss"));
 const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
-async function BasicWidget({ widgetConfig, context, generalParts, itemParts }) {
-    async function generateResponse() {
+async function BasicWidget({ widgetConfig, context, extendableAttributes }) {
+    async function getData() {
         const query = (0, graphql_tag_1.gql) `
             query($codeName:  ID!, $nodeId:  ID!){
                 section(codeName: $codeName, nodeId: $nodeId) {
@@ -68,9 +68,9 @@ async function BasicWidget({ widgetConfig, context, generalParts, itemParts }) {
         };
         return await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     }
-    const response = await generateResponse();
-    const allGeneralParts = generalParts || GeneralParts;
-    context.customData.itemParts = itemParts;
+    const response = await getData();
+    const allGeneralParts = (extendableAttributes === null || extendableAttributes === void 0 ? void 0 : extendableAttributes.generalParts) || GeneralParts;
+    context.customData.itemParts = extendableAttributes === null || extendableAttributes === void 0 ? void 0 : extendableAttributes.itemParts;
     const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
@@ -82,7 +82,7 @@ async function BasicWidget({ widgetConfig, context, generalParts, itemParts }) {
     function render() {
         return (0, jsx_runtime_1.jsx)("div", { className: ['BasicWidget', BasicWidget_module_scss_1.default.BasicWidget].join(' '), children: generalComponents });
     }
-    return render();
+    return (extendableAttributes === null || extendableAttributes === void 0 ? void 0 : extendableAttributes.render(generalComponents)) || render();
 }
 exports.BasicWidget = BasicWidget;
 //# sourceMappingURL=BasicWidget.js.map

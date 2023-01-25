@@ -7,8 +7,9 @@ import * as _ from 'lodash';
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 
-export async function BasicWidget({widgetConfig, context, generalParts, itemParts}: BasicWidgetParams) {
-    async function generateResponse() {
+
+export async function BasicWidget({widgetConfig, context, extendableAttributes}: BasicWidgetParams) {
+    async function getData() {
         const query = gql`
             query($codeName:  ID!, $nodeId:  ID!){
                 section(codeName: $codeName, nodeId: $nodeId) {
@@ -44,10 +45,10 @@ export async function BasicWidget({widgetConfig, context, generalParts, itemPart
         return await WebsiteApiProvider.call(query, variables);
     }
 
-    const response = await generateResponse();
+    const response = await getData();
 
-    const allGeneralParts = generalParts || GeneralParts;
-    context.customData.itemParts = itemParts;
+    const allGeneralParts = extendableAttributes?.generalParts || GeneralParts;
+    context.customData.itemParts = extendableAttributes?.itemParts;
 
     const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
@@ -65,5 +66,5 @@ export async function BasicWidget({widgetConfig, context, generalParts, itemPart
         </div>;
     }
 
-    return render();
+    return extendableAttributes?.render(generalComponents) || render();
 }
