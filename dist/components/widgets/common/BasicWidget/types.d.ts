@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { WidgetParams } from "../../../../types/types";
 declare enum BasicWidgetGeneralShowOptions {
     sectionElements = "sectionElements",
@@ -52,7 +53,8 @@ export interface BasicWidgetParams extends WidgetParams {
     extendableAttributes?: {
         generalParts?: any;
         itemParts?: any;
-        render?: any;
+        render?: (generalComponents: any, cssModules: any) => JSX.Element | null;
+        getCssModule?: (defaultStyles: any) => string | null;
     };
 }
 export interface BasicWidgetResponseNode {

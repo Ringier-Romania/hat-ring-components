@@ -8,11 +8,11 @@ import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 
 
-export async function BasicWidget({widgetConfig, context, extendableAttributes}: BasicWidgetParams) {
+export async function BasicWidget({widgetConfig, context, extendableAttributes = {}}: BasicWidgetParams) {
     async function getData() {
         const query = gql`
             query($codeName:  ID!, $nodeId:  ID!){
-                section(codeName: $codeName, nodeId: $nodeId) {
+                section(codeName: $codeName, nodeId: $nodeId) { 
                     items{
                         edges {
                             node {
@@ -47,8 +47,8 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes}:
 
     const response = await getData();
 
-    const allGeneralParts = extendableAttributes?.generalParts || GeneralParts;
-    context.customData.itemParts = extendableAttributes?.itemParts;
+    const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
+    context.customData.itemParts = extendableAttributes.itemParts;
 
     const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
@@ -59,12 +59,21 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes}:
         return <Component key={index} context={context} widgetConfig={widgetConfig} response={response}/>;
     });
 
+    let cssModules = styles.BasicWidget;
+
+    if (extendableAttributes.getCssModule) {
+        cssModules = extendableAttributes.getCssModule(styles.BasicWidget) || styles.BasicWidget;
+    }
 
     function render(){
-        return <div className={['BasicWidget', styles.BasicWidget].join(' ')}>
+        return <div className={['BasicWidget', cssModules].join(' ')}>
             {generalComponents}
         </div>;
     }
 
-    return extendableAttributes?.render(generalComponents) || render();
+    if (extendableAttributes.render) {
+        return extendableAttributes.render(generalComponents, cssModules);
+    }
+
+    return render();
 }

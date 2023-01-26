@@ -57,7 +57,8 @@ export interface BasicWidgetParams extends WidgetParams {
     extendableAttributes?: {
         generalParts?: any,
         itemParts?: any,
-        render?: any,
+        render?: (generalComponents, cssModules) => JSX.Element | null,
+        getCssModule?: (defaultStyles) => string | null
     }
 }
 

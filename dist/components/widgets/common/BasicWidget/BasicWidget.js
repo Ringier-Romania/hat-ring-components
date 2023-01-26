@@ -26,19 +26,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BasicWidget = exports.BasicWidget_generalParts = void 0;
+exports.BasicWidget = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const graphql_tag_1 = require("graphql-tag");
 const GeneralParts = __importStar(require("./generalParts"));
 const _ = __importStar(require("lodash"));
 const BasicWidget_module_scss_1 = __importDefault(require("../../../../../styles/widgets/common/BasicWidget.module.scss"));
 const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
-exports.BasicWidget_generalParts = GeneralParts;
-async function BasicWidget({ widgetConfig, context }) {
-    async function generateResponse() {
+async function BasicWidget({ widgetConfig, context, extendableAttributes = {} }) {
+    async function getData() {
         const query = (0, graphql_tag_1.gql) `
             query($codeName:  ID!, $nodeId:  ID!){
-                section(codeName: $codeName, nodeId: $nodeId) {
+                section(codeName: $codeName, nodeId: $nodeId) { 
                     items{
                         edges {
                             node {
@@ -69,17 +68,26 @@ async function BasicWidget({ widgetConfig, context }) {
         };
         return await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     }
-    const response = generateResponse();
+    const response = await getData();
+    const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
+    context.customData.itemParts = extendableAttributes.itemParts;
     const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
-        const Component = exports.BasicWidget_generalParts[_.upperFirst(showOption)];
+        const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
             return (0, jsx_runtime_1.jsxs)("div", { style: { display: 'none' }, children: [showOption, " not supported, yet"] });
         }
         return (0, jsx_runtime_1.jsx)(Component, { context: context, widgetConfig: widgetConfig, response: response }, index);
     });
+    let cssModules = BasicWidget_module_scss_1.default.BasicWidget;
+    if (extendableAttributes.getCssModule) {
+        cssModules = extendableAttributes.getCssModule(BasicWidget_module_scss_1.default.BasicWidget) || BasicWidget_module_scss_1.default.BasicWidget;
+    }
     function render() {
-        return (0, jsx_runtime_1.jsxs)("div", { className: ['BasicWidget', BasicWidget_module_scss_1.default.BasicWidget].join(' '), children: ["ddddddddddddd", generalComponents] });
+        return (0, jsx_runtime_1.jsx)("div", { className: ['BasicWidget', cssModules].join(' '), children: generalComponents });
+    }
+    if (extendableAttributes.render) {
+        return extendableAttributes.render(generalComponents, cssModules);
     }
     return render();
 }
