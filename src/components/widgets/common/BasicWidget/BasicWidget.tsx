@@ -9,7 +9,7 @@ import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 
 
 export async function BasicWidget({widgetConfig, context, extendableAttributes = {}}: BasicWidgetParams) {
-    async function getData() {
+    async function getData(queryNodeFragment) {
         const query = gql`
             query($codeName:  ID!, $nodeId:  ID!){
                 section(codeName: $codeName, nodeId: $nodeId) { 
@@ -31,6 +31,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
                                         }
                                     }
                                 }
+                                ${queryNodeFragment}
                             }
                         }
                     }
@@ -45,7 +46,8 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
         return await WebsiteApiProvider.call(query, variables);
     }
 
-    const response = await getData();
+    let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
+    const response = await getData(queryFragment);
 
     const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
     context.customData.itemParts = extendableAttributes.itemParts;

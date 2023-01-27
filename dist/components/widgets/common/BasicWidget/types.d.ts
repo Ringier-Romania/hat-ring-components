@@ -55,6 +55,7 @@ export interface BasicWidgetParams extends WidgetParams {
         itemParts?: any;
         render?: (generalComponents: any, cssModules: any) => JSX.Element | null;
         getCssModule?: (defaultStyles: any) => string | null;
+        getDataQueryNodeFragment?: string | null;
     };
 }
 export interface BasicWidgetResponseNode {

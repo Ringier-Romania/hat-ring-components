@@ -58,7 +58,8 @@ export interface BasicWidgetParams extends WidgetParams {
         generalParts?: any,
         itemParts?: any,
         render?: (generalComponents, cssModules) => JSX.Element | null,
-        getCssModule?: (defaultStyles) => string | null
+        getCssModule?: (defaultStyles) => string | null,
+        getDataQueryNodeFragment?: string | null,
     }
 }
 
