@@ -7,7 +7,7 @@ exports.ocdnLoader = exports.TransformType = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const image_1 = __importDefault(require("next/image"));
 const { OcdnUrl } = require('@ras-tech/ocdn');
-const RingImage_module_scss_1 = __importDefault(require("../../../styles/common/RingImage.module.scss"));
+const RingImage_module_scss_1 = __importDefault(require("styles/common/RingImage.module.scss"));
 var TransformType;
 (function (TransformType) {
     TransformType["ResizeCropAuto"] = "resizeCropAuto";

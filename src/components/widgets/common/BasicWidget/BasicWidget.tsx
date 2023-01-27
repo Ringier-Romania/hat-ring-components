@@ -4,8 +4,8 @@ import {gql} from "graphql-tag";
 import * as GeneralParts from './generalParts';
 import * as _ from 'lodash';
 // @TODO alias
-import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
-import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
+import styles from "styles/widgets/common/BasicWidget.module.scss";
+import {WebsiteApiProvider} from "providers/WebsiteApiProvider";
 
 
 export async function BasicWidget({widgetConfig, context, extendableAttributes = {}}: BasicWidgetParams) {

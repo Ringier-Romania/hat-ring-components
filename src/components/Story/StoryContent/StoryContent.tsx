@@ -1,9 +1,9 @@
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
-import {ComponentParams} from "../../../types/types";
+import {ComponentParams} from "types/types";
 import {StoryContentSwitcher} from "./StoryContentSwitcher";
-import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
+import {WebsiteApiProvider} from "providers/WebsiteApiProvider";
 
 export interface StoryContentParams extends ComponentParams {
     config: {

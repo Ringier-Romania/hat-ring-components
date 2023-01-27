@@ -1,5 +1,5 @@
 import React from "react";
-import {AbstractWidgetConfig, WidgetParams} from "../../../types/types";
+import {AbstractWidgetConfig, WidgetParams} from "types/types";
 
 
 interface ExternalApplicationParams extends WidgetParams {

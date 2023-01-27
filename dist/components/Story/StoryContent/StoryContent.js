@@ -28,7 +28,7 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const graphql_tag_1 = require("graphql-tag");
 const StoryContentSwitcher_1 = require("./StoryContentSwitcher");
-const WebsiteApiProvider_1 = require("../../../providers/WebsiteApiProvider");
+const WebsiteApiProvider_1 = require("providers/WebsiteApiProvider");
 async function StoryContent({ config, context }) {
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID){

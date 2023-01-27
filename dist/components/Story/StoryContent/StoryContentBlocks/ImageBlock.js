@@ -27,8 +27,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
-const RingImage_1 = __importStar(require("../../../common/RingImage"));
-const RingLink_1 = __importDefault(require("../../../common/RingLink"));
+const RingImage_1 = __importStar(require("components/common/RingImage"));
+const RingLink_1 = __importDefault(require("components/common/RingLink"));
 function ImageBlock({ blockData, config }) {
     var _a;
     const { title, alt, image, url, link } = blockData;

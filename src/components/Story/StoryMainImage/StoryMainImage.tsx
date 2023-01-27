@@ -1,10 +1,10 @@
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
-import {ComponentParams} from "../../../types/types";
+import {ComponentParams} from "types/types";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
-import RingImage, {TransformType} from "../../common/RingImage";
-import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
+import RingImage, {TransformType} from "components/common/RingImage";
+import {WebsiteApiProvider} from "providers/WebsiteApiProvider";
 
 
 export interface StoryMainImageParams extends ComponentParams {

@@ -1,7 +1,7 @@
 import React from 'react';
-import {AppContext} from "../../../../../types/types";
+import {AppContext} from "types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
-import RingImage, {TransformType} from "../../../../common/RingImage";
+import RingImage, {TransformType} from "components/common/RingImage";
 
 export default function Image(
     {context, widgetConfig, data}:

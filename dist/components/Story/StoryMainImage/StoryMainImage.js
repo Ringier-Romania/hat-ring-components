@@ -28,8 +28,8 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const graphql_tag_1 = require("graphql-tag");
 const StoryMainImageCaption_1 = require("./StoryMainImageCaption");
-const RingImage_1 = __importStar(require("../../common/RingImage"));
-const WebsiteApiProvider_1 = require("../../../providers/WebsiteApiProvider");
+const RingImage_1 = __importStar(require("components/common/RingImage"));
+const WebsiteApiProvider_1 = require("providers/WebsiteApiProvider");
 async function StoryMainImage(params) {
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID, $imageWidth:Int!, $imageHeight:Int!){
