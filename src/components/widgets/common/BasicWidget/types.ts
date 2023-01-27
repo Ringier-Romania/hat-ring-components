@@ -48,11 +48,18 @@ export interface BasicWidgetConfig {
     widgetType: 'basicWidget',
     decorators: [],
     lazyload: 'enabled',
-    additionalOptions: ['useCroppedImage']
+    additionalOptions: ['useCroppedImage'],
+    dedicatedStyleForWidget: string
 }
 
 export interface BasicWidgetParams extends WidgetParams {
-    widgetConfig: BasicWidgetConfig
+    widgetConfig: BasicWidgetConfig,
+    extendableAttributes?: {
+        generalParts?: any,
+        itemParts?: any,
+        render?: (generalComponents, cssModules) => JSX.Element | null,
+        getCssModule?: (defaultStyles) => string | null
+    }
 }
 
 export interface BasicWidgetResponseNode {

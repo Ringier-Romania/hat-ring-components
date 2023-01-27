@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { WidgetParams } from "../../../../types/types";
 declare enum BasicWidgetGeneralShowOptions {
     sectionElements = "sectionElements",
@@ -45,9 +46,16 @@ export interface BasicWidgetConfig {
     decorators: [];
     lazyload: 'enabled';
     additionalOptions: ['useCroppedImage'];
+    dedicatedStyleForWidget: string;
 }
 export interface BasicWidgetParams extends WidgetParams {
     widgetConfig: BasicWidgetConfig;
+    extendableAttributes?: {
+        generalParts?: any;
+        itemParts?: any;
+        render?: (generalComponents: any, cssModules: any) => JSX.Element | null;
+        getCssModule?: (defaultStyles: any) => string | null;
+    };
 }
 export interface BasicWidgetResponseNode {
     title: string;

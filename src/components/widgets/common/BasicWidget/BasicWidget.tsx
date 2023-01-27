@@ -8,25 +8,27 @@ import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 
 
-export async function BasicWidget({widgetConfig, context}: BasicWidgetParams) {
-    const query = gql`
-        query($codeName:  ID!, $nodeId:  ID!){
-            section(codeName: $codeName, nodeId: $nodeId) {
-                items{
-                    edges {
-                        node {
-                            title
-                            lead
-                            image {
-                                url,
-                                caption
-                            }
-                            url
-                            originalContent {
-                                ... on Story {
-                                    image {
-                                        url,
-                                        caption
+export async function BasicWidget({widgetConfig, context, extendableAttributes = {}}: BasicWidgetParams) {
+    async function getData() {
+        const query = gql`
+            query($codeName:  ID!, $nodeId:  ID!){
+                section(codeName: $codeName, nodeId: $nodeId) { 
+                    items{
+                        edges {
+                            node {
+                                title
+                                lead
+                                image {
+                                    url,
+                                    caption
+                                }
+                                url
+                                originalContent {
+                                    ... on Story {
+                                        image {
+                                            url,
+                                            caption
+                                        }
                                     }
                                 }
                             }
@@ -34,17 +36,22 @@ export async function BasicWidget({widgetConfig, context}: BasicWidgetParams) {
                     }
                 }
             }
-        }
-    `;
+        `;
 
-    const variables = {
-        codeName: widgetConfig.section_name,
-        nodeId: context.controllerParams.gqlResponse.data.site.data.node.id
-    };
+        const variables = {
+            codeName: widgetConfig.section_name,
+            nodeId: context.controllerParams.gqlResponse.data.site.data.node.id
+        };
+        return await WebsiteApiProvider.call(query, variables);
+    }
 
-    const response = await WebsiteApiProvider.call(query, variables);
+    const response = await getData();
+
+    const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
+    context.customData.itemParts = extendableAttributes.itemParts;
+
     const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
-        const Component = GeneralParts[_.upperFirst(showOption)];
+        const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
             return <div style={{display: 'none'}}>{showOption} not supported, yet</div>;
@@ -52,8 +59,21 @@ export async function BasicWidget({widgetConfig, context}: BasicWidgetParams) {
         return <Component key={index} context={context} widgetConfig={widgetConfig} response={response}/>;
     });
 
+    let cssModules = styles.BasicWidget;
 
-    return <div className={['BasicWidget', styles.BasicWidget].join(' ')}>
-        {generalComponents}
-    </div>;
+    if (extendableAttributes.getCssModule) {
+        cssModules = extendableAttributes.getCssModule(styles.BasicWidget) || styles.BasicWidget;
+    }
+
+    function render(){
+        return <div className={['BasicWidget', cssModules].join(' ')}>
+            {generalComponents}
+        </div>;
+    }
+
+    if (extendableAttributes.render) {
+        return extendableAttributes.render(generalComponents, cssModules);
+    }
+
+    return render();
 }
