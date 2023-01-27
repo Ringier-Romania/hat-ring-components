@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { ComponentParams } from "types/types";
+import { ComponentParams } from "../../../types/types";
 export interface StoryContentParams extends ComponentParams {
     config: {
         width: number;

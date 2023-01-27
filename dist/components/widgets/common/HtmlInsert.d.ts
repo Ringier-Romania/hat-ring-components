@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { WidgetParams } from "types/types";
+import { WidgetParams } from "../../../types/types";
 interface HtmlInsertParams extends WidgetParams {
     widgetConfig: {
         plainHtml: string;

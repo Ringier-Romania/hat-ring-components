@@ -1,8 +1,8 @@
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
-import {ComponentParams} from "types/types";
-import {WebsiteApiProvider} from "providers/WebsiteApiProvider";
+import {ComponentParams} from "../../../types/types";
+import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 
 export interface StoryTitleParams extends ComponentParams {
     config: {}

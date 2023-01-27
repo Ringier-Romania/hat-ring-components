@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Container = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const Box_1 = require("./Box");
-const Grid_module_scss_1 = __importDefault(require("styles/Grid/Grid.module.scss"));
+const Grid_module_scss_1 = __importDefault(require("../../../styles/Grid/Grid.module.scss"));
 ;
 function Container({ sectionName, sectionConfig, context, boxes }) {
     const ContainerTag = `${sectionConfig.container_html_tag || 'main'}`;

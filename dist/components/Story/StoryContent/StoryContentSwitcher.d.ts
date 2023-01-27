@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { AppContext } from "types/types";
+import { AppContext } from "../../../types/types";
 interface StoryContentSwitcherParams {
     content: any[];
     context: AppContext;

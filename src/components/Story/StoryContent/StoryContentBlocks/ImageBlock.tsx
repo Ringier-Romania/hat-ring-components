@@ -1,6 +1,6 @@
 import React from "react";
-import RingImage, {TransformType} from "components/common/RingImage";
-import RingLink from "components/common/RingLink";
+import RingImage, {TransformType} from "../../../common/RingImage";
+import RingLink from "../../../common/RingLink";
 
 export interface ImageBlockParams {
     blockData: {

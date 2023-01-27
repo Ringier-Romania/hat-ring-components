@@ -1,8 +1,8 @@
 import React from "react";
 import * as _ from "lodash";
-import {AppContext} from "types/types";
+import {AppContext} from "../../types/types";
 import {Widget} from "./Widget";
-import styles from "styles/Grid/Grid.module.scss";
+import styles from "../../../styles/Grid/Grid.module.scss";
 //@TODO section config type
 interface GridBoxParams {
     context: AppContext;

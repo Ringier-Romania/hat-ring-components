@@ -1,9 +1,9 @@
-import {ComponentParams} from "types/types";
+import {ComponentParams} from "../../types/types";
 import {gql} from "graphql-tag";
 import React from "react";
 import * as _ from "lodash";
 import {Container} from "./Container";
-import {WebsiteApiProvider} from "providers/WebsiteApiProvider";
+import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 
 
 export interface GridParams extends ComponentParams {

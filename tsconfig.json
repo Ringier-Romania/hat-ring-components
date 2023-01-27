@@ -1,7 +1,6 @@
 {
 	"extends": "@ringieraxelspringer/tsconfig",
 	"compilerOptions": {
-		"baseUrl": "src",
 		"allowJs": true,
 		"jsx": "react",
 		"outDir": "./dist",

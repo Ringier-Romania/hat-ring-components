@@ -1,7 +1,7 @@
 import React from 'react';
 import * as _ from 'lodash';
 import * as BlocksTypes from "./StoryContentBlocks";
-import {AppContext} from "types/types";
+import {AppContext} from "../../../types/types";
 
 interface StoryContentSwitcherParams {
     content: any[];

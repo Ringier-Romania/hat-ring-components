@@ -31,8 +31,8 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const graphql_tag_1 = require("graphql-tag");
 const GeneralParts = __importStar(require("./generalParts"));
 const _ = __importStar(require("lodash"));
-const BasicWidget_module_scss_1 = __importDefault(require("styles/widgets/common/BasicWidget.module.scss"));
-const WebsiteApiProvider_1 = require("providers/WebsiteApiProvider");
+const BasicWidget_module_scss_1 = __importDefault(require("../../../../../styles/widgets/common/BasicWidget.module.scss"));
+const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
 async function BasicWidget({ widgetConfig, context, extendableAttributes = {} }) {
     async function getData(queryNodeFragment) {
         const query = (0, graphql_tag_1.gql) `

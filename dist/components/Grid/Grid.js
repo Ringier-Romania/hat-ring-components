@@ -28,7 +28,7 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const graphql_tag_1 = require("graphql-tag");
 const _ = __importStar(require("lodash"));
 const Container_1 = require("./Container");
-const WebsiteApiProvider_1 = require("providers/WebsiteApiProvider");
+const WebsiteApiProvider_1 = require("../../providers/WebsiteApiProvider");
 async function Grid(params) {
     const variant = process.env.WEBSITE_API_VARIANT;
     const domain = process.env.WEBSITE_DOMAIN;

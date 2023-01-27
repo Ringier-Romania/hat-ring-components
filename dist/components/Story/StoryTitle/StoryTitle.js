@@ -27,7 +27,7 @@ exports.StoryTitle = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const graphql_tag_1 = require("graphql-tag");
-const WebsiteApiProvider_1 = require("providers/WebsiteApiProvider");
+const WebsiteApiProvider_1 = require("../../../providers/WebsiteApiProvider");
 async function StoryTitle(params) {
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID){

@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { WidgetParams } from "types/types";
+import { WidgetParams } from "../../../types/types";
 interface ExternalApplicationParams extends WidgetParams {
     widgetConfig: {
         controllerUrl: string;

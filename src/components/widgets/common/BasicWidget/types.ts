@@ -1,4 +1,4 @@
-import {WidgetParams} from "types/types";
+import {WidgetParams} from "../../../../types/types";
 
 enum BasicWidgetGeneralShowOptions {
     sectionElements = "sectionElements",

@@ -29,7 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const ItemParts = __importStar(require("../itemParts"));
 const _ = __importStar(require("lodash"));
-const RingLink_1 = __importDefault(require("components/common/RingLink"));
+const RingLink_1 = __importDefault(require("../../../../common/RingLink"));
 function SectionElements({ context, widgetConfig, response }) {
     const colClass = Math.floor(12 / parseInt(widgetConfig.columns));
     const allItemParts = context.customData.itemParts || ItemParts;

@@ -1,7 +1,7 @@
 import Image, {ImageProps, ImageLoaderProps} from "next/image";
 import React from "react";
 const { OcdnUrl } = require('@ras-tech/ocdn');
-import styles from "styles/common/RingImage.module.scss";
+import styles from "../../../styles/common/RingImage.module.scss";
 
 export interface RingImageProps extends ImageProps {
     transform: TransformType

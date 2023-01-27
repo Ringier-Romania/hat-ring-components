@@ -24,7 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
-const RingImage_1 = __importStar(require("components/common/RingImage"));
+const RingImage_1 = __importStar(require("../../../../common/RingImage"));
 function Image({ context, widgetConfig, data }) {
     var _a, _b;
     if (!data.image && !data.originalContent.image) {
