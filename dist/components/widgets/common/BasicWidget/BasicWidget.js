@@ -65,7 +65,7 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
         `;
         const variables = {
             codeName: widgetConfig.section_name,
-            nodeId: context.controllerParams.gqlResponse.data.site.data.node.id
+            nodeId: context.hatControllerParams.gqlResponse.data.site.data.node.id
         };
         return await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     }
