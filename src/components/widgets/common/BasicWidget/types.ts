@@ -67,12 +67,28 @@ export interface BasicWidgetResponseNode {
     title: string,
     url: string,
     lead: string,
-    type?: string,
-    imageDim?: string,
     originalContent: {
         image: { url: string, caption: string }
     },
     image: { url: string, caption: string }
+}
+
+export interface ListElementsData {
+    text: string,
+    Text: string,
+    children: [],
+    Title: string,
+    Description: string,
+    'Image src': string,
+    'Image dimensions (eg. 600x300)': string,
+    'Link url': string,
+    'Custom CSS Class': string
+}
+
+export interface ListElementsImage {
+    url: string,
+    caption: string,
+    imageDim: string
 }
 
 export interface BasicWidgetResponse {

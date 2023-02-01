@@ -1,7 +1,7 @@
 /// <reference types="react" />
 import { ImageProps } from "next/image";
 export interface RingImageProps extends ImageProps {
-    transform: TransformType;
+    transform?: TransformType;
 }
 export declare enum TransformType {
     ResizeCropAuto = "resizeCropAuto",

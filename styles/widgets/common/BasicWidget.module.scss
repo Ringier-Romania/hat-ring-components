@@ -19,3 +19,12 @@
     }
   }
 }
+
+.ListElementsImageFill {
+  object-fit: contain;
+}
+
+.ListElementsImageWrapper {
+  position: relative;
+  aspect-ratio: 16 / 9;
+}

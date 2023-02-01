@@ -39,24 +39,19 @@ function ocdnLoader(src, width, height, transformType) {
     return src;
 }
 exports.ocdnLoader = ocdnLoader;
-function isOcdnURL(url) {
-    return url && ((url.indexOf('ocdn.eu') >= 0) && url.indexOf('pulscms') >= 0);
-}
 function RingImage(props) {
     let src = props.src;
     let unoptimized = props.unoptimized;
     let blurDataURL = props.blurDataURL;
     let placeholder = props.placeholder;
-    let transform = props.transform;
-    if (isOcdnURL(src)) {
-        if (!props.fill) {
-            blurDataURL = getPlaceholderData(props.width, props.height);
-            placeholder = 'blur';
-        }
-        unoptimized = true;
-        if (transform !== TransformType.None) {
-            src = ocdnLoader(src, props.width, props.height, props.transform);
-        }
+    let transform = props.transform || TransformType.None;
+    if (!props.fill) {
+        blurDataURL = getPlaceholderData(props.width, props.height);
+        placeholder = 'blur';
+    }
+    unoptimized = true;
+    if (transform !== TransformType.None) {
+        src = ocdnLoader(src, props.width, props.height, props.transform);
     }
     return (0, jsx_runtime_1.jsx)(image_1.default, { ...props, className: ['RingImage', RingImage_module_scss_1.default.RingImage, props.className].join(' '), src: src, width: props.width, height: props.height, unoptimized: unoptimized, placeholder: placeholder, blurDataURL: blurDataURL });
 }

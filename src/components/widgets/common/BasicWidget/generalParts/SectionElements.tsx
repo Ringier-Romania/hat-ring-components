@@ -20,7 +20,6 @@ export default function SectionElements(
     return (
         <div className={['SectionElements'].join(' ')}>
             {response.data.section.items.edges.map(edge => {
-                edge.node.type = 'SectionElements';
                 const itemParts =  widgetConfig.showOptions.map((showOption, index) => {
                     const Component = allItemParts[_.upperFirst(showOption)];
                     if (!Component) {
