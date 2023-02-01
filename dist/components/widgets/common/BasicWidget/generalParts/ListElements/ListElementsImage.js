@@ -33,7 +33,7 @@ function ListElementsImage({ context, widgetConfig, data }) {
     if (!data.url) {
         return null;
     }
-    let sizes = '300x100';
+    let sizes = '0x0';
     sizes = data.imageDim || widgetConfig.listElementsImageSize || '0x0';
     const imageWidth = Number(sizes.split('x')[0]);
     const imageHeight = Number(sizes.split('x')[1]);
@@ -51,7 +51,7 @@ function ListElementsImage({ context, widgetConfig, data }) {
         ringImageProps.fill = true;
     }
     return ((data.url) ?
-        (0, jsx_runtime_1.jsx)("div", { className: ['Image', (!imageWidth || !imageHeight) && BasicWidget_module_scss_1.default.ListElementsImageWrapper].join(' '), children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { ...ringImageProps, className: (!imageWidth || !imageHeight) && BasicWidget_module_scss_1.default.ListElementsImageFill }) }) :
+        (0, jsx_runtime_1.jsx)("div", { className: ['Image', (!imageWidth || !imageHeight) ? BasicWidget_module_scss_1.default.ListElementsImageWrapper : ''].join(' '), children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { ...ringImageProps, className: (!imageWidth || !imageHeight) ? BasicWidget_module_scss_1.default.ListElementsImageFill : '' }) }) :
         (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}));
 }
 exports.default = ListElementsImage;

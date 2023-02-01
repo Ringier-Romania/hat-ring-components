@@ -12,7 +12,6 @@ export default function ListElements(
             response: BasicWidgetResponse
         }) {
 
-
     const colClass = Math.floor(12 / parseInt(widgetConfig.columns));
     return (
         <div className={['ListElements'].join(' ')}>

@@ -16,7 +16,7 @@ export default function ListElementsImage(
         return null;
     }
 
-    let sizes = '300x100';
+    let sizes = '0x0';
     sizes = data.imageDim || widgetConfig.listElementsImageSize || '0x0';
     const imageWidth = Number(sizes.split('x')[0]);
     const imageHeight = Number(sizes.split('x')[1]);
@@ -39,9 +39,9 @@ export default function ListElementsImage(
     // @TODO: add priority from config and other props
     return (
         (data.url) ?
-            <div className={['Image', (!imageWidth || !imageHeight) && styles.ListElementsImageWrapper].join(' ')}>
+            <div className={['Image', (!imageWidth || !imageHeight) ? styles.ListElementsImageWrapper: ''].join(' ')}>
                 {/* @ts-ignore */}
-                <RingImage {...ringImageProps} className={(!imageWidth || !imageHeight) && styles.ListElementsImageFill}/>
+                <RingImage {...ringImageProps} className={(!imageWidth || !imageHeight) ? styles.ListElementsImageFill : '' }/>
             </div> :
             <></>
     );
