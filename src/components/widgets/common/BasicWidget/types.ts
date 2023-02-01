@@ -67,6 +67,8 @@ export interface BasicWidgetResponseNode {
     title: string,
     url: string,
     lead: string,
+    type?: string,
+    imageDim?: string,
     originalContent: {
         image: { url: string, caption: string }
     },

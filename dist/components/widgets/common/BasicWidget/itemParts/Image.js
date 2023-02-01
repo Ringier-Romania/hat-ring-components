@@ -26,13 +26,36 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingImage_1 = __importStar(require("../../../../common/RingImage"));
 function Image({ context, widgetConfig, data }) {
-    var _a, _b;
+    var _a, _b, _c, _d, _e;
     if (!data.image && !data.originalContent.image) {
         return null;
     }
-    const sizes = widgetConfig.standardImageSize.split('x');
+    let sizes = '0x0';
+    if (data.type === 'SectionElements') {
+        sizes = widgetConfig.standardImageSize;
+    }
+    else if (data.type === 'ListElements') {
+        sizes = data.imageDim || widgetConfig.listElementsImageSize || '0x0';
+    }
+    const imageWidth = Number(sizes.split('x')[0]);
+    const imageHeight = Number(sizes.split('x')[1]);
+    const ringImageProps = {
+        transform: RingImage_1.TransformType.None,
+        fill: true,
+        style: { objectFit: 'contain' },
+        src: ((_a = data.image) === null || _a === void 0 ? void 0 : _a.url) || ((_c = (_b = data.originalContent) === null || _b === void 0 ? void 0 : _b.image) === null || _c === void 0 ? void 0 : _c.url),
+        priority: false,
+        alt: ((_e = (_d = data.originalContent) === null || _d === void 0 ? void 0 : _d.image) === null || _e === void 0 ? void 0 : _e.caption) || data.title || '',
+    };
+    if (imageWidth && imageHeight) {
+        ringImageProps.transform = RingImage_1.TransformType.ResizeCropAuto;
+        ringImageProps.fill = false;
+        ringImageProps.style = {};
+        ringImageProps.width = imageWidth;
+        ringImageProps.height = imageHeight;
+    }
     return ((data.image || data.originalContent.image) ?
-        (0, jsx_runtime_1.jsx)("div", { className: ['Image'].join(' '), children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { priority: false, alt: data.originalContent.image.caption || data.title || '', transform: RingImage_1.TransformType.ResizeCropAuto, src: ((_a = data.image) === null || _a === void 0 ? void 0 : _a.url) || ((_b = data.originalContent.image) === null || _b === void 0 ? void 0 : _b.url), width: Number(sizes[0]), height: Number(sizes[1]) }) }) :
+        (0, jsx_runtime_1.jsx)("div", { className: ['Image'].join(' '), style: imageWidth && imageHeight ? {} : { position: "relative", aspectRatio: 16 / 9 }, children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { ...ringImageProps }) }) :
         (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}));
 }
 exports.default = Image;

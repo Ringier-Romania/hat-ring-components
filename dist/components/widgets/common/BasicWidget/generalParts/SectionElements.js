@@ -34,6 +34,7 @@ function SectionElements({ context, widgetConfig, response }) {
     const colClass = Math.floor(12 / parseInt(widgetConfig.columns));
     const allItemParts = context.customData.itemParts || ItemParts;
     return ((0, jsx_runtime_1.jsx)("div", { className: ['SectionElements'].join(' '), children: response.data.section.items.edges.map(edge => {
+            edge.node.type = 'SectionElements';
             const itemParts = widgetConfig.showOptions.map((showOption, index) => {
                 const Component = allItemParts[_.upperFirst(showOption)];
                 if (!Component) {
