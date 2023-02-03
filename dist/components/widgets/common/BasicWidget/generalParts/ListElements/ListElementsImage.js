@@ -22,13 +22,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingImage_1 = __importStar(require("../../../../../common/RingImage"));
-const BasicWidget_module_scss_1 = __importDefault(require("../../../../../../../styles/widgets/common/BasicWidget.module.scss"));
 function ListElementsImage({ context, widgetConfig, data }) {
     if (!data.url) {
         return null;
@@ -51,7 +47,7 @@ function ListElementsImage({ context, widgetConfig, data }) {
         ringImageProps.fill = true;
     }
     return ((data.url) ?
-        (0, jsx_runtime_1.jsx)("div", { className: ['Image', (!imageWidth || !imageHeight) ? BasicWidget_module_scss_1.default.ListElementsImageWrapper : ''].join(' '), children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { ...ringImageProps, className: (!imageWidth || !imageHeight) ? BasicWidget_module_scss_1.default.ListElementsImageFill : '' }) }) :
+        (0, jsx_runtime_1.jsx)("div", { className: ['ListElementsImage', (!imageWidth || !imageHeight) ? 'listElementsImageWrapper' : ''].join(' '), children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { ...ringImageProps, className: (!imageWidth || !imageHeight) ? 'listElementsImageFill' : '' }) }) :
         (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}));
 }
 exports.default = ListElementsImage;

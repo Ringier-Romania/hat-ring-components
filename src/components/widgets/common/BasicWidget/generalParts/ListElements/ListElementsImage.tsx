@@ -2,7 +2,6 @@ import React from 'react';
 import {AppContext} from "../../../../../../types/types";
 import {BasicWidgetConfig, ListElementsImage} from "../../types";
 import RingImage, {RingImageProps, TransformType} from "../../../../../common/RingImage";
-import styles from "../../../../../../../styles/widgets/common/BasicWidget.module.scss";
 
 export default function ListElementsImage(
     {context, widgetConfig, data}:
@@ -39,9 +38,9 @@ export default function ListElementsImage(
     // @TODO: add priority from config and other props
     return (
         (data.url) ?
-            <div className={['Image', (!imageWidth || !imageHeight) ? styles.ListElementsImageWrapper: ''].join(' ')}>
+            <div className={['ListElementsImage', (!imageWidth || !imageHeight) ? 'listElementsImageWrapper': ''].join(' ')}>
                 {/* @ts-ignore */}
-                <RingImage {...ringImageProps} className={(!imageWidth || !imageHeight) ? styles.ListElementsImageFill : '' }/>
+                <RingImage {...ringImageProps} className={(!imageWidth || !imageHeight) ? 'listElementsImageFill' : '' }/>
             </div> :
             <></>
     );

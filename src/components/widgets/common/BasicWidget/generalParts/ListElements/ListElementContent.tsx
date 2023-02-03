@@ -18,7 +18,7 @@ export default function ListElementContent (
     };
     const customCssClass = _.get(data, 'Custom CSS Class', '');
 
-    return <div className={['LayoutItem', customCssClass].join(' ')}>
+    return <div className={['ListElementContent', customCssClass].join(' ')}>
         {data['Image src'] && <ListElementsImage context={context} widgetConfig={widgetConfig} data={imageProps}/>}
         {data.Title && <p className="Title">{data.Title}</p>}
         {data.Description && <div className="Description">{data.Description}</div>}
