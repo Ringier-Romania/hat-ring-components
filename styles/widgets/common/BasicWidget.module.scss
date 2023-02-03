@@ -18,13 +18,13 @@
       }
     }
   }
-}
 
-.ListElementsImageFill {
-  object-fit: contain;
-}
+  .ListElementsImageFill {
+    object-fit: contain;
+  }
 
-.ListElementsImageWrapper {
-  position: relative;
-  aspect-ratio: 16 / 9;
+  .ListElementsImageWrapper {
+    position: relative;
+    aspect-ratio: 16 / 9;
+  }
 }
