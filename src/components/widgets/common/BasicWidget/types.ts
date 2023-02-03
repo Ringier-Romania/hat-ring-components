@@ -73,6 +73,24 @@ export interface BasicWidgetResponseNode {
     image: { url: string, caption: string }
 }
 
+export interface ListElementsData {
+    text: string,
+    Text: string,
+    children: [],
+    Title: string,
+    Description: string,
+    'Image src': string,
+    'Image dimensions (eg. 600x300)': string,
+    'Link url': string,
+    'Custom CSS Class': string
+}
+
+export interface ListElementsImage {
+    url: string,
+    caption: string,
+    imageDim: string
+}
+
 export interface BasicWidgetResponse {
     "data": {
         "section": {

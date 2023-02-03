@@ -4,7 +4,7 @@ const { OcdnUrl } = require('@ras-tech/ocdn');
 import styles from "../../../styles/common/RingImage.module.scss";
 
 export interface RingImageProps extends ImageProps {
-    transform: TransformType
+    transform?: TransformType
 }
 
 export enum TransformType {
@@ -41,27 +41,21 @@ export function ocdnLoader(src, width, height, transformType) {
     return src;
 }
 
-function isOcdnURL(url) {
-    return url && ((url.indexOf('ocdn.eu') >= 0) && url.indexOf('pulscms') >= 0);
-}
-
 // TODO: checkout if they fixed bug with backend rendering https://github.com/vercel/next.js/issues/41924
 export default function RingImage(props: RingImageProps) {
     let src = props.src;
     let unoptimized = props.unoptimized;
     let blurDataURL = props.blurDataURL;
     let placeholder = props.placeholder;
-    let transform = props.transform;
+    let transform = props.transform || TransformType.None;
 
-    if(isOcdnURL(src)) {
-        if (!props.fill) {
-            blurDataURL = getPlaceholderData(props.width, props.height);
-            placeholder = 'blur';
-        }
-        unoptimized = true;
-        if (transform !== TransformType.None) {
-            src = ocdnLoader(src, props.width, props.height, props.transform);
-        }
+    if (!props.fill) {
+        blurDataURL = getPlaceholderData(props.width, props.height);
+        placeholder = 'blur';
+    }
+    unoptimized = true;
+    if (transform !== TransformType.None) {
+        src = ocdnLoader(src, props.width, props.height, props.transform);
     }
 
     return <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src} width={props.width} height={props.height} unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>

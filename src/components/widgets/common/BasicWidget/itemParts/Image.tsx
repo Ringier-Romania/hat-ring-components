@@ -17,14 +17,21 @@ export default function Image(
 
     const sizes = widgetConfig.standardImageSize.split('x');
 
+    const ringImageProps = {
+        src:  data.image?.url || data.originalContent.image?.url,
+        alt: data.originalContent.image.caption || data.title || '',
+        transform: TransformType.ResizeCropAuto,
+        width: Number(sizes[0]),
+        height: Number(sizes[1])
+    };
+
+
     // @TODO: add priority from config and other props
     return (
         (data.image || data.originalContent.image) ?
             <div className={['Image'].join(' ')}>
-                <RingImage priority={false} alt={data.originalContent.image.caption || data.title || ''} transform={TransformType.ResizeCropAuto} src={ data.image?.url || data.originalContent.image?.url } width={Number(sizes[0])} height={Number(sizes[1])}/>
+                <RingImage {...ringImageProps} />
             </div> :
             <></>
-
     )
 }
-

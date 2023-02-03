@@ -1,19 +1,30 @@
 .BasicWidget {
-  @media only screen and (min-width: 768px) {
-    :global {
-      .SectionElements {
+  :global {
+    @media only screen and (min-width: 768px) {
+      .SectionElements,
+      .ListElements {
         display: grid;
         grid-template-columns: repeat(12, [col-start] 1fr);
         gap: var(--basicWidgetGap, var(--ringGap, 20px));
 
-        .Item {
-          @for $i from 1 through 12 {
-            &.col#{$i} {
-              grid-column: auto / span $i;
-            }
+      }
+
+      .Item {
+        @for $i from 1 through 12 {
+          &.col#{$i} {
+            grid-column: auto / span $i;
           }
         }
       }
+    }
+
+    .listElementsImageFill {
+      object-fit: contain;
+    }
+
+    .listElementsImageWrapper {
+      position: relative;
+      aspect-ratio: 16 / 9;
     }
   }
 }

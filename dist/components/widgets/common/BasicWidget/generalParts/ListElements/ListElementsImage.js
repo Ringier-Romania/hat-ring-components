@@ -24,23 +24,31 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
-const RingImage_1 = __importStar(require("../../../../common/RingImage"));
-function Image({ context, widgetConfig, data }) {
-    var _a, _b;
-    if (!data.image && !data.originalContent.image) {
+const RingImage_1 = __importStar(require("../../../../../common/RingImage"));
+function ListElementsImage({ context, widgetConfig, data }) {
+    if (!data.url) {
         return null;
     }
-    const sizes = widgetConfig.standardImageSize.split('x');
+    let sizes = '0x0';
+    sizes = data.imageDim || widgetConfig.listElementsImageSize || '0x0';
+    const imageWidth = Number(sizes.split('x')[0]);
+    const imageHeight = Number(sizes.split('x')[1]);
     const ringImageProps = {
-        src: ((_a = data.image) === null || _a === void 0 ? void 0 : _a.url) || ((_b = data.originalContent.image) === null || _b === void 0 ? void 0 : _b.url),
-        alt: data.originalContent.image.caption || data.title || '',
+        src: data.url,
+        width: imageWidth,
+        height: imageHeight,
         transform: RingImage_1.TransformType.ResizeCropAuto,
-        width: Number(sizes[0]),
-        height: Number(sizes[1])
+        alt: data.caption,
     };
-    return ((data.image || data.originalContent.image) ?
-        (0, jsx_runtime_1.jsx)("div", { className: ['Image'].join(' '), children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { ...ringImageProps }) }) :
+    if (!imageWidth || !imageHeight) {
+        delete ringImageProps.width;
+        delete ringImageProps.height;
+        delete ringImageProps.transform;
+        ringImageProps.fill = true;
+    }
+    return ((data.url) ?
+        (0, jsx_runtime_1.jsx)("div", { className: ['ListElementsImage', (!imageWidth || !imageHeight) ? 'listElementsImageWrapper' : ''].join(' '), children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { ...ringImageProps, className: (!imageWidth || !imageHeight) ? 'listElementsImageFill' : '' }) }) :
         (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}));
 }
-exports.default = Image;
-//# sourceMappingURL=Image.js.map
+exports.default = ListElementsImage;
+//# sourceMappingURL=ListElementsImage.js.map
