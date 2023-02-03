@@ -16,7 +16,7 @@ export default function ListElements(
     return (
         <div className={['ListElements'].join(' ')}>
             {widgetConfig.listElements.map(element => {
-                return <div className={['LayoutWrapper', 'col' + colClass].join(' ')}>
+                return <div className={['Item', 'col' + colClass].join(' ')}>
                     {
                         element['Link url'] ?
                             <RingLink href={element['Link url']}>
