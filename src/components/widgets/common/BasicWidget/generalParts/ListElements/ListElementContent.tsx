@@ -20,8 +20,8 @@ export default function ListElementContent (
 
     return <div className={['ListElementContent', customCssClass].join(' ')}>
         {data['Image src'] && <ListElementsImage context={context} widgetConfig={widgetConfig} data={imageProps}/>}
-        {data.Title && <p className="Title">{data.Title}</p>}
-        {data.Description && <div className="Description">{data.Description}</div>}
-        {data.Text && <div className="Text">{data.Text}</div>}
+        {data.Title && <p className="title">{data.Title}</p>}
+        {data.Description && <div className="description">{data.Description}</div>}
+        {data.Text && <div className="text">{data.Text}</div>}
     </div>;
 };

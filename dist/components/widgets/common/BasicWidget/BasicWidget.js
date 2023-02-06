@@ -48,11 +48,17 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
                                     caption
                                 }
                                 url
+                                creationTime
+                                modificationTime
                                 originalContent {
                                     ... on Story {
                                         image {
                                             url,
                                             caption
+                                        }
+                                        date {
+                                            modificationTime
+                                            creationTime
                                         }
                                     }
                                 }

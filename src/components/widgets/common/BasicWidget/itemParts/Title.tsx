@@ -11,14 +11,22 @@ export default function Title(
             data: BasicWidgetResponseNode,
         }) {
 
-
     const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span' ) as keyof JSX.IntrinsicElements;
+    let ItemHeaderTag = HeaderTag;
+
+    const itemsHeaderArr = HeaderTag.split('h');
+    if (itemsHeaderArr.length === 2) {
+        const tagLevel = Number(itemsHeaderArr[1]);
+        if (tagLevel === 6) {
+            ItemHeaderTag = 'span';
+        } else {
+            ItemHeaderTag = `h${_.clamp(tagLevel + 1, 2, 6)}` as keyof JSX.IntrinsicElements;
+        }
+    }
 
     return (
         <div className={['Title'].join(' ')}>
-            {widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ?
-                <HeaderTag>{data.title}</HeaderTag> :
-                <span>{data.title}</span>}
+            <ItemHeaderTag>{data.title}</ItemHeaderTag>
         </div>
     )
 }

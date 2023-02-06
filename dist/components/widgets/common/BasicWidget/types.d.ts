@@ -62,11 +62,15 @@ export interface BasicWidgetResponseNode {
     title: string;
     url: string;
     lead: string;
+    creationTime: string;
+    modificationTime: string;
     originalContent: {
         image: {
             url: string;
             caption: string;
         };
+        creationTime: string;
+        modificationTime: string;
     };
     image: {
         url: string;
