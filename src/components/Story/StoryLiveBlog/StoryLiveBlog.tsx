@@ -52,7 +52,9 @@ export async function StoryLiveBlog({config, context}: ComponentParams) {
 
     return <div className="StoryLiveBlog">
         {/* @ts-expect-error Server Component */}
-        <ExternalApplication widgetConfig={{controllerUrl: url}} context={context}/>
+        <ExternalApplication widgetConfig={{controllerUrl: url, selector: '[name="block-html-head"]'}} context={context}/>
+        {/* @ts-expect-error Server Component */}
+        <ExternalApplication widgetConfig={{controllerUrl: url, selector: '[name="block-body-section"]'}} context={context}/>
     </div>
 }
 

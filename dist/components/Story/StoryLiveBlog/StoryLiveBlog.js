@@ -67,7 +67,7 @@ async function StoryLiveBlog({ config, context }) {
         return (0, jsx_runtime_1.jsx)("div", { style: { display: 'none' }, children: "Problem with fetching liveblog data" });
     }
     let url = `${platformUrl}/${liveblogUuid},${productLanguage},${productKey},liveblog.html`;
-    return (0, jsx_runtime_1.jsx)("div", { className: "StoryLiveBlog", children: (0, jsx_runtime_1.jsx)(ExternalApplication_1.ExternalApplication, { widgetConfig: { controllerUrl: url }, context: context }) });
+    return (0, jsx_runtime_1.jsxs)("div", { className: "StoryLiveBlog", children: [(0, jsx_runtime_1.jsx)(ExternalApplication_1.ExternalApplication, { widgetConfig: { controllerUrl: url, selector: '[name="block-html-head"]' }, context: context }), (0, jsx_runtime_1.jsx)(ExternalApplication_1.ExternalApplication, { widgetConfig: { controllerUrl: url, selector: '[name="block-body-section"]' }, context: context })] });
 }
 exports.StoryLiveBlog = StoryLiveBlog;
 //# sourceMappingURL=StoryLiveBlog.js.map
