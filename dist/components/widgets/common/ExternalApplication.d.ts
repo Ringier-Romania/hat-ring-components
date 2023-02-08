@@ -3,6 +3,7 @@ import { WidgetParams } from "../../../types/types";
 interface ExternalApplicationParams extends WidgetParams {
     widgetConfig: {
         controllerUrl: string;
+        blockName?: string;
         selector?: string;
     };
 }

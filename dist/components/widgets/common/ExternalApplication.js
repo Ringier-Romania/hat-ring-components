@@ -6,6 +6,9 @@ const cheerio = require('cheerio');
 async function ExternalApplication({ widgetConfig, context }) {
     const res = await fetch(widgetConfig.controllerUrl);
     let html = await res.text();
+    if (widgetConfig.blockName) {
+        widgetConfig.selector = `[name="${widgetConfig.blockName}"]`;
+    }
     if (widgetConfig.selector) {
         const $ = cheerio.load(html);
         html = $(widgetConfig.selector).html();
