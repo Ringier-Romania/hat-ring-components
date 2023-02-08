@@ -6,4 +6,4 @@ export * from "./components/Grid/Grid";
 export * from "./components/widgets/common/HtmlInsert";
 export * from "./components/widgets/common/ExternalApplication";
 export * from "./components/widgets/common/BasicWidget/BasicWidget";
-export * from "./components/Story/StoryLiveBlog/StoryLiveBlog";
+export * from "./components/widgets/Story/StoryLiveBlog/StoryLiveBlog";

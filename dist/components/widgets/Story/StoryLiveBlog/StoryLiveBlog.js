@@ -27,45 +27,34 @@ exports.StoryLiveBlog = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const graphql_tag_1 = require("graphql-tag");
-const WebsiteApiProvider_1 = require("../../../providers/WebsiteApiProvider");
-const ExternalApplication_1 = require("../../widgets/common/ExternalApplication");
+const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
+const ExternalApplication_1 = require("../../common/ExternalApplication");
 async function StoryLiveBlog({ widgetConfig, context }) {
-    const variant = process.env.WEBSITE_API_VARIANT;
-    const domain = process.env.WEBSITE_DOMAIN;
     const query = (0, graphql_tag_1.gql) `
-        query($extType: String, $url: URL!, $variant: ID!){
-            site(url: $url, variantId: $variant){
-                data {
-                    node {
-                        config {
-                            config(codeName: "liveBlog"){ data }
-                        }
-                    }
-                    content {
-                        ...on Story{
-                            extensions(type:$extType){
-                                data
-                            }
-                        }
-                    }
+        query($storyId: UUID,$extType: String){
+            story(id:$storyId){
+                extensions(type:$extType){
+                    data
                 }
             }
         }
     `;
     const variables = {
-        extType: widgetConfig., 'liveblog': ,
-        url: domain + context.url,
-        variant,
+        storyId: context.id,
+        extType: widgetConfig.extensionAppCodeName || 'liveblog',
     };
-    const response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
-    const platformUrl = _.get(response, 'data.site.data.node.config.config[0].data.liveBlogPlatformUrl', false);
-    const productKey = _.get(response, 'data.site.data.node.config.config[0].data.liveBlogClientId', false);
-    const productLanguage = _.get(response, 'data.site.data.node.config.config[0].data.liveBlogLanguage', false);
-    const liveblogUuid = _.get(response, 'data.site.data.content.extensions[0].data.id', false);
-    if (!(platformUrl && productKey && productLanguage && liveblogUuid)) {
-        return (0, jsx_runtime_1.jsx)("div", { style: { display: 'none' }, children: "Problem with fetching liveblog data" });
+    let liveblogUuid = false;
+    if (widgetConfig.liveBlogId) {
+        liveblogUuid = widgetConfig.liveBlogId;
     }
-    let url = `${platformUrl}/${liveblogUuid},${productLanguage},${productKey},liveblog.html`;
+    else {
+        const response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
+        liveblogUuid = _.get(response, 'data.story.extensions[0].data.id', false);
+    }
+    if (!widgetConfig.liveBlogPlatformUrl) {
+        widgetConfig.liveBlogPlatformUrl = 'http://client.liveblog.dreamlab.pl';
+    }
+    let url = `${widgetConfig.liveBlogPlatformUrl}/${liveblogUuid},${widgetConfig.liveBlogLanguage},${widgetConfig.liveBlogClientId},liveblog.html`;
     return (0, jsx_runtime_1.jsxs)("div", { className: "StoryLiveBlog", children: [(0, jsx_runtime_1.jsx)(ExternalApplication_1.ExternalApplication, { widgetConfig: { controllerUrl: url, selector: '[name="block-html-head"]' }, context: context }), (0, jsx_runtime_1.jsx)(ExternalApplication_1.ExternalApplication, { widgetConfig: { controllerUrl: url, selector: '[name="block-body-section"]' }, context: context })] });
 }
 exports.StoryLiveBlog = StoryLiveBlog;

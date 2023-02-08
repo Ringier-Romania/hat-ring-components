@@ -1,11 +1,12 @@
 /// <reference types="react" />
-import { WidgetParams } from "../../../types/types";
+import { WidgetParams } from "../../../../types/types";
 interface StoryLiveBlogParams extends WidgetParams {
     widgetConfig: {
-        response?: any;
-        extensionType?: string;
-        selector?: string;
+        liveBlogId?: string;
         extensionAppCodeName?: string;
+        liveBlogPlatformUrl?: string;
+        liveBlogClientId: string;
+        liveBlogLanguage: string;
     };
 }
 export declare function StoryLiveBlog({ widgetConfig, context }: StoryLiveBlogParams): Promise<JSX.Element>;
