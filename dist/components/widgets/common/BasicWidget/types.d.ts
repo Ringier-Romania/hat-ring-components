@@ -45,7 +45,7 @@ export interface BasicWidgetConfig {
     widgetType: 'basicWidget';
     decorators: [];
     lazyload: 'enabled';
-    additionalOptions: ['useCroppedImage'];
+    additionalOptions: ['useCroppedImage', "Hide when no section items"];
     dedicatedStyleForWidget: string;
 }
 export interface BasicWidgetParams extends WidgetParams {
@@ -64,17 +64,29 @@ export interface BasicWidgetResponseNode {
     lead: string;
     creationTime: string;
     modificationTime: string;
+    authors: Array<string>;
     originalContent: {
         image: {
+            bigImageUrl: string;
             url: string;
             caption: string;
         };
         creationTime: string;
         modificationTime: string;
+        authors: Array<{
+            author: {
+                name: string;
+                image: {
+                    url: string;
+                    caption: string;
+                };
+            };
+        }>;
     };
     image: {
         url: string;
         caption: string;
+        bigImageUrl: string;
     };
 }
 export interface ListElementsData {

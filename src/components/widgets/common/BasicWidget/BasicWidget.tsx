@@ -11,16 +11,20 @@ import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 export async function BasicWidget({widgetConfig, context, extendableAttributes = {}}: BasicWidgetParams) {
     async function getData(queryNodeFragment) {
         const query = gql`
-            query($codeName:  ID!, $nodeId:  ID!){
+            query($codeName:  ID!, $nodeId:  ID!, $first: Int, $bigImageWidth: Int!, $bigImageHeight: Int!, $imageWidth: Int!, $imageHeight: Int!){
                 section(codeName: $codeName, nodeId: $nodeId) { 
-                    items{
+                    items(first: $first){
                         edges {
                             node {
                                 title
                                 lead
                                 image {
-                                    url,
+                                    bigImageUrl: url(transforms:{resizeCropAuto:{width:$bigImageWidth,height:$bigImageHeight}} ),
+                                    url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}} ),
                                     caption
+                                }
+                                authors {
+                                    name
                                 }
                                 url
                                 creationTime
@@ -28,12 +32,22 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
                                 originalContent {
                                     ... on Story {
                                         image {
-                                            url,
+                                            bigImageUrl: url(transforms:{resizeCropAuto:{width:$bigImageWidth,height:$bigImageHeight}} ),
+                                            url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}} ),
                                             caption
                                         }
                                         date {
                                             modificationTime
                                             creationTime
+                                        }
+                                        authors {
+                                            author {
+                                                name
+                                                image {
+                                                    url
+                                                    caption
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -45,15 +59,36 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
             }
         `;
 
+        const bigImageDimensions = (widgetConfig.bigImageSize || '0x0').split('x');
+        const imageDimensions = (widgetConfig.standardImageSize || '0x0').split('x');
+
         const variables = {
             codeName: widgetConfig.section_name,
-            nodeId: context.hatControllerParams.gqlResponse.data.site.data.node.id
+            nodeId: context.hatControllerParams.gqlResponse.data.site.data.node.id,
+            // there is no offset for sections so:
+            // we have to sum offset + count and delete offset items from response object
+            first: (Number(widgetConfig.offset) + Number(widgetConfig.count)) || null,
+            bigImageWidth: Number(bigImageDimensions[0]) || 0,
+            bigImageHeight: Number(bigImageDimensions[1]) || 0,
+            imageWidth: Number(imageDimensions[0]) || 0,
+            imageHeight: Number(imageDimensions[1]) || 0
         };
+
         return await WebsiteApiProvider.call(query, variables);
     }
 
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
-    const response = await getData(queryFragment);
+    const response = await getData(queryFragment) as BasicWidgetResponse;
+
+    if (response?.data?.section?.items?.edges) {
+        response.data.section.items.edges = response.data.section.items.edges.slice(Number(widgetConfig.offset));
+    }
+
+    const hideWhenNoItems = widgetConfig.additionalOptions.includes("Hide when no section items");
+
+    if (hideWhenNoItems && _.get(response, 'data.section.items.edges.length', 0) === 0) {
+        return <div className={'BasicWidget'} style={{display: 'none'}}/>
+    }
 
     const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
     context.customData.itemParts = extendableAttributes.itemParts;
@@ -74,7 +109,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
     }
 
     function render(){
-        return <div className={['BasicWidget', cssModules].join(' ')}>
+        return <div className={['BasicWidget', cssModules, widgetConfig.customClass || ''].join(' ')}>
             {generalComponents}
         </div>;
     }

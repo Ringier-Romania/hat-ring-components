@@ -26,6 +26,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 function Title({ context, widgetConfig, data }) {
+    if (!data.title) {
+        return (0, jsx_runtime_1.jsx)("div", { className: 'Title', style: { display: 'none' } });
+    }
     const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span');
     let ItemHeaderTag = HeaderTag;
     const itemsHeaderArr = HeaderTag.split('h');

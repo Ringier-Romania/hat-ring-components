@@ -1,8 +1,7 @@
 /// <reference types="react" />
 import { AppContext } from "../../../../../types/types";
 import { BasicWidgetConfig, BasicWidgetResponseNode } from "../types";
-export default function Image({ itemIndex, context, widgetConfig, data }: {
-    itemIndex: number;
+export default function Authors({ context, widgetConfig, data }: {
     context: AppContext;
     widgetConfig: BasicWidgetConfig;
     data: BasicWidgetResponseNode;

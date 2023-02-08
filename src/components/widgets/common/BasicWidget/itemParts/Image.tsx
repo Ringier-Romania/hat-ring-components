@@ -4,22 +4,25 @@ import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import RingImage, {TransformType} from "../../../../common/RingImage";
 
 export default function Image(
-    {context, widgetConfig, data}:
+    {itemIndex, context, widgetConfig, data}:
         {
+            itemIndex: number,
             context: AppContext,
             widgetConfig: BasicWidgetConfig,
             data: BasicWidgetResponseNode,
         }) {
+    const image = data.image || data.originalContent.image;
 
-    if(!data.image && !data.originalContent.image){
-        return null;
+    if (!image) {
+        return <div className={'Image'} style={{display: 'none'}}/>
     }
 
-    const sizes = widgetConfig.standardImageSize.split('x');
+    const isBig = itemIndex < widgetConfig.countBig;
+    const sizes = isBig ? widgetConfig.bigImageSize.split('x') : widgetConfig.standardImageSize.split('x');
 
     const ringImageProps = {
-        src:  data.image?.url || data.originalContent.image?.url,
-        alt: data.originalContent.image.caption || data.title || '',
+        src: isBig ? image.bigImageUrl : image.url,
+        alt: image.caption || data.title || '',
         transform: TransformType.ResizeCropAuto,
         width: Number(sizes[0]),
         height: Number(sizes[1])
@@ -28,10 +31,8 @@ export default function Image(
 
     // @TODO: add priority from config and other props
     return (
-        (data.image || data.originalContent.image) ?
-            <div className={['Image'].join(' ')}>
-                <RingImage {...ringImageProps} />
-            </div> :
-            <></>
+        <div className={['Image', isBig ? 'bigImage' : ''].join(' ')}>
+            <RingImage {...ringImageProps} />
+        </div>
     )
 }

@@ -11,6 +11,10 @@ export default function Title(
             data: BasicWidgetResponseNode,
         }) {
 
+    if (!data.title) {
+        return <div className={'Title'} style={{display: 'none'}}/>
+    }
+
     const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span' ) as keyof JSX.IntrinsicElements;
     let ItemHeaderTag = HeaderTag;
 

@@ -14,35 +14,35 @@ export default function PublicationDate(
 
     const dateFromData = data.creationTime || data.originalContent.creationTime;
 
-    if (dateFromData) {
-        const decoratedLocale = {
-            ...enGB, // @todo: pobrać wartość z globalnej konfiguracji
-            formatRelative: (...args) => {
-                if (args && args[0] === 'other') {
-                    return 'LLLL d. yyyy, h:mm:ss a'; // @todo: pobrać wartość z globalnej konfiguracji
-                }
-                // @ts-ignore
-                return enGB.formatRelative(...args);
-            },
-        };
-
-        const options = {
-            locale: decoratedLocale,
-            timeZone: 'Europe/London' // @todo: pobrać wartość z globalnej konfiguracji
-        };
-
-        const date = toDate(dateFromData, options);
-        const relativeDate = formatRelative(date, new Date(), options);
-
-        return (
-            <div className={['PublicationDate'].join(' ')}>
-                <time dateTime={formatISO(date)}>
-                    {relativeDate}
-                </time>
-            </div>
-        )
+    if (!dateFromData) {
+        return <div className={'PublicationDate'} style={{display: 'none'}}/>
     }
 
-    return <></>;
+    const decoratedLocale = {
+        ...enGB, // @todo: pobrać wartość z globalnej konfiguracji
+        formatRelative: (...args) => {
+            if (args && args[0] === 'other') {
+                return 'LLLL d. yyyy, h:mm:ss a'; // @todo: pobrać wartość z globalnej konfiguracji
+            }
+            // @ts-ignore
+            return enGB.formatRelative(...args);
+        },
+    };
+
+    const options = {
+        locale: decoratedLocale,
+        timeZone: 'Europe/London' // @todo: pobrać wartość z globalnej konfiguracji
+    };
+
+    const date = toDate(dateFromData, options);
+    const relativeDate = formatRelative(date, new Date(), options);
+
+    return (
+        <div className={['PublicationDate'].join(' ')}>
+            <time dateTime={formatISO(date)}>
+                {relativeDate}
+            </time>
+        </div>
+    )
 }
 

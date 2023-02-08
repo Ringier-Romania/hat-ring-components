@@ -11,6 +11,10 @@ export default function Lead(
             data: BasicWidgetResponseNode,
         }) {
 
+    if (!data.lead) {
+        return <div className={'Lead'} style={{display: 'none'}}/>
+    }
+
     return (
         <div className={['Lead'].join(' ')}>
                 <span>{data.lead}</span>

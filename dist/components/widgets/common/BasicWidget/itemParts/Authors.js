@@ -25,21 +25,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingImage_1 = __importStar(require("../../../../common/RingImage"));
-function Image({ itemIndex, context, widgetConfig, data }) {
-    const image = data.image || data.originalContent.image;
-    if (!image) {
-        return (0, jsx_runtime_1.jsx)("div", { className: 'Image', style: { display: 'none' } });
+function Authors({ context, widgetConfig, data }) {
+    var _a, _b;
+    const authorsObjs = (_b = (_a = data.originalContent) === null || _a === void 0 ? void 0 : _a.authors) === null || _b === void 0 ? void 0 : _b.map((obj) => obj.author);
+    if (!authorsObjs || authorsObjs.length === 0) {
+        return (0, jsx_runtime_1.jsx)("div", { className: 'Authors', style: { display: 'none' } });
     }
-    const isBig = itemIndex < widgetConfig.countBig;
-    const sizes = isBig ? widgetConfig.bigImageSize.split('x') : widgetConfig.standardImageSize.split('x');
-    const ringImageProps = {
-        src: isBig ? image.bigImageUrl : image.url,
-        alt: image.caption || data.title || '',
-        transform: RingImage_1.TransformType.ResizeCropAuto,
-        width: Number(sizes[0]),
-        height: Number(sizes[1])
-    };
-    return ((0, jsx_runtime_1.jsx)("div", { className: ['Image', isBig ? 'bigImage' : ''].join(' '), children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { ...ringImageProps }) }));
+    return ((0, jsx_runtime_1.jsx)("div", { className: ['Authors'].join(' '), children: authorsObjs.map((author) => {
+            var _a;
+            return ((0, jsx_runtime_1.jsxs)("div", { className: "authorWrapper", children: [((_a = author.image) === null || _a === void 0 ? void 0 : _a.url) &&
+                        (0, jsx_runtime_1.jsx)("div", { className: "authorImage", children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { src: author.image.url, alt: author.image.caption || author.name, width: 100, height: 100, transform: RingImage_1.TransformType.ResizeCropAuto }) }), author.name &&
+                        (0, jsx_runtime_1.jsx)("div", { className: "authorName", children: author.name })] }));
+        }) }));
 }
-exports.default = Image;
-//# sourceMappingURL=Image.js.map
+exports.default = Authors;
+//# sourceMappingURL=Authors.js.map
