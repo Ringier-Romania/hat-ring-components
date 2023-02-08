@@ -33,11 +33,11 @@ const GeneralParts = __importStar(require("./generalParts"));
 const _ = __importStar(require("lodash"));
 const BasicWidget_module_scss_1 = __importDefault(require("../../../../../styles/widgets/common/BasicWidget.module.scss"));
 const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
-const _helpers_1 = require("@helpers");
+const helpers_1 = require("../../../../helpers");
 async function BasicWidget({ widgetConfig, context, extendableAttributes = {} }) {
     var _a, _b, _c;
-    if ((0, _helpers_1.shouldHideWidget)(widgetConfig, context)) {
-        return (0, _helpers_1.renderEmptyWidget)(widgetConfig);
+    if ((0, helpers_1.shouldHideWidget)(widgetConfig, context)) {
+        return (0, helpers_1.renderEmptyWidget)(widgetConfig);
     }
     async function getData(queryNodeFragment) {
         const query = (0, graphql_tag_1.gql) `
@@ -108,7 +108,7 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
     }
     const hideWhenNoItems = widgetConfig.additionalOptions.includes("Hide when no section items");
     if (hideWhenNoItems && _.get(response, 'data.section.items.edges.length', 0) === 0) {
-        return (0, _helpers_1.renderEmptyWidget)(widgetConfig);
+        return (0, helpers_1.renderEmptyWidget)(widgetConfig);
     }
     const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
     context.customData.itemParts = extendableAttributes.itemParts;
@@ -116,7 +116,7 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
-            return (0, _helpers_1.renderEmptyComponent)(showOption, 'not supported, yet');
+            return (0, helpers_1.renderEmptyComponent)(showOption, 'not supported, yet');
         }
         return (0, jsx_runtime_1.jsx)(Component, { context: context, widgetConfig: widgetConfig, response: response }, index);
     });

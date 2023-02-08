@@ -4,11 +4,11 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const date_fns_1 = require("date-fns");
 const date_fns_tz_1 = require("date-fns-tz");
 const locale_1 = require("date-fns/esm/locale");
-const _helpers_1 = require("@helpers");
+const helpers_1 = require("../../../../../helpers");
 function ModificationDate({ context, widgetConfig, data }) {
     const dateFromData = data.modificationTime || data.originalContent.modificationTime;
     if (!dateFromData) {
-        return (0, _helpers_1.renderEmptyComponent)('ModificationDate');
+        return (0, helpers_1.renderEmptyComponent)('ModificationDate');
     }
     const decoratedLocale = {
         ...locale_1.enGB,

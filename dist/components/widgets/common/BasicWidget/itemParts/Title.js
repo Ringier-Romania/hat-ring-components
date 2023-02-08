@@ -25,10 +25,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
-const _helpers_1 = require("@helpers");
+const helpers_1 = require("../../../../../helpers");
 function Title({ context, widgetConfig, data }) {
     if (!data.title) {
-        return (0, _helpers_1.renderEmptyComponent)('Title');
+        return (0, helpers_1.renderEmptyComponent)('Title');
     }
     const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span');
     let ItemHeaderTag = HeaderTag;

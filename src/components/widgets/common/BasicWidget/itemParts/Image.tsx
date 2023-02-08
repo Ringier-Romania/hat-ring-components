@@ -2,7 +2,7 @@ import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import RingImage, {TransformType} from "../../../../common/RingImage";
-import {renderEmptyComponent} from "@helpers";
+import {renderEmptyComponent} from "../../../../../helpers";
 
 export default function Image(
     {itemIndex, context, widgetConfig, data}:

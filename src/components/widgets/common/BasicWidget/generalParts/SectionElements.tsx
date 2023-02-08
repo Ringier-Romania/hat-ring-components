@@ -4,7 +4,7 @@ import {BasicWidgetConfig, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import RingLink from "../../../../common/RingLink";
-import {renderEmptyComponent} from "@helpers";
+import {renderEmptyComponent} from "../../../../../helpers";
 
 export default function SectionElements(
     {context, widgetConfig, response}:

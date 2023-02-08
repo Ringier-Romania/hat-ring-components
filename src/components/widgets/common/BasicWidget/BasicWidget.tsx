@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 // @TODO alias
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {renderEmptyComponent, renderEmptyWidget, shouldHideWidget} from "@helpers"
+import {renderEmptyComponent, renderEmptyWidget, shouldHideWidget} from "../../../../helpers";
 
 
 export async function BasicWidget({widgetConfig, context, extendableAttributes = {}}: BasicWidgetParams) {

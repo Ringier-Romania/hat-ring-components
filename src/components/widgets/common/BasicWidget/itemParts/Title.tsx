@@ -2,7 +2,7 @@ import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import * as _ from "lodash";
-import {renderEmptyComponent} from "@helpers";
+import {renderEmptyComponent} from "../../../../../helpers";
 
 export default function Title(
     {context, widgetConfig, data}:

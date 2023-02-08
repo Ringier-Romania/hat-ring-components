@@ -25,12 +25,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingImage_1 = __importStar(require("../../../../common/RingImage"));
-const _helpers_1 = require("@helpers");
+const helpers_1 = require("../../../../../helpers");
 function AuthorsImages({ context, widgetConfig, data }) {
     var _a, _b;
     const authorsObjs = (_b = (_a = data.originalContent) === null || _a === void 0 ? void 0 : _a.authors) === null || _b === void 0 ? void 0 : _b.map((obj) => obj.author);
     if (!authorsObjs || authorsObjs.length === 0) {
-        return (0, _helpers_1.renderEmptyComponent)('AuthorsImages');
+        return (0, helpers_1.renderEmptyComponent)('AuthorsImages');
     }
     return ((0, jsx_runtime_1.jsx)("div", { className: ['AuthorsImages'].join(' '), children: authorsObjs.map((author) => {
             var _a;
