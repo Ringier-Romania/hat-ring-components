@@ -4,6 +4,7 @@ import {BasicWidgetConfig, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import RingLink from "../../../../common/RingLink";
+import {renderEmptyComponent} from "@helpers";
 
 export default function SectionElements(
     {context, widgetConfig, response}:
@@ -12,6 +13,10 @@ export default function SectionElements(
             widgetConfig: BasicWidgetConfig,
             response: BasicWidgetResponse
         }) {
+
+    if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
+        return renderEmptyComponent('SectionElements');
+    }
 
     const allItemParts = context.customData.itemParts || ItemParts;
     const columnsCount = parseInt(widgetConfig.columns);
@@ -27,9 +32,9 @@ export default function SectionElements(
                     const Component = allItemParts[_.upperFirst(showOption)];
                     if (!Component) {
                         console.error(`No item part support ${showOption}`);
-                        return <div style={{display: "none"}}>{showOption} item part not supported, yet</div>;
+                        return renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
                     }
-                    // @ts-ignore
+
                     return <Component key={index} itemIndex={itemIndex} context={context} widgetConfig={widgetConfig}
                                       data={edge.node}/>;
                 });

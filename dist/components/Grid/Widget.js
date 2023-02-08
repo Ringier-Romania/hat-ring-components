@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Widget = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
+const helpers_1 = require("../../helpers");
 ;
 function Widget({ widgetConfig, context }) {
     const availableWidgets = context.customData.widgets;
@@ -33,7 +34,10 @@ function Widget({ widgetConfig, context }) {
     const Component = availableWidgets[widgetName];
     if (!Component) {
         console.error(`No widget with name ${widgetConfig.widgetType}`);
-        return (0, jsx_runtime_1.jsx)("span", { className: widgetName, style: { display: 'none' }, dangerouslySetInnerHTML: { __html: `<!-- No widget found ${widgetName} -->` } });
+        return (0, helpers_1.renderEmptyComponent)(`gridWidget ${widgetName}`, 'No widget found');
+    }
+    if ((0, helpers_1.shouldHideWidget)(widgetConfig, context)) {
+        return (0, helpers_1.renderEmptyComponent)(`gridWidget ${widgetName}`);
     }
     const customClass = widgetConfig.customClass || '';
     return (0, jsx_runtime_1.jsx)("div", { className: ['gridWidget', widgetName, customClass].join(' '), children: (0, jsx_runtime_1.jsx)(Component, { widgetConfig: widgetConfig, context: context }) });

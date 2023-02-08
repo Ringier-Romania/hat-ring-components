@@ -25,10 +25,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingImage_1 = __importStar(require("../../../../common/RingImage"));
+const _helpers_1 = require("@helpers");
 function Image({ itemIndex, context, widgetConfig, data }) {
     const image = data.image || data.originalContent.image;
     if (!image) {
-        return (0, jsx_runtime_1.jsx)("div", { className: 'Image', style: { display: 'none' } });
+        return (0, _helpers_1.renderEmptyComponent)('Image');
     }
     const isBig = itemIndex < widgetConfig.countBig;
     const sizes = isBig ? widgetConfig.bigImageSize.split('x') : widgetConfig.standardImageSize.split('x');

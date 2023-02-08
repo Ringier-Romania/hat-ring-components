@@ -2,6 +2,7 @@ import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import RingImage, {TransformType} from "../../../../common/RingImage";
+import {renderEmptyComponent} from "@helpers";
 
 export default function Authors(
     {context, widgetConfig, data}:
@@ -13,7 +14,7 @@ export default function Authors(
     const authorsObjs = data.originalContent?.authors?.map((obj) => obj.author);
 
     if (!authorsObjs || authorsObjs.length === 0) {
-        return <div className={'Authors'} style={{display: 'none'}}/>
+        return renderEmptyComponent('Authors');
     }
 
     return (

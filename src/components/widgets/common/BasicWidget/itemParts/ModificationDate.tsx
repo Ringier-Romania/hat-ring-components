@@ -4,6 +4,7 @@ import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import {formatISO, formatRelative, Locale} from "date-fns";
 import {format, toDate} from "date-fns-tz";
 import {enGB} from 'date-fns/esm/locale'
+import {renderEmptyComponent} from "@helpers";
 export default function ModificationDate(
     {context, widgetConfig, data}:
         {
@@ -15,7 +16,7 @@ export default function ModificationDate(
     const dateFromData = data.modificationTime || data.originalContent.modificationTime;
 
     if (!dateFromData) {
-        return <div className={'ModificationDate'} style={{display: 'none'}}/>
+        return renderEmptyComponent('ModificationDate');
     }
 
     const decoratedLocale = {

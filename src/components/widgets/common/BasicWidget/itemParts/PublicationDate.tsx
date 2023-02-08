@@ -4,6 +4,7 @@ import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import {formatISO, formatRelative, Locale} from "date-fns";
 import {format, toDate} from "date-fns-tz";
 import {enGB} from 'date-fns/esm/locale'
+import {renderEmptyComponent} from "@helpers";
 export default function PublicationDate(
     {context, widgetConfig, data}:
         {
@@ -15,7 +16,7 @@ export default function PublicationDate(
     const dateFromData = data.creationTime || data.originalContent.creationTime;
 
     if (!dateFromData) {
-        return <div className={'PublicationDate'} style={{display: 'none'}}/>
+        return renderEmptyComponent('PublicationDate');
     }
 
     const decoratedLocale = {

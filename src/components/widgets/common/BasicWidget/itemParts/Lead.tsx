@@ -2,6 +2,7 @@ import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import * as _ from "lodash";
+import {renderEmptyComponent} from "@helpers";
 
 export default function Lead(
     {context, widgetConfig, data}:
@@ -12,7 +13,7 @@ export default function Lead(
         }) {
 
     if (!data.lead) {
-        return <div className={'Lead'} style={{display: 'none'}}/>
+        return renderEmptyComponent('Lead');
     }
 
     return (

@@ -4,6 +4,7 @@ import {BasicWidgetConfig, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import RingLink from "../../../../common/RingLink";
+import {renderEmptyComponent} from "@helpers";
 
 export default function Header(
     {context, widgetConfig, response}:
@@ -12,10 +13,14 @@ export default function Header(
             widgetConfig: BasicWidgetConfig,
             response: BasicWidgetResponse
         }) {
+    const headerText = widgetConfig.labelValue;
+
+    if (!headerText) {
+        return renderEmptyComponent('Header');
+    }
 
     const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span' ) as keyof JSX.IntrinsicElements;
     // @todo dynamiczny text?
-    const headerText = widgetConfig.labelValue;
     const headerUrl = widgetConfig.labelLink;
 
     return (

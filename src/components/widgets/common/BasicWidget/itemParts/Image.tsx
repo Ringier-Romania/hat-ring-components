@@ -2,6 +2,7 @@ import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import RingImage, {TransformType} from "../../../../common/RingImage";
+import {renderEmptyComponent} from "@helpers";
 
 export default function Image(
     {itemIndex, context, widgetConfig, data}:
@@ -14,7 +15,7 @@ export default function Image(
     const image = data.image || data.originalContent.image;
 
     if (!image) {
-        return <div className={'Image'} style={{display: 'none'}}/>
+        return renderEmptyComponent('Image');
     }
 
     const isBig = itemIndex < widgetConfig.countBig;

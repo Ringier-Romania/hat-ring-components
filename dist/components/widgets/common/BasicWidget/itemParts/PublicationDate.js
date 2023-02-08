@@ -4,10 +4,11 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const date_fns_1 = require("date-fns");
 const date_fns_tz_1 = require("date-fns-tz");
 const locale_1 = require("date-fns/esm/locale");
+const _helpers_1 = require("@helpers");
 function PublicationDate({ context, widgetConfig, data }) {
     const dateFromData = data.creationTime || data.originalContent.creationTime;
     if (!dateFromData) {
-        return (0, jsx_runtime_1.jsx)("div", { className: 'PublicationDate', style: { display: 'none' } });
+        return (0, _helpers_1.renderEmptyComponent)('PublicationDate');
     }
     const decoratedLocale = {
         ...locale_1.enGB,

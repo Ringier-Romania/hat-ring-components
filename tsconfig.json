@@ -21,6 +21,9 @@
 		"lib": [
 			"dom"
 		],
+		"paths": {
+			"@helpers": ["src/helpers"]
+		}
 	},
 	"include": [
 		"next-env.d.ts",

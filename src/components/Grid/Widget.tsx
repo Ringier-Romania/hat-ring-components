@@ -1,6 +1,7 @@
 import React from "react";
 import * as _ from "lodash";
 import {AbstractWidget, AppContext, WidgetParams} from "../../types/types";
+import {renderEmptyComponent, renderEmptyWidget, shouldHideWidget} from "../../helpers";
 
 interface GridWidgetParams {
     context: AppContext;
@@ -15,10 +16,15 @@ export function Widget({widgetConfig, context}: GridWidgetParams) {
 
     if (!Component) {
         console.error(`No widget with name ${widgetConfig.widgetType}`);
-        return <span className={widgetName} style={{display: 'none'}}
-                     dangerouslySetInnerHTML={{__html: `<!-- No widget found ${widgetName} -->`}}/>;
+        return renderEmptyComponent(`gridWidget ${widgetName}`, 'No widget found');
     }
+
+    if(shouldHideWidget(widgetConfig, context)) {
+        return renderEmptyComponent(`gridWidget ${widgetName}`);
+    }
+
     const customClass = widgetConfig.customClass || '';
+
     return <div className={['gridWidget', widgetName, customClass].join(' ')}>
         <Component widgetConfig={widgetConfig}
                    context={context}/>

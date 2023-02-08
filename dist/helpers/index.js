@@ -23,20 +23,25 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.renderEmptyComponent = exports.renderEmptyWidget = exports.shouldHideWidget = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
-const RingImage_1 = __importStar(require("../../../../common/RingImage"));
-const _helpers_1 = require("@helpers");
-function AuthorsImages({ context, widgetConfig, data }) {
-    var _a, _b;
-    const authorsObjs = (_b = (_a = data.originalContent) === null || _a === void 0 ? void 0 : _a.authors) === null || _b === void 0 ? void 0 : _b.map((obj) => obj.author);
-    if (!authorsObjs || authorsObjs.length === 0) {
-        return (0, _helpers_1.renderEmptyComponent)('AuthorsImages');
+const _ = __importStar(require("lodash"));
+function shouldHideWidget(widgetConfig, context) {
+    if (typeof context.hatControllerParams.isMobile === 'boolean') {
+        if ((context.hatControllerParams.isMobile && widgetConfig.platformDesktop)
+            || (!context.hatControllerParams.isMobile && widgetConfig.platformMobile)) {
+            return true;
+        }
     }
-    return ((0, jsx_runtime_1.jsx)("div", { className: ['AuthorsImages'].join(' '), children: authorsObjs.map((author) => {
-            var _a;
-            return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: ((_a = author.image) === null || _a === void 0 ? void 0 : _a.url) &&
-                    (0, jsx_runtime_1.jsx)("div", { className: "authorImage", children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { src: author.image.url, alt: author.image.caption || author.name, width: 100, height: 100, transform: RingImage_1.TransformType.ResizeCropAuto }) }) }));
-        }) }));
+    return false;
 }
-exports.default = AuthorsImages;
-//# sourceMappingURL=AuthorsImages.js.map
+exports.shouldHideWidget = shouldHideWidget;
+function renderEmptyWidget(widgetConfig, text = '') {
+    return renderEmptyComponent(_.upperFirst(widgetConfig.widgetType), text);
+}
+exports.renderEmptyWidget = renderEmptyWidget;
+function renderEmptyComponent(componentClassName, text = '') {
+    return ((0, jsx_runtime_1.jsx)("div", { className: componentClassName, style: { display: 'none' }, dangerouslySetInnerHTML: { __html: text && `<!-- ${text} -->` } }));
+}
+exports.renderEmptyComponent = renderEmptyComponent;
+//# sourceMappingURL=index.js.map

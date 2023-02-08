@@ -6,9 +6,14 @@ import * as _ from 'lodash';
 // @TODO alias
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
+import {renderEmptyComponent, renderEmptyWidget, shouldHideWidget} from "@helpers"
 
 
 export async function BasicWidget({widgetConfig, context, extendableAttributes = {}}: BasicWidgetParams) {
+    if (shouldHideWidget(widgetConfig, context)) {
+        return renderEmptyWidget(widgetConfig);
+    }
+
     async function getData(queryNodeFragment) {
         const query = gql`
             query($codeName:  ID!, $nodeId:  ID!, $first: Int, $bigImageWidth: Int!, $bigImageHeight: Int!, $imageWidth: Int!, $imageHeight: Int!){
@@ -85,9 +90,8 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
     }
 
     const hideWhenNoItems = widgetConfig.additionalOptions.includes("Hide when no section items");
-
     if (hideWhenNoItems && _.get(response, 'data.section.items.edges.length', 0) === 0) {
-        return <div className={'BasicWidget'} style={{display: 'none'}}/>
+        return renderEmptyWidget(widgetConfig);
     }
 
     const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
@@ -97,7 +101,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
-            return <div style={{display: 'none'}}>{showOption} not supported, yet</div>;
+            return renderEmptyComponent(showOption, 'not supported, yet');
         }
         return <Component key={index} context={context} widgetConfig={widgetConfig} response={response}/>;
     });
