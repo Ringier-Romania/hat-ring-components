@@ -1,10 +1,14 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const date_fns_1 = require("date-fns");
 const date_fns_tz_1 = require("date-fns-tz");
 const locale_1 = require("date-fns/esm/locale");
 const helpers_1 = require("../../../../../helpers");
+const graphql_tag_1 = __importDefault(require("graphql-tag"));
 function PublicationDate({ context, widgetConfig, data }) {
     const dateFromData = data.creationTime || data.originalContent.creationTime;
     if (!dateFromData) {
@@ -28,4 +32,19 @@ function PublicationDate({ context, widgetConfig, data }) {
     return ((0, jsx_runtime_1.jsx)("div", { className: ['PublicationDate'].join(' '), children: (0, jsx_runtime_1.jsx)("time", { dateTime: (0, date_fns_1.formatISO)(date), children: relativeDate }) }));
 }
 exports.default = PublicationDate;
+PublicationDate.getFragment = () => {
+    return {
+        variables: {},
+        query: (0, graphql_tag_1.default) `fragment PublicationDateFragment on SectionItem {
+            creationTime
+            originalContent {
+                ... on Story {
+                    date {
+                        creationTime
+                    }
+                }
+            }
+        }`
+    };
+};
 //# sourceMappingURL=PublicationDate.js.map

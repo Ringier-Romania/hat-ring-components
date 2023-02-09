@@ -22,10 +22,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingImage_1 = __importStar(require("../../../../common/RingImage"));
 const helpers_1 = require("../../../../../helpers");
+const graphql_tag_1 = __importDefault(require("graphql-tag"));
 function Image({ itemIndex, context, widgetConfig, data }) {
     const image = data.image || data.originalContent.image;
     if (!image) {
@@ -43,4 +47,45 @@ function Image({ itemIndex, context, widgetConfig, data }) {
     return ((0, jsx_runtime_1.jsx)("div", { className: ['Image', isBig ? 'bigImage' : ''].join(' '), children: (0, jsx_runtime_1.jsx)(RingImage_1.default, { ...ringImageProps }) }));
 }
 exports.default = Image;
+Image.getFragment = (widgetConfig) => {
+    const sizes = widgetConfig.standardImageSize.split('x');
+    const bigSizes = widgetConfig.bigImageSize.split('x');
+    const bigImage = widgetConfig.countBig > 0
+        ? `bigImageUrl: url(transforms:{resizeCropAuto:{width:$bigImageWidth,height:$bigImageHeight}} )`
+        : '';
+    const bigImageVars = widgetConfig.countBig > 0
+        ? { bigImageWidth: Number(bigSizes[0]), bigImageHeight: Number(bigSizes[1]) }
+        : {};
+    const bigImageVarsTypes = widgetConfig.countBig > 0
+        ? { $bigImageWidth: 'Int!', $bigImageHeight: 'Int!' }
+        : {};
+    return {
+        variablesTypes: {
+            '$imageWidth': 'Int!',
+            '$imageHeight': 'Int!',
+            ...bigImageVarsTypes
+        },
+        variables: {
+            imageWidth: Number(sizes[0]),
+            imageHeight: Number(sizes[1]),
+            ...bigImageVars
+        },
+        query: (0, graphql_tag_1.default) `fragment ImageFragment on SectionItem {
+            image {
+                ${bigImage}
+                url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}}),
+                caption
+            }
+            originalContent {
+                ... on Story {
+                    image {
+                        ${bigImage}
+                        url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}}),
+                        caption
+                    }
+                }
+            }
+        }`
+    };
+};
 //# sourceMappingURL=Image.js.map

@@ -3,6 +3,7 @@ import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import RingImage, {TransformType} from "../../../../common/RingImage";
 import {renderEmptyComponent} from "../../../../../helpers";
+import gql from "graphql-tag";
 
 export default function Image(
     {itemIndex, context, widgetConfig, data}:
@@ -36,4 +37,50 @@ export default function Image(
             <RingImage {...ringImageProps} />
         </div>
     )
+}
+
+Image.getFragment = (widgetConfig) => {
+    const sizes = widgetConfig.standardImageSize.split('x');
+    const bigSizes = widgetConfig.bigImageSize.split('x');
+
+    const bigImage = widgetConfig.countBig > 0
+        ? `bigImageUrl: url(transforms:{resizeCropAuto:{width:$bigImageWidth,height:$bigImageHeight}} )`
+        : ''
+
+    const bigImageVars = widgetConfig.countBig > 0
+        ? { bigImageWidth: Number(bigSizes[0]), bigImageHeight: Number(bigSizes[1])}
+        : {}
+
+    const bigImageVarsTypes = widgetConfig.countBig > 0
+        ? { $bigImageWidth: 'Int!', $bigImageHeight: 'Int!'}
+        : {}
+
+    return {
+        variablesTypes: {
+            '$imageWidth': 'Int!',
+            '$imageHeight': 'Int!',
+            ...bigImageVarsTypes
+        },
+        variables: {
+            imageWidth: Number(sizes[0]),
+            imageHeight: Number(sizes[1]),
+            ...bigImageVars
+        },
+        query: gql`fragment ImageFragment on SectionItem {
+            image {
+                ${bigImage}
+                url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}}),
+                caption
+            }
+            originalContent {
+                ... on Story {
+                    image {
+                        ${bigImage}
+                        url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}}),
+                        caption
+                    }
+                }
+            }
+        }`
+    }
 }

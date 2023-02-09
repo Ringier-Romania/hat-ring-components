@@ -3,10 +3,10 @@ import {BasicWidgetParams, BasicWidgetResponse} from "./types";
 import {gql} from "graphql-tag";
 import * as GeneralParts from './generalParts';
 import * as _ from 'lodash';
-// @TODO alias
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {renderEmptyComponent, renderEmptyWidget, shouldHideWidget} from "../../../../helpers";
+import * as ItemParts from "./itemParts";
 
 
 export async function BasicWidget({widgetConfig, context, extendableAttributes = {}}: BasicWidgetParams) {
@@ -15,74 +15,70 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
     }
 
     async function getData(queryNodeFragment) {
+        let dynamicVariablesTypes = {}
+        let dynamicVariables = {}
+        let dynamicFragmentsTitles = '';
+
+        const dynamicFragments = widgetConfig.showOptions.map((showOption) => {
+            const allItemParts = context.customData.itemParts || ItemParts;
+
+            const ItemPart = allItemParts[_.upperFirst(showOption)];
+
+            if (ItemPart && ItemPart.getFragment) {
+                const fragment = ItemPart.getFragment(widgetConfig);
+                if (fragment.variables) {
+                    dynamicVariables = {...dynamicVariables, ...fragment.variables}
+                }
+
+                if (fragment.variablesTypes) {
+                    dynamicVariablesTypes = {...dynamicVariablesTypes, ...fragment.variablesTypes}
+                }
+
+                if (fragment.query) {
+                    dynamicFragmentsTitles += ` ...${fragment.query.definitions[0].name.value} \n`;
+                    return `${fragment.query.loc?.source.body}`
+                }
+            }
+        }).join('\n');
+
+        const mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
+            return `, ${key}: ${dynamicVariablesTypes[key]}`;
+        }).join(' ')
+
         const query = gql`
-            query($codeName:  ID!, $nodeId:  ID!, $first: Int, $bigImageWidth: Int!, $bigImageHeight: Int!, $imageWidth: Int!, $imageHeight: Int!){
-                section(codeName: $codeName, nodeId: $nodeId) { 
-                    items(first: $first){
+            query($codeName:  ID!, $nodeId:  ID!, $first: Int ${mappedDynamicVariablesTypes}){
+                section(codeName: $codeName, nodeId: $nodeId) {
+                    items(first: $first) {
                         edges {
                             node {
-                                title
-                                lead
-                                image {
-                                    bigImageUrl: url(transforms:{resizeCropAuto:{width:$bigImageWidth,height:$bigImageHeight}} ),
-                                    url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}} ),
-                                    caption
-                                }
-                                authors {
-                                    name
-                                }
                                 url
-                                creationTime
-                                modificationTime
-                                originalContent {
-                                    ... on Story {
-                                        image {
-                                            bigImageUrl: url(transforms:{resizeCropAuto:{width:$bigImageWidth,height:$bigImageHeight}} ),
-                                            url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}} ),
-                                            caption
-                                        }
-                                        date {
-                                            modificationTime
-                                            creationTime
-                                        }
-                                        authors {
-                                            author {
-                                                name
-                                                image {
-                                                    url
-                                                    caption
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                ${dynamicFragmentsTitles}
                                 ${queryNodeFragment}
                             }
                         }
                     }
                 }
             }
+            ${dynamicFragments}
         `;
 
-        const bigImageDimensions = (widgetConfig.bigImageSize || '0x0').split('x');
-        const imageDimensions = (widgetConfig.standardImageSize || '0x0').split('x');
-
         const variables = {
+            ...dynamicVariables,
             codeName: widgetConfig.section_name,
             nodeId: context.hatControllerParams.gqlResponse.data.site.data.node.id,
             // there is no offset for sections so:
             // we have to sum offset + count and delete offset items from response object
-            first: (Number(widgetConfig.offset) + Number(widgetConfig.count)) || null,
-            bigImageWidth: Number(bigImageDimensions[0]) || 0,
-            bigImageHeight: Number(bigImageDimensions[1]) || 0,
-            imageWidth: Number(imageDimensions[0]) || 0,
-            imageHeight: Number(imageDimensions[1]) || 0
+            first: (Number(widgetConfig.offset) + Number(widgetConfig.count)) || null
         };
 
         return await WebsiteApiProvider.call(query, variables);
     }
 
+    const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
+    context.customData.itemParts = extendableAttributes.itemParts;
+
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
+
     const response = await getData(queryFragment) as BasicWidgetResponse;
 
     if (response?.data?.section?.items?.edges) {
@@ -93,9 +89,6 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
     if (hideWhenNoItems && _.get(response, 'data.section.items.edges.length', 0) === 0) {
         return renderEmptyWidget(widgetConfig);
     }
-
-    const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
-    context.customData.itemParts = extendableAttributes.itemParts;
 
     const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
@@ -112,7 +105,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
         cssModules = extendableAttributes.getCssModule(styles.BasicWidget) || styles.BasicWidget;
     }
 
-    function render(){
+    function render() {
         return <div className={['BasicWidget', cssModules, widgetConfig.customClass || ''].join(' ')}>
             {generalComponents}
         </div>;

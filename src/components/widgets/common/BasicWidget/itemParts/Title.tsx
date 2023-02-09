@@ -3,6 +3,7 @@ import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import * as _ from "lodash";
 import {renderEmptyComponent} from "../../../../../helpers";
+import gql from "graphql-tag";
 
 export default function Title(
     {context, widgetConfig, data}:
@@ -34,5 +35,14 @@ export default function Title(
             <ItemHeaderTag>{data.title}</ItemHeaderTag>
         </div>
     )
+}
+
+Title.getFragment = () => {
+    return {
+        variables: {},
+        query: gql`fragment TitleFragment on SectionItem {
+            title
+        }`
+    }
 }
 

@@ -22,10 +22,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingImage_1 = __importStar(require("../../../../common/RingImage"));
 const helpers_1 = require("../../../../../helpers");
+const graphql_tag_1 = __importDefault(require("graphql-tag"));
 function AuthorsImages({ context, widgetConfig, data }) {
     var _a, _b;
     const authorsObjs = (_b = (_a = data.originalContent) === null || _a === void 0 ? void 0 : _a.authors) === null || _b === void 0 ? void 0 : _b.map((obj) => obj.author);
@@ -39,4 +43,24 @@ function AuthorsImages({ context, widgetConfig, data }) {
         }) }));
 }
 exports.default = AuthorsImages;
+AuthorsImages.getFragment = () => {
+    return {
+        variables: {},
+        query: (0, graphql_tag_1.default) `fragment AuthorsImagesFragment on SectionItem {
+            originalContent {
+                ... on Story {
+                    authors {
+                        author {
+                            name
+                            image {
+                                url
+                                caption
+                            }
+                        }
+                    }
+                }
+            }
+        }`
+    };
+};
 //# sourceMappingURL=AuthorsImages.js.map

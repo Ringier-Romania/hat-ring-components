@@ -5,6 +5,8 @@ import {formatISO, formatRelative, Locale} from "date-fns";
 import {format, toDate} from "date-fns-tz";
 import {enGB} from 'date-fns/esm/locale'
 import {renderEmptyComponent} from "../../../../../helpers";
+import gql from "graphql-tag";
+
 export default function ModificationDate(
     {context, widgetConfig, data}:
         {
@@ -45,5 +47,21 @@ export default function ModificationDate(
             </time>
         </div>
     )
+}
+
+ModificationDate.getFragment = () => {
+    return {
+        variables: {},
+        query: gql`fragment ModificationDateFragment on SectionItem {
+            modificationTime
+            originalContent {
+                ... on Story {
+                    date {
+                        modificationTime
+                    }
+                }
+            }
+        }`
+    }
 }
 

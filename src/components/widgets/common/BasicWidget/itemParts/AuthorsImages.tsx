@@ -3,6 +3,7 @@ import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import RingImage, {TransformType} from "../../../../common/RingImage";
 import {renderEmptyComponent} from "../../../../../helpers";
+import gql from "graphql-tag";
 
 export default function AuthorsImages(
     {context, widgetConfig, data}:
@@ -32,4 +33,27 @@ export default function AuthorsImages(
         </div>
     )
 }
+
+AuthorsImages.getFragment = () => {
+    return {
+        variables: {},
+        query: gql`fragment AuthorsImagesFragment on SectionItem {
+            originalContent {
+                ... on Story {
+                    authors {
+                        author {
+                            name
+                            image {
+                                url
+                                caption
+                            }
+                        }
+                    }
+                }
+            }
+        }`
+    }
+}
+
+
 

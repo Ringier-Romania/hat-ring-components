@@ -5,6 +5,7 @@ import {formatISO, formatRelative, Locale} from "date-fns";
 import {format, toDate} from "date-fns-tz";
 import {enGB} from 'date-fns/esm/locale'
 import {renderEmptyComponent} from "../../../../../helpers";
+import gql from "graphql-tag";
 export default function PublicationDate(
     {context, widgetConfig, data}:
         {
@@ -45,5 +46,22 @@ export default function PublicationDate(
             </time>
         </div>
     )
+}
+
+
+PublicationDate.getFragment = () => {
+    return {
+        variables: {},
+        query: gql`fragment PublicationDateFragment on SectionItem {
+            creationTime
+            originalContent {
+                ... on Story {
+                    date {
+                        creationTime
+                    }
+                }
+            }
+        }`
+    }
 }
 

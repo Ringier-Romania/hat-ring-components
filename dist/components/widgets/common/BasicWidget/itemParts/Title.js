@@ -22,10 +22,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const helpers_1 = require("../../../../../helpers");
+const graphql_tag_1 = __importDefault(require("graphql-tag"));
 function Title({ context, widgetConfig, data }) {
     if (!data.title) {
         return (0, helpers_1.renderEmptyComponent)('Title');
@@ -45,4 +49,12 @@ function Title({ context, widgetConfig, data }) {
     return ((0, jsx_runtime_1.jsx)("div", { className: ['Title'].join(' '), children: (0, jsx_runtime_1.jsx)(ItemHeaderTag, { children: data.title }) }));
 }
 exports.default = Title;
+Title.getFragment = () => {
+    return {
+        variables: {},
+        query: (0, graphql_tag_1.default) `fragment TitleFragment on SectionItem {
+            title
+        }`
+    };
+};
 //# sourceMappingURL=Title.js.map

@@ -3,6 +3,7 @@ import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import * as _ from "lodash";
 import {renderEmptyComponent} from "../../../../../helpers";
+import gql from "graphql-tag";
 
 export default function Lead(
     {context, widgetConfig, data}:
@@ -21,5 +22,14 @@ export default function Lead(
                 <span>{data.lead}</span>
         </div>
     )
+}
+
+Lead.getFragment = () => {
+    return {
+        variables: {},
+        query: gql`fragment LeadFragment on SectionItem {
+            lead
+        }`
+    }
 }
 
