@@ -29,6 +29,7 @@ const _ = __importStar(require("lodash"));
 const graphql_tag_1 = require("graphql-tag");
 const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
 const ExternalApplication_1 = require("../../common/ExternalApplication");
+;
 async function StoryLiveBlog({ widgetConfig, context }) {
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID,$extType: String){

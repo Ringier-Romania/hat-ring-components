@@ -1,19 +1,20 @@
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
-import {ComponentParams, WidgetParams} from "../../../../types/types";
+import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "../../../../types/types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {ExternalApplication} from "../../common/ExternalApplication";
 
 interface StoryLiveBlogParams extends WidgetParams {
-    widgetConfig: {
-        liveBlogId?: string,
-        extensionAppCodeName?: string,
-        liveBlogPlatformUrl?: string,
-        liveBlogClientId: string,
-        liveBlogLanguage: string
-    }
+    widgetConfig: StoryLiveBlogParamsConfig
 }
+interface StoryLiveBlogParamsConfig extends AbstractWidgetConfig {
+    liveBlogId?: string,
+    extensionAppCodeName?: string,
+    liveBlogPlatformUrl?: string,
+    liveBlogClientId: string,
+    liveBlogLanguage: string
+};
 
 export async function StoryLiveBlog({widgetConfig, context}: StoryLiveBlogParams) {
     const query = gql`
