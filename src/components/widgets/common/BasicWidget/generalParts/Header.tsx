@@ -20,7 +20,7 @@ export default function Header(
     }
 
     const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span' ) as keyof JSX.IntrinsicElements;
-    // @todo dynamiczny text?
+    // @todo dynamic text?
     const headerUrl = widgetConfig.labelLink;
 
     return (

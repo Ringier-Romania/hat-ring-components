@@ -22,10 +22,10 @@ export default function ModificationDate(
     }
 
     const decoratedLocale = {
-        ...enGB, // @todo: pobrać wartość z globalnej konfiguracji
+        ...enGB, // @todo: get value from global config
         formatRelative: (...args) => {
             if (args && args[0] === 'other') {
-                return 'LLLL d. yyyy, h:mm:ss a'; // @todo: pobrać wartość z globalnej konfiguracji
+                return 'LLLL d. yyyy, h:mm:ss a'; // @todo: get value from global config
             }
             // @ts-ignore
             return enGB.formatRelative(...args);
@@ -34,7 +34,7 @@ export default function ModificationDate(
 
     const options = {
         locale: decoratedLocale,
-        timeZone: 'Europe/London' // @todo: pobrać wartość z globalnej konfiguracji
+        timeZone: 'Europe/London' // @todo: get value from global config
     };
 
     const date = toDate(dateFromData, options);

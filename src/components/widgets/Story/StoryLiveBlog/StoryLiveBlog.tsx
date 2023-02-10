@@ -14,7 +14,7 @@ interface StoryLiveBlogParamsConfig extends AbstractWidgetConfig {
     liveBlogPlatformUrl?: string,
     liveBlogClientId: string,
     liveBlogLanguage: string
-};
+}
 
 export async function StoryLiveBlog({widgetConfig, context}: StoryLiveBlogParams) {
     const query = gql`
