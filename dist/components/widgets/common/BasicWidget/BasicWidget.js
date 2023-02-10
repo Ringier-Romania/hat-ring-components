@@ -28,6 +28,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BasicWidget = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
+const types_1 = require("./types");
 const graphql_tag_1 = require("graphql-tag");
 const GeneralParts = __importStar(require("./generalParts"));
 const _ = __importStar(require("lodash"));
@@ -44,7 +45,7 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
         let dynamicVariablesTypes = {};
         let dynamicVariables = {};
         let dynamicFragmentsTitles = '';
-        const dynamicFragments = widgetConfig.showOptions.map((showOption) => {
+        const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
             var _a;
             const allItemParts = context.customData.itemParts || ItemParts;
             const ItemPart = allItemParts[_.upperFirst(showOption)];
@@ -96,11 +97,11 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
     if ((_c = (_b = (_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.section) === null || _b === void 0 ? void 0 : _b.items) === null || _c === void 0 ? void 0 : _c.edges) {
         response.data.section.items.edges = response.data.section.items.edges.slice(Number(widgetConfig.offset));
     }
-    const hideWhenNoItems = widgetConfig.additionalOptions.includes("Hide when no section items");
+    const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(types_1.BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
     if (hideWhenNoItems && _.get(response, 'data.section.items.edges.length', 0) === 0) {
         return (0, helpers_1.renderEmptyWidget)(widgetConfig);
     }
-    const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
+    const generalComponents = widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
@@ -113,7 +114,7 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
         cssModules = extendableAttributes.getCssModule(BasicWidget_module_scss_1.default.BasicWidget) || BasicWidget_module_scss_1.default.BasicWidget;
     }
     function render() {
-        return (0, jsx_runtime_1.jsx)("div", { className: ['BasicWidget', cssModules, widgetConfig.customClass || ''].join(' '), children: generalComponents });
+        return (0, jsx_runtime_1.jsx)("div", { className: (0, helpers_1.getWidgetCssClasses)(widgetConfig, [cssModules]), children: generalComponents });
     }
     if (extendableAttributes.render) {
         return extendableAttributes.render(generalComponents, cssModules);

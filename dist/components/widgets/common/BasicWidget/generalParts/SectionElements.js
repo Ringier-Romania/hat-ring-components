@@ -36,13 +36,13 @@ function SectionElements({ context, widgetConfig, response }) {
         return (0, helpers_1.renderEmptyComponent)('SectionElements');
     }
     const allItemParts = context.customData.itemParts || ItemParts;
-    const columnsCount = parseInt(widgetConfig.columns);
+    const columnsCount = parseInt(widgetConfig.columns || '0');
     const bigElementsCount = Number(widgetConfig.countBig);
     const colNumber = Math.floor(12 / columnsCount);
     const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
     const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
     return ((0, jsx_runtime_1.jsx)("div", { className: ['SectionElements', bigElementsClass, columnsClass].join(' '), children: response.data.section.items.edges.map((edge, itemIndex) => {
-            const itemParts = widgetConfig.showOptions.map((showOption, index) => {
+            const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
                 const Component = allItemParts[_.upperFirst(showOption)];
                 if (!Component) {
                     console.error(`No item part support ${showOption}`);

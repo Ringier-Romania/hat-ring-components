@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.renderEmptyComponent = exports.renderEmptyWidget = exports.shouldHideWidget = void 0;
+exports.getWidgetCssClasses = exports.renderEmptyComponent = exports.renderEmptyWidget = exports.shouldHideWidget = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 function shouldHideWidget(widgetConfig, context) {
@@ -44,4 +44,21 @@ function renderEmptyComponent(componentClassName, text = '') {
     return ((0, jsx_runtime_1.jsx)("div", { className: componentClassName, style: { display: 'none' }, dangerouslySetInnerHTML: { __html: text && `<!-- ${text} -->` } }));
 }
 exports.renderEmptyComponent = renderEmptyComponent;
+function getWidgetCssClasses(widgetConfig, additionalCssClasses = []) {
+    const cssClasses = [];
+    if (widgetConfig.widgetType) {
+        cssClasses.push(_.upperFirst(widgetConfig.widgetType));
+    }
+    if (widgetConfig.customWidth && widgetConfig.customWidth !== 'none') {
+        cssClasses.push(`widgetWidth${widgetConfig.customWidth}`);
+    }
+    if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
+        cssClasses.push(`widgetPosition${_.upperFirst(widgetConfig.customPosition)}`);
+    }
+    if (widgetConfig.customClass && widgetConfig.customClass !== '') {
+        cssClasses.push(widgetConfig.customClass);
+    }
+    return [...additionalCssClasses, ...cssClasses].join(' ');
+}
+exports.getWidgetCssClasses = getWidgetCssClasses;
 //# sourceMappingURL=index.js.map

@@ -35,8 +35,8 @@ function Image({ itemIndex, context, widgetConfig, data }) {
     if (!image) {
         return (0, helpers_1.renderEmptyComponent)('Image');
     }
-    const isBig = itemIndex < widgetConfig.countBig;
-    const sizes = isBig ? widgetConfig.bigImageSize.split('x') : widgetConfig.standardImageSize.split('x');
+    const isBig = widgetConfig.countBig ? itemIndex < widgetConfig.countBig : false;
+    const sizes = isBig ? (widgetConfig.bigImageSize || '0x0').split('x') : (widgetConfig.standardImageSize || '0x0').split('x');
     const ringImageProps = {
         src: isBig ? image.bigImageUrl : image.url,
         alt: image.caption || data.title || '',

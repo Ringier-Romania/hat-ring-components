@@ -1,9 +1,9 @@
 /// <reference types="react" />
-import { AppContext } from "../../types/types";
+import { AbstractWidgetConfig, AppContext } from "../../types/types";
 interface GridBoxParams {
     context: AppContext;
     boxName: string;
-    widgets: Array<any>;
+    widgets: Array<AbstractWidgetConfig>;
     size: number;
     tagName: string;
 }

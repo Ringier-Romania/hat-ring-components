@@ -1,11 +1,11 @@
 import React from "react";
 import * as _ from "lodash";
-import {AbstractWidget, AppContext, WidgetParams} from "../../types/types";
-import {renderEmptyComponent, renderEmptyWidget, shouldHideWidget} from "../../helpers";
+import {AbstractWidget, AbstractWidgetConfig, AppContext, WidgetParams} from "../../types/types";
+import {renderEmptyComponent, shouldHideWidget, getWidgetCssClasses} from "../../helpers";
 
 interface GridWidgetParams {
     context: AppContext;
-    widgetConfig: any,
+    widgetConfig: AbstractWidgetConfig,
 };
 
 //@TODO box tag etc from parent config
@@ -23,11 +23,8 @@ export function Widget({widgetConfig, context}: GridWidgetParams) {
         return renderEmptyComponent(`gridWidget ${widgetName}`);
     }
 
-    const customClass = widgetConfig.customClass || '';
-
-    return <div className={['gridWidget', widgetName, customClass].join(' ')}>
-        <Component widgetConfig={widgetConfig}
-                   context={context}/>
+    return <div className={getWidgetCssClasses(widgetConfig, ['gridWidget'])}>
+        <Component widgetConfig={widgetConfig} context={context}/>
     </div>;
 }
 

@@ -11,8 +11,29 @@
           }
         }
       }
+
+      .gridWidget {
+        // widgetConfig.customWidth
+        @for $i from 1 through 12 {
+          &.widgetWidth#{$i} {
+            width: $i / 12 * 100%;
+          }
+        }
+
+        // widgetConfig.customPosition
+        &.widgetPositionLeft {
+          float: left;
+        }
+
+        &.widgetPositionRight {
+          float: right;
+        }
+
+        &.widgetPositionCenter {
+          margin: 0 auto;
+        }
+      }
     }
   }
-
 }
 

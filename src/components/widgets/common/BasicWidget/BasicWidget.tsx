@@ -1,11 +1,11 @@
 import React from "react";
-import {BasicWidgetParams, BasicWidgetResponse} from "./types";
+import {BasicWidgetAdditionalOptions, BasicWidgetParams, BasicWidgetResponse} from "./types";
 import {gql} from "graphql-tag";
 import * as GeneralParts from './generalParts';
 import * as _ from 'lodash';
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {renderEmptyComponent, renderEmptyWidget, shouldHideWidget} from "../../../../helpers";
+import {getWidgetCssClasses, renderEmptyComponent, renderEmptyWidget, shouldHideWidget} from "../../../../helpers";
 import * as ItemParts from "./itemParts";
 
 
@@ -19,7 +19,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
         let dynamicVariables = {}
         let dynamicFragmentsTitles = '';
 
-        const dynamicFragments = widgetConfig.showOptions.map((showOption) => {
+        const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
             const allItemParts = context.customData.itemParts || ItemParts;
 
             const ItemPart = allItemParts[_.upperFirst(showOption)];
@@ -85,12 +85,12 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
         response.data.section.items.edges = response.data.section.items.edges.slice(Number(widgetConfig.offset));
     }
 
-    const hideWhenNoItems = widgetConfig.additionalOptions.includes("Hide when no section items");
+    const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
     if (hideWhenNoItems && _.get(response, 'data.section.items.edges.length', 0) === 0) {
         return renderEmptyWidget(widgetConfig);
     }
 
-    const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
+    const generalComponents = widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
@@ -106,7 +106,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
     }
 
     function render() {
-        return <div className={['BasicWidget', cssModules, widgetConfig.customClass || ''].join(' ')}>
+        return <div className={getWidgetCssClasses(widgetConfig, [cssModules])}>
             {generalComponents}
         </div>;
     }

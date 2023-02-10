@@ -1,8 +1,8 @@
 /// <reference types="react" />
-import { AppContext } from "../../types/types";
+import { AbstractWidgetConfig, AppContext } from "../../types/types";
 interface GridWidgetParams {
     context: AppContext;
-    widgetConfig: any;
+    widgetConfig: AbstractWidgetConfig;
 }
 export declare function Widget({ widgetConfig, context }: GridWidgetParams): JSX.Element;
 export {};

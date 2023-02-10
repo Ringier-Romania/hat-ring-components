@@ -22,14 +22,14 @@ export interface AbstractWidget extends React.ComponentClass<WidgetParams> {
 }
 export interface WidgetParams {
     context: AppContext;
-    widgetConfig: any;
+    widgetConfig: AbstractWidgetConfig;
 }
 export interface AbstractWidgetConfig {
-    module: string;
-    widgetType: string;
-    platformDesktop: boolean;
-    platformMobile: boolean;
-    customClass: string;
-    customPosition: string;
-    customWidth: string;
+    module?: string;
+    widgetType?: string;
+    platformDesktop?: boolean;
+    platformMobile?: boolean;
+    customClass?: string;
+    customPosition?: 'none' | 'left' | 'center' | 'right';
+    customWidth?: 'none' | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 }

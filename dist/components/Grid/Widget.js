@@ -39,8 +39,7 @@ function Widget({ widgetConfig, context }) {
     if ((0, helpers_1.shouldHideWidget)(widgetConfig, context)) {
         return (0, helpers_1.renderEmptyComponent)(`gridWidget ${widgetName}`);
     }
-    const customClass = widgetConfig.customClass || '';
-    return (0, jsx_runtime_1.jsx)("div", { className: ['gridWidget', widgetName, customClass].join(' '), children: (0, jsx_runtime_1.jsx)(Component, { widgetConfig: widgetConfig, context: context }) });
+    return (0, jsx_runtime_1.jsx)("div", { className: (0, helpers_1.getWidgetCssClasses)(widgetConfig, ['gridWidget']), children: (0, jsx_runtime_1.jsx)(Component, { widgetConfig: widgetConfig, context: context }) });
 }
 exports.Widget = Widget;
 //# sourceMappingURL=Widget.js.map
