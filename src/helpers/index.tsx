@@ -4,11 +4,8 @@ import {AbstractWidgetConfig} from "../types/types";
 
 export function shouldHideWidget(widgetConfig, context) {
     if (typeof context.hatControllerParams.isMobile === 'boolean') {
-        if ((context.hatControllerParams.isMobile && widgetConfig.platformDesktop)
-            || (!context.hatControllerParams.isMobile && widgetConfig.platformMobile)) {
-
-            return true;
-        }
+        return !((context.hatControllerParams.isMobile && widgetConfig.platformDesktop)
+            || (!context.hatControllerParams.isMobile && widgetConfig.platformMobile));
     }
     return false;
 }
