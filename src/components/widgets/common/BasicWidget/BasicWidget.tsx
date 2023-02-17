@@ -5,19 +5,19 @@ import * as GeneralParts from './generalParts';
 import * as _ from 'lodash';
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {getWidgetCssClasses, renderEmptyComponent, renderEmptyWidget, shouldHideWidget} from "../../../../helpers";
+import WidgetHelper from "../../../../helpers/WidgetHelper";
 import * as ItemParts from "./itemParts";
 
 
 export async function BasicWidget({widgetConfig, context, extendableAttributes = {}}: BasicWidgetParams) {
-    if (shouldHideWidget(widgetConfig, context)) {
-        return renderEmptyWidget(widgetConfig);
+    if (WidgetHelper.shouldHideWidget(widgetConfig, context)) {
+        return WidgetHelper.renderEmptyWidget(widgetConfig);
     }
 
     async function getData(queryNodeFragment) {
         let dynamicVariablesTypes = {}
         let dynamicVariables = {}
-        let dynamicFragmentsTitles = '';
+        let dynamicFragmentsNames = '';
 
         const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
             const allItemParts = context.customData.itemParts || ItemParts;
@@ -35,7 +35,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
                 }
 
                 if (fragment.query) {
-                    dynamicFragmentsTitles += ` ...${fragment.query.definitions[0].name.value} \n`;
+                    dynamicFragmentsNames += ` ...${fragment.query.definitions[0].name.value} \n`;
                     return `${fragment.query.loc?.source.body}`
                 }
             }
@@ -52,7 +52,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
                         edges {
                             node {
                                 url
-                                ${dynamicFragmentsTitles}
+                                ${dynamicFragmentsNames}
                                 ${queryNodeFragment}
                             }
                         }
@@ -87,14 +87,14 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
 
     const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
     if (hideWhenNoItems && _.get(response, 'data.section.items.edges.length', 0) === 0) {
-        return renderEmptyWidget(widgetConfig);
+        return WidgetHelper.renderEmptyWidget(widgetConfig);
     }
 
     const generalComponents = widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
-            return renderEmptyComponent(showOption, 'not supported, yet');
+            return WidgetHelper.renderEmptyComponent(showOption, 'not supported, yet');
         }
         return <Component key={index} context={context} widgetConfig={widgetConfig} response={response}/>;
     });
@@ -106,7 +106,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
     }
 
     function render() {
-        return <div className={getWidgetCssClasses(widgetConfig, [cssModules])}>
+        return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig, [cssModules])}>
             {generalComponents}
         </div>;
     }

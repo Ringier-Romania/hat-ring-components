@@ -1,6 +1,6 @@
 import React from "react";
 import {AbstractWidgetConfig, WidgetParams} from "../../../types/types";
-import {getWidgetCssClasses} from "../../../helpers";
+import WidgetHelper from "../../../helpers/WidgetHelper";
 
 
 interface HtmlInsertParams extends WidgetParams {
@@ -11,5 +11,5 @@ interface HtmlInsertConfig extends AbstractWidgetConfig {
 };
 
 export function HtmlInsert({widgetConfig, context}: HtmlInsertParams) {
-    return <div className={getWidgetCssClasses(widgetConfig)} dangerouslySetInnerHTML={{__html: widgetConfig.plainHtml}}/>;
+    return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig)} dangerouslySetInnerHTML={{__html: widgetConfig.plainHtml}}/>;
 }

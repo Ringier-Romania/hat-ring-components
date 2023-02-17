@@ -1,7 +1,7 @@
 import React from "react";
 import * as _ from "lodash";
 import {AbstractWidget, AbstractWidgetConfig, AppContext, WidgetParams} from "../../types/types";
-import {renderEmptyComponent, shouldHideWidget, getWidgetCssClasses} from "../../helpers";
+import WidgetHelper from "../../helpers/WidgetHelper";
 
 interface GridWidgetParams {
     context: AppContext;
@@ -16,14 +16,15 @@ export function Widget({widgetConfig, context}: GridWidgetParams) {
 
     if (!Component) {
         console.error(`No widget with name ${widgetConfig.widgetType}`);
-        return renderEmptyComponent(`gridWidget ${widgetName}`, 'No widget found');
+        return WidgetHelper.renderEmptyComponent(`gridWidget ${widgetName}`, 'No widget found');
     }
 
-    if(shouldHideWidget(widgetConfig, context)) {
-        return renderEmptyComponent(`gridWidget ${widgetName}`);
+    if(WidgetHelper.shouldHideWidget(widgetConfig, context)) {
+        console.log(widgetName, widgetConfig, context.hatControllerParams.isMobile)
+        return WidgetHelper.renderEmptyComponent(`gridWidget ${widgetName}`);
     }
 
-    return <div className={getWidgetCssClasses(widgetConfig, ['gridWidget'])}>
+    return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig, ['gridWidget'])}>
         <Component widgetConfig={widgetConfig} context={context}/>
     </div>;
 }

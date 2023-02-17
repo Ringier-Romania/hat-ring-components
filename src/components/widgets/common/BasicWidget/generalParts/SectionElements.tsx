@@ -4,7 +4,7 @@ import {BasicWidgetConfig, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import RingLink from "../../../../common/RingLink";
-import {renderEmptyComponent} from "../../../../../helpers";
+import WidgetHelper from "../../../../../helpers/WidgetHelper";
 
 export default function SectionElements(
     {context, widgetConfig, response}:
@@ -15,7 +15,7 @@ export default function SectionElements(
         }) {
 
     if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
-        return renderEmptyComponent('SectionElements');
+        return WidgetHelper.renderEmptyComponent('SectionElements');
     }
 
     const allItemParts = context.customData.itemParts || ItemParts;
@@ -32,7 +32,7 @@ export default function SectionElements(
                     const Component = allItemParts[_.upperFirst(showOption)];
                     if (!Component) {
                         console.error(`No item part support ${showOption}`);
-                        return renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
+                        return WidgetHelper.renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
                     }
 
                     return <Component key={index} itemIndex={itemIndex} context={context} widgetConfig={widgetConfig}
@@ -43,7 +43,7 @@ export default function SectionElements(
                 const bigElementClass = isBig ? `bigElement` : '';
 
                 return <div className={['Item', colClass, bigElementClass].join(' ')}>
-                    <RingLink href={edge.node.url}>
+                    <RingLink href={edge.node?.url || '/'}>
                         {itemParts}
                     </RingLink>
                 </div>;

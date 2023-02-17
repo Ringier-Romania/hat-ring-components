@@ -1,7 +1,6 @@
 import React from "react";
 import {AbstractWidgetConfig, WidgetParams} from "../../../types/types";
-import {getWidgetCssClasses} from "../../../helpers";
-
+import WidgetHelper from "../../../helpers/WidgetHelper";
 const cheerio = require('cheerio');
 
 interface ExternalApplicationParams extends WidgetParams {
@@ -25,5 +24,5 @@ export async function ExternalApplication({widgetConfig, context}: ExternalAppli
         html = $(widgetConfig.selector).html();
     }
 
-    return <div className={getWidgetCssClasses(widgetConfig)} dangerouslySetInnerHTML={{__html: html}}/>;
+    return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig)} dangerouslySetInnerHTML={{__html: html}}/>;
 }

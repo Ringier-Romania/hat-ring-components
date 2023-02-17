@@ -28,17 +28,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingImage_1 = __importStar(require("../../../../common/RingImage"));
-const helpers_1 = require("../../../../../helpers");
+const WidgetHelper_1 = __importDefault(require("../../../../../helpers/WidgetHelper"));
 const graphql_tag_1 = __importDefault(require("graphql-tag"));
 function Image({ itemIndex, context, widgetConfig, data }) {
-    const image = data.image || data.originalContent.image;
-    if (!image) {
-        return (0, helpers_1.renderEmptyComponent)('Image');
+    var _a;
+    const image = data.image || ((_a = data.originalContent) === null || _a === void 0 ? void 0 : _a.image);
+    if (!image || !image.url) {
+        return WidgetHelper_1.default.renderEmptyComponent('Image');
     }
     const isBig = widgetConfig.countBig ? itemIndex < widgetConfig.countBig : false;
     const sizes = isBig ? (widgetConfig.bigImageSize || '0x0').split('x') : (widgetConfig.standardImageSize || '0x0').split('x');
     const ringImageProps = {
-        src: isBig ? image.bigImageUrl : image.url,
+        src: image.url,
         alt: image.caption || data.title || '',
         transform: RingImage_1.TransformType.ResizeCropAuto,
         width: Number(sizes[0]),
@@ -48,39 +49,16 @@ function Image({ itemIndex, context, widgetConfig, data }) {
 }
 exports.default = Image;
 Image.getFragment = (widgetConfig) => {
-    const sizes = widgetConfig.standardImageSize.split('x');
-    const bigSizes = widgetConfig.bigImageSize.split('x');
-    const bigImage = widgetConfig.countBig > 0
-        ? `bigImageUrl: url(transforms:{resizeCropAuto:{width:$bigImageWidth,height:$bigImageHeight}} )`
-        : '';
-    const bigImageVars = widgetConfig.countBig > 0
-        ? { bigImageWidth: Number(bigSizes[0]), bigImageHeight: Number(bigSizes[1]) }
-        : {};
-    const bigImageVarsTypes = widgetConfig.countBig > 0
-        ? { $bigImageWidth: 'Int!', $bigImageHeight: 'Int!' }
-        : {};
     return {
-        variablesTypes: {
-            '$imageWidth': 'Int!',
-            '$imageHeight': 'Int!',
-            ...bigImageVarsTypes
-        },
-        variables: {
-            imageWidth: Number(sizes[0]),
-            imageHeight: Number(sizes[1]),
-            ...bigImageVars
-        },
         query: (0, graphql_tag_1.default) `fragment ImageFragment on SectionItem {
             image {
-                ${bigImage}
-                url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}}),
+                url,
                 caption
             }
             originalContent {
                 ... on Story {
                     image {
-                        ${bigImage}
-                        url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}}),
+                        url,
                         caption
                     }
                 }

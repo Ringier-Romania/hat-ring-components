@@ -65,31 +65,30 @@ export interface BasicWidgetParams extends WidgetParams {
 }
 
 export interface BasicWidgetResponseNode {
-    title: string,
-    url: string,
-    lead: string,
-    creationTime: string,
-    modificationTime: string,
-    authors: Array<string>,
-    originalContent: {
-        image: {
-            bigImageUrl: string,
-            url: string,
-            caption: string
+    title?: string,
+    url?: string,
+    lead?: string,
+    creationTime?: string,
+    modificationTime?: string,
+    authors?: Array<string>,
+    originalContent?: {
+        image?: {
+            url?: string,
+            caption?: string
         }
-        creationTime: string,
-        modificationTime: string,
-        authors: Array<{
-            author: {
-                name: string,
-                image: {
-                    url: string
-                    caption: string
+        creationTime?: string,
+        modificationTime?: string,
+        authors?: Array<{
+            author?: {
+                name?: string,
+                image?: {
+                    url?: string
+                    caption?: string
                 }
             }
         }>,
     },
-    image: { url: string, caption: string, bigImageUrl: string, }
+    image?: { url?: string, caption?: string, }
 }
 
 export interface ListElementsData {

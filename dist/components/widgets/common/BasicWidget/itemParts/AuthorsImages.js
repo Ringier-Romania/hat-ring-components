@@ -28,13 +28,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingImage_1 = __importStar(require("../../../../common/RingImage"));
-const helpers_1 = require("../../../../../helpers");
+const WidgetHelper_1 = __importDefault(require("../../../../../helpers/WidgetHelper"));
 const graphql_tag_1 = __importDefault(require("graphql-tag"));
 function AuthorsImages({ context, widgetConfig, data }) {
-    var _a, _b;
-    const authorsObjs = (_b = (_a = data.originalContent) === null || _a === void 0 ? void 0 : _a.authors) === null || _b === void 0 ? void 0 : _b.map((obj) => obj.author);
+    var _a, _b, _c;
+    const authorsObjs = ((_a = data.authors) === null || _a === void 0 ? void 0 : _a.map((name) => { return { name, image: { url: null, caption: null } }; })) || ((_c = (_b = data.originalContent) === null || _b === void 0 ? void 0 : _b.authors) === null || _c === void 0 ? void 0 : _c.map((obj) => obj.author));
     if (!authorsObjs || authorsObjs.length === 0) {
-        return (0, helpers_1.renderEmptyComponent)('AuthorsImages');
+        return WidgetHelper_1.default.renderEmptyComponent('AuthorsImages');
     }
     return ((0, jsx_runtime_1.jsx)("div", { className: ['AuthorsImages'].join(' '), children: authorsObjs.map((author) => {
             var _a;
@@ -47,6 +47,9 @@ AuthorsImages.getFragment = () => {
     return {
         variables: {},
         query: (0, graphql_tag_1.default) `fragment AuthorsImagesFragment on SectionItem {
+            authors {
+                name
+            }
             originalContent {
                 ... on Story {
                     authors {

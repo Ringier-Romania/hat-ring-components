@@ -2,7 +2,7 @@ import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import * as _ from "lodash";
-import {renderEmptyComponent} from "../../../../../helpers";
+import WidgetHelper from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 
 export default function Title(
@@ -14,7 +14,7 @@ export default function Title(
         }) {
 
     if (!data.title) {
-        return renderEmptyComponent('Title');
+        return WidgetHelper.renderEmptyComponent('Title');
     }
 
     const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span' ) as keyof JSX.IntrinsicElements;

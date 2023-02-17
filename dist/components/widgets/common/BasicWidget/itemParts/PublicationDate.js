@@ -7,12 +7,13 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const date_fns_1 = require("date-fns");
 const date_fns_tz_1 = require("date-fns-tz");
 const locale_1 = require("date-fns/esm/locale");
-const helpers_1 = require("../../../../../helpers");
+const WidgetHelper_1 = __importDefault(require("../../../../../helpers/WidgetHelper"));
 const graphql_tag_1 = __importDefault(require("graphql-tag"));
 function PublicationDate({ context, widgetConfig, data }) {
-    const dateFromData = data.creationTime || data.originalContent.creationTime;
+    var _a;
+    const dateFromData = data.creationTime || ((_a = data.originalContent) === null || _a === void 0 ? void 0 : _a.creationTime);
     if (!dateFromData) {
-        return (0, helpers_1.renderEmptyComponent)('PublicationDate');
+        return WidgetHelper_1.default.renderEmptyComponent('PublicationDate');
     }
     const decoratedLocale = {
         ...locale_1.enGB,

@@ -30,10 +30,10 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const ItemParts = __importStar(require("../itemParts"));
 const _ = __importStar(require("lodash"));
 const RingLink_1 = __importDefault(require("../../../../common/RingLink"));
-const helpers_1 = require("../../../../../helpers");
+const WidgetHelper_1 = __importDefault(require("../../../../../helpers/WidgetHelper"));
 function SectionElements({ context, widgetConfig, response }) {
     if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
-        return (0, helpers_1.renderEmptyComponent)('SectionElements');
+        return WidgetHelper_1.default.renderEmptyComponent('SectionElements');
     }
     const allItemParts = context.customData.itemParts || ItemParts;
     const columnsCount = parseInt(widgetConfig.columns || '0');
@@ -42,18 +42,19 @@ function SectionElements({ context, widgetConfig, response }) {
     const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
     const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
     return ((0, jsx_runtime_1.jsx)("div", { className: ['SectionElements', bigElementsClass, columnsClass].join(' '), children: response.data.section.items.edges.map((edge, itemIndex) => {
+            var _a;
             const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
                 const Component = allItemParts[_.upperFirst(showOption)];
                 if (!Component) {
                     console.error(`No item part support ${showOption}`);
-                    return (0, helpers_1.renderEmptyComponent)(_.upperFirst(showOption), "item part not supported, yet");
+                    return WidgetHelper_1.default.renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
                 }
                 return (0, jsx_runtime_1.jsx)(Component, { itemIndex: itemIndex, context: context, widgetConfig: widgetConfig, data: edge.node }, index);
             });
             const isBig = itemIndex < bigElementsCount;
             const colClass = isBig ? `col12` : `col${colNumber}`;
             const bigElementClass = isBig ? `bigElement` : '';
-            return (0, jsx_runtime_1.jsx)("div", { className: ['Item', colClass, bigElementClass].join(' '), children: (0, jsx_runtime_1.jsx)(RingLink_1.default, { href: edge.node.url, children: itemParts }) });
+            return (0, jsx_runtime_1.jsx)("div", { className: ['Item', colClass, bigElementClass].join(' '), children: (0, jsx_runtime_1.jsx)(RingLink_1.default, { href: ((_a = edge.node) === null || _a === void 0 ? void 0 : _a.url) || '/', children: itemParts }) });
         }) }));
 }
 exports.default = SectionElements;

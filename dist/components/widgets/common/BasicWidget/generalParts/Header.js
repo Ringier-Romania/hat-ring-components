@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingLink_1 = __importDefault(require("../../../../common/RingLink"));
-const helpers_1 = require("../../../../../helpers");
+const WidgetHelper_1 = __importDefault(require("../../../../../helpers/WidgetHelper"));
 function Header({ context, widgetConfig, response }) {
     const headerText = widgetConfig.labelValue;
     if (!headerText) {
-        return (0, helpers_1.renderEmptyComponent)('Header');
+        return WidgetHelper_1.default.renderEmptyComponent('Header');
     }
     const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span');
     const headerUrl = widgetConfig.labelLink;

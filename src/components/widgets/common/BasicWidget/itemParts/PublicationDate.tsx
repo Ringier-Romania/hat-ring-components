@@ -4,7 +4,7 @@ import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import {formatISO, formatRelative, Locale} from "date-fns";
 import {format, toDate} from "date-fns-tz";
 import {enGB} from 'date-fns/esm/locale'
-import {renderEmptyComponent} from "../../../../../helpers";
+import WidgetHelper from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 export default function PublicationDate(
     {context, widgetConfig, data}:
@@ -14,10 +14,10 @@ export default function PublicationDate(
             data: BasicWidgetResponseNode,
         }) {
 
-    const dateFromData = data.creationTime || data.originalContent.creationTime;
+    const dateFromData = data.creationTime || data.originalContent?.creationTime;
 
     if (!dateFromData) {
-        return renderEmptyComponent('PublicationDate');
+        return WidgetHelper.renderEmptyComponent('PublicationDate');
     }
 
     const decoratedLocale = {

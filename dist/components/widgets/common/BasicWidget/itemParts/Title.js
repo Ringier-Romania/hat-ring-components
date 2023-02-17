@@ -28,11 +28,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
-const helpers_1 = require("../../../../../helpers");
+const WidgetHelper_1 = __importDefault(require("../../../../../helpers/WidgetHelper"));
 const graphql_tag_1 = __importDefault(require("graphql-tag"));
 function Title({ context, widgetConfig, data }) {
     if (!data.title) {
-        return (0, helpers_1.renderEmptyComponent)('Title');
+        return WidgetHelper_1.default.renderEmptyComponent('Title');
     }
     const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span');
     let ItemHeaderTag = HeaderTag;
