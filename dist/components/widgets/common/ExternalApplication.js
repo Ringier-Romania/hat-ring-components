@@ -1,8 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExternalApplication = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
+const WidgetHelper_1 = __importDefault(require("../../../helpers/WidgetHelper"));
 const cheerio = require('cheerio');
+;
 async function ExternalApplication({ widgetConfig, context }) {
     const res = await fetch(widgetConfig.controllerUrl);
     let html = await res.text();
@@ -13,7 +18,7 @@ async function ExternalApplication({ widgetConfig, context }) {
         const $ = cheerio.load(html);
         html = $(widgetConfig.selector).html();
     }
-    return (0, jsx_runtime_1.jsx)("div", { dangerouslySetInnerHTML: { __html: html } });
+    return (0, jsx_runtime_1.jsx)("div", { className: WidgetHelper_1.default.getWidgetCssClasses(widgetConfig), dangerouslySetInnerHTML: { __html: html } });
 }
 exports.ExternalApplication = ExternalApplication;
 //# sourceMappingURL=ExternalApplication.js.map

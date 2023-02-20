@@ -2,24 +2,29 @@ import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import RingImage, {TransformType} from "../../../../common/RingImage";
+import WidgetHelper from "../../../../../helpers/WidgetHelper";
+import gql from "graphql-tag";
 
 export default function Image(
-    {context, widgetConfig, data}:
+    {itemIndex, context, widgetConfig, data}:
         {
+            itemIndex: number,
             context: AppContext,
             widgetConfig: BasicWidgetConfig,
             data: BasicWidgetResponseNode,
         }) {
+    const image = data.image || data.originalContent?.image;
 
-    if(!data.image && !data.originalContent.image){
-        return null;
+    if (!image || !image.url) {
+        return WidgetHelper.renderEmptyComponent('Image');
     }
 
-    const sizes = widgetConfig.standardImageSize.split('x');
+    const isBig = widgetConfig.countBig ? itemIndex < widgetConfig.countBig : false;
+    const sizes = isBig ? (widgetConfig.bigImageSize || '0x0').split('x') : (widgetConfig.standardImageSize || '0x0').split('x');
 
     const ringImageProps = {
-        src:  data.image?.url || data.originalContent.image?.url,
-        alt: data.originalContent.image.caption || data.title || '',
+        src: image.url,
+        alt: image.caption || data.title || '',
         transform: TransformType.ResizeCropAuto,
         width: Number(sizes[0]),
         height: Number(sizes[1])
@@ -28,10 +33,27 @@ export default function Image(
 
     // @TODO: add priority from config and other props
     return (
-        (data.image || data.originalContent.image) ?
-            <div className={['Image'].join(' ')}>
-                <RingImage {...ringImageProps} />
-            </div> :
-            <></>
+        <div className={['Image', isBig ? 'bigImage' : ''].join(' ')}>
+            <RingImage {...ringImageProps} />
+        </div>
     )
+}
+
+Image.getFragment = (widgetConfig) => {
+    return {
+        query: gql`fragment ImageFragment on SectionItem {
+            image {
+                url,
+                caption
+            }
+            originalContent {
+                ... on Story {
+                    image {
+                        url,
+                        caption
+                    }
+                }
+            }
+        }`
+    }
 }

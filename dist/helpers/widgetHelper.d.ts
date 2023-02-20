@@ -1,0 +1,8 @@
+/// <reference types="react" />
+import { AbstractWidgetConfig } from "../types/types";
+export default class WidgetHelper {
+    static shouldHideWidget(widgetConfig: any, context: any): boolean;
+    static renderEmptyWidget(widgetConfig: any, text?: string): JSX.Element;
+    static renderEmptyComponent(componentClassName: any, text?: string): JSX.Element;
+    static getWidgetCssClasses(widgetConfig: AbstractWidgetConfig, additionalCssClasses?: Array<string>): string;
+}

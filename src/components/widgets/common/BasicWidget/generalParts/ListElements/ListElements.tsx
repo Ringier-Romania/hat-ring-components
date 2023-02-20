@@ -12,10 +12,10 @@ export default function ListElements(
             response: BasicWidgetResponse
         }) {
 
-    const colClass = Math.floor(12 / parseInt(widgetConfig.columns));
+    const colClass = Math.floor(12 / parseInt(widgetConfig.columns || '0'));
     return (
         <div className={['ListElements'].join(' ')}>
-            {widgetConfig.listElements.map(element => {
+            {widgetConfig.listElements && widgetConfig.listElements.map(element => {
                 return <div className={['Item', 'col' + colClass].join(' ')}>
                     {
                         element['Link url'] ?

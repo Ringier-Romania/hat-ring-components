@@ -28,56 +28,84 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BasicWidget = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
+const types_1 = require("./types");
 const graphql_tag_1 = require("graphql-tag");
 const GeneralParts = __importStar(require("./generalParts"));
 const _ = __importStar(require("lodash"));
 const BasicWidget_module_scss_1 = __importDefault(require("../../../../../styles/widgets/common/BasicWidget.module.scss"));
 const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
+const WidgetHelper_1 = __importDefault(require("../../../../helpers/WidgetHelper"));
+const ItemParts = __importStar(require("./itemParts"));
 async function BasicWidget({ widgetConfig, context, extendableAttributes = {} }) {
+    var _a, _b, _c;
+    if (WidgetHelper_1.default.shouldHideWidget(widgetConfig, context)) {
+        return WidgetHelper_1.default.renderEmptyWidget(widgetConfig);
+    }
     async function getData(queryNodeFragment) {
+        let dynamicVariablesTypes = {};
+        let dynamicVariables = {};
+        let dynamicFragmentsNames = '';
+        const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
+            var _a;
+            const allItemParts = context.customData.itemParts || ItemParts;
+            const ItemPart = allItemParts[_.upperFirst(showOption)];
+            if (ItemPart && ItemPart.getFragment) {
+                const fragment = ItemPart.getFragment(widgetConfig);
+                if (fragment.variables) {
+                    dynamicVariables = { ...dynamicVariables, ...fragment.variables };
+                }
+                if (fragment.variablesTypes) {
+                    dynamicVariablesTypes = { ...dynamicVariablesTypes, ...fragment.variablesTypes };
+                }
+                if (fragment.query) {
+                    dynamicFragmentsNames += ` ...${fragment.query.definitions[0].name.value} \n`;
+                    return `${(_a = fragment.query.loc) === null || _a === void 0 ? void 0 : _a.source.body}`;
+                }
+            }
+        }).join('\n');
+        const mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
+            return `, ${key}: ${dynamicVariablesTypes[key]}`;
+        }).join(' ');
         const query = (0, graphql_tag_1.gql) `
-            query($codeName:  ID!, $nodeId:  ID!){
-                section(codeName: $codeName, nodeId: $nodeId) { 
-                    items{
+            query($codeName:  ID!, $nodeId:  ID!, $first: Int ${mappedDynamicVariablesTypes}){
+                section(codeName: $codeName, nodeId: $nodeId) {
+                    items(first: $first) {
                         edges {
                             node {
-                                title
-                                lead
-                                image {
-                                    url,
-                                    caption
-                                }
                                 url
-                                originalContent {
-                                    ... on Story {
-                                        image {
-                                            url,
-                                            caption
-                                        }
-                                    }
-                                }
+                                ${dynamicFragmentsNames}
                                 ${queryNodeFragment}
                             }
                         }
                     }
                 }
             }
+            ${dynamicFragments}
         `;
         const variables = {
+            ...dynamicVariables,
             codeName: widgetConfig.section_name,
-            nodeId: context.hatControllerParams.gqlResponse.data.site.data.node.id
+            nodeId: context.hatControllerParams.gqlResponse.data.site.data.node.id,
+            first: (Number(widgetConfig.offset) + Number(widgetConfig.count)) || null
         };
         return await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     }
-    let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
-    const response = await getData(queryFragment);
     const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
     context.customData.itemParts = extendableAttributes.itemParts;
-    const generalComponents = widgetConfig.generalShowOptions.map((showOption, index) => {
+    let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
+    const response = await getData(queryFragment);
+    if ((_c = (_b = (_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.section) === null || _b === void 0 ? void 0 : _b.items) === null || _c === void 0 ? void 0 : _c.edges) {
+        response.data.section.items.edges = response.data.section.items.edges.slice(Number(widgetConfig.offset));
+    }
+    const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(types_1.BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
+    if (hideWhenNoItems && _.get(response, 'data.section.items.edges.length', 0) === 0) {
+        return WidgetHelper_1.default.renderEmptyWidget(widgetConfig);
+    }
+    const generalComponents = widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
-            return (0, jsx_runtime_1.jsxs)("div", { style: { display: 'none' }, children: [showOption, " not supported, yet"] });
+            return WidgetHelper_1.default.renderEmptyComponent(showOption, 'not supported, yet');
         }
         return (0, jsx_runtime_1.jsx)(Component, { context: context, widgetConfig: widgetConfig, response: response }, index);
     });
@@ -86,7 +114,7 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
         cssModules = extendableAttributes.getCssModule(BasicWidget_module_scss_1.default.BasicWidget) || BasicWidget_module_scss_1.default.BasicWidget;
     }
     function render() {
-        return (0, jsx_runtime_1.jsx)("div", { className: ['BasicWidget', cssModules].join(' '), children: generalComponents });
+        return (0, jsx_runtime_1.jsx)("div", { className: WidgetHelper_1.default.getWidgetCssClasses(widgetConfig, [cssModules]), children: generalComponents });
     }
     if (extendableAttributes.render) {
         return extendableAttributes.render(generalComponents, cssModules);

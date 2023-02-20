@@ -4,6 +4,7 @@ import {BasicWidgetConfig, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import RingLink from "../../../../common/RingLink";
+import WidgetHelper from "../../../../../helpers/WidgetHelper";
 
 export default function SectionElements(
     {context, widgetConfig, response}:
@@ -13,24 +14,36 @@ export default function SectionElements(
             response: BasicWidgetResponse
         }) {
 
+    if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
+        return WidgetHelper.renderEmptyComponent('SectionElements');
+    }
 
-    const colClass = Math.floor( 12 /parseInt(widgetConfig.columns));
     const allItemParts = context.customData.itemParts || ItemParts;
+    const columnsCount = parseInt(widgetConfig.columns || '0');
+    const bigElementsCount = Number(widgetConfig.countBig);
+    const colNumber = Math.floor(12 / columnsCount);
+    const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
+    const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
 
     return (
-        <div className={['SectionElements'].join(' ')}>
-            {response.data.section.items.edges.map(edge => {
-                const itemParts =  widgetConfig.showOptions.map((showOption, index) => {
+        <div className={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
+            {response.data.section.items.edges.map((edge, itemIndex) => {
+                const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
                     const Component = allItemParts[_.upperFirst(showOption)];
                     if (!Component) {
                         console.error(`No item part support ${showOption}`);
-                        return <div style={{display: "none"}}>{showOption} item part not supported, yet</div>;
+                        return WidgetHelper.renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
                     }
-                    // @ts-ignore
-                    return <Component key={ index } context={context} widgetConfig={ widgetConfig } data={ edge.node }/>;
+
+                    return <Component key={index} itemIndex={itemIndex} context={context} widgetConfig={widgetConfig}
+                                      data={edge.node}/>;
                 });
-                return <div className={['Item', 'col'+colClass].join(' ')}>
-                    <RingLink href={edge.node.url}>
+                const isBig = itemIndex < bigElementsCount;
+                const colClass = isBig ? `col12` : `col${colNumber}`;
+                const bigElementClass = isBig ? `bigElement` : '';
+
+                return <div className={['Item', colClass, bigElementClass].join(' ')}>
+                    <RingLink href={edge.node?.url || '/'}>
                         {itemParts}
                     </RingLink>
                 </div>;

@@ -30,19 +30,31 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const ItemParts = __importStar(require("../itemParts"));
 const _ = __importStar(require("lodash"));
 const RingLink_1 = __importDefault(require("../../../../common/RingLink"));
+const WidgetHelper_1 = __importDefault(require("../../../../../helpers/WidgetHelper"));
 function SectionElements({ context, widgetConfig, response }) {
-    const colClass = Math.floor(12 / parseInt(widgetConfig.columns));
+    if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
+        return WidgetHelper_1.default.renderEmptyComponent('SectionElements');
+    }
     const allItemParts = context.customData.itemParts || ItemParts;
-    return ((0, jsx_runtime_1.jsx)("div", { className: ['SectionElements'].join(' '), children: response.data.section.items.edges.map(edge => {
-            const itemParts = widgetConfig.showOptions.map((showOption, index) => {
+    const columnsCount = parseInt(widgetConfig.columns || '0');
+    const bigElementsCount = Number(widgetConfig.countBig);
+    const colNumber = Math.floor(12 / columnsCount);
+    const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
+    const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
+    return ((0, jsx_runtime_1.jsx)("div", { className: ['SectionElements', bigElementsClass, columnsClass].join(' '), children: response.data.section.items.edges.map((edge, itemIndex) => {
+            var _a;
+            const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
                 const Component = allItemParts[_.upperFirst(showOption)];
                 if (!Component) {
                     console.error(`No item part support ${showOption}`);
-                    return (0, jsx_runtime_1.jsxs)("div", { style: { display: "none" }, children: [showOption, " item part not supported, yet"] });
+                    return WidgetHelper_1.default.renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
                 }
-                return (0, jsx_runtime_1.jsx)(Component, { context: context, widgetConfig: widgetConfig, data: edge.node }, index);
+                return (0, jsx_runtime_1.jsx)(Component, { itemIndex: itemIndex, context: context, widgetConfig: widgetConfig, data: edge.node }, index);
             });
-            return (0, jsx_runtime_1.jsx)("div", { className: ['Item', 'col' + colClass].join(' '), children: (0, jsx_runtime_1.jsx)(RingLink_1.default, { href: edge.node.url, children: itemParts }) });
+            const isBig = itemIndex < bigElementsCount;
+            const colClass = isBig ? `col12` : `col${colNumber}`;
+            const bigElementClass = isBig ? `bigElement` : '';
+            return (0, jsx_runtime_1.jsx)("div", { className: ['Item', colClass, bigElementClass].join(' '), children: (0, jsx_runtime_1.jsx)(RingLink_1.default, { href: ((_a = edge.node) === null || _a === void 0 ? void 0 : _a.url) || '/', children: itemParts }) });
         }) }));
 }
 exports.default = SectionElements;

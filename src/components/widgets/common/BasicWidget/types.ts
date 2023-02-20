@@ -1,55 +1,56 @@
-import {WidgetParams} from "../../../../types/types";
+import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
 
-enum BasicWidgetGeneralShowOptions {
-    sectionElements = "sectionElements",
-    listElements = "listElements",
-    header = "header",
-    description = "description",
-    button = "button"
+export enum BasicWidgetGeneralShowOptions {
+    SectionElements = "sectionElements",
+    ListElements = "listElements",
+    Description = "description",
+    Header = "header",
+    Button = "button"
 }
 
-//@TODO finish definiton
-export interface BasicWidgetConfig {
+export enum BasicWidgetShowOptions {
+    Image = 'image',
+    Title = 'title',
+    PublicationDate = 'publicationDate',
+    ModificationDate = 'modificationDate',
+    Lead = 'lead',
+    // Flags = 'flags',
+    Authors = 'authors',
+    AuthorsImages = 'authorsImages',
+    // TitleExtras = 'titleExtras',
+    // AlternativeTeasers = 'alternativeTeasers',
+    // OrdinalNumber = 'ordinalNumber',
+}
 
-    name: string,
-    module: string,
-    platformDesktop: true,
-    platformMobile: false,
-    generalShowOptions: Array<BasicWidgetGeneralShowOptions>,
-    showOptions: ['image', 'title'],
-    section_name: 'podcasts',
-    listElements: [],
-    customClass: 'cy-podcasts',
-    template: 'basicWidget',
-    amdModule: 'none',
-    customPosition: 'none',
-    customWidth: 'none',
-    count: '3',
-    offset: 0,
-    countBig: 0,
-    columns: '3',
-    labelValue: '',
-    headerSeoTag: string,
-    labelLink: '',
-    description: '',
-    moreText: '',
-    moreUrl: '',
-    customId: '',
-    customBg: '',
-    bigImageSize: '1200x660',
-    standardImageSize: '600x330',
-    listElementsImageSize: '600x330',
-    titleExtrasCodeNames: '',
-    alternativeTeasersCodeNames: '',
-    classificationList: 'category,tag',
-    slider: 'none',
-    cache: 'min',
-    onError: 'abort',
-    widgetType: 'basicWidget',
-    decorators: [],
-    lazyload: 'enabled',
-    additionalOptions: ['useCroppedImage'],
-    dedicatedStyleForWidget: string
+export enum BasicWidgetAdditionalOptions {
+    "UseCroppedImage" = 'useCroppedImage',
+    "DisableCropAuto" = 'disableCropAuto',
+    "DisableCropImage" = 'disableCropImage',
+    "HideWhenNoSectionItems" = 'Hide when no section items',
+}
+
+export interface BasicWidgetConfig extends AbstractWidgetConfig {
+    generalShowOptions?: Array<BasicWidgetGeneralShowOptions>,
+    showOptions?: Array<BasicWidgetShowOptions>,
+    section_name?: string,
+    listElements?: [],
+    count?: string,
+    offset?: number,
+    countBig?: number,
+    columns?: string,
+    labelValue?: string,
+    headerSeoTag?: string,
+    labelLink?: string,
+    description?: string,
+    moreText?: string,
+    moreUrl?: string,
+    bigImageSize?: string,
+    standardImageSize?: string,
+    listElementsImageSize?: string,
+    titleExtrasCodeNames?: string,
+    alternativeTeasersCodeNames?: string,
+    classificationList?: string,
+    additionalOptions?: Array<BasicWidgetAdditionalOptions>
 }
 
 export interface BasicWidgetParams extends WidgetParams {
@@ -64,13 +65,30 @@ export interface BasicWidgetParams extends WidgetParams {
 }
 
 export interface BasicWidgetResponseNode {
-    title: string,
-    url: string,
-    lead: string,
-    originalContent: {
-        image: { url: string, caption: string }
+    title?: string,
+    url?: string,
+    lead?: string,
+    creationTime?: string,
+    modificationTime?: string,
+    authors?: Array<string>,
+    originalContent?: {
+        image?: {
+            url?: string,
+            caption?: string
+        }
+        creationTime?: string,
+        modificationTime?: string,
+        authors?: Array<{
+            author?: {
+                name?: string,
+                image?: {
+                    url?: string
+                    caption?: string
+                }
+            }
+        }>,
     },
-    image: { url: string, caption: string }
+    image?: { url?: string, caption?: string, }
 }
 
 export interface ListElementsData {

@@ -1,4 +1,5 @@
 export * from "./types/types";
+export * from "./helpers/WidgetHelper";
 export * from "./components/Story/StoryTitle/StoryTitle";
 export * from "./components/Story/StoryMainImage/StoryMainImage";
 export * from "./components/Story/StoryContent/StoryContent";

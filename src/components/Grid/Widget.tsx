@@ -1,10 +1,11 @@
 import React from "react";
 import * as _ from "lodash";
-import {AbstractWidget, AppContext, WidgetParams} from "../../types/types";
+import {AbstractWidget, AbstractWidgetConfig, AppContext, WidgetParams} from "../../types/types";
+import WidgetHelper from "../../helpers/WidgetHelper";
 
 interface GridWidgetParams {
     context: AppContext;
-    widgetConfig: any,
+    widgetConfig: AbstractWidgetConfig,
 };
 
 //@TODO box tag etc from parent config
@@ -15,13 +16,16 @@ export function Widget({widgetConfig, context}: GridWidgetParams) {
 
     if (!Component) {
         console.error(`No widget with name ${widgetConfig.widgetType}`);
-        return <span className={widgetName} style={{display: 'none'}}
-                     dangerouslySetInnerHTML={{__html: `<!-- No widget found ${widgetName} -->`}}/>;
+        return WidgetHelper.renderEmptyComponent(`gridWidget ${widgetName}`, 'No widget found');
     }
-    const customClass = widgetConfig.customClass || '';
-    return <div className={['gridWidget', widgetName, customClass].join(' ')}>
-        <Component widgetConfig={widgetConfig}
-                   context={context}/>
+
+    if(WidgetHelper.shouldHideWidget(widgetConfig, context)) {
+        console.log(widgetName, widgetConfig, context.hatControllerParams.isMobile)
+        return WidgetHelper.renderEmptyComponent(`gridWidget ${widgetName}`);
+    }
+
+    return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig, ['gridWidget'])}>
+        <Component widgetConfig={widgetConfig} context={context}/>
     </div>;
 }
 
