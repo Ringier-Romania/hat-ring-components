@@ -4,11 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
-const WidgetHelper_1 = __importDefault(require("../../../../../helpers/WidgetHelper"));
+const WidgetHelper_1 = require("../../../../../helpers/WidgetHelper");
 const graphql_tag_1 = __importDefault(require("graphql-tag"));
 function Lead({ context, widgetConfig, data }) {
     if (!data.lead) {
-        return WidgetHelper_1.default.renderEmptyComponent('Lead');
+        return WidgetHelper_1.WidgetHelper.renderEmptyComponent('Lead');
     }
     return ((0, jsx_runtime_1.jsx)("div", { className: ['Lead'].join(' '), children: (0, jsx_runtime_1.jsx)("span", { children: data.lead }) }));
 }

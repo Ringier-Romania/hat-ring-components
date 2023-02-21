@@ -23,6 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.WidgetHelper = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 class WidgetHelper {
@@ -56,5 +57,5 @@ class WidgetHelper {
         return [...additionalCssClasses, ...cssClasses].join(' ');
     }
 }
-exports.default = WidgetHelper;
+exports.WidgetHelper = WidgetHelper;
 //# sourceMappingURL=WidgetHelper.js.map

@@ -34,12 +34,12 @@ const GeneralParts = __importStar(require("./generalParts"));
 const _ = __importStar(require("lodash"));
 const BasicWidget_module_scss_1 = __importDefault(require("../../../../../styles/widgets/common/BasicWidget.module.scss"));
 const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
-const WidgetHelper_1 = __importDefault(require("../../../../helpers/WidgetHelper"));
+const WidgetHelper_1 = require("../../../../helpers/WidgetHelper");
 const ItemParts = __importStar(require("./itemParts"));
 async function BasicWidget({ widgetConfig, context, extendableAttributes = {} }) {
     var _a, _b, _c;
-    if (WidgetHelper_1.default.shouldHideWidget(widgetConfig, context)) {
-        return WidgetHelper_1.default.renderEmptyWidget(widgetConfig);
+    if (WidgetHelper_1.WidgetHelper.shouldHideWidget(widgetConfig, context)) {
+        return WidgetHelper_1.WidgetHelper.renderEmptyWidget(widgetConfig);
     }
     async function getData(queryNodeFragment) {
         let dynamicVariablesTypes = {};
@@ -99,13 +99,13 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
     }
     const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(types_1.BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
     if (hideWhenNoItems && _.get(response, 'data.section.items.edges.length', 0) === 0) {
-        return WidgetHelper_1.default.renderEmptyWidget(widgetConfig);
+        return WidgetHelper_1.WidgetHelper.renderEmptyWidget(widgetConfig);
     }
     const generalComponents = widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
-            return WidgetHelper_1.default.renderEmptyComponent(showOption, 'not supported, yet');
+            return WidgetHelper_1.WidgetHelper.renderEmptyComponent(showOption, 'not supported, yet');
         }
         return (0, jsx_runtime_1.jsx)(Component, { context: context, widgetConfig: widgetConfig, response: response }, index);
     });
@@ -114,7 +114,7 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
         cssModules = extendableAttributes.getCssModule(BasicWidget_module_scss_1.default.BasicWidget) || BasicWidget_module_scss_1.default.BasicWidget;
     }
     function render() {
-        return (0, jsx_runtime_1.jsx)("div", { className: WidgetHelper_1.default.getWidgetCssClasses(widgetConfig, [cssModules]), children: generalComponents });
+        return (0, jsx_runtime_1.jsx)("div", { className: WidgetHelper_1.WidgetHelper.getWidgetCssClasses(widgetConfig, [cssModules]), children: generalComponents });
     }
     if (extendableAttributes.render) {
         return extendableAttributes.render(generalComponents, cssModules);

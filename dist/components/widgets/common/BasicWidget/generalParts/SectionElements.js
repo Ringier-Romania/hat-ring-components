@@ -30,10 +30,10 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const ItemParts = __importStar(require("../itemParts"));
 const _ = __importStar(require("lodash"));
 const RingLink_1 = __importDefault(require("../../../../common/RingLink"));
-const WidgetHelper_1 = __importDefault(require("../../../../../helpers/WidgetHelper"));
+const WidgetHelper_1 = require("../../../../../helpers/WidgetHelper");
 function SectionElements({ context, widgetConfig, response }) {
     if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
-        return WidgetHelper_1.default.renderEmptyComponent('SectionElements');
+        return WidgetHelper_1.WidgetHelper.renderEmptyComponent('SectionElements');
     }
     const allItemParts = context.customData.itemParts || ItemParts;
     const columnsCount = parseInt(widgetConfig.columns || '0');
@@ -47,7 +47,7 @@ function SectionElements({ context, widgetConfig, response }) {
                 const Component = allItemParts[_.upperFirst(showOption)];
                 if (!Component) {
                     console.error(`No item part support ${showOption}`);
-                    return WidgetHelper_1.default.renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
+                    return WidgetHelper_1.WidgetHelper.renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
                 }
                 return (0, jsx_runtime_1.jsx)(Component, { itemIndex: itemIndex, context: context, widgetConfig: widgetConfig, data: edge.node }, index);
             });
