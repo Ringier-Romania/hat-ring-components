@@ -1,7 +1,7 @@
 import React from "react";
 import * as _ from "lodash";
 import {AbstractWidget, AbstractWidgetConfig, AppContext, WidgetParams} from "../../types/types";
-import WidgetHelper from "../../helpers/WidgetHelper";
+import {WidgetHelper} from "../../helpers/WidgetHelper";
 
 interface GridWidgetParams {
     context: AppContext;
@@ -20,7 +20,6 @@ export function Widget({widgetConfig, context}: GridWidgetParams) {
     }
 
     if(WidgetHelper.shouldHideWidget(widgetConfig, context)) {
-        console.log(widgetName, widgetConfig, context.hatControllerParams.isMobile)
         return WidgetHelper.renderEmptyComponent(`gridWidget ${widgetName}`);
     }
 

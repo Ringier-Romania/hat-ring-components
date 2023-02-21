@@ -5,7 +5,7 @@ import * as GeneralParts from './generalParts';
 import * as _ from 'lodash';
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import WidgetHelper from "../../../../helpers/WidgetHelper";
+import {WidgetHelper} from "../../../../helpers/WidgetHelper";
 import * as ItemParts from "./itemParts";
 
 

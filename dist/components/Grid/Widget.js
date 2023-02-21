@@ -22,14 +22,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Widget = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
-const WidgetHelper_1 = __importDefault(require("../../helpers/WidgetHelper"));
+const WidgetHelper_1 = require("../../helpers/WidgetHelper");
 ;
 function Widget({ widgetConfig, context }) {
     const availableWidgets = context.customData.widgets;
@@ -37,13 +34,12 @@ function Widget({ widgetConfig, context }) {
     const Component = availableWidgets[widgetName];
     if (!Component) {
         console.error(`No widget with name ${widgetConfig.widgetType}`);
-        return WidgetHelper_1.default.renderEmptyComponent(`gridWidget ${widgetName}`, 'No widget found');
+        return WidgetHelper_1.WidgetHelper.renderEmptyComponent(`gridWidget ${widgetName}`, 'No widget found');
     }
-    if (WidgetHelper_1.default.shouldHideWidget(widgetConfig, context)) {
-        console.log(widgetName, widgetConfig, context.hatControllerParams.isMobile);
-        return WidgetHelper_1.default.renderEmptyComponent(`gridWidget ${widgetName}`);
+    if (WidgetHelper_1.WidgetHelper.shouldHideWidget(widgetConfig, context)) {
+        return WidgetHelper_1.WidgetHelper.renderEmptyComponent(`gridWidget ${widgetName}`);
     }
-    return (0, jsx_runtime_1.jsx)("div", { className: WidgetHelper_1.default.getWidgetCssClasses(widgetConfig, ['gridWidget']), children: (0, jsx_runtime_1.jsx)(Component, { widgetConfig: widgetConfig, context: context }) });
+    return (0, jsx_runtime_1.jsx)("div", { className: WidgetHelper_1.WidgetHelper.getWidgetCssClasses(widgetConfig, ['gridWidget']), children: (0, jsx_runtime_1.jsx)(Component, { widgetConfig: widgetConfig, context: context }) });
 }
 exports.Widget = Widget;
 //# sourceMappingURL=Widget.js.map

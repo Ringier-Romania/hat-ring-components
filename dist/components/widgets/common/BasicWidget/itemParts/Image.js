@@ -28,13 +28,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingImage_1 = __importStar(require("../../../../common/RingImage"));
-const WidgetHelper_1 = __importDefault(require("../../../../../helpers/WidgetHelper"));
+const WidgetHelper_1 = require("../../../../../helpers/WidgetHelper");
 const graphql_tag_1 = __importDefault(require("graphql-tag"));
 function Image({ itemIndex, context, widgetConfig, data }) {
     var _a;
     const image = data.image || ((_a = data.originalContent) === null || _a === void 0 ? void 0 : _a.image);
     if (!image || !image.url) {
-        return WidgetHelper_1.default.renderEmptyComponent('Image');
+        return WidgetHelper_1.WidgetHelper.renderEmptyComponent('Image');
     }
     const isBig = widgetConfig.countBig ? itemIndex < widgetConfig.countBig : false;
     const sizes = isBig ? (widgetConfig.bigImageSize || '0x0').split('x') : (widgetConfig.standardImageSize || '0x0').split('x');

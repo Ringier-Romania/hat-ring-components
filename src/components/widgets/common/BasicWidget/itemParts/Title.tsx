@@ -2,7 +2,7 @@ import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import * as _ from "lodash";
-import WidgetHelper from "../../../../../helpers/WidgetHelper";
+import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 
 export default function Title(

@@ -1,7 +1,7 @@
 import React from "react";
 import * as _ from 'lodash';
 import {AbstractWidgetConfig} from "../types/types";
-export default class WidgetHelper {
+export class WidgetHelper {
     static shouldHideWidget(widgetConfig, context) {
         if (typeof context.hatControllerParams.isMobile === 'boolean') {
             return !((context.hatControllerParams.isMobile && widgetConfig.platformDesktop)
