@@ -6,5 +6,5 @@ interface GridContainerParams {
     boxes: Array<string>;
     context: AppContext;
 }
-export declare function Container({ sectionName, sectionConfig, context, boxes }: GridContainerParams): JSX.Element;
+export declare function Container({ sectionName, sectionConfig, context, boxes }: GridContainerParams): JSX.Element | null;
 export {};

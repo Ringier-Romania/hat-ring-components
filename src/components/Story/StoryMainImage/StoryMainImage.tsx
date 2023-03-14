@@ -36,9 +36,9 @@ export async function StoryMainImage(params: StoryMainImageParams) {
     const caption = _.get(response, 'data.story.image.caption');
 
     // TransformType.None because we do transform on API level
-    return <>
+    return imgSrc ?  <>
         <RingImage priority={true} transform={TransformType.None} src={imgSrc} alt={caption || ''} width={params.config.width} height={params.config.height}/>
         <StoryMainImageCaption {...params } caption={caption}/>
-    </>;
+    </> : null;
 }
 

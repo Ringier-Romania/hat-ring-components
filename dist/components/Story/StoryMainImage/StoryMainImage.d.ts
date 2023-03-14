@@ -6,4 +6,4 @@ export interface StoryMainImageParams extends ComponentParams {
         height: number;
     };
 }
-export declare function StoryMainImage(params: StoryMainImageParams): Promise<JSX.Element>;
+export declare function StoryMainImage(params: StoryMainImageParams): Promise<JSX.Element | null>;

@@ -9,6 +9,9 @@ const Box_1 = require("./Box");
 const Grid_module_scss_1 = __importDefault(require("../../../styles/Grid/Grid.module.scss"));
 ;
 function Container({ sectionName, sectionConfig, context, boxes }) {
+    if (!sectionConfig) {
+        return null;
+    }
     const ContainerTag = `${sectionConfig.container_html_tag || 'main'}`;
     return (0, jsx_runtime_1.jsx)(ContainerTag, { className: ['gridContainer', sectionName, Grid_module_scss_1.default.gridContainer].join(' '), children: boxes.map(boxName => {
             return !!sectionConfig[boxName + '_hide'] ? null :
