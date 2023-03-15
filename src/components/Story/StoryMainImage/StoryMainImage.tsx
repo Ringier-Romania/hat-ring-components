@@ -6,11 +6,22 @@ import {StoryMainImageCaption} from "./StoryMainImageCaption";
 import RingImage, {TransformType} from "../../common/RingImage";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 
+export interface StoryMainImageResponse {
+    "data": {
+        "story": {
+            "image": {
+                "url": string,
+                "caption": string | null
+            }
+        }
+    }
+}
 
 export interface StoryMainImageParams extends ComponentParams {
-    config: {
-        width: number,
-        height: number,
+    widgetConfig: {
+        width?: number,
+        height?: number,
+        response?: StoryMainImageResponse
     }
 }
 
@@ -25,20 +36,25 @@ export async function StoryMainImage(params: StoryMainImageParams) {
             }
         }
     `;
+
     const variables = {
         storyId: params.context.id,
-        imageWidth: params.config.width,
-        imageHeight: params.config.height,
+        imageWidth: params.widgetConfig?.width || 0,
+        imageHeight: params.widgetConfig?.height || 0,
     };
 
-    const response = await WebsiteApiProvider.call(query, variables);
+    var response = params.widgetConfig?.response;
+    if (!response) {
+        response = await WebsiteApiProvider.call(query, variables) as StoryMainImageResponse;
+    }
+
     const imgSrc = _.get(response, 'data.story.image.url');
     const caption = _.get(response, 'data.story.image.caption');
-
     // TransformType.None because we do transform on API level
-    return imgSrc ?  <>
-        <RingImage priority={true} transform={TransformType.None} src={imgSrc} alt={caption || ''} width={params.config.width} height={params.config.height}/>
-        <StoryMainImageCaption {...params } caption={caption}/>
+    return imgSrc ? <>
+        <RingImage priority={true} transform={TransformType.None} src={imgSrc} alt={caption || ''}
+                   width={params.widgetConfig.width} height={params.widgetConfig.height}/>
+        <StoryMainImageCaption {...params} caption={caption}/>
     </> : null;
 }
 

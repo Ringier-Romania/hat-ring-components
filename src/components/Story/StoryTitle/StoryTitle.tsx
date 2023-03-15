@@ -4,8 +4,14 @@ import {gql} from 'graphql-tag';
 import {ComponentParams} from "../../../types/types";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 
+export interface StoryTitleResponse {
+    data: { story: { name: string } }
+}
+
 export interface StoryTitleParams extends ComponentParams {
-    config: {}
+    widgetConfig: {
+        response?: StoryTitleResponse
+    }
 }
 
 export async function StoryTitle(params: StoryTitleParams) {
@@ -21,7 +27,10 @@ export async function StoryTitle(params: StoryTitleParams) {
         storyId: params.context.id,
     };
 
-    const response = await WebsiteApiProvider.call(query, variables);
+    let response = params.widgetConfig?.response;
+    if(!response){
+        response = await WebsiteApiProvider.call(query, variables) as StoryTitleResponse;
+    }
     const title = _.get(response, 'data.story.name');
     return <h1>{title}</h1>;
 }

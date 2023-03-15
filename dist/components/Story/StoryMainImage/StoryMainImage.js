@@ -31,6 +31,7 @@ const StoryMainImageCaption_1 = require("./StoryMainImageCaption");
 const RingImage_1 = __importStar(require("../../common/RingImage"));
 const WebsiteApiProvider_1 = require("../../../providers/WebsiteApiProvider");
 async function StoryMainImage(params) {
+    var _a, _b, _c;
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID, $imageWidth:Int!, $imageHeight:Int!){
             story(id:$storyId){
@@ -43,13 +44,16 @@ async function StoryMainImage(params) {
     `;
     const variables = {
         storyId: params.context.id,
-        imageWidth: params.config.width,
-        imageHeight: params.config.height,
+        imageWidth: ((_a = params.widgetConfig) === null || _a === void 0 ? void 0 : _a.width) || 0,
+        imageHeight: ((_b = params.widgetConfig) === null || _b === void 0 ? void 0 : _b.height) || 0,
     };
-    const response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
+    var response = (_c = params.widgetConfig) === null || _c === void 0 ? void 0 : _c.response;
+    if (!response) {
+        response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
+    }
     const imgSrc = _.get(response, 'data.story.image.url');
     const caption = _.get(response, 'data.story.image.caption');
-    return imgSrc ? (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(RingImage_1.default, { priority: true, transform: RingImage_1.TransformType.None, src: imgSrc, alt: caption || '', width: params.config.width, height: params.config.height }), (0, jsx_runtime_1.jsx)(StoryMainImageCaption_1.StoryMainImageCaption, { ...params, caption: caption })] }) : null;
+    return imgSrc ? (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(RingImage_1.default, { priority: true, transform: RingImage_1.TransformType.None, src: imgSrc, alt: caption || '', width: params.widgetConfig.width, height: params.widgetConfig.height }), (0, jsx_runtime_1.jsx)(StoryMainImageCaption_1.StoryMainImageCaption, { ...params, caption: caption })] }) : null;
 }
 exports.StoryMainImage = StoryMainImage;
 //# sourceMappingURL=StoryMainImage.js.map

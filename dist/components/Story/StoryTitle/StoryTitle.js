@@ -29,6 +29,7 @@ const _ = __importStar(require("lodash"));
 const graphql_tag_1 = require("graphql-tag");
 const WebsiteApiProvider_1 = require("../../../providers/WebsiteApiProvider");
 async function StoryTitle(params) {
+    var _a;
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID){
             story(id:$storyId){
@@ -39,7 +40,10 @@ async function StoryTitle(params) {
     const variables = {
         storyId: params.context.id,
     };
-    const response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
+    let response = (_a = params.widgetConfig) === null || _a === void 0 ? void 0 : _a.response;
+    if (!response) {
+        response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
+    }
     const title = _.get(response, 'data.story.name');
     return (0, jsx_runtime_1.jsx)("h1", { children: title });
 }
