@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ocdnLoader = exports.TransformType = void 0;
+exports.RingImage = exports.TransformType = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const image_1 = __importDefault(require("next/image"));
 const { OcdnUrl } = require('@ras-tech/ocdn');
@@ -38,7 +38,6 @@ function ocdnLoader(src, width, height, transformType) {
     }
     return src;
 }
-exports.ocdnLoader = ocdnLoader;
 function RingImage(props) {
     let src = props.src;
     let unoptimized = props.unoptimized;
@@ -55,5 +54,5 @@ function RingImage(props) {
     }
     return (0, jsx_runtime_1.jsx)(image_1.default, { ...props, className: ['RingImage', RingImage_module_scss_1.default.RingImage, props.className].join(' '), src: src, width: props.width, height: props.height, unoptimized: unoptimized, placeholder: placeholder, blurDataURL: blurDataURL });
 }
-exports.default = RingImage;
+exports.RingImage = RingImage;
 //# sourceMappingURL=RingImage.js.map

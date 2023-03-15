@@ -22,14 +22,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const ItemParts = __importStar(require("../itemParts"));
 const _ = __importStar(require("lodash"));
-const RingLink_1 = __importDefault(require("../../../../common/RingLink"));
+const RingLink_1 = require("../../../../common/RingLink");
 const WidgetHelper_1 = require("../../../../../helpers/WidgetHelper");
 function SectionElements({ context, widgetConfig, response }) {
     if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
@@ -54,7 +51,7 @@ function SectionElements({ context, widgetConfig, response }) {
             const isBig = itemIndex < bigElementsCount;
             const colClass = isBig ? `col12` : `col${colNumber}`;
             const bigElementClass = isBig ? `bigElement` : '';
-            return (0, jsx_runtime_1.jsx)("div", { className: ['Item', colClass, bigElementClass].join(' '), children: (0, jsx_runtime_1.jsx)(RingLink_1.default, { href: ((_a = edge.node) === null || _a === void 0 ? void 0 : _a.url) || '/', children: itemParts }) });
+            return (0, jsx_runtime_1.jsx)("div", { className: ['Item', colClass, bigElementClass].join(' '), children: (0, jsx_runtime_1.jsx)(RingLink_1.RingLink, { href: ((_a = edge.node) === null || _a === void 0 ? void 0 : _a.url) || '/', children: itemParts }) });
         }) }));
 }
 exports.default = SectionElements;

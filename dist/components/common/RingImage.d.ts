@@ -8,5 +8,4 @@ export declare enum TransformType {
     Resize = "resize",
     None = "none"
 }
-export declare function ocdnLoader(src: any, width: any, height: any, transformType: any): any;
-export default function RingImage(props: RingImageProps): JSX.Element;
+export declare function RingImage(props: RingImageProps): JSX.Element;

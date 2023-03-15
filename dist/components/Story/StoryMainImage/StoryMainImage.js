@@ -28,7 +28,7 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const graphql_tag_1 = require("graphql-tag");
 const StoryMainImageCaption_1 = require("./StoryMainImageCaption");
-const RingImage_1 = __importStar(require("../../common/RingImage"));
+const RingImage_1 = require("../../common/RingImage");
 const WebsiteApiProvider_1 = require("../../../providers/WebsiteApiProvider");
 async function StoryMainImage(params) {
     var _a, _b, _c;
@@ -53,7 +53,7 @@ async function StoryMainImage(params) {
     }
     const imgSrc = _.get(response, 'data.story.image.url');
     const caption = _.get(response, 'data.story.image.caption');
-    return imgSrc ? (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(RingImage_1.default, { priority: true, transform: RingImage_1.TransformType.None, src: imgSrc, alt: caption || '', width: params.widgetConfig.width, height: params.widgetConfig.height }), (0, jsx_runtime_1.jsx)(StoryMainImageCaption_1.StoryMainImageCaption, { ...params, caption: caption })] }) : null;
+    return imgSrc ? (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(RingImage_1.RingImage, { priority: true, transform: RingImage_1.TransformType.None, src: imgSrc, alt: caption || '', width: params.widgetConfig.width, height: params.widgetConfig.height }), (0, jsx_runtime_1.jsx)(StoryMainImageCaption_1.StoryMainImageCaption, { ...params, caption: caption })] }) : null;
 }
 exports.StoryMainImage = StoryMainImage;
 //# sourceMappingURL=StoryMainImage.js.map

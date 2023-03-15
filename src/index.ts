@@ -8,3 +8,5 @@ export * from "./components/widgets/common/HtmlInsert";
 export * from "./components/widgets/common/ExternalApplication";
 export * from "./components/widgets/common/BasicWidget/BasicWidget";
 export * from "./components/widgets/Story/StoryLiveBlog/StoryLiveBlog";
+export * from "./components/common/RingImage";
+export * from "./components/common/RingLink";

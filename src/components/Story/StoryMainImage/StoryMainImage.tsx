@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {ComponentParams} from "../../../types/types";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
-import RingImage, {TransformType} from "../../common/RingImage";
+import {RingImage, TransformType} from "../../common/RingImage";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 
 export interface StoryMainImageResponse {
