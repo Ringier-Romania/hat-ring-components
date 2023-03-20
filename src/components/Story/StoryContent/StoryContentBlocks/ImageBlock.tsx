@@ -25,22 +25,22 @@ export interface ImageBlockParams {
             ]
         }
     }
-    config: {
+    widgetConfig: {
         width: number;
         height: number;
     }
 }
 
-export default function ImageBlock({blockData, config}: ImageBlockParams) {
+export default function ImageBlock({blockData, widgetConfig}: ImageBlockParams) {
     const {title, alt, image, url, link} = blockData;
 
     return <div className="ImageBlock">
         {
             link ?
                 <RingLink href={link.url}>
-                    <RingImage priority={true} src={url} alt={alt || ''} width={config.width} height={config.height} transform={TransformType.ResizeCropAuto}/>
+                    <RingImage priority={true} src={url} alt={alt || ''} width={widgetConfig.width} height={widgetConfig.height} transform={TransformType.ResizeCropAuto}/>
                 </RingLink> :
-                <RingImage priority={true} src={url} alt={alt || ''} width={config.width} height={config.height} transform={TransformType.ResizeCropAuto}/>
+                <RingImage priority={true} src={url} alt={alt || ''} width={widgetConfig.width} height={widgetConfig.height} transform={TransformType.ResizeCropAuto}/>
         }
         <div className="imgMetaData">
             {title && <span className="caption">{title}</span>}

@@ -5,14 +5,14 @@ export interface GroupBlockParams {
     type: string;
     alignment: string;
     elements: any[];
-    config: {
+    widgetConfig: {
         width: number;
         height: number;
     };
     context: AppContext;
 }
-export default function GroupBlock({ blockData, config, context }: {
+export default function GroupBlock({ blockData, widgetConfig, context }: {
     blockData: any;
-    config: any;
+    widgetConfig: any;
     context: any;
 }): JSX.Element;

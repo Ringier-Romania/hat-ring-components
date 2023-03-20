@@ -45,15 +45,16 @@ export interface BasicWidgetConfig extends AbstractWidgetConfig {
     classificationList?: string;
     additionalOptions?: Array<BasicWidgetAdditionalOptions>;
 }
+export interface BasicWidgetExtendableAttributes {
+    generalParts?: any;
+    itemParts?: any;
+    render?: (generalComponents: any, cssModules: any) => JSX.Element | null;
+    getCssModule?: (defaultStyles: any) => string | null;
+    getDataQueryNodeFragment?: string | null;
+}
 export interface BasicWidgetParams extends WidgetParams {
     widgetConfig: BasicWidgetConfig;
-    extendableAttributes?: {
-        generalParts?: any;
-        itemParts?: any;
-        render?: (generalComponents: any, cssModules: any) => JSX.Element | null;
-        getCssModule?: (defaultStyles: any) => string | null;
-        getDataQueryNodeFragment?: string | null;
-    };
+    extendableAttributes?: BasicWidgetExtendableAttributes;
 }
 export interface BasicWidgetResponseNode {
     title?: string;

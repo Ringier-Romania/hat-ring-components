@@ -44,8 +44,8 @@ async function StoryMainImage(params) {
     `;
     const variables = {
         storyId: params.context.id,
-        imageWidth: ((_a = params.widgetConfig) === null || _a === void 0 ? void 0 : _a.width) || 0,
-        imageHeight: ((_b = params.widgetConfig) === null || _b === void 0 ? void 0 : _b.height) || 0,
+        imageWidth: ((_a = params.widgetConfig) === null || _a === void 0 ? void 0 : _a.width) || 1920,
+        imageHeight: ((_b = params.widgetConfig) === null || _b === void 0 ? void 0 : _b.height) || 768,
     };
     var response = (_c = params.widgetConfig) === null || _c === void 0 ? void 0 : _c.response;
     if (!response) {

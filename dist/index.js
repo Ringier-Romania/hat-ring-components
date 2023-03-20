@@ -26,4 +26,5 @@ __exportStar(require("./components/widgets/common/BasicWidget/BasicWidget"), exp
 __exportStar(require("./components/widgets/Story/StoryLiveBlog/StoryLiveBlog"), exports);
 __exportStar(require("./components/common/RingImage"), exports);
 __exportStar(require("./components/common/RingLink"), exports);
+__exportStar(require("./components/widgets/Lists/GenericList/GenericList"), exports);
 //# sourceMappingURL=index.js.map

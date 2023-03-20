@@ -20,7 +20,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
         let dynamicFragmentsNames = '';
 
         const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
-            const allItemParts = context.customData.itemParts || ItemParts;
+            const allItemParts = extendableAttributes.itemParts || ItemParts;
 
             const ItemPart = allItemParts[_.upperFirst(showOption)];
 
@@ -75,7 +75,6 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
     }
 
     const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
-    context.customData.itemParts = extendableAttributes.itemParts;
 
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
 
@@ -96,7 +95,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
             console.error(`No general show option name support ${showOption}`);
             return WidgetHelper.renderEmptyComponent(showOption, 'not supported, yet');
         }
-        return <Component key={index} context={context} widgetConfig={widgetConfig} response={response}/>;
+        return <Component key={index} context={context} widgetConfig={widgetConfig} response={response} extendableAttributes={extendableAttributes}/>;
     });
 
     let cssModules = styles.BasicWidget;
@@ -106,7 +105,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
     }
 
     function render() {
-        return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig, [cssModules])}>
+        return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig, ['BasicWidget', cssModules])}>
             {generalComponents}
         </div>;
     }

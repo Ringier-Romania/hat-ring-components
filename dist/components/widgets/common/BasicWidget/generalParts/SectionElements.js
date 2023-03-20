@@ -28,11 +28,11 @@ const ItemParts = __importStar(require("../itemParts"));
 const _ = __importStar(require("lodash"));
 const RingLink_1 = require("../../../../common/RingLink");
 const WidgetHelper_1 = require("../../../../../helpers/WidgetHelper");
-function SectionElements({ context, widgetConfig, response }) {
+function SectionElements({ context, widgetConfig, response, extendableAttributes }) {
     if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
         return WidgetHelper_1.WidgetHelper.renderEmptyComponent('SectionElements');
     }
-    const allItemParts = context.customData.itemParts || ItemParts;
+    const allItemParts = extendableAttributes.itemParts || ItemParts;
     const columnsCount = parseInt(widgetConfig.columns || '0');
     const bigElementsCount = Number(widgetConfig.countBig);
     const colNumber = Math.floor(12 / columnsCount);

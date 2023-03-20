@@ -47,7 +47,7 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
         let dynamicFragmentsNames = '';
         const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
             var _a;
-            const allItemParts = context.customData.itemParts || ItemParts;
+            const allItemParts = extendableAttributes.itemParts || ItemParts;
             const ItemPart = allItemParts[_.upperFirst(showOption)];
             if (ItemPart && ItemPart.getFragment) {
                 const fragment = ItemPart.getFragment(widgetConfig);
@@ -91,7 +91,6 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
         return await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     }
     const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
-    context.customData.itemParts = extendableAttributes.itemParts;
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
     const response = await getData(queryFragment);
     if ((_c = (_b = (_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.section) === null || _b === void 0 ? void 0 : _b.items) === null || _c === void 0 ? void 0 : _c.edges) {
@@ -107,14 +106,14 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
             console.error(`No general show option name support ${showOption}`);
             return WidgetHelper_1.WidgetHelper.renderEmptyComponent(showOption, 'not supported, yet');
         }
-        return (0, jsx_runtime_1.jsx)(Component, { context: context, widgetConfig: widgetConfig, response: response }, index);
+        return (0, jsx_runtime_1.jsx)(Component, { context: context, widgetConfig: widgetConfig, response: response, extendableAttributes: extendableAttributes }, index);
     });
     let cssModules = BasicWidget_module_scss_1.default.BasicWidget;
     if (extendableAttributes.getCssModule) {
         cssModules = extendableAttributes.getCssModule(BasicWidget_module_scss_1.default.BasicWidget) || BasicWidget_module_scss_1.default.BasicWidget;
     }
     function render() {
-        return (0, jsx_runtime_1.jsx)("div", { className: WidgetHelper_1.WidgetHelper.getWidgetCssClasses(widgetConfig, [cssModules]), children: generalComponents });
+        return (0, jsx_runtime_1.jsx)("div", { className: WidgetHelper_1.WidgetHelper.getWidgetCssClasses(widgetConfig, ['BasicWidget', cssModules]), children: generalComponents });
     }
     if (extendableAttributes.render) {
         return extendableAttributes.render(generalComponents, cssModules);

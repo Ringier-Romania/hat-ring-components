@@ -6,13 +6,13 @@ import {StoryContentSwitcher} from "./StoryContentSwitcher";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 
 export interface StoryContentParams extends ComponentParams {
-    config: {
+    widgetConfig: {
         width: number;
         height: number;
     }
 }
 
-export async function StoryContent({config, context}: StoryContentParams) {
+export async function StoryContent({widgetConfig, context}: StoryContentParams) {
 
     const query = gql`
         query($storyId: UUID){
@@ -105,7 +105,7 @@ export async function StoryContent({config, context}: StoryContentParams) {
     const content = _.get(response, 'data.story.content[0].blocks');
     return <div className="StoryContent">
         {/* @ts-expect-error Server Component */}
-        <StoryContentSwitcher content={content} config={config} context={context} />
+        <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context} />
     </div>
 }
 

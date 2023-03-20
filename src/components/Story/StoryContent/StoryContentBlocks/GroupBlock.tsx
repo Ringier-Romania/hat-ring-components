@@ -7,17 +7,17 @@ export interface GroupBlockParams {
     type: string;
     alignment: string;
     elements: any[];
-    config: {
+    widgetConfig: {
         width: number;
         height: number;
     }
     context: AppContext;
 }
 
-export default function GroupBlock({blockData, config, context}) {
+export default function GroupBlock({blockData, widgetConfig, context}) {
 
     return <section className={`GroupBlock align${blockData.alignment} ${blockData.name}`}>
         {/* @ts-expect-error Server Component */}
-        <StoryContentSwitcher content={blockData.elements} config={config} context={context}/>
+        <StoryContentSwitcher content={blockData.elements} widgetConfig={widgetConfig} context={context}/>
     </section>
 }

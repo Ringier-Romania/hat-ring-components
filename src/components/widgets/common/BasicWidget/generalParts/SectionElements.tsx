@@ -1,24 +1,25 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
-import {BasicWidgetConfig, BasicWidgetResponse} from "../types";
+import {BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import {RingLink} from "../../../../common/RingLink";
 import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
 
 export default function SectionElements(
-    {context, widgetConfig, response}:
+    {context, widgetConfig, response, extendableAttributes}:
         {
             context: AppContext,
             widgetConfig: BasicWidgetConfig,
-            response: BasicWidgetResponse
+            response: BasicWidgetResponse,
+            extendableAttributes: BasicWidgetExtendableAttributes
         }) {
 
     if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
         return WidgetHelper.renderEmptyComponent('SectionElements');
     }
 
-    const allItemParts = context.customData.itemParts || ItemParts;
+    const allItemParts = extendableAttributes.itemParts || ItemParts;
     const columnsCount = parseInt(widgetConfig.columns || '0');
     const bigElementsCount = Number(widgetConfig.countBig);
     const colNumber = Math.floor(12 / columnsCount);

@@ -39,8 +39,8 @@ export async function StoryMainImage(params: StoryMainImageParams) {
 
     const variables = {
         storyId: params.context.id,
-        imageWidth: params.widgetConfig?.width || 0,
-        imageHeight: params.widgetConfig?.height || 0,
+        imageWidth: params.widgetConfig?.width || 1920,
+        imageHeight: params.widgetConfig?.height || 768,
     };
 
     var response = params.widgetConfig?.response;
