@@ -1,12 +1,7 @@
 /// <reference types="react" />
 import { AbstractWidgetConfig, WidgetParams } from "../../../../types/types";
 export interface GenericListWidgetConfig extends AbstractWidgetConfig {
-    "showOptions": Array<[
-        "image",
-        "title",
-        "lead",
-        "publicationDate"
-    ]>;
+    "showOptions": Array<"image" | "title">;
     "headerText": string;
     "headerTag": string;
     "columns": number;
@@ -15,7 +10,6 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
     "customListUuid": string;
     "imageSize": string;
     "imageSizeMobile": string;
-    "sort": string;
 }
 export interface GenericListExtendableAttributes {
     itemParts?: any;
@@ -32,16 +26,16 @@ export interface GenericListResponseNode {
     mainPublicationPoint?: {
         url: string;
     };
-    lead?: string;
     image?: {
         url?: string;
         caption?: string;
     };
 }
 export interface GenericListResponse {
-    "data": {
-        "stories": {
-            "edges": Array<{
+    data: {
+        stories: {
+            total: number;
+            edges: Array<{
                 node: GenericListResponseNode;
             }>;
         };

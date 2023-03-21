@@ -19,7 +19,6 @@ export declare let StoryLiveBlogWebsitesConfig: {
                 customWidth: string;
                 imageSize: string;
                 imageSizeMobile: string;
-                sort: string;
                 platformDesktop: boolean;
                 platformMobile: boolean;
                 cache: string;
@@ -110,15 +109,6 @@ export declare let StoryLiveBlogWebsitesConfig: {
                 showTotalElements: {
                     name: string;
                     type: string;
-                };
-                sort: {
-                    name: string;
-                    description: string;
-                    type: string;
-                    allowBlank: boolean;
-                    multiSelect: boolean;
-                    required: boolean;
-                    items: string[];
                 };
                 platformDesktop: {
                     name: string;

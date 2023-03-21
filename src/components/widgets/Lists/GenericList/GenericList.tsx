@@ -9,9 +9,12 @@ import Items from "./generalParts/Items";
 import {WidgetHelper} from "../../../../helpers/WidgetHelper";
 
 import styles from "../../../../../styles/widgets/common/GenericList.module.scss";
+import Pagination from "./generalParts/Pagination";
 
 
 export async function GenericList({widgetConfig, context, extendableAttributes = {}}: GenericListParams) {
+
+    const currentPage = _.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1);
 
     async function getData(queryNodeFragment) {
         let dynamicVariablesTypes = {}
@@ -46,8 +49,9 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
 
 
         const query = gql`
-            query($categoryId: UUID!, $limit: Int! ${mappedDynamicVariablesTypes}){
-                stories(filter:{category: {in: [$categoryId]}},limit: $limit ){
+            query($categoryId: UUID!, $limit: Int!, $offset: Int! ${mappedDynamicVariablesTypes}){
+                stories(filter:{category: {in: [$categoryId]}},limit: $limit, offset: $offset ){
+                    total
                     edges {
                         node {
                             mainPublicationPoint {
@@ -64,10 +68,12 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
 
         const categoryId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id');
 
+        const offset = (widgetConfig.postShift || 0) + ((currentPage - 1) * widgetConfig.paginationElements);
         const variables = {
             ...dynamicVariables,
             categoryId: categoryId,
-            limit: widgetConfig.paginationElements
+            limit: widgetConfig.paginationElements,
+            offset: offset
         };
         return await WebsiteApiProvider.call(query, variables);
     }
@@ -86,6 +92,7 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
             <Header context={context} widgetConfig={widgetConfig} response={response}/>
             <Items context={context} widgetConfig={widgetConfig} response={response}
                    extendableAttributes={extendableAttributes}/>
+            <Pagination context={context} widgetConfig={widgetConfig} response={response} currentPage={currentPage}/>
         </div>;
     }
 

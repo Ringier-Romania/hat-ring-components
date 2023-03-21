@@ -36,7 +36,9 @@ const Header_1 = __importDefault(require("./generalParts/Header"));
 const Items_1 = __importDefault(require("./generalParts/Items"));
 const WidgetHelper_1 = require("../../../../helpers/WidgetHelper");
 const GenericList_module_scss_1 = __importDefault(require("../../../../../styles/widgets/common/GenericList.module.scss"));
+const Pagination_1 = __importDefault(require("./generalParts/Pagination"));
 async function GenericList({ widgetConfig, context, extendableAttributes = {} }) {
+    const currentPage = _.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1);
     async function getData(queryNodeFragment) {
         let dynamicVariablesTypes = {};
         let dynamicVariables = {};
@@ -63,8 +65,9 @@ async function GenericList({ widgetConfig, context, extendableAttributes = {} })
             return `, ${key}: ${dynamicVariablesTypes[key]}`;
         }).join(' ');
         const query = (0, graphql_tag_1.gql) `
-            query($categoryId: UUID!, $limit: Int! ${mappedDynamicVariablesTypes}){
-                stories(filter:{category: {in: [$categoryId]}},limit: $limit ){
+            query($categoryId: UUID!, $limit: Int!, $offset: Int! ${mappedDynamicVariablesTypes}){
+                stories(filter:{category: {in: [$categoryId]}},limit: $limit, offset: $offset ){
+                    total
                     edges {
                         node {
                             mainPublicationPoint {
@@ -79,10 +82,12 @@ async function GenericList({ widgetConfig, context, extendableAttributes = {} })
             ${dynamicFragments}
         `;
         const categoryId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id');
+        const offset = (widgetConfig.postShift || 0) + ((currentPage - 1) * widgetConfig.paginationElements);
         const variables = {
             ...dynamicVariables,
             categoryId: categoryId,
-            limit: widgetConfig.paginationElements
+            limit: widgetConfig.paginationElements,
+            offset: offset
         };
         return await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     }
@@ -93,7 +98,7 @@ async function GenericList({ widgetConfig, context, extendableAttributes = {} })
         cssModules = extendableAttributes.getCssModule(GenericList_module_scss_1.default.GenericList) || GenericList_module_scss_1.default.GenericList;
     }
     function render() {
-        return (0, jsx_runtime_1.jsxs)("div", { className: WidgetHelper_1.WidgetHelper.getWidgetCssClasses(widgetConfig, ['GenericList', cssModules]), children: [(0, jsx_runtime_1.jsx)(Header_1.default, { context: context, widgetConfig: widgetConfig, response: response }), (0, jsx_runtime_1.jsx)(Items_1.default, { context: context, widgetConfig: widgetConfig, response: response, extendableAttributes: extendableAttributes })] });
+        return (0, jsx_runtime_1.jsxs)("div", { className: WidgetHelper_1.WidgetHelper.getWidgetCssClasses(widgetConfig, ['GenericList', cssModules]), children: [(0, jsx_runtime_1.jsx)(Header_1.default, { context: context, widgetConfig: widgetConfig, response: response }), (0, jsx_runtime_1.jsx)(Items_1.default, { context: context, widgetConfig: widgetConfig, response: response, extendableAttributes: extendableAttributes }), (0, jsx_runtime_1.jsx)(Pagination_1.default, { context: context, widgetConfig: widgetConfig, response: response, currentPage: currentPage })] });
     }
     if (extendableAttributes.render) {
         return extendableAttributes.render(cssModules);

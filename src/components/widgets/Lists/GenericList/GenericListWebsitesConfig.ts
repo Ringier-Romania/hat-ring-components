@@ -25,7 +25,6 @@ export let StoryLiveBlogWebsitesConfig
                 "customWidth": "none",
                 "imageSize": "400x225",
                 "imageSizeMobile": "",
-                "sort": "date_last_modified desc",
                 "platformDesktop": true,
                 "platformMobile": true,
                 "cache": "",
@@ -142,18 +141,6 @@ export let StoryLiveBlogWebsitesConfig
                 "showTotalElements": {
                     "name": "Display total elements",
                     "type": "checkbox"
-                },
-                "sort": {
-                    "name": "Sort",
-                    "description": "Sorting condition",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "required": true,
-                    "items": [
-                        "date_last_modified desc",
-                        "date_created desc"
-                    ]
                 },
                 "platformDesktop": {
                     "name": "Desktop",

@@ -13,7 +13,9 @@ function RingLink(props) {
             href = props.href.replace(process.env.WEBSITE_DOMAIN, '');
         }
     }
-    return (0, jsx_runtime_1.jsx)(link_1.default, { ...props, href: href, children: props.children });
+    let prefetch = props.prefetch;
+    prefetch = false;
+    return (0, jsx_runtime_1.jsx)(link_1.default, { ...props, href: href, prefetch: prefetch, children: props.children });
 }
 exports.RingLink = RingLink;
 //# sourceMappingURL=RingLink.js.map
