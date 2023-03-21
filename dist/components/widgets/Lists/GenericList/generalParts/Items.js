@@ -28,10 +28,11 @@ const WidgetHelper_1 = require("../../../../../helpers/WidgetHelper");
 const ItemParts = __importStar(require("./../itemParts"));
 const _ = __importStar(require("lodash"));
 const RingLink_1 = require("../../../../common/RingLink");
+const UtilsHelper_1 = require("../../../../../helpers/UtilsHelper");
 function Items({ context, widgetConfig, response, extendableAttributes }) {
     var _a, _b;
     const allItemParts = extendableAttributes.itemParts || ItemParts;
-    const columnsCount = widgetConfig.columns || 1;
+    const columnsCount = UtilsHelper_1.UtilsHelper.convertToInt(widgetConfig.columns) || 1;
     const colNumber = Math.floor(12 / columnsCount);
     return ((0, jsx_runtime_1.jsx)("div", { className: ['Items'].join(' '), children: ((_b = (_a = response.data) === null || _a === void 0 ? void 0 : _a.stories) === null || _b === void 0 ? void 0 : _b.edges.map((edge, itemIndex) => {
             var _a, _b;

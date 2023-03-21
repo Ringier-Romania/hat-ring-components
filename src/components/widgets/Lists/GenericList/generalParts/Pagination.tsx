@@ -4,6 +4,7 @@ import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
 import {GenericListResponse, GenericListWidgetConfig} from "../types";
 import {RingLink} from "../../../../common/RingLink";
 import * as _ from 'lodash';
+import {UtilsHelper} from "../../../../../helpers/UtilsHelper";
 
 export default function Pagination(
     {context, widgetConfig, response, currentPage}:
@@ -15,8 +16,8 @@ export default function Pagination(
         }) {
 
     const currentUrl = _.get(context, 'hatControllerParams.urlWithParsedQuery.pathname');
-    const total = response.data.stories.total;
-    const pages = Math.ceil(total / widgetConfig.paginationElements);
+    const total = response.data?.stories.total;
+    const pages = Math.ceil(total / UtilsHelper.convertToInt(widgetConfig.paginationElements));
     if (pages === 1) {
         return null;
     }

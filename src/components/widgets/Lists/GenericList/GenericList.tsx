@@ -10,6 +10,7 @@ import {WidgetHelper} from "../../../../helpers/WidgetHelper";
 
 import styles from "../../../../../styles/widgets/common/GenericList.module.scss";
 import Pagination from "./generalParts/Pagination";
+import {UtilsHelper} from "../../../../helpers/UtilsHelper";
 
 
 export async function GenericList({widgetConfig, context, extendableAttributes = {}}: GenericListParams) {
@@ -68,11 +69,11 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
 
         const categoryId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id');
 
-        const offset = (widgetConfig.postShift || 0) + ((currentPage - 1) * widgetConfig.paginationElements);
+        const offset = (UtilsHelper.convertToInt(widgetConfig.postShift) || 0) + ((currentPage - 1) * UtilsHelper.convertToInt(widgetConfig.paginationElements));
         const variables = {
             ...dynamicVariables,
             categoryId: categoryId,
-            limit: widgetConfig.paginationElements,
+            limit: UtilsHelper.convertToInt(widgetConfig.paginationElements),
             offset: offset
         };
         return await WebsiteApiProvider.call(query, variables);
@@ -81,6 +82,7 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
     const response = await getData(queryFragment) as GenericListResponse;
 
+    console.log(response);
     let cssModules = styles.GenericList;
 
     if (extendableAttributes.getCssModule) {

@@ -5,6 +5,7 @@ import {GenericListExtendableAttributes, GenericListResponse, GenericListWidgetC
 import * as ItemParts from "./../itemParts";
 import * as _ from "lodash";
 import {RingLink} from "../../../../common/RingLink";
+import {UtilsHelper} from "../../../../../helpers/UtilsHelper";
 
 export default function Items(
     {context, widgetConfig, response, extendableAttributes}:
@@ -16,7 +17,7 @@ export default function Items(
         }) {
 
     const allItemParts = extendableAttributes.itemParts || ItemParts;
-    const columnsCount = widgetConfig.columns || 1;
+    const columnsCount = UtilsHelper.convertToInt(widgetConfig.columns) || 1;
     const colNumber = Math.floor(12 / columnsCount);
     return (
         <div className={['Items'].join(' ')}>

@@ -26,10 +26,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RingLink_1 = require("../../../../common/RingLink");
 const _ = __importStar(require("lodash"));
+const UtilsHelper_1 = require("../../../../../helpers/UtilsHelper");
 function Pagination({ context, widgetConfig, response, currentPage }) {
+    var _a;
     const currentUrl = _.get(context, 'hatControllerParams.urlWithParsedQuery.pathname');
-    const total = response.data.stories.total;
-    const pages = Math.ceil(total / widgetConfig.paginationElements);
+    const total = (_a = response.data) === null || _a === void 0 ? void 0 : _a.stories.total;
+    const pages = Math.ceil(total / UtilsHelper_1.UtilsHelper.convertToInt(widgetConfig.paginationElements));
     if (pages === 1) {
         return null;
     }

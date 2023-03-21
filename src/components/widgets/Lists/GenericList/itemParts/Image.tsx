@@ -20,12 +20,11 @@ export default function Image(
         return WidgetHelper.renderEmptyComponent('Image');
     }
 
-    const sizes = (widgetConfig.imageSize || '400x300').split('x');
+    const sizes = ((context.hatControllerParams.isMobile ? widgetConfig.imageSizeMobile : widgetConfig.imageSize) || '400x300').split('x');
 
     const ringImageProps = {
         src: image.url,
         alt: image.caption || data.title || '',
-        transform: TransformType.ResizeCropAuto,
         width: Number(sizes[0]),
         height: Number(sizes[1])
     };
@@ -47,7 +46,7 @@ Image.getFragment = (widgetConfig) => {
             mainImageWidth: Number(sizes[0]),
             mainImageHeight: Number(sizes[1])
         },
-        variablesTypes:{
+        variablesTypes: {
             $mainImageWidth: 'Int!',
             $mainImageHeight: 'Int!',
         },

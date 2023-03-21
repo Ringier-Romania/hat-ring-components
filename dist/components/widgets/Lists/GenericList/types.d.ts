@@ -4,9 +4,9 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
     "showOptions": Array<"image" | "title">;
     "headerText": string;
     "headerTag": string;
-    "columns": number;
-    "paginationElements": number;
-    "postShift": number;
+    "columns": number | string;
+    "paginationElements": number | string;
+    "postShift": number | string;
     "customListUuid": string;
     "imageSize": string;
     "imageSizeMobile": string;

@@ -12,11 +12,10 @@ function Image({ itemIndex, context, widgetConfig, data }) {
     if (!image || !image.url) {
         return WidgetHelper_1.WidgetHelper.renderEmptyComponent('Image');
     }
-    const sizes = (widgetConfig.imageSize || '400x300').split('x');
+    const sizes = ((context.hatControllerParams.isMobile ? widgetConfig.imageSizeMobile : widgetConfig.imageSize) || '400x300').split('x');
     const ringImageProps = {
         src: image.url,
         alt: image.caption || data.title || '',
-        transform: RingImage_1.TransformType.ResizeCropAuto,
         width: Number(sizes[0]),
         height: Number(sizes[1])
     };

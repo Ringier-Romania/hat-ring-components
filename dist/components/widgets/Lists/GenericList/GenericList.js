@@ -37,6 +37,7 @@ const Items_1 = __importDefault(require("./generalParts/Items"));
 const WidgetHelper_1 = require("../../../../helpers/WidgetHelper");
 const GenericList_module_scss_1 = __importDefault(require("../../../../../styles/widgets/common/GenericList.module.scss"));
 const Pagination_1 = __importDefault(require("./generalParts/Pagination"));
+const UtilsHelper_1 = require("../../../../helpers/UtilsHelper");
 async function GenericList({ widgetConfig, context, extendableAttributes = {} }) {
     const currentPage = parseInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
     async function getData(queryNodeFragment) {
@@ -82,17 +83,18 @@ async function GenericList({ widgetConfig, context, extendableAttributes = {} })
             ${dynamicFragments}
         `;
         const categoryId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id');
-        const offset = (widgetConfig.postShift || 0) + ((currentPage - 1) * widgetConfig.paginationElements);
+        const offset = (UtilsHelper_1.UtilsHelper.convertToInt(widgetConfig.postShift) || 0) + ((currentPage - 1) * UtilsHelper_1.UtilsHelper.convertToInt(widgetConfig.paginationElements));
         const variables = {
             ...dynamicVariables,
             categoryId: categoryId,
-            limit: widgetConfig.paginationElements,
+            limit: UtilsHelper_1.UtilsHelper.convertToInt(widgetConfig.paginationElements),
             offset: offset
         };
         return await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     }
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
     const response = await getData(queryFragment);
+    console.log(response);
     let cssModules = GenericList_module_scss_1.default.GenericList;
     if (extendableAttributes.getCssModule) {
         cssModules = extendableAttributes.getCssModule(GenericList_module_scss_1.default.GenericList) || GenericList_module_scss_1.default.GenericList;
