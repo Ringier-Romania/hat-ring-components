@@ -81,8 +81,7 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
 
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
     const response = await getData(queryFragment) as GenericListResponse;
-
-    console.log(response);
+    
     let cssModules = styles.GenericList;
 
     if (extendableAttributes.getCssModule) {
