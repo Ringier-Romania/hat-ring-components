@@ -6,4 +6,4 @@ export default function Pagination({ context, widgetConfig, response, currentPag
     widgetConfig: GenericListWidgetConfig;
     response: GenericListResponse;
     currentPage: number;
-}): JSX.Element;
+}): JSX.Element | null;

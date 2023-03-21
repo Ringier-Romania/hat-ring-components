@@ -17,12 +17,30 @@ export default function Pagination(
     const currentUrl = _.get(context, 'hatControllerParams.urlWithParsedQuery.pathname');
     const total = response.data.stories.total;
     const pages = Math.ceil(total / widgetConfig.paginationElements);
+    if (pages === 1) {
+        return null;
+    }
 
     let buttons: Array<React.ReactNode> = [];
+    if (currentPage > 1) {
+        buttons.push(<li className={['prev'].join(' ')}>
+            <RingLink rel={'prev'}
+                      href={currentUrl + '?page=' + (currentPage - 1)}>&#60;</RingLink>
+        </li>);
+    }
+
+
     for (let i = 1; i < pages + 1; i++) {
         buttons.push(<li className={currentPage == i ? 'active' : ''}>
             <RingLink
                 href={currentUrl + '?page=' + i}>{i}</RingLink>
+        </li>);
+    }
+
+    if (currentPage < pages) {
+        buttons.push(<li className={['prev'].join(' ')}>
+            <RingLink rel={'next'}
+                      href={currentUrl + '?page=' + (currentPage + 1)}>&#62;</RingLink>
         </li>);
     }
     return (

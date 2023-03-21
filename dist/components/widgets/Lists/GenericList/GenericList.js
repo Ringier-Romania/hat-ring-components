@@ -38,7 +38,7 @@ const WidgetHelper_1 = require("../../../../helpers/WidgetHelper");
 const GenericList_module_scss_1 = __importDefault(require("../../../../../styles/widgets/common/GenericList.module.scss"));
 const Pagination_1 = __importDefault(require("./generalParts/Pagination"));
 async function GenericList({ widgetConfig, context, extendableAttributes = {} }) {
-    const currentPage = _.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1);
+    const currentPage = parseInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
     async function getData(queryNodeFragment) {
         let dynamicVariablesTypes = {};
         let dynamicVariables = {};

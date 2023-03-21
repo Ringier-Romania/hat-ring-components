@@ -30,9 +30,18 @@ function Pagination({ context, widgetConfig, response, currentPage }) {
     const currentUrl = _.get(context, 'hatControllerParams.urlWithParsedQuery.pathname');
     const total = response.data.stories.total;
     const pages = Math.ceil(total / widgetConfig.paginationElements);
+    if (pages === 1) {
+        return null;
+    }
     let buttons = [];
+    if (currentPage > 1) {
+        buttons.push((0, jsx_runtime_1.jsx)("li", { className: ['prev'].join(' '), children: (0, jsx_runtime_1.jsx)(RingLink_1.RingLink, { rel: 'prev', href: currentUrl + '?page=' + (currentPage - 1), children: "<" }) }));
+    }
     for (let i = 1; i < pages + 1; i++) {
         buttons.push((0, jsx_runtime_1.jsx)("li", { className: currentPage == i ? 'active' : '', children: (0, jsx_runtime_1.jsx)(RingLink_1.RingLink, { href: currentUrl + '?page=' + i, children: i }) }));
+    }
+    if (currentPage < pages) {
+        buttons.push((0, jsx_runtime_1.jsx)("li", { className: ['prev'].join(' '), children: (0, jsx_runtime_1.jsx)(RingLink_1.RingLink, { rel: 'next', href: currentUrl + '?page=' + (currentPage + 1), children: ">" }) }));
     }
     return ((0, jsx_runtime_1.jsx)("ul", { className: ['Pagination'].join(' '), children: buttons }));
 }

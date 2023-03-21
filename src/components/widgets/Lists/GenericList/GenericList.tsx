@@ -14,7 +14,7 @@ import Pagination from "./generalParts/Pagination";
 
 export async function GenericList({widgetConfig, context, extendableAttributes = {}}: GenericListParams) {
 
-    const currentPage = _.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1);
+    const currentPage = parseInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
 
     async function getData(queryNodeFragment) {
         let dynamicVariablesTypes = {}
