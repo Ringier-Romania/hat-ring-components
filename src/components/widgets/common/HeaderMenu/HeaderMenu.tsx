@@ -1,7 +1,9 @@
 import React from "react";
+import * as _ from 'lodash';
 import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
 import {RingLink} from "../../../common/RingLink";
 import {RingImage} from "../../../common/RingImage";
+import styles from '../../../../../styles/widgets/common/HeaderMenu.module.scss';
 
 interface HeaderMenuElement {
     "text": string,
@@ -40,17 +42,21 @@ export function HeaderMenu(
                 })}</ul>
             }</>;
 
-        return menuElement.hidden ? null : <li className={menuElement["custom css class"]}>
-            {menuElement.url ?
-                <RingLink href={menuElement.url} target={menuElement["open in new tab"] ? '_blank' : ''}>
-                    {item}
-                </RingLink> : <>{item}</>
-            }
+        const currentUrl = _.get(context, 'hatControllerParams.urlWithParsedQuery.pathname') || context.url;
+        const isActive = currentUrl == menuElement.url;
+        return menuElement.hidden ? null :
+            <li className={[menuElement["custom css class"], isActive ? 'active' : ''].join(' ')}>
+                {menuElement.url ?
+                    <RingLink href={menuElement.url} target={menuElement["open in new tab"] ? '_blank' : ''}>
+                        {item}
+                    </RingLink> : <>{item}</>
+                }
 
-        </li>
+            </li>
     }
 
-    return <nav className={['HeaderMenu', widgetConfig.customClass].join(' ')} style={{color: widgetConfig.textColor}}>
+    return <nav className={['HeaderMenu', widgetConfig.customClass, styles.HeaderMenu].join(' ')}
+    >
         <ul>
             {widgetConfig.overrideMenuElements.map((menuElement) => {
                 return renderMenuElement(menuElement);
