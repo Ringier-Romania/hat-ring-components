@@ -7,5 +7,5 @@ interface GridBoxParams {
     size: number;
     tagName: string;
 }
-export declare function Box({ boxName, widgets, context, size, tagName }: GridBoxParams): JSX.Element;
+export declare function Box({ boxName, widgets, context, size, tagName }: GridBoxParams): JSX.Element | null;
 export {};

@@ -52,7 +52,7 @@ function RingImage(props) {
     if (transform !== TransformType.None) {
         src = ocdnLoader(src, props.width, props.height, props.transform);
     }
-    return (0, jsx_runtime_1.jsx)(image_1.default, { ...props, className: ['RingImage', RingImage_module_scss_1.default.RingImage, props.className].join(' '), src: src, width: props.width, height: props.height, unoptimized: unoptimized, placeholder: placeholder, blurDataURL: blurDataURL });
+    return (0, jsx_runtime_1.jsx)(image_1.default, { ...props, className: ['RingImage', RingImage_module_scss_1.default.RingImage, props.className].join(' '), src: src, unoptimized: unoptimized, placeholder: placeholder, blurDataURL: blurDataURL });
 }
 exports.RingImage = RingImage;
 //# sourceMappingURL=RingImage.js.map

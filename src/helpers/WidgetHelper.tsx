@@ -3,9 +3,14 @@ import * as _ from 'lodash';
 import {AbstractWidgetConfig} from "../types/types";
 export class WidgetHelper {
     static shouldHideWidget(widgetConfig, context) {
-        if (typeof context.hatControllerParams.isMobile === 'boolean') {
-            return !((context.hatControllerParams.isMobile && widgetConfig.platformDesktop)
-                || (!context.hatControllerParams.isMobile && widgetConfig.platformMobile));
+        if (typeof context.hatControllerParams.isMobile === 'boolean'
+            && typeof widgetConfig.platformDesktop === 'boolean'
+            && typeof widgetConfig.platformMobile === 'boolean'
+        ) {
+            return !(
+                (context.hatControllerParams.isMobile && widgetConfig.platformMobile)
+                || (!context.hatControllerParams.isMobile && widgetConfig.platformDesktop)
+            );
         }
         return false;
     }

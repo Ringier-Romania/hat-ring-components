@@ -28,9 +28,11 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 class WidgetHelper {
     static shouldHideWidget(widgetConfig, context) {
-        if (typeof context.hatControllerParams.isMobile === 'boolean') {
-            return !((context.hatControllerParams.isMobile && widgetConfig.platformDesktop)
-                || (!context.hatControllerParams.isMobile && widgetConfig.platformMobile));
+        if (typeof context.hatControllerParams.isMobile === 'boolean'
+            && typeof widgetConfig.platformDesktop === 'boolean'
+            && typeof widgetConfig.platformMobile === 'boolean') {
+            return !((context.hatControllerParams.isMobile && widgetConfig.platformMobile)
+                || (!context.hatControllerParams.isMobile && widgetConfig.platformDesktop));
         }
         return false;
     }

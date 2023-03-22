@@ -58,5 +58,5 @@ export function RingImage(props: RingImageProps) {
         src = ocdnLoader(src, props.width, props.height, props.transform);
     }
 
-    return <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src} width={props.width} height={props.height} unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
+    return <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src} unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
 }

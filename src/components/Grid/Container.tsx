@@ -28,7 +28,7 @@ export function Container({sectionName, sectionConfig, context, boxes}: GridCont
                     context={context}
                     boxName={boxName}
                     widgets={sectionConfig[boxName]}
-                    size={sectionConfig[boxName + '_size']}
+                    size={sectionConfig[boxName + '_size'] || 12}
                     tagName={sectionConfig[boxName + '_html_tag']}
                 />
         })}
