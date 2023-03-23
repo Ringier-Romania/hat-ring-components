@@ -10,6 +10,7 @@ interface HeaderMenuElement {
     "children": Array<HeaderMenuElement>,
     "url": string,
     "image url": string,
+    "image dimensions (eg. 200x200)": string,
     "custom css class": string,
     "hidden": boolean,
     "open in new tab": boolean,
@@ -32,7 +33,7 @@ export function HeaderMenu(
         const item = <>
             <span className={'text'}>{menuElement.text}</span>
             {
-                menuElement["image url"] &&
+                menuElement["image url"] && menuElement["image dimensions (eg. 200x200)"] &&
                 <RingImage src={menuElement["image url"]} alt={menuElement.text} width={200} height={200}/>
             }
             {

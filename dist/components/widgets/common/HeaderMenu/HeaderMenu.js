@@ -35,7 +35,7 @@ const HeaderMenu_module_scss_1 = __importDefault(require("../../../../../styles/
 ;
 function HeaderMenu({ widgetConfig, context }) {
     function renderMenuElement(menuElement) {
-        const item = (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("span", { className: 'text', children: menuElement.text }), menuElement["image url"] &&
+        const item = (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("span", { className: 'text', children: menuElement.text }), menuElement["image url"] && menuElement["image dimensions (eg. 200x200)"] &&
                     (0, jsx_runtime_1.jsx)(RingImage_1.RingImage, { src: menuElement["image url"], alt: menuElement.text, width: 200, height: 200 }), menuElement.children && menuElement.children.length > 0 &&
                     (0, jsx_runtime_1.jsx)("ul", { children: menuElement.children.map((menuElement) => {
                             return renderMenuElement(menuElement);

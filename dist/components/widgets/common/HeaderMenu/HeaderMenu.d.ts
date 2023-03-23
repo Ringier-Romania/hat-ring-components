@@ -5,6 +5,7 @@ interface HeaderMenuElement {
     "children": Array<HeaderMenuElement>;
     "url": string;
     "image url": string;
+    "image dimensions (eg. 200x200)": string;
     "custom css class": string;
     "hidden": boolean;
     "open in new tab": boolean;

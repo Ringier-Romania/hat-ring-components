@@ -46,6 +46,10 @@ exports.HeaderMenuWebsitesConfig = {
                         {
                             "name": "image url",
                             "type": "textfield"
+                        },
+                        {
+                            "name": "image dimensions (eg. 200x200)",
+                            "type": "textfield"
                         }
                     ]
                 },
