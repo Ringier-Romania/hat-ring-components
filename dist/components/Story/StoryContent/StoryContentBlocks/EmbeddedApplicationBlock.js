@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
 const script_1 = __importDefault(require("next/script"));
-function EmbeddedApplicationBlock({ blockData }) {
+function EmbeddedApplicationBlock({ blockData, context }) {
     (0, react_1.useEffect)(() => {
         if (window.pulsembed) {
             window.pulsembed();

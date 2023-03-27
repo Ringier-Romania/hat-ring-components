@@ -1,3 +1,4 @@
+"use server";
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
@@ -81,7 +82,7 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
 
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
     const response = await getData(queryFragment) as GenericListResponse;
-    
+
     let cssModules = styles.GenericList;
 
     if (extendableAttributes.getCssModule) {

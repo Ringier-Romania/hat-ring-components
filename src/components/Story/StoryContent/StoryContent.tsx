@@ -1,3 +1,4 @@
+"use server";
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
@@ -101,6 +102,12 @@ export async function StoryContent({widgetConfig, context}: StoryContentParams) 
         storyId: context.id,
     };
 
+    if(!widgetConfig.width){
+        widgetConfig.width = 1600;
+    }
+    if(!widgetConfig.height){
+        widgetConfig.height = 900;
+    }
     const response = await WebsiteApiProvider.call(query, variables);
     const content = _.get(response, 'data.story.content[0].blocks');
     return <div className="StoryContent">

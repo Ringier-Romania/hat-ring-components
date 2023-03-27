@@ -34,8 +34,12 @@ export function StoryContentSwitcher({content, widgetConfig, context}: StoryCont
             return <></>;
         }
 
+        let clientContext = context;
+        clientContext.customData.widgets = {};
         const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
         const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
-        return <Block blockData={block} widgetConfig={widgetConfig} context={context}/>;
+        const isClientSideComponent = Block.$$typeof && Block.$$typeof === Symbol.for('react.client.reference');
+        return <Block blockData={block} widgetConfig={widgetConfig}
+                      context={isClientSideComponent ? clientContext : context}/>;
     });
 }

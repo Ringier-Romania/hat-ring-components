@@ -1,3 +1,4 @@
+"use server";
 import {ComponentParams} from "../../types/types";
 import {gql} from "graphql-tag";
 import React from "react";

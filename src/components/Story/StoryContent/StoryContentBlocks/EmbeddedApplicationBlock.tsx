@@ -2,8 +2,9 @@
 
 import React, {useEffect} from "react";
 import Script from "next/script";
+import {WidgetParams} from "../../../../types/types";
 
-export interface EmbeddedApplicationBlockParams {
+export interface EmbeddedApplicationBlockParams extends WidgetParams {
     blockData: {
         type: string;
         embed: {
@@ -11,8 +12,7 @@ export interface EmbeddedApplicationBlockParams {
         }
     }
 }
-
-export default function EmbeddedApplicationBlock({blockData}: EmbeddedApplicationBlockParams) {
+export default function EmbeddedApplicationBlock({blockData, context}: EmbeddedApplicationBlockParams) {
 
     useEffect(()=>{
         //@ts-ignore
