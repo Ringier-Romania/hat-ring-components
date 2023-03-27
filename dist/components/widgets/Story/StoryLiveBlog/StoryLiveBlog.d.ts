@@ -10,5 +10,5 @@ interface StoryLiveBlogParamsConfig extends AbstractWidgetConfig {
     liveBlogClientId: string;
     liveBlogLanguage: string;
 }
-export declare function StoryLiveBlog({ widgetConfig, context }: StoryLiveBlogParams): Promise<JSX.Element>;
+export declare function StoryLiveBlog({ widgetConfig, context }: StoryLiveBlogParams): Promise<JSX.Element | null>;
 export {};
