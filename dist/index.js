@@ -16,7 +16,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./helpers/WidgetHelper"), exports);
 __exportStar(require("./types/types"), exports);
-__exportStar(require("./components/Story/StoryTitle/StoryTitle"), exports);
+__exportStar(require("./components/widgets/Story/StoryTitle/StoryTitle"), exports);
 __exportStar(require("./components/Story/StoryMainImage/StoryMainImage"), exports);
 __exportStar(require("./components/Story/StoryContent/StoryContent"), exports);
 __exportStar(require("./components/Grid/Grid"), exports);

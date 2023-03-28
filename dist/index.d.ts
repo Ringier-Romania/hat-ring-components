@@ -1,6 +1,6 @@
 export * from "./helpers/WidgetHelper";
 export * from "./types/types";
-export * from "./components/Story/StoryTitle/StoryTitle";
+export * from "./components/widgets/Story/StoryTitle/StoryTitle";
 export * from "./components/Story/StoryMainImage/StoryMainImage";
 export * from "./components/Story/StoryContent/StoryContent";
 export * from "./components/Grid/Grid";

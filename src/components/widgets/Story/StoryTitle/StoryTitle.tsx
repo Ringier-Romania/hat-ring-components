@@ -2,18 +2,8 @@
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
-import {ComponentParams} from "../../../types/types";
-import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
-
-export interface StoryTitleResponse {
-    data: { story: { name: string } }
-}
-
-export interface StoryTitleParams extends ComponentParams {
-    widgetConfig: {
-        response?: StoryTitleResponse
-    }
-}
+import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
+import {StoryTitleParams, StoryTitleResponse} from "./types";
 
 export async function StoryTitle(params: StoryTitleParams) {
     const query = gql`

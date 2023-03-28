@@ -6,4 +6,6 @@ export * from './components/widgets/Story/StoryLiveBlog/StoryLiveBlogWebsitesCon
 export * from "./components/widgets/Lists/GenericList/GenericList";
 export * from "./components/Grid/HeaderFooterWebsitesConfig";
 export * from "./components/Grid/GridHomeWebsitesConfig";
+export * from "./components/Grid/GridStoryWebsitesConfig";
 export * from "./components/widgets/common/HeaderMenu/HeaderMenuWebsitesConfig";
+export * from './components/widgets/Story/StoryTitle/StoryTitleWebsitesConfig';
