@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.WidgetHelper = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
+const UtilsHelper_1 = require("./UtilsHelper");
 class WidgetHelper {
     static shouldHideWidget(widgetConfig, context) {
         if (typeof context.hatControllerParams.isMobile === 'boolean'
@@ -57,6 +58,29 @@ class WidgetHelper {
             cssClasses.push(widgetConfig.customClass);
         }
         return [...additionalCssClasses, ...cssClasses].join(' ');
+    }
+    static getImageDimensionsFromWidgetConfig(widgetConfig, context, desktopFieldName = 'standardImageSize', mobileFieldName = 'imageSizeMobile', defaultSizesString = '800x450') {
+        let dimensionsString = '';
+        if (UtilsHelper_1.UtilsHelper.isMobile(context)) {
+            if (widgetConfig[mobileFieldName]) {
+                dimensionsString = widgetConfig[mobileFieldName];
+            }
+            else {
+                if (widgetConfig[desktopFieldName]) {
+                    dimensionsString = widgetConfig[desktopFieldName];
+                }
+            }
+        }
+        else {
+            if (widgetConfig[desktopFieldName]) {
+                dimensionsString = widgetConfig[desktopFieldName];
+            }
+        }
+        if (dimensionsString === '') {
+            dimensionsString = defaultSizesString;
+        }
+        const sizes = dimensionsString.split('x');
+        return { width: parseInt(sizes[0]), height: parseInt(sizes[1]) };
     }
 }
 exports.WidgetHelper = WidgetHelper;

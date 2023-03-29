@@ -5,6 +5,7 @@ import React from "react";
 import * as _ from "lodash";
 import {Container} from "./Container";
 import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
+import {UtilsHelper} from "../../helpers/UtilsHelper";
 
 
 export interface GridParams extends ComponentParams {
@@ -29,10 +30,11 @@ export async function Grid(params: GridParams) {
         configQuery += section + ':config(codeName: "' + section + '"){ data } ';
     })
 
-
+    const antycache = UtilsHelper.isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}`: 'antycacheStatusCode';
     const query = gql`
         query($url: URL!, $variant:ID!){
             site(url:$url, variantId: $variant){
+                ${antycache}:statusCode
                 data {
                     node {
                         config {

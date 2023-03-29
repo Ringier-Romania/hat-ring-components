@@ -25,4 +25,5 @@ __exportStar(require("./components/Grid/GridHomeWebsitesConfig"), exports);
 __exportStar(require("./components/Grid/GridStoryWebsitesConfig"), exports);
 __exportStar(require("./components/widgets/common/HeaderMenu/HeaderMenuWebsitesConfig"), exports);
 __exportStar(require("./components/widgets/Story/StoryTitle/StoryTitleWebsitesConfig"), exports);
+__exportStar(require("./components/widgets/Story/StoryMainImage/StoryMainImageWebsitesConfig"), exports);
 //# sourceMappingURL=websitesApiConfigs.js.map

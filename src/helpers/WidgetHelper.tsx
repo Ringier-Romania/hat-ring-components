@@ -1,6 +1,8 @@
 import React from "react";
 import * as _ from 'lodash';
-import {AbstractWidgetConfig} from "../types/types";
+import {AbstractWidgetConfig, AppContext} from "../types/types";
+import {UtilsHelper} from "./UtilsHelper";
+
 export class WidgetHelper {
     static shouldHideWidget(widgetConfig, context) {
         if (typeof context.hatControllerParams.isMobile === 'boolean'
@@ -20,10 +22,11 @@ export class WidgetHelper {
     }
 
     static renderEmptyComponent(componentClassName, text = '') {
-        return (<div className={componentClassName} style={{display: 'none'}} dangerouslySetInnerHTML={{__html: text && `<!-- ${text} -->`}}/>);
+        return (<div className={componentClassName} style={{display: 'none'}}
+                     dangerouslySetInnerHTML={{__html: text && `<!-- ${text} -->`}}/>);
     }
 
-    static getWidgetCssClasses(widgetConfig: AbstractWidgetConfig, additionalCssClasses:Array<string> = []):string {
+    static getWidgetCssClasses(widgetConfig: AbstractWidgetConfig, additionalCssClasses: Array<string> = []): string {
         const cssClasses = [] as Array<string>;
 
         if (widgetConfig.widgetType) {
@@ -43,5 +46,38 @@ export class WidgetHelper {
         }
 
         return [...additionalCssClasses, ...cssClasses].join(' ');
+    }
+
+    /**
+     * Generate object of dimensions {width, height} from widgetConfig
+     * @param widgetConfig
+     * @param context
+     * @param desktopFieldName
+     * @param mobileFieldName
+     * @param defaultSizesString
+     * @return {width: SafeNumber, height: SafeNumber}
+     */
+    static getImageDimensionsFromWidgetConfig(widgetConfig, context: AppContext, desktopFieldName = 'standardImageSize', mobileFieldName = 'imageSizeMobile', defaultSizesString = '800x450'):
+        { width: number | `${number}`, height: number | `${number}` } {
+        let dimensionsString: string = '';
+        if (UtilsHelper.isMobile(context)) {
+            if (widgetConfig[mobileFieldName]) {
+                dimensionsString = widgetConfig[mobileFieldName];
+            } else {
+                if (widgetConfig[desktopFieldName]) {
+                    dimensionsString = widgetConfig[desktopFieldName];
+                }
+            }
+        } else {
+            if (widgetConfig[desktopFieldName]) {
+                dimensionsString = widgetConfig[desktopFieldName];
+            }
+        }
+
+        if (dimensionsString === '') {
+            dimensionsString = defaultSizesString;
+        }
+        const sizes = dimensionsString.split('x');
+        return {width: parseInt(sizes[0]), height: parseInt(sizes[1])};
     }
 }
