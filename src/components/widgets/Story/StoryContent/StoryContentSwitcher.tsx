@@ -1,23 +1,15 @@
 import React from 'react';
 import * as _ from 'lodash';
 import * as BlocksTypes from "./StoryContentBlocks";
-import {AppContext} from "../../../types/types";
+import {AppContext} from "../../../../types/types";
+import {StoryContentWidgetConfig, StoryContentSwitcherParams} from "./types";
 
-interface StoryContentSwitcherParams {
-    content: any[];
-    context: AppContext;
-    widgetConfig: {
-        width: number;
-        height: number;
-    };
-}
 
 export function StoryContentSwitcher({content, widgetConfig, context}: StoryContentSwitcherParams) {
     let isGroupBlock = false;
     const groupElements: any[] = [];
 
-    return content.map((block) => {
-
+    return content.map((block, index) => {
         if (block.type === 'groupStart') {
             isGroupBlock = true;
             return <></>;
@@ -32,6 +24,14 @@ export function StoryContentSwitcher({content, widgetConfig, context}: StoryCont
         if (isGroupBlock === true) {
             groupElements.push(block);
             return <></>;
+        }
+
+        if(widgetConfig.displayFrom && widgetConfig.displayFrom > index + 1){
+            return null;
+        }
+
+        if(widgetConfig.displayTo && widgetConfig.displayTo < index + 1){
+            return null;
         }
 
         let clientContext = context;

@@ -2,6 +2,6 @@ import React from 'react';
 
 
 export function StoryMainImageCaption(params){
-    return <p>{params.caption}</p>;
+    return <p className={'StoryMainImageCaption'}>{params.caption}</p>;
 }
 

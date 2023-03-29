@@ -1,21 +1,40 @@
+"use strict";
 "use server";
-import React from 'react';
-import * as _ from 'lodash';
-import {gql} from 'graphql-tag';
-import {ComponentParams} from "../../../types/types";
-import {StoryContentSwitcher} from "./StoryContentSwitcher";
-import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
-
-export interface StoryContentParams extends ComponentParams {
-    widgetConfig: {
-        width: number;
-        height: number;
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
     }
-}
-
-export async function StoryContent({widgetConfig, context}: StoryContentParams) {
-
-    const query = gql`
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StoryContent = void 0;
+const jsx_runtime_1 = require("react/jsx-runtime");
+const _ = __importStar(require("lodash"));
+const graphql_tag_1 = require("graphql-tag");
+const StoryContentSwitcher_1 = require("./StoryContentSwitcher");
+const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
+const UtilsHelper_1 = require("../../../../helpers/UtilsHelper");
+async function StoryContent({ widgetConfig, context }) {
+    widgetConfig.displayFrom = widgetConfig.displayFrom && UtilsHelper_1.UtilsHelper.convertToInt(widgetConfig.displayFrom);
+    widgetConfig.displayTo = widgetConfig.displayTo && UtilsHelper_1.UtilsHelper.convertToInt(widgetConfig.displayTo);
+    const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID){
             story(id:$storyId){
                 content {
@@ -101,18 +120,9 @@ export async function StoryContent({widgetConfig, context}: StoryContentParams) 
     const variables = {
         storyId: context.id,
     };
-
-    if(!widgetConfig.width){
-        widgetConfig.width = 1600;
-    }
-    if(!widgetConfig.height){
-        widgetConfig.height = 900;
-    }
-    const response = await WebsiteApiProvider.call(query, variables);
+    const response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     const content = _.get(response, 'data.story.content[0].blocks');
-    return <div className="StoryContent">
-        {/* @ts-expect-error Server Component */}
-        <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context} />
-    </div>
+    return (0, jsx_runtime_1.jsx)("div", { className: "StoryContent", children: (0, jsx_runtime_1.jsx)(StoryContentSwitcher_1.StoryContentSwitcher, { content: content, widgetConfig: widgetConfig, context: context }) });
 }
-
+exports.StoryContent = StoryContent;
+//# sourceMappingURL=StoryContent.js.map

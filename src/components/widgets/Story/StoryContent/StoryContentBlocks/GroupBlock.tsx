@@ -1,6 +1,6 @@
 import React from "react";
 import {StoryContentSwitcher} from "../StoryContentSwitcher";
-import {AppContext} from "../../../../types/types";
+import {AppContext} from "../../../../../types/types";
 
 export interface GroupBlockParams {
     name: string;

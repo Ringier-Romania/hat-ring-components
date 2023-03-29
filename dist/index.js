@@ -18,7 +18,7 @@ __exportStar(require("./helpers/WidgetHelper"), exports);
 __exportStar(require("./types/types"), exports);
 __exportStar(require("./components/widgets/Story/StoryTitle/StoryTitle"), exports);
 __exportStar(require("./components/widgets/Story/StoryMainImage/StoryMainImage"), exports);
-__exportStar(require("./components/Story/StoryContent/StoryContent"), exports);
+__exportStar(require("./components/widgets/Story/StoryContent/StoryContent"), exports);
 __exportStar(require("./components/Grid/Grid"), exports);
 __exportStar(require("./components/widgets/common/HtmlInsert"), exports);
 __exportStar(require("./components/widgets/common/ExternalApplication"), exports);

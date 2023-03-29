@@ -40,7 +40,7 @@ export async function StoryMainImage({widgetConfig, context}: StoryMainImagePara
     return imgSrc ? <>
         <RingImage priority={true} transform={TransformType.None} src={imgSrc} alt={caption || ''}
                    width={imageDimensions.width} height={imageDimensions.height}/>
-        <StoryMainImageCaption caption={caption}/>
+        {caption && <StoryMainImageCaption caption={caption}/>}
     </> : null;
 }
 

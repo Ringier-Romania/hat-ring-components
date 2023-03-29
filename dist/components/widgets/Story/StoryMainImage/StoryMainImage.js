@@ -55,7 +55,7 @@ async function StoryMainImage({ widgetConfig, context }) {
     }
     const imgSrc = _.get(response, 'data.story.image.url');
     const caption = _.get(response, 'data.story.image.caption');
-    return imgSrc ? (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(RingImage_1.RingImage, { priority: true, transform: RingImage_1.TransformType.None, src: imgSrc, alt: caption || '', width: imageDimensions.width, height: imageDimensions.height }), (0, jsx_runtime_1.jsx)(StoryMainImageCaption_1.StoryMainImageCaption, { caption: caption })] }) : null;
+    return imgSrc ? (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)(RingImage_1.RingImage, { priority: true, transform: RingImage_1.TransformType.None, src: imgSrc, alt: caption || '', width: imageDimensions.width, height: imageDimensions.height }), caption && (0, jsx_runtime_1.jsx)(StoryMainImageCaption_1.StoryMainImageCaption, { caption: caption })] }) : null;
 }
 exports.StoryMainImage = StoryMainImage;
 //# sourceMappingURL=StoryMainImage.js.map

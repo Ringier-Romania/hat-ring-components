@@ -10,3 +10,4 @@ export * from "./components/Grid/GridStoryWebsitesConfig";
 export * from "./components/widgets/common/HeaderMenu/HeaderMenuWebsitesConfig";
 export * from './components/widgets/Story/StoryTitle/StoryTitleWebsitesConfig';
 export * from './components/widgets/Story/StoryMainImage/StoryMainImageWebsitesConfig';
+export * from './components/widgets/Story/StoryContent/StoryContentWebsitesConfig';

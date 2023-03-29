@@ -2,7 +2,7 @@
 
 import React, {useEffect} from "react";
 import Script from "next/script";
-import {WidgetParams} from "../../../../types/types";
+import {WidgetParams} from "../../../../../types/types";
 
 export interface EmbeddedApplicationBlockParams extends WidgetParams {
     blockData: {
