@@ -16,6 +16,9 @@ interface GridContainerParams {
 
 export function Container({sectionName, sectionConfig, context, boxes}: GridContainerParams) {
 
+    if(!sectionConfig){
+        return null;
+    }
     const ContainerTag = `${sectionConfig.container_html_tag || 'main'}`;
     // @ts-ignore
     return <ContainerTag className={['gridContainer', sectionName, styles.gridContainer].join(' ')}>
@@ -25,7 +28,7 @@ export function Container({sectionName, sectionConfig, context, boxes}: GridCont
                     context={context}
                     boxName={boxName}
                     widgets={sectionConfig[boxName]}
-                    size={sectionConfig[boxName + '_size']}
+                    size={sectionConfig[boxName + '_size'] || 12}
                     tagName={sectionConfig[boxName + '_html_tag']}
                 />
         })}

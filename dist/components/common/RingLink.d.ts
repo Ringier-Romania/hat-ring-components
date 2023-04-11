@@ -1,5 +1,5 @@
 import { LinkProps } from "next/link";
 import React from "react";
-export default function RingLink(props: LinkProps & {
+export declare function RingLink(props: LinkProps & {
     children?: React.ReactNode;
-}): JSX.Element;
+} & React.AnchorHTMLAttributes<HTMLAnchorElement>): JSX.Element;

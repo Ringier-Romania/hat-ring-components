@@ -1,4 +1,5 @@
 "use strict";
+"use server";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -53,6 +54,9 @@ async function StoryLiveBlog({ widgetConfig, context }) {
     }
     if (!widgetConfig.liveBlogPlatformUrl) {
         widgetConfig.liveBlogPlatformUrl = 'http://client.liveblog.dreamlab.pl';
+    }
+    if (!liveblogUuid) {
+        return null;
     }
     let url = `${widgetConfig.liveBlogPlatformUrl}/${liveblogUuid},${widgetConfig.liveBlogLanguage},${widgetConfig.liveBlogClientId},liveblog.html`;
     return (0, jsx_runtime_1.jsxs)("div", { className: "StoryLiveBlog", children: [(0, jsx_runtime_1.jsx)(ExternalApplication_1.ExternalApplication, { widgetConfig: { controllerUrl: url, selector: '[name="block-html-head"]' }, context: context }), (0, jsx_runtime_1.jsx)(ExternalApplication_1.ExternalApplication, { widgetConfig: { controllerUrl: url, selector: '[name="block-body-section"]' }, context: context })] });

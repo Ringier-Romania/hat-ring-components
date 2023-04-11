@@ -1,5 +1,6 @@
 /// <reference types="react" />
-export interface EmbeddedApplicationBlockParams {
+import { WidgetParams } from "../../../../types/types";
+export interface EmbeddedApplicationBlockParams extends WidgetParams {
     blockData: {
         type: string;
         embed: {
@@ -7,4 +8,4 @@ export interface EmbeddedApplicationBlockParams {
         };
     };
 }
-export default function EmbeddedApplicationBlock({ blockData }: EmbeddedApplicationBlockParams): JSX.Element;
+export default function EmbeddedApplicationBlock({ blockData, context }: EmbeddedApplicationBlockParams): JSX.Element;

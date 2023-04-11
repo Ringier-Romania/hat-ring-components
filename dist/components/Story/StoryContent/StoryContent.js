@@ -1,4 +1,5 @@
 "use strict";
+"use server";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -29,7 +30,7 @@ const _ = __importStar(require("lodash"));
 const graphql_tag_1 = require("graphql-tag");
 const StoryContentSwitcher_1 = require("./StoryContentSwitcher");
 const WebsiteApiProvider_1 = require("../../../providers/WebsiteApiProvider");
-async function StoryContent({ config, context }) {
+async function StoryContent({ widgetConfig, context }) {
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID){
             story(id:$storyId){
@@ -116,9 +117,15 @@ async function StoryContent({ config, context }) {
     const variables = {
         storyId: context.id,
     };
+    if (!widgetConfig.width) {
+        widgetConfig.width = 1600;
+    }
+    if (!widgetConfig.height) {
+        widgetConfig.height = 900;
+    }
     const response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     const content = _.get(response, 'data.story.content[0].blocks');
-    return (0, jsx_runtime_1.jsx)("div", { className: "StoryContent", children: (0, jsx_runtime_1.jsx)(StoryContentSwitcher_1.StoryContentSwitcher, { content: content, config: config, context: context }) });
+    return (0, jsx_runtime_1.jsx)("div", { className: "StoryContent", children: (0, jsx_runtime_1.jsx)(StoryContentSwitcher_1.StoryContentSwitcher, { content: content, widgetConfig: widgetConfig, context: context }) });
 }
 exports.StoryContent = StoryContent;
 //# sourceMappingURL=StoryContent.js.map

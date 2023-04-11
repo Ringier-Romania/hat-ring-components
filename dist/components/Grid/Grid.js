@@ -1,4 +1,5 @@
 "use strict";
+"use server";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -29,6 +30,7 @@ const graphql_tag_1 = require("graphql-tag");
 const _ = __importStar(require("lodash"));
 const Container_1 = require("./Container");
 const WebsiteApiProvider_1 = require("../../providers/WebsiteApiProvider");
+const UtilsHelper_1 = require("../../helpers/UtilsHelper");
 async function Grid(params) {
     const variant = process.env.WEBSITE_API_VARIANT;
     const domain = process.env.WEBSITE_DOMAIN;
@@ -40,9 +42,11 @@ async function Grid(params) {
     params.config.containers.forEach(section => {
         configQuery += section + ':config(codeName: "' + section + '"){ data } ';
     });
+    const antycache = UtilsHelper_1.UtilsHelper.isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}` : 'antycacheStatusCode';
     const query = (0, graphql_tag_1.gql) `
         query($url: URL!, $variant:ID!){
             site(url:$url, variantId: $variant){
+                ${antycache}:statusCode
                 data {
                     node {
                         config {

@@ -27,7 +27,7 @@ exports.StoryContentSwitcher = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const BlocksTypes = __importStar(require("./StoryContentBlocks"));
-function StoryContentSwitcher({ content, config, context }) {
+function StoryContentSwitcher({ content, widgetConfig, context }) {
     let isGroupBlock = false;
     const groupElements = [];
     return content.map((block) => {
@@ -44,9 +44,12 @@ function StoryContentSwitcher({ content, config, context }) {
             groupElements.push(block);
             return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
         }
+        let clientContext = context;
+        clientContext.customData.widgets = {};
         const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
         const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
-        return (0, jsx_runtime_1.jsx)(Block, { blockData: block, config: config, context: context });
+        const isClientSideComponent = Block.$$typeof && Block.$$typeof === Symbol.for('react.client.reference');
+        return (0, jsx_runtime_1.jsx)(Block, { blockData: block, widgetConfig: widgetConfig, context: isClientSideComponent ? clientContext : context });
     });
 }
 exports.StoryContentSwitcher = StoryContentSwitcher;

@@ -1,3 +1,4 @@
+"use server";
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
@@ -44,6 +45,9 @@ export async function StoryLiveBlog({widgetConfig, context}: StoryLiveBlogParams
         widgetConfig.liveBlogPlatformUrl = 'http://client.liveblog.dreamlab.pl';
     }
 
+    if(!liveblogUuid){
+        return null;
+    }
     let url = `${widgetConfig.liveBlogPlatformUrl}/${liveblogUuid},${widgetConfig.liveBlogLanguage},${widgetConfig.liveBlogClientId},liveblog.html`;
 
     return <div className="StoryLiveBlog">

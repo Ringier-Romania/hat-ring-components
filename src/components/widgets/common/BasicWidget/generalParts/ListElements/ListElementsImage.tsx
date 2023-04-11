@@ -1,7 +1,7 @@
 import React from 'react';
 import {AppContext} from "../../../../../../types/types";
 import {BasicWidgetConfig, ListElementsImage} from "../../types";
-import RingImage, {RingImageProps, TransformType} from "../../../../../common/RingImage";
+import {RingImage, RingImageProps, TransformType} from "../../../../../common/RingImage";
 
 export default function ListElementsImage(
     {context, widgetConfig, data}:

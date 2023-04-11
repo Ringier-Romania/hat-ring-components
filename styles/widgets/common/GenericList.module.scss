@@ -1,0 +1,31 @@
+.GenericList {
+  :global {
+    @media only screen and (min-width: 768px) {
+      .Items {
+        display: grid;
+        grid-template-columns: repeat(12, [col-start] 1fr);
+        gap: var(--basicWidgetGap, var(--ringGap, 20px));
+
+        .Item {
+          @for $i from 1 through 12 {
+            &.col#{$i} {
+              grid-column: auto / span $i;
+            }
+          }
+        }
+      }
+    }
+
+    .Pagination {
+      display: flex;
+      justify-content: center;
+      li{
+        padding: 5px;
+        list-style: none;
+        &.active{
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
-import RingImage, {TransformType} from "../../../../common/RingImage";
+import {RingImage, TransformType} from "../../../../common/RingImage";
 import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 

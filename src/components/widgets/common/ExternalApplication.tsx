@@ -1,3 +1,4 @@
+"use server";
 import React from "react";
 import {AbstractWidgetConfig, WidgetParams} from "../../../types/types";
 import {WidgetHelper} from "../../../helpers/WidgetHelper";

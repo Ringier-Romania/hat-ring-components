@@ -21,7 +21,7 @@ function getPlaceholderData(width, height) {
     return `data:image/svg+xml;charset=utf8,${encodeURIComponent(svg)}`;
 }
 
-export function ocdnLoader(src, width, height, transformType) {
+function ocdnLoader(src, width, height, transformType) {
     const ocdnBucketName = process.env.OCDN_BUCKET_NAME!;
     const ocdnTransformKey = process.env.OCDN_TRANSFORM_KEY!;
 
@@ -42,7 +42,7 @@ export function ocdnLoader(src, width, height, transformType) {
 }
 
 // TODO: checkout if they fixed bug with backend rendering https://github.com/vercel/next.js/issues/41924
-export default function RingImage(props: RingImageProps) {
+export function RingImage(props: RingImageProps) {
     let src = props.src;
     let unoptimized = props.unoptimized;
     let blurDataURL = props.blurDataURL;
@@ -58,5 +58,5 @@ export default function RingImage(props: RingImageProps) {
         src = ocdnLoader(src, props.width, props.height, props.transform);
     }
 
-    return <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src} width={props.width} height={props.height} unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
+    return <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src} unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
 }
