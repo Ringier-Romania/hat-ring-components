@@ -1,4 +1,4 @@
-export let StoryLiveBlogWebsitesConfig
+export let GenericListWebsitesConfig
     = {
     "sections": [],
     "defaultParams": {},
