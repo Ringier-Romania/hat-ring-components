@@ -32,8 +32,8 @@ const Container_1 = require("./Container");
 const WebsiteApiProvider_1 = require("../../providers/WebsiteApiProvider");
 const UtilsHelper_1 = require("../../helpers/UtilsHelper");
 async function Grid(params) {
-    const variant = process.env.WEBSITE_API_VARIANT;
-    const domain = process.env.WEBSITE_DOMAIN;
+    const variant = process.env.NEXT_PUBLIC_WEBSITE_API_VARIANT;
+    const domain = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
     if (!params.config.boxes) {
         params.config.boxes = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom'];
     }

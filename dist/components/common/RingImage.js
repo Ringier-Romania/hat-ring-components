@@ -21,8 +21,8 @@ function getPlaceholderData(width, height) {
     return `data:image/svg+xml;charset=utf8,${encodeURIComponent(svg)}`;
 }
 function ocdnLoader(src, width, height, transformType) {
-    const ocdnBucketName = process.env.OCDN_BUCKET_NAME;
-    const ocdnTransformKey = process.env.OCDN_TRANSFORM_KEY;
+    const ocdnBucketName = process.env.NEXT_PUBLIC_OCDN_BUCKET_NAME;
+    const ocdnTransformKey = process.env.NEXT_PUBLIC_OCDN_TRANSFORM_KEY;
     if (ocdnBucketName && ocdnTransformKey) {
         const cropImage = new OcdnUrl();
         cropImage.init(src);

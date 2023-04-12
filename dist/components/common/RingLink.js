@@ -9,9 +9,9 @@ const link_1 = __importDefault(require("next/link"));
 const UtilsHelper_1 = require("../../helpers/UtilsHelper");
 function RingLink(props) {
     let href = props.href;
-    if (props.href && process.env.WEBSITE_DOMAIN && UtilsHelper_1.UtilsHelper.isDevelopmentMode()) {
+    if (props.href && process.env.NEXT_PUBLIC_WEBSITE_DOMAIN && UtilsHelper_1.UtilsHelper.isDevelopmentMode()) {
         if (typeof props.href === 'string') {
-            href = props.href.replace(process.env.WEBSITE_DOMAIN, '');
+            href = props.href.replace(process.env.NEXT_PUBLIC_WEBSITE_DOMAIN, '');
         }
     }
     let prefetch = props.prefetch;
