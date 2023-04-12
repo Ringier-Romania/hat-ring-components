@@ -1,4 +1,4 @@
-import {WebsitesApiClient} from '@ringpublishing/graphql-api-client';
+import { WebsitesApiClientBuilder } from '@ringpublishing/graphql-api-client';
 
 export class WebsiteApiProvider {
 
@@ -7,7 +7,7 @@ export class WebsiteApiProvider {
         const secretKey = process.env.WEBSITE_API_SECRET!;
         const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
-        const websitesApiClient = new WebsitesApiClient({accessKey, secretKey, spaceUuid});
-        return await websitesApiClient.query(query, variables);
+        const websitesApiClient = new WebsitesApiClientBuilder({ accessKey, secretKey, spaceUuid }).buildApolloClient();
+        return await websitesApiClient.query({ query, variables });
     }
 }
