@@ -1,5 +1,6 @@
 import { WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
 
+
 export class WebsiteApiProvider {
 
     static async call(query, variables) {
@@ -11,7 +12,6 @@ export class WebsiteApiProvider {
             global.websitesApiApolloClient = new WebsitesApiClientBuilder({accessKey, secretKey, spaceUuid}).buildApolloClient();
         }
 
-        console.log('components',global.websitesApiApolloClient)
         return await global.websitesApiApolloClient.query({ query, variables });
     }
 }

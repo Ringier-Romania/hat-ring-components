@@ -10,7 +10,6 @@ class WebsiteApiProvider {
         if (!global.websitesApiApolloClient) {
             global.websitesApiApolloClient = new graphql_api_client_1.WebsitesApiClientBuilder({ accessKey, secretKey, spaceUuid }).buildApolloClient();
         }
-        console.log('components', global.websitesApiApolloClient);
         return await global.websitesApiApolloClient.query({ query, variables });
     }
 }

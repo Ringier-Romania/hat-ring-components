@@ -1,4 +1,4 @@
-export declare let StoryLiveBlogWebsitesConfig: {
+export declare let GenericListWebsitesConfig: {
     sections: never[];
     defaultParams: {};
     paramsDescription: {};

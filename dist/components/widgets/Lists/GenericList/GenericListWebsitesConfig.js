@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StoryLiveBlogWebsitesConfig = void 0;
-exports.StoryLiveBlogWebsitesConfig = {
+exports.GenericListWebsitesConfig = void 0;
+exports.GenericListWebsitesConfig = {
     "sections": [],
     "defaultParams": {},
     "paramsDescription": {},
