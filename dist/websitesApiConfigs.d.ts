@@ -3,7 +3,7 @@ export * from "./components/widgets/common/BasicWidget/BasicWidgetWebsitesConfig
 export * from "./components/widgets/common/ExternalApplicationWebsitesConfig";
 export * from "./components/widgets/common/HtmlInsertWebsitesConfig";
 export * from './components/widgets/Story/StoryLiveBlog/StoryLiveBlogWebsitesConfig';
-export * from "./components/widgets/Lists/GenericList/GenericList";
+export * from "./components/widgets/Lists/GenericList/GenericListWebsitesConfig";
 export * from "./components/Grid/HeaderFooterWebsitesConfig";
 export * from "./components/Grid/GridHomeWebsitesConfig";
 export * from "./components/Grid/GridStoryWebsitesConfig";
