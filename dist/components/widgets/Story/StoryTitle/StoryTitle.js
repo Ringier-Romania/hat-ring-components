@@ -29,8 +29,7 @@ const jsx_runtime_1 = require("react/jsx-runtime");
 const _ = __importStar(require("lodash"));
 const graphql_tag_1 = require("graphql-tag");
 const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
-async function StoryTitle(params) {
-    var _a;
+async function StoryTitle({ widgetConfig, context }) {
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID){
             story(id:$storyId){
@@ -39,9 +38,9 @@ async function StoryTitle(params) {
         }
     `;
     const variables = {
-        storyId: params.context.id,
+        storyId: context.id,
     };
-    let response = (_a = params.widgetConfig) === null || _a === void 0 ? void 0 : _a.response;
+    let response = widgetConfig === null || widgetConfig === void 0 ? void 0 : widgetConfig.response;
     if (!response) {
         response = await WebsiteApiProvider_1.WebsiteApiProvider.call(query, variables);
     }

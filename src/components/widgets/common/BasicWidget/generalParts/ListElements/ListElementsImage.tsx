@@ -1,6 +1,6 @@
 import React from 'react';
 import {AppContext} from "../../../../../../types/types";
-import {BasicWidgetConfig, ListElementsImage} from "../../types";
+import {BasicWidgetConfig, ListElementsImageData} from "../../types";
 import {RingImage, RingImageProps, TransformType} from "../../../../../common/RingImage";
 
 export default function ListElementsImage(
@@ -8,7 +8,7 @@ export default function ListElementsImage(
         {
             context: AppContext,
             widgetConfig: BasicWidgetConfig,
-            data: ListElementsImage,
+            data: ListElementsImageData,
         }) {
 
     if (!data.url) {

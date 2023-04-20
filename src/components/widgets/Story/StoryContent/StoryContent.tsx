@@ -8,8 +8,6 @@ import {StoryContentParams} from "./types";
 import {UtilsHelper} from "../../../../helpers/UtilsHelper";
 
 export async function StoryContent({widgetConfig, context}: StoryContentParams) {
-    widgetConfig.displayFrom = widgetConfig.displayFrom && UtilsHelper.convertToInt(widgetConfig.displayFrom);
-    widgetConfig.displayTo = widgetConfig.displayTo && UtilsHelper.convertToInt(widgetConfig.displayTo);
     const query = gql`
         query($storyId: UUID){
             story(id:$storyId){

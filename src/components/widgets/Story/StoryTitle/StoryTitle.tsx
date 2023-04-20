@@ -5,7 +5,7 @@ import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTitleParams, StoryTitleResponse} from "./types";
 
-export async function StoryTitle(params: StoryTitleParams) {
+export async function StoryTitle({widgetConfig, context}: StoryTitleParams) {
     const query = gql`
         query($storyId: UUID){
             story(id:$storyId){
@@ -15,10 +15,10 @@ export async function StoryTitle(params: StoryTitleParams) {
     `;
 
     const variables = {
-        storyId: params.context.id,
+        storyId: context.id,
     };
 
-    let response = params.widgetConfig?.response;
+    let response = widgetConfig?.response;
     if(!response){
         response = await WebsiteApiProvider.call(query, variables) as StoryTitleResponse;
     }

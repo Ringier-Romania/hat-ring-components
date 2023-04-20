@@ -3,36 +3,39 @@ import * as _ from 'lodash';
 import * as BlocksTypes from "./StoryContentBlocks";
 import {AppContext} from "../../../../types/types";
 import {StoryContentWidgetConfig, StoryContentSwitcherParams} from "./types";
+import {UtilsHelper} from "../../../../helpers/UtilsHelper";
 
 
 export function StoryContentSwitcher({content, widgetConfig, context}: StoryContentSwitcherParams) {
     let isGroupBlock = false;
     const groupElements: any[] = [];
 
+    content = [...content];
     return content.map((block, index) => {
         if (block.type === 'groupStart') {
             isGroupBlock = true;
             return <></>;
         }
 
-        if (block.type === 'groupEnd') {
-            isGroupBlock = false;
-            block.type = 'group';
-            block.elements = [...groupElements];
-        }
+        // if (block.type === 'groupEnd') {
+        //     isGroupBlock = false;
+        //     block.type = 'group';
+        //     block.elements = [...groupElements];
+        // }
 
-        if (isGroupBlock === true) {
-            groupElements.push(block);
-            return <></>;
-        }
-
-        if(widgetConfig.displayFrom && widgetConfig.displayFrom > index + 1){
-            return null;
-        }
-
-        if(widgetConfig.displayTo && widgetConfig.displayTo < index + 1){
-            return null;
-        }
+        // if (isGroupBlock === true) {
+        //     groupElements.push(block);
+        //     return <></>;
+        // }
+        // const displayFrom = widgetConfig.displayFrom && UtilsHelper.convertToInt(widgetConfig.displayFrom);
+        // const displayTo = widgetConfig.displayTo && UtilsHelper.convertToInt(widgetConfig.displayTo);
+        // if(displayFrom && displayFrom > index + 1){
+        //     return null;
+        // }
+        //
+        // if(displayTo && displayTo < index + 1){
+        //     return null;
+        // }
 
         let clientContext = context;
         clientContext.customData.widgets = {};

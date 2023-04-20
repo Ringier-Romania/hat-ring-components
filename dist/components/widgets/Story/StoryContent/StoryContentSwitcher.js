@@ -30,25 +30,11 @@ const BlocksTypes = __importStar(require("./StoryContentBlocks"));
 function StoryContentSwitcher({ content, widgetConfig, context }) {
     let isGroupBlock = false;
     const groupElements = [];
+    content = [...content];
     return content.map((block, index) => {
         if (block.type === 'groupStart') {
             isGroupBlock = true;
             return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
-        }
-        if (block.type === 'groupEnd') {
-            isGroupBlock = false;
-            block.type = 'group';
-            block.elements = [...groupElements];
-        }
-        if (isGroupBlock === true) {
-            groupElements.push(block);
-            return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
-        }
-        if (widgetConfig.displayFrom && widgetConfig.displayFrom > index + 1) {
-            return null;
-        }
-        if (widgetConfig.displayTo && widgetConfig.displayTo < index + 1) {
-            return null;
         }
         let clientContext = context;
         clientContext.customData.widgets = {};

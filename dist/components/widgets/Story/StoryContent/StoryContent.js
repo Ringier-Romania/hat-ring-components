@@ -30,10 +30,7 @@ const _ = __importStar(require("lodash"));
 const graphql_tag_1 = require("graphql-tag");
 const StoryContentSwitcher_1 = require("./StoryContentSwitcher");
 const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider");
-const UtilsHelper_1 = require("../../../../helpers/UtilsHelper");
 async function StoryContent({ widgetConfig, context }) {
-    widgetConfig.displayFrom = widgetConfig.displayFrom && UtilsHelper_1.UtilsHelper.convertToInt(widgetConfig.displayFrom);
-    widgetConfig.displayTo = widgetConfig.displayTo && UtilsHelper_1.UtilsHelper.convertToInt(widgetConfig.displayTo);
     const query = (0, graphql_tag_1.gql) `
         query($storyId: UUID){
             story(id:$storyId){
