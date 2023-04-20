@@ -29,18 +29,18 @@ export interface AbstractWidget extends React.ComponentClass<WidgetParams> {
 
 export interface WidgetParams {
     context: AppContext,
-    widgetConfig: AbstractWidgetConfig,
+    readonly widgetConfig: Readonly<AbstractWidgetConfig>,
 }
 
 
-export interface AbstractWidgetConfig{
-    module?: string,
-    widgetType?: string,
-    platformDesktop?: boolean,
-    platformMobile?: boolean,
-    customClass?: string,
-    customPosition?: 'none' | 'left' | 'center' | 'right',
-    customWidth?: 'none' | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12,
+export interface AbstractWidgetConfig {
+    readonly module?: string,
+    readonly widgetType?: string,
+    readonly platformDesktop?: boolean,
+    readonly platformMobile?: boolean,
+    readonly customClass?: string,
+    readonly customPosition?: 'none' | 'left' | 'center' | 'right',
+    readonly customWidth?: 'none' | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12,
 }
 
 

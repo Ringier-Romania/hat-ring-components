@@ -41,14 +41,12 @@ export async function StoryLiveBlog({widgetConfig, context}: StoryLiveBlogParams
         liveblogUuid = _.get(response, 'data.story.extensions[0].data.id', false);
     }
 
-    if (!widgetConfig.liveBlogPlatformUrl) {
-        widgetConfig.liveBlogPlatformUrl = 'http://client.liveblog.dreamlab.pl';
-    }
+    const liveBlogPlatformUrl = widgetConfig.liveBlogPlatformUrl || 'http://client.liveblog.dreamlab.pl';
 
     if(!liveblogUuid){
         return null;
     }
-    let url = `${widgetConfig.liveBlogPlatformUrl}/${liveblogUuid},${widgetConfig.liveBlogLanguage},${widgetConfig.liveBlogClientId},liveblog.html`;
+    let url = `${liveBlogPlatformUrl}/${liveblogUuid},${widgetConfig.liveBlogLanguage},${widgetConfig.liveBlogClientId},liveblog.html`;
 
     return <div className="StoryLiveBlog">
         {/* @ts-expect-error Server Component */}

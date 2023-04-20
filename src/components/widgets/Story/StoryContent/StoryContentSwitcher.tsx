@@ -10,32 +10,32 @@ export function StoryContentSwitcher({content, widgetConfig, context}: StoryCont
     let isGroupBlock = false;
     const groupElements: any[] = [];
 
-    content = [...content];
     return content.map((block, index) => {
+        block = {...block};
         if (block.type === 'groupStart') {
             isGroupBlock = true;
             return <></>;
         }
 
-        // if (block.type === 'groupEnd') {
-        //     isGroupBlock = false;
-        //     block.type = 'group';
-        //     block.elements = [...groupElements];
-        // }
+        if (block.type === 'groupEnd') {
+            isGroupBlock = false;
+            block.type = 'group';
+            block.elements = [...groupElements];
+        }
 
-        // if (isGroupBlock === true) {
-        //     groupElements.push(block);
-        //     return <></>;
-        // }
-        // const displayFrom = widgetConfig.displayFrom && UtilsHelper.convertToInt(widgetConfig.displayFrom);
-        // const displayTo = widgetConfig.displayTo && UtilsHelper.convertToInt(widgetConfig.displayTo);
-        // if(displayFrom && displayFrom > index + 1){
-        //     return null;
-        // }
-        //
-        // if(displayTo && displayTo < index + 1){
-        //     return null;
-        // }
+        if (isGroupBlock) {
+            groupElements.push(block);
+            return <></>;
+        }
+        const displayFrom = widgetConfig.displayFrom && UtilsHelper.convertToInt(widgetConfig.displayFrom);
+        const displayTo = widgetConfig.displayTo && UtilsHelper.convertToInt(widgetConfig.displayTo);
+        if(displayFrom && displayFrom > index + 1){
+            return null;
+        }
+
+        if(displayTo && displayTo < index + 1){
+            return null;
+        }
 
         let clientContext = context;
         clientContext.customData.widgets = {};

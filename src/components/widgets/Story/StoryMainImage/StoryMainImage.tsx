@@ -29,7 +29,7 @@ export async function StoryMainImage({widgetConfig, context}: StoryMainImagePara
         imageHeight: imageDimensions.height,
     };
 
-    var response = widgetConfig?.response;
+    let response = widgetConfig?.response;
     if (!response) {
         response = await WebsiteApiProvider.call(query, variables) as StoryMainImageResponse;
     }
