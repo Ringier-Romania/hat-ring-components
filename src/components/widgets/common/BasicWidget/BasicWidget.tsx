@@ -80,13 +80,14 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
 
     const response = await getData(queryFragment) as BasicWidgetResponse;
+    let edges = response?.data?.section?.items?.edges ? [...response?.data?.section?.items?.edges] : [];
 
-    if (response?.data?.section?.items?.edges) {
-        response.data.section.items.edges = response.data.section.items.edges.slice(Number(widgetConfig.offset));
+    if (edges.length > 0) {
+        edges = edges.slice(Number(widgetConfig.offset));
     }
 
     const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
-    if (hideWhenNoItems && _.get(response, 'data.section.items.edges.length', 0) === 0) {
+    if (hideWhenNoItems && _.get(edges, 'length', 0) === 0) {
         return WidgetHelper.renderEmptyWidget(widgetConfig);
     }
 

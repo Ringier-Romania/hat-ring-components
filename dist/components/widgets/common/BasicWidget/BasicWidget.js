@@ -38,7 +38,7 @@ const WebsiteApiProvider_1 = require("../../../../providers/WebsiteApiProvider")
 const WidgetHelper_1 = require("../../../../helpers/WidgetHelper");
 const ItemParts = __importStar(require("./itemParts"));
 async function BasicWidget({ widgetConfig, context, extendableAttributes = {} }) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d, _e, _f;
     if (WidgetHelper_1.WidgetHelper.shouldHideWidget(widgetConfig, context)) {
         return WidgetHelper_1.WidgetHelper.renderEmptyWidget(widgetConfig);
     }
@@ -94,11 +94,12 @@ async function BasicWidget({ widgetConfig, context, extendableAttributes = {} })
     const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
     const response = await getData(queryFragment);
-    if ((_c = (_b = (_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.section) === null || _b === void 0 ? void 0 : _b.items) === null || _c === void 0 ? void 0 : _c.edges) {
-        response.data.section.items.edges = response.data.section.items.edges.slice(Number(widgetConfig.offset));
+    let edges = ((_c = (_b = (_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.section) === null || _b === void 0 ? void 0 : _b.items) === null || _c === void 0 ? void 0 : _c.edges) ? [...(_f = (_e = (_d = response === null || response === void 0 ? void 0 : response.data) === null || _d === void 0 ? void 0 : _d.section) === null || _e === void 0 ? void 0 : _e.items) === null || _f === void 0 ? void 0 : _f.edges] : [];
+    if (edges.length > 0) {
+        edges = edges.slice(Number(widgetConfig.offset));
     }
     const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(types_1.BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
-    if (hideWhenNoItems && _.get(response, 'data.section.items.edges.length', 0) === 0) {
+    if (hideWhenNoItems && _.get(edges, 'length', 0) === 0) {
         return WidgetHelper_1.WidgetHelper.renderEmptyWidget(widgetConfig);
     }
     const generalComponents = widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {

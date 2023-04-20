@@ -14,16 +14,17 @@ interface ExternalApplicationConfig extends AbstractWidgetConfig {
 };
 
 export async function ExternalApplication({widgetConfig, context}: ExternalApplicationParams) {
-    const res = await fetch(widgetConfig.controllerUrl);
+    const _widgetConfig = {...widgetConfig};
+    const res = await fetch(_widgetConfig.controllerUrl);
     let html = await res.text();
 
-    if (widgetConfig.blockName) {
-        widgetConfig.selector = `[name="${widgetConfig.blockName}"]`;
+    if (_widgetConfig.blockName) {
+        _widgetConfig.selector = `[name="${_widgetConfig.blockName}"]`;
     }
-    if (widgetConfig.selector) {
+    if (_widgetConfig.selector) {
         const $ = cheerio.load(html);
-        html = $(widgetConfig.selector).html();
+        html = $(_widgetConfig.selector).html();
     }
 
-    return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig)} dangerouslySetInnerHTML={{__html: html}}/>;
+    return <div className={WidgetHelper.getWidgetCssClasses(_widgetConfig)} dangerouslySetInnerHTML={{__html: html}}/>;
 }
