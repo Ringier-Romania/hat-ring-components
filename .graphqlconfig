@@ -1,0 +1,4 @@
+{
+  "name": "Websites API",
+  "schemaPath": "node_modules/@ringpublishing/graphql-api-client/src/schemas/websites-api.graphql"
+}

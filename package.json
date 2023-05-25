@@ -14,7 +14,7 @@
 	"private": false,
 	"dependencies": {
 		"@ringieraxelspringer/tsconfig": "^4.0.0",
-		"@ringpublishing/graphql-api-client": "^2.0.0",
+		"@ringpublishing/graphql-api-client": "^2.2.0",
 		"@ras-tech/ocdn": "3.3.0",
 		"@types/node": "*",
 		"date-fns": "^2.29.3",
