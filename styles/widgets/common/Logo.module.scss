@@ -1,0 +1,11 @@
+.Logo {
+  :global {
+    a {
+      display: inline-block;
+      img {
+        // fix for the gap below images links is due to the image being aligned with base text line by default
+        vertical-align: bottom;
+      }
+    }
+  }
+}
