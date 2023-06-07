@@ -1,3 +1,9 @@
+import {
+    AbstractWebsitesWidgetConfigDefaultParams,
+    AbstractWebsitesWidgetConfigParamsDescription
+} from "../../../types/abstracts";
+
+
 export let ExternalApplicationWebsitesConfig = {
     "sections": [],
     "defaultParams": {},
@@ -7,32 +13,14 @@ export let ExternalApplicationWebsitesConfig = {
             "name": "Ring External Application",
             "description": "",
             "defaultParams": {
-                "widgetType": "externalApplication",
-                "platformDesktop": true,
-                "platformMobile": true,
+                ...AbstractWebsitesWidgetConfigDefaultParams,
                 "controllerUrl": "",
                 "blockName": "",
                 "selector": "",
-                "cache": "",
-                "onError": ""
+                "widgetType": "externalApplication",
             },
             "paramsDescription": {
-                "widgetType": {
-                    "name": "widgetType",
-                    "description": "widget type",
-                    "type": "textfield",
-                    "required": true
-                },
-                "platformDesktop": {
-                    "name": "Desktop",
-                    "type": "checkbox",
-                    "description": "Desktop"
-                },
-                "platformMobile": {
-                    "name": "Mobile",
-                    "type": "checkbox",
-                    "description": "Mobile"
-                },
+                ...AbstractWebsitesWidgetConfigParamsDescription,
                 "controllerUrl": {
                     "name": "Controller URL",
                     "description": "Controller URL",
@@ -50,30 +38,6 @@ export let ExternalApplicationWebsitesConfig = {
                     "description": "Query selector to fetch element e.g. div.myElement. When blockName is set it does not work",
                     "type": "textfield",
                     "required": false
-                },
-                "cache": {
-                    "name": "cache",
-                    "description": "cache value",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "items": [
-                        "none",
-                        "min",
-                        "mdm",
-                        "max"
-                    ]
-                },
-                "onError": {
-                    "name": "onError",
-                    "description": "onError value",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "items": [
-                        "discard",
-                        "abort"
-                    ]
                 }
             }
         }

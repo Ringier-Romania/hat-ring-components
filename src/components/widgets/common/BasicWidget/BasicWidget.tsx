@@ -1,4 +1,4 @@
-"use server";
+
 import React from "react";
 import {BasicWidgetAdditionalOptions, BasicWidgetParams, BasicWidgetResponse} from "./types";
 import {gql} from "graphql-tag";
