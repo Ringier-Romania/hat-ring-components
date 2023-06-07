@@ -5,7 +5,7 @@ export * from "./components/widgets/common/ExternalApplicationWebsitesConfig";
 export * from "./components/widgets/common/HtmlInsertWebsitesConfig";
 export * from "./components/widgets/common/BasicWidget/BasicWidgetWebsitesConfig";
 export * from "./components/widgets/common/Logo/LogoWebsitesConfig";
-export * from "./components/widgets/common/HeaderMenu/HeaderMenuWebsitesConfig";
+export * from "./components/widgets/common/Menu/MenuWebsitesConfig";
 export * from './components/widgets/Story/StoryLiveBlog/StoryLiveBlogWebsitesConfig';
 export * from './components/widgets/Story/StoryTitle/StoryTitleWebsitesConfig';
 export * from './components/widgets/Story/StoryMainImage/StoryMainImageWebsitesConfig';

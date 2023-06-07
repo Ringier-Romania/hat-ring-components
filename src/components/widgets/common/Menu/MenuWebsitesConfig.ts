@@ -1,14 +1,14 @@
-export let HeaderMenuWebsitesConfig
+export let MenuWebsitesConfig
     = {
     "sections": [],
     "defaultParams": {},
     "paramsDescription": {},
     "modules": {
-        "headerMenu_wdg": {
-            "name": "Header menu",
+        "menu_wdg": {
+            "name": "Menu",
             "description": "",
             "defaultParams": {
-                "widgetType": "headerMenu",
+                "widgetType": "menu",
                 "overrideMenuElements": [],
                 "textColor": "",
                 "additionalOptions": [],
