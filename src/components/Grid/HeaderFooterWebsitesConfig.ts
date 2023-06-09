@@ -13,14 +13,12 @@ export let HeaderFooterWebsitesConfig = {
                     "type": "group",
                     "name": "HEADER",
                     "fields": [
-                        "header.headerBackground",
-                        "header.menuElements",
-                        "header.customClass"
+                        // "header.customClass"
                     ]
                 },
                 "headerWidgets": {
                     "type": "group",
-                    "name": "Widgets",
+                    "name": "Header widgets",
                     "fields": [
                         "headerWidgets.widgets_above_content",
                         "headerWidgets.widgets_middle_content",
@@ -31,12 +29,12 @@ export let HeaderFooterWebsitesConfig = {
                     "type": "group",
                     "name": "Footer",
                     "fields": [
-                        "footer.customClass"
+                        // "footer.customClass"
                     ]
                 },
                 "footerWidgets": {
                     "type": "group",
-                    "name": "Widgets",
+                    "name": "Footer widgets",
                     "fields": [
                         "footerWidgets.widgets_above_content",
                         "footerWidgets.widgets_middle_content",
@@ -48,9 +46,7 @@ export let HeaderFooterWebsitesConfig = {
     ],
     "defaultParams": {
         "header": {
-            "headerBackground": "",
-            "menuElements": [],
-            "customClass": ""
+            // "customClass": ""
         },
         "headerWidgets": {
             "widgets_above_content": [],
@@ -58,7 +54,7 @@ export let HeaderFooterWebsitesConfig = {
             "widgets_below_content": []
         },
         "footer": {
-            "customClass": ""
+            // "customClass": ""
         },
         "footerWidgets": {
             "widgets_above_content": [],
@@ -68,47 +64,11 @@ export let HeaderFooterWebsitesConfig = {
     },
     "paramsDescription": {
         "header": {
-            "headerBackground": {
-                "name": "Custom header background (name or HEX)",
-                "description": "Custom header background (name or HEX)",
-                "type": "textfield"
-            },
-            "menuElements": {
-                "type": "treeobject",
-                "name": "Menu elements",
-                "description": "Default navigation menu elements",
-                "properties": [
-                    {
-                        "name": "url",
-                        "type": "textfield"
-                    },
-                    {
-                        "name": "path",
-                        "type": "textfield"
-                    },
-                    {
-                        "name": "hidden",
-                        "type": "checkbox"
-                    },
-                    {
-                        "name": "open in new tab",
-                        "type": "checkbox"
-                    },
-                    {
-                        "name": "custom css class",
-                        "type": "textfield"
-                    },
-                    {
-                        "name": "image url",
-                        "type": "textfield"
-                    }
-                ]
-            },
-            "customClass": {
-                "name": "custom CSS class",
-                "description": "custom CSS class",
-                "type": "textfield"
-            }
+            // "customClass": {
+            //     "name": "custom CSS class",
+            //     "description": "custom CSS class",
+            //     "type": "textfield"
+            // }
         },
         "headerWidgets": {
             "widgets_above_content": {
@@ -134,34 +94,11 @@ export let HeaderFooterWebsitesConfig = {
             }
         },
         "footer": {
-            "menuElements": {
-                "type": "treeobject",
-                "name": "Menu elements",
-                "description": "Default navigation menu elements",
-                "properties": [
-                    {
-                        "name": "url",
-                        "type": "textfield"
-                    },
-                    {
-                        "name": "path",
-                        "type": "textfield"
-                    },
-                    {
-                        "name": "hidden",
-                        "type": "checkbox"
-                    },
-                    {
-                        "name": "custom css class",
-                        "type": "textfield"
-                    }
-                ]
-            },
-            "customClass": {
-                "name": "custom CSS class",
-                "description": "custom CSS class",
-                "type": "textfield"
-            }
+            // "customClass": {
+            //     "name": "custom CSS class",
+            //     "description": "custom CSS class",
+            //     "type": "textfield"
+            // }
         },
         "footerWidgets": {
             "widgets_above_content": {

@@ -6,7 +6,6 @@ import {RingImage} from "../../../common/RingImage";
 import styles from '../../../../../styles/widgets/common/Menu.module.scss';
 import {WidgetHelper} from "../../../../helpers/WidgetHelper";
 
-// zmiana nazwy na MENu
 interface MenuElement {
     "text": string,
     "children": Array<MenuElement>,
