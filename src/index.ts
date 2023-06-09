@@ -11,5 +11,6 @@ export * from "./components/widgets/Story/StoryLiveBlog/StoryLiveBlog";
 export * from "./components/common/RingImage";
 export * from "./components/common/RingLink";
 export * from "./components/widgets/Lists/GenericList/GenericList";
+export * from "./components/widgets/Story/StoryTaxonomyList/StoryTaxonomyList";
 export * from "./components/widgets/common/Menu/Menu";
 export * from "./components/widgets/common/Logo/Logo";

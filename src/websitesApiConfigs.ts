@@ -10,5 +10,6 @@ export * from './components/widgets/Story/StoryLiveBlog/StoryLiveBlogWebsitesCon
 export * from './components/widgets/Story/StoryTitle/StoryTitleWebsitesConfig';
 export * from './components/widgets/Story/StoryMainImage/StoryMainImageWebsitesConfig';
 export * from './components/widgets/Story/StoryContent/StoryContentWebsitesConfig';
+export * from './components/widgets/Story/StoryTaxonomyList/StoryTaxonomyListWebsitesConfig';
 export * from "./components/widgets/Lists/GenericList/GenericListWebsitesConfig";
 
