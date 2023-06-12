@@ -4,7 +4,7 @@ import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import {formatISO, formatRelative, Locale} from "date-fns";
 import {format, toDate} from "date-fns-tz";
 import {enGB} from 'date-fns/esm/locale'
-import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 
 export default function ModificationDate(
@@ -18,7 +18,7 @@ export default function ModificationDate(
     const dateFromData = data.modificationTime || data.originalContent?.modificationTime;
 
     if (!dateFromData) {
-        return WidgetHelper.renderEmptyComponent('ModificationDate');
+        return WidgetHelper_renderEmptyComponent('ModificationDate');
     }
 
     const decoratedLocale = {

@@ -7,7 +7,7 @@ import * as ItemParts from "./itemParts";
 import {GenericListParams, GenericListResponse} from "./types";
 import Header from "./generalParts/Header";
 import Items from "./generalParts/Items";
-import {WidgetHelper} from "../../../../helpers/WidgetHelper";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 import styles from "../../../../../styles/widgets/common/GenericList.module.scss";
 import Pagination from "./generalParts/Pagination";
@@ -90,7 +90,7 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
     }
 
     function render() {
-        return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig, ['GenericList', cssModules])}>
+        return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, ['GenericList', cssModules])}>
             <Header context={context} widgetConfig={widgetConfig} response={response}/>
             <Items context={context} widgetConfig={widgetConfig} response={response}
                    extendableAttributes={extendableAttributes}/>

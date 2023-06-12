@@ -4,7 +4,7 @@ import {BasicWidgetConfig, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import {RingLink} from "../../../../common/RingLink";
-import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 
 export default function Description(
     {context, widgetConfig, response}:
@@ -17,7 +17,7 @@ export default function Description(
     const descText = widgetConfig.description;
 
     if (!descText) {
-        return WidgetHelper.renderEmptyComponent('Description');
+        return WidgetHelper_renderEmptyComponent('Description');
     }
 
     return (

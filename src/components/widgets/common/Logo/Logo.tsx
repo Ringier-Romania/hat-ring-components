@@ -3,7 +3,7 @@ import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
 import {RingLink} from "../../../common/RingLink";
 import {RingImage, TransformType} from "../../../common/RingImage";
 import styles from '../../../../../styles/widgets/common/Logo.module.scss';
-import {WidgetHelper} from "../../../../helpers/WidgetHelper";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 interface LogoConfig extends AbstractWidgetConfig {
     imageHeight: string
@@ -27,7 +27,7 @@ export function Logo(
     // TODO: Get service homepage url from general config
     const logoHref = widgetConfig.overrideLink || '/';
 
-    return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig, [styles.Logo])}>
+    return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, [styles.Logo])}>
         {logoSrc &&
             <RingLink href={logoHref}>
                 <RingImage src={logoSrc} alt={logoTitle} width={Number(widgetConfig.imageWidth)}

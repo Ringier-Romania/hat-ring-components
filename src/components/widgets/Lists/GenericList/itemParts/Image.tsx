@@ -17,7 +17,7 @@ export default function Image(
     const image = data.image;
 
     if (!image || !image.url) {
-        return WidgetHelper.renderEmptyComponent('Image');
+        return WidgetHelper_renderEmptyComponent('Image');
     }
 
     const sizes = ((context.hatControllerParams.isMobile ? widgetConfig.imageSizeMobile : widgetConfig.imageSize) || '400x300').split('x');

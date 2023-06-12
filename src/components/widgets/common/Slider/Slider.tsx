@@ -1,6 +1,9 @@
 import React from "react";
 import styles from '../../../../../styles/widgets/common/Slider.module.scss';
-import {WidgetHelper} from "../../../../helpers/WidgetHelper";
+import {
+    WidgetHelper_getImageDimensionsFromWidgetConfig,
+    WidgetHelper_getWidgetCssClasses
+} from "../../../../helpers/WidgetHelper";
 import {SliderFront} from "./SliderFront";
 import {RingImage} from "../../../common/RingImage";
 import {RingLink} from "../../../common/RingLink";
@@ -27,10 +30,10 @@ export async function Slider(
         </>
     }
 
-    return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig, [styles.Slider])}>
+    return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, [styles.Slider])}>
         <SliderFront widgetConfig={widgetConfig} context={frontendContext}>
             {widgetConfig.slides.map((slide: SliderElement) => {
-                const dimensions = WidgetHelper.getImageDimensionsFromWidgetConfig(slide, context, "Source desktop dimensions(eg. 600x300)", "Source mobile dimensions(eg. 600x300)", '600x300');
+                const dimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(slide, context, "Source desktop dimensions(eg. 600x300)", "Source mobile dimensions(eg. 600x300)", '600x300');
 
                 return (
                     // @ts-ignore in web-components class is valid

@@ -4,7 +4,7 @@ import {BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse}
 import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import {RingLink} from "../../../../common/RingLink";
-import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 
 export default function SectionElements(
     {context, widgetConfig, response, extendableAttributes}:
@@ -16,7 +16,7 @@ export default function SectionElements(
         }) {
 
     if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
-        return WidgetHelper.renderEmptyComponent('SectionElements');
+        return WidgetHelper_renderEmptyComponent('SectionElements');
     }
 
     const allItemParts = extendableAttributes.itemParts || ItemParts;
@@ -33,7 +33,7 @@ export default function SectionElements(
                     const Component = allItemParts[_.upperFirst(showOption)];
                     if (!Component) {
                         console.error(`No item part support ${showOption}`);
-                        return WidgetHelper.renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
+                        return WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
                     }
 
                     return <Component key={index} itemIndex={itemIndex} context={context} widgetConfig={widgetConfig}
