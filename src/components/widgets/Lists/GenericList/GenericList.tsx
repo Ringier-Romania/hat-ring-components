@@ -16,6 +16,7 @@ import {UtilsHelper} from "../../../../helpers/UtilsHelper";
 
 export async function GenericList({widgetConfig, context, extendableAttributes = {}}: GenericListParams) {
 
+    console.log(context);
     const currentPage = parseInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
 
     async function getData(queryNodeFragment) {
