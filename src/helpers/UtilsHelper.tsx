@@ -1,18 +1,17 @@
 import React from "react";
-import * as _ from 'lodash';
-import {AbstractWidgetConfig} from "../types/types";
+import {isNil} from 'lodash';
+export function UtilsHelper_convertToInt(input: string | number) {
+    return typeof input === "number" ? input : parseInt(input);
+}
 
-export class UtilsHelper {
+export function UtilsHelper_getValueIfExists(value, defaultValue) {
+    return isNil(value) ? defaultValue : value;
+}
 
-    static convertToInt(input: string | number) {
-        return typeof input === "number" ? input : parseInt(input);
-    }
+export function UtilsHelper_isDevelopmentMode() {
+    return process.env.NODE_ENV === 'development';
+}
 
-    static isMobile(context) {
-        return !!context.hatControllerParams?.isMobile;
-    }
-
-    static isDevelopmentMode(){
-        return process.env.NODE_ENV === 'development';
-    }
+export function UtilsHelper_isMobile(context) {
+    return !!context.hatControllerParams?.isMobile;
 }

@@ -17,7 +17,7 @@ export default function Items(
         }) {
 
     const allItemParts = extendableAttributes.itemParts || ItemParts;
-    const columnsCount = UtilsHelper.convertToInt(widgetConfig.columns) || 1;
+    const columnsCount = UtilsHelper_convertToInt(widgetConfig.columns) || 1;
     const colNumber = Math.floor(12 / columnsCount);
     return (
         <div className={['Items'].join(' ')}>

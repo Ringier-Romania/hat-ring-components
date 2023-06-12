@@ -1,7 +1,7 @@
 import React from "react";
 import * as _ from 'lodash';
 import {AbstractWidgetConfig, AppContext} from "../types/types";
-import {UtilsHelper} from "./UtilsHelper";
+import {UtilsHelper_isMobile} from "./UtilsHelper";
 
 export class WidgetHelper {
     static shouldHideWidget(widgetConfig, context) {
@@ -60,7 +60,7 @@ export class WidgetHelper {
     static getImageDimensionsFromWidgetConfig(widgetConfig, context: AppContext, desktopFieldName = 'standardImageSize', mobileFieldName = 'imageSizeMobile', defaultSizesString = '800x450'):
         { width: number | `${number}`, height: number | `${number}` } {
         let dimensionsString: string = '';
-        if (UtilsHelper.isMobile(context)) {
+        if (UtilsHelper_isMobile(context)) {
             if (widgetConfig[mobileFieldName]) {
                 dimensionsString = widgetConfig[mobileFieldName];
             } else {
