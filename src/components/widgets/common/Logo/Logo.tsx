@@ -1,21 +1,10 @@
 import React from "react";
-import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
 import {RingLink} from "../../../common/RingLink";
 import {RingImage, TransformType} from "../../../common/RingImage";
 import styles from '../../../../../styles/widgets/common/Logo.module.scss';
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {LogoParams} from "./types";
 
-interface LogoConfig extends AbstractWidgetConfig {
-    imageHeight: string
-    imageWidth: string
-    logoLinkLight: string
-    overrideLink: string
-    overrideTitle: string
-}
-
-export interface LogoParams extends WidgetParams {
-    widgetConfig: LogoConfig
-}
 
 export function Logo(
     {widgetConfig, context}: LogoParams
