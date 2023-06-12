@@ -1,11 +1,11 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
-import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import {GenericListExtendableAttributes, GenericListResponse, GenericListWidgetConfig} from "../types";
 import * as ItemParts from "./../itemParts";
 import * as _ from "lodash";
 import {RingLink} from "../../../../common/RingLink";
-import {UtilsHelper} from "../../../../../helpers/UtilsHelper";
+import {UtilsHelper_convertToInt} from "../../../../../helpers/UtilsHelper";
 
 export default function Items(
     {context, widgetConfig, response, extendableAttributes}:
@@ -17,7 +17,7 @@ export default function Items(
         }) {
 
     const allItemParts = extendableAttributes.itemParts || ItemParts;
-    const columnsCount = UtilsHelper.convertToInt(widgetConfig.columns) || 1;
+    const columnsCount = UtilsHelper_convertToInt(widgetConfig.columns) || 1;
     const colNumber = Math.floor(12 / columnsCount);
     return (
         <div className={['Items'].join(' ')}>
@@ -26,7 +26,7 @@ export default function Items(
                     const Component = allItemParts[_.upperFirst(showOption)];
                     if (!Component) {
                         console.error(`No item part support ${showOption}`);
-                        return WidgetHelper.renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
+                        return WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
                     }
 
                     return <Component key={index} itemIndex={itemIndex} context={context} widgetConfig={widgetConfig}

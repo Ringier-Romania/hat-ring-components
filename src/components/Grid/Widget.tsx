@@ -1,7 +1,11 @@
 import React from "react";
 import * as _ from "lodash";
 import {AbstractWidget, AbstractWidgetConfig, AppContext, WidgetParams} from "../../types/types";
-import {WidgetHelper} from "../../helpers/WidgetHelper";
+import {
+    WidgetHelper_getWidgetCssClasses,
+    WidgetHelper_renderEmptyComponent,
+    WidgetHelper_shouldHideWidget
+} from "../../helpers/WidgetHelper";
 
 interface GridWidgetParams {
     context: AppContext;
@@ -16,14 +20,14 @@ export function Widget({widgetConfig, context}: GridWidgetParams) {
 
     if (!Component) {
         console.error(`No widget with name ${widgetConfig.widgetType}`);
-        return WidgetHelper.renderEmptyComponent(`gridWidget ${widgetName}`, 'No widget found');
+        return WidgetHelper_renderEmptyComponent(`gridWidget ${widgetName}`, 'No widget found');
     }
 
-    if(WidgetHelper.shouldHideWidget(widgetConfig, context)) {
-        return WidgetHelper.renderEmptyComponent(`gridWidget ${widgetName}`);
+    if(WidgetHelper_shouldHideWidget(widgetConfig, context)) {
+        return WidgetHelper_renderEmptyComponent(`gridWidget ${widgetName}`);
     }
 
-    return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig, ['gridWidget'])}>
+    return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, ['gridWidget'])}>
         <Component widgetConfig={widgetConfig} context={context}/>
     </div>;
 }

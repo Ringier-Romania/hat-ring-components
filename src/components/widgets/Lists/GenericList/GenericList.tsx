@@ -7,11 +7,11 @@ import * as ItemParts from "./itemParts";
 import {GenericListParams, GenericListResponse} from "./types";
 import Header from "./generalParts/Header";
 import Items from "./generalParts/Items";
-import {WidgetHelper} from "../../../../helpers/WidgetHelper";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 import styles from "../../../../../styles/widgets/common/GenericList.module.scss";
 import Pagination from "./generalParts/Pagination";
-import {UtilsHelper} from "../../../../helpers/UtilsHelper";
+import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 
 
 export async function GenericList({widgetConfig, context, extendableAttributes = {}}: GenericListParams) {
@@ -71,11 +71,11 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
 
         const categoryId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id');
 
-        const offset = (UtilsHelper.convertToInt(widgetConfig.postShift) || 0) + ((currentPage - 1) * UtilsHelper.convertToInt(widgetConfig.paginationElements));
+        const offset = (UtilsHelper_convertToInt(widgetConfig.postShift) || 0) + ((currentPage - 1) * UtilsHelper_convertToInt(widgetConfig.paginationElements));
         const variables = {
             ...dynamicVariables,
             categoryId: categoryId,
-            limit: UtilsHelper.convertToInt(widgetConfig.paginationElements),
+            limit: UtilsHelper_convertToInt(widgetConfig.paginationElements),
             offset: offset
         };
         return await WebsiteApiProvider.call(query, variables);
@@ -91,7 +91,7 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
     }
 
     function render() {
-        return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig, ['GenericList', cssModules])}>
+        return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, ['GenericList', cssModules])}>
             <Header context={context} widgetConfig={widgetConfig} response={response}/>
             <Items context={context} widgetConfig={widgetConfig} response={response}
                    extendableAttributes={extendableAttributes}/>

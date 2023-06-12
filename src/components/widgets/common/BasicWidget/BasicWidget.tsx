@@ -6,13 +6,17 @@ import * as GeneralParts from './generalParts';
 import * as _ from 'lodash';
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {WidgetHelper} from "../../../../helpers/WidgetHelper";
+import {
+    WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent,
+    WidgetHelper_renderEmptyWidget,
+    WidgetHelper_shouldHideWidget
+} from "../../../../helpers/WidgetHelper";
 import * as ItemParts from "./itemParts";
 
 
 export async function BasicWidget({widgetConfig, context, extendableAttributes = {}}: BasicWidgetParams) {
-    if (WidgetHelper.shouldHideWidget(widgetConfig, context)) {
-        return WidgetHelper.renderEmptyWidget(widgetConfig);
+    if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
+        return WidgetHelper_renderEmptyWidget(widgetConfig);
     }
 
     async function getData(queryNodeFragment) {
@@ -88,14 +92,14 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
 
     const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
     if (hideWhenNoItems && _.get(edges, 'length', 0) === 0) {
-        return WidgetHelper.renderEmptyWidget(widgetConfig);
+        return WidgetHelper_renderEmptyWidget(widgetConfig);
     }
 
     const generalComponents = widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {
             console.error(`No general show option name support ${showOption}`);
-            return WidgetHelper.renderEmptyComponent(showOption, 'not supported, yet');
+            return WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet');
         }
         return <Component key={index} context={context} widgetConfig={widgetConfig} response={response} extendableAttributes={extendableAttributes}/>;
     });
@@ -107,7 +111,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
     }
 
     function render() {
-        return <div className={WidgetHelper.getWidgetCssClasses(widgetConfig, ['BasicWidget', cssModules])}>
+        return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, ['BasicWidget', cssModules])}>
             {generalComponents}
         </div>;
     }

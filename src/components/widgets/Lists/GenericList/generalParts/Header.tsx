@@ -1,6 +1,6 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
-import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import {GenericListResponse, GenericListWidgetConfig} from "../types";
 
 export default function Header(
@@ -13,7 +13,7 @@ export default function Header(
     const headerText = widgetConfig.headerText;
 
     if (!headerText) {
-        return WidgetHelper.renderEmptyComponent('Header');
+        return WidgetHelper_renderEmptyComponent('Header');
     }
 
     const HeaderTag = (widgetConfig.headerTag && widgetConfig.headerTag !== 'none' ? widgetConfig.headerTag : 'span' ) as keyof JSX.IntrinsicElements;

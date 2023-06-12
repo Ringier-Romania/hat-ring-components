@@ -4,7 +4,7 @@ import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
 import {RingLink} from "../../../common/RingLink";
 import {RingImage} from "../../../common/RingImage";
 import styles from '../../../../../styles/widgets/common/Menu.module.scss';
-import {WidgetHelper} from "../../../../helpers/WidgetHelper";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 interface MenuElement {
     "text": string,
@@ -58,7 +58,7 @@ export function Menu(
             </li>
     }
 
-    return <nav className={WidgetHelper.getWidgetCssClasses(widgetConfig, [styles.HeaderMenu])}
+    return <nav className={WidgetHelper_getWidgetCssClasses(widgetConfig, [styles.HeaderMenu])}
     >
         <ul>
             {widgetConfig.overrideMenuElements.map((menuElement) => {
