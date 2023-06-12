@@ -1,6 +1,5 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
-import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
 import {GenericListResponse, GenericListWidgetConfig} from "../types";
 import {RingLink} from "../../../../common/RingLink";
 import * as _ from 'lodash';
