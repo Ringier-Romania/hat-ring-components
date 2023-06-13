@@ -15,3 +15,4 @@ export * from './components/widgets/Story/StoryTaxonomyList/StoryTaxonomyListWeb
 export * from "./components/widgets/Lists/GenericList/GenericListWebsitesConfig";
 export * from './components/widgets/Story/StoryDate/StoryDateWebsitesConfig';
 export * from './components/configs/DeveloperSettingsWebsitesConfig';
+export * from './components/configs/GeneralWebsitesConfig';
