@@ -24,8 +24,9 @@ function getPlaceholderData(width, height) {
 function ocdnLoader(src, width, height, transformType) {
     const ocdnBucketName = process.env.NEXT_PUBLIC_OCDN_BUCKET_NAME!;
     const ocdnTransformKey = process.env.NEXT_PUBLIC_OCDN_TRANSFORM_KEY!;
+    const isOcdnURL = src.includes('ocdn.eu') && src.includes('pulscms');
 
-    if (ocdnBucketName && ocdnTransformKey) {
+    if (ocdnBucketName && ocdnTransformKey && isOcdnURL) {
         const cropImage = new OcdnUrl();
         cropImage.init(src);
         cropImage.setKey(ocdnTransformKey);

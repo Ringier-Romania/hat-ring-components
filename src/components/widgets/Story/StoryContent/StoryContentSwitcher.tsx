@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import * as BlocksTypes from "./StoryContentBlocks";
 import {AppContext} from "../../../../types/types";
 import {StoryContentWidgetConfig, StoryContentSwitcherParams} from "./types";
-import {UtilsHelper} from "../../../../helpers/UtilsHelper";
+import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 
 
 export function StoryContentSwitcher({content, widgetConfig, context}: StoryContentSwitcherParams) {
@@ -27,8 +27,8 @@ export function StoryContentSwitcher({content, widgetConfig, context}: StoryCont
             groupElements.push(block);
             return <></>;
         }
-        const displayFrom = widgetConfig.displayFrom && UtilsHelper.convertToInt(widgetConfig.displayFrom);
-        const displayTo = widgetConfig.displayTo && UtilsHelper.convertToInt(widgetConfig.displayTo);
+        const displayFrom = widgetConfig.displayFrom && UtilsHelper_convertToInt(widgetConfig.displayFrom);
+        const displayTo = widgetConfig.displayTo && UtilsHelper_convertToInt(widgetConfig.displayTo);
         if(displayFrom && displayFrom > index + 1){
             return null;
         }

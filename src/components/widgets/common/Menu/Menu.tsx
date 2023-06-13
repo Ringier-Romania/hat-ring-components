@@ -3,11 +3,12 @@ import * as _ from 'lodash';
 import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
 import {RingLink} from "../../../common/RingLink";
 import {RingImage} from "../../../common/RingImage";
-import styles from '../../../../../styles/widgets/common/HeaderMenu.module.scss';
+import styles from '../../../../../styles/widgets/common/Menu.module.scss';
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
-interface HeaderMenuElement {
+interface MenuElement {
     "text": string,
-    "children": Array<HeaderMenuElement>,
+    "children": Array<MenuElement>,
     "url": string,
     "image url": string,
     "image dimensions (eg. 200x200)": string,
@@ -16,20 +17,20 @@ interface HeaderMenuElement {
     "open in new tab": boolean,
 }
 
-interface HeaderMenuConfig extends AbstractWidgetConfig {
-    "overrideMenuElements": Array<HeaderMenuElement>,
+interface MenuConfig extends AbstractWidgetConfig {
+    "overrideMenuElements": Array<MenuElement>,
     "textColor": string,
 };
 
-export interface HeaderMenuParams extends WidgetParams {
-    widgetConfig: HeaderMenuConfig
+export interface MenuParams extends WidgetParams {
+    widgetConfig: MenuConfig
 }
 
-export function HeaderMenu(
-    {widgetConfig, context}: HeaderMenuParams
+export function Menu(
+    {widgetConfig, context}: MenuParams
 ) {
 
-    function renderMenuElement(menuElement: HeaderMenuElement) {
+    function renderMenuElement(menuElement: MenuElement) {
         const item = <>
             <span className={'text'}>{menuElement.text}</span>
             {
@@ -45,6 +46,7 @@ export function HeaderMenu(
 
         const currentUrl = _.get(context, 'hatControllerParams.urlWithParsedQuery.pathname') || context.url;
         const isActive = currentUrl == menuElement.url;
+
         return menuElement.hidden ? null :
             <li className={[menuElement["custom css class"], isActive ? 'active' : ''].join(' ')}>
                 {menuElement.url ?
@@ -56,7 +58,7 @@ export function HeaderMenu(
             </li>
     }
 
-    return <nav className={['HeaderMenu', widgetConfig.customClass, styles.HeaderMenu].join(' ')}
+    return <nav className={WidgetHelper_getWidgetCssClasses(widgetConfig, context)}
     >
         <ul>
             {widgetConfig.overrideMenuElements.map((menuElement) => {

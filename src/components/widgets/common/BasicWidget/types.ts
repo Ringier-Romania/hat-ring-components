@@ -56,7 +56,7 @@ export interface BasicWidgetConfig extends AbstractWidgetConfig {
 export interface BasicWidgetExtendableAttributes {
     generalParts?: any,
     itemParts?: any,
-    render?: (generalComponents, cssModules) => JSX.Element | null,
+    render?: (generalComponents) => JSX.Element | null,
     getCssModule?: (defaultStyles) => string | null,
     getDataQueryNodeFragment?: string | null,
 }

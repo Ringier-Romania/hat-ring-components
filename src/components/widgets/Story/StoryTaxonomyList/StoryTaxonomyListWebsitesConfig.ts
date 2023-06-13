@@ -17,7 +17,6 @@ export let StoryTaxonomyListWebsitesConfig
                 "taxonomyKind": "tag",
                 "listPrefix": "Tags: ",
                 "links": true,
-                "linksPrefix": "",
                 "widgetType": "detailTaxonomyList",
             },
             "paramsDescription": {
@@ -38,12 +37,6 @@ export let StoryTaxonomyListWebsitesConfig
                     "type": "checkbox",
                     "description": "List elements are linking to their detail pages"
                 },
-                "linksPrefix": {
-                    "name": "links prefix",
-                    "description": "url's path prefix for links - useful if your taxonomy has custom prefix",
-                    "type": "textfield"
-                },
-
             }
         }
     }

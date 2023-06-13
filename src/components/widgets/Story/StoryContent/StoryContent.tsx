@@ -4,7 +4,6 @@ import {gql} from 'graphql-tag';
 import {StoryContentSwitcher} from "./StoryContentSwitcher";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryContentParams} from "./types";
-import {UtilsHelper} from "../../../../helpers/UtilsHelper";
 
 export async function StoryContent({widgetConfig, context}: StoryContentParams) {
     const query = gql`

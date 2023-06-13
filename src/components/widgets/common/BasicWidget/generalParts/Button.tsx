@@ -4,27 +4,22 @@ import {BasicWidgetConfig, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import {RingLink} from "../../../../common/RingLink";
-import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 
-export default function Description(
+export default function Button(
     {context, widgetConfig, response}:
         {
             context: AppContext,
             widgetConfig: BasicWidgetConfig,
             response: BasicWidgetResponse
         }) {
-
-    const descText = widgetConfig.description;
-
-    if (!descText) {
-        return WidgetHelper_renderEmptyComponent('Description');
-    }
-
     return (
-        <div className={['Description'].join(' ')}>
-            <p>
-                {descText}
-            </p>
+        <div className={['Button'].join(' ')}>
+            {widgetConfig.moreUrl
+                ? <RingLink href={widgetConfig.moreUrl}>
+                    {widgetConfig.moreText}
+                </RingLink>
+                : <button type="button">{widgetConfig.moreText}</button>
+            }
         </div>
     )
 }
