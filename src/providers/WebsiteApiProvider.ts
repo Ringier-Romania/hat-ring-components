@@ -1,5 +1,5 @@
 import {WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
-import {UtilsHelper} from "../helpers/UtilsHelper";
+import { UtilsHelper_isDevelopmentMode} from "../helpers/UtilsHelper";
 
 
 export class WebsiteApiProvider {
@@ -17,7 +17,7 @@ export class WebsiteApiProvider {
             }).buildApolloClient();
         }
 
-        const fetchPolicy = UtilsHelper.isDevelopmentMode() ? 'no-cache' : 'cache-first';
+        const fetchPolicy = UtilsHelper_isDevelopmentMode() ? 'no-cache' : 'cache-first';
         return await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
     }
 }

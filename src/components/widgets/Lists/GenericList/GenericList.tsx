@@ -69,7 +69,8 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
             ${dynamicFragments}
         `;
 
-        const categoryId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id');
+
+        const categoryId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id')|| _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.id');
 
         const offset = (UtilsHelper_convertToInt(widgetConfig.postShift) || 0) + ((currentPage - 1) * UtilsHelper_convertToInt(widgetConfig.paginationElements));
         const variables = {
@@ -78,6 +79,9 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
             limit: UtilsHelper_convertToInt(widgetConfig.paginationElements),
             offset: offset
         };
+
+        console.log(variables);
+
         return await WebsiteApiProvider.call(query, variables);
     }
 
