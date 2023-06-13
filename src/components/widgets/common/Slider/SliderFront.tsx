@@ -27,6 +27,7 @@ export function SliderFront(
             slidesPerView={slidesPerView}
             navigation={navigation}
             pagination={pagination}
+            suppressHydrationWarning={true}
         >
             {children}
         </swiper-container>

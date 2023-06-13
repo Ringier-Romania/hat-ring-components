@@ -36,7 +36,7 @@ export async function Slider(
 
                 return (
                     // @ts-ignore in web-components class is valid
-                    <swiper-slide class={slide['Custom CSS Class'] || ''}>
+                    <swiper-slide class={slide['Custom CSS Class'] || ''} suppressHydrationWarning={true}>
                         {slide['Link url']
                             ? <>
                                 <RingLink href={slide['Link url']}>
