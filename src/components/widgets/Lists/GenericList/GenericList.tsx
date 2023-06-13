@@ -15,8 +15,7 @@ import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 
 
 export async function GenericList({widgetConfig, context, extendableAttributes = {}}: GenericListParams) {
-
-    console.log(context);
+    
     const currentPage = parseInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
 
     async function getData(queryNodeFragment) {
@@ -79,8 +78,6 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
             limit: UtilsHelper_convertToInt(widgetConfig.paginationElements),
             offset: offset
         };
-
-        console.log(variables);
 
         return await WebsiteApiProvider.call(query, variables);
     }
