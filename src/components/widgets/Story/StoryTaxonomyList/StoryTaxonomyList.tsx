@@ -36,7 +36,6 @@ export async function StoryTaxonomyList({widgetConfig, context}: StoryTaxonomyLi
 
     const response = await WebsiteApiProvider.call(query, variables) as StoryTaxonomyListResponse;
 
-    console.log(JSON.stringify(response));
     return <div className={['StoryTaxonomyList'].join(' ')}>
         {widgetConfig.listPrefix && <span className={'listPrefix'}>{widgetConfig.listPrefix}</span>}
 
