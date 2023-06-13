@@ -26,5 +26,5 @@ export async function ExternalApplication({widgetConfig, context}: ExternalAppli
         html = $(selector).html();
     }
 
-    return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig)} dangerouslySetInnerHTML={{__html: html}}/>;
+    return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, context)} dangerouslySetInnerHTML={{__html: html}}/>;
 }
