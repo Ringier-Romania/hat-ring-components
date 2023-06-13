@@ -80,8 +80,6 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
             offset: offset
         };
 
-        console.log(variables);
-
         return await WebsiteApiProvider.call(query, variables);
     }
 
