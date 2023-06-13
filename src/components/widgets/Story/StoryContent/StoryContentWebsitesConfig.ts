@@ -10,7 +10,7 @@ export let StoryContentWebsitesConfig
     "paramsDescription": {},
     "modules": {
         "detailContent_wdg": {
-            "name": "Detail Content",
+            "name": "Story Content",
             "description": "",
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
