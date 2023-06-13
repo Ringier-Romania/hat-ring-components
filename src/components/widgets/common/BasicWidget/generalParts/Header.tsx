@@ -1,6 +1,6 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
-import {BasicWidgetConfig, BasicWidgetResponse} from "../types";
+import {BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import {RingLink} from "../../../../common/RingLink";
@@ -11,7 +11,8 @@ export default function Header(
         {
             context: AppContext,
             widgetConfig: BasicWidgetConfig,
-            response: BasicWidgetResponse
+            response: BasicWidgetResponse,
+            extendableAttributes: BasicWidgetExtendableAttributes,
         }) {
     const headerText = widgetConfig.labelValue;
 

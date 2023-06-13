@@ -18,6 +18,7 @@ export let StoryTaxonomyListWebsitesConfig
                 "listPrefix": "Tags: ",
                 "links": true,
                 "widgetType": "detailTaxonomyList",
+                "excludedUuids": ""
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -36,6 +37,11 @@ export let StoryTaxonomyListWebsitesConfig
                     "name": "Generate links",
                     "type": "checkbox",
                     "description": "List elements are linking to their detail pages"
+                },
+                "excludedUuids": {
+                    "name": "Excluded Uuids",
+                    "type": "textfield",
+                    "description": "comma separated list"
                 },
             }
         }

@@ -4,7 +4,8 @@ import {Topic} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 export interface StoryTaxonomyListWidgetConfig extends AbstractWidgetConfig {
     taxonomyKind: string,
     listPrefix: string,
-    links: boolean
+    links: boolean,
+    excludedUuids: string,
 }
 
 export interface StoryTaxonomyListParams extends WidgetParams {
@@ -20,7 +21,7 @@ export interface StoryTaxonomyListResponse {
     "data": {
         "story": {
             "__typename": string,
-            "topics": StoryTaxonomyListTopicResponse[]
+            "topics": StoryTaxonomyListTopicResponse[],
         }
     }
 }

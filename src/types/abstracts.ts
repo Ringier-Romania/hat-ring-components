@@ -1,4 +1,10 @@
 export const AbstractWebsitesWidgetConfigParamsDescription = {
+    "widgetType": {
+        "name": "widgetType",
+        "description": "widget type (do not touch)",
+        "type": "textfield",
+        "required": true
+    },
     "platformDesktop": {
         "name": "Desktop",
         "type": "checkbox",
@@ -35,12 +41,6 @@ export const AbstractWebsitesWidgetConfigParamsDescription = {
         "multiSelect": false,
         "items": ["none", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         "required": false
-    },
-    "widgetType": {
-        "name": "widgetType",
-        "description": "widget type",
-        "type": "textfield",
-        "required": true
     },
 }
 

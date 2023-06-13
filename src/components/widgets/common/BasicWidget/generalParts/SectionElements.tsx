@@ -12,7 +12,7 @@ export default function SectionElements(
             context: AppContext,
             widgetConfig: BasicWidgetConfig,
             response: BasicWidgetResponse,
-            extendableAttributes: BasicWidgetExtendableAttributes
+            extendableAttributes: BasicWidgetExtendableAttributes,
         }) {
 
     if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
