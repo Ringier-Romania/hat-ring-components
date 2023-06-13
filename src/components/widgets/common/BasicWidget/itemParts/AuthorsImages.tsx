@@ -2,7 +2,7 @@ import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import {RingImage, TransformType} from "../../../../common/RingImage";
-import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 
 export default function AuthorsImages(
@@ -16,7 +16,7 @@ export default function AuthorsImages(
     const authorsObjs = data.authors?.map((name) => {return {name, image: {url: null, caption: null}}}) || data.originalContent?.authors?.map((obj) => obj.author);
 
     if (!authorsObjs || authorsObjs.length === 0) {
-        return WidgetHelper.renderEmptyComponent('AuthorsImages');
+        return WidgetHelper_renderEmptyComponent('AuthorsImages');
     }
 
 

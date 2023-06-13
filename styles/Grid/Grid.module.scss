@@ -15,21 +15,21 @@
       .gridWidget {
         // widgetConfig.customWidth
         @for $i from 1 through 12 {
-          &.widgetWidth#{$i} {
+          &.gridWidth#{$i} {
             width: $i / 12 * 100%;
           }
         }
 
         // widgetConfig.customPosition
-        &.widgetPositionLeft {
+        &.gridPositionLeft {
           float: left;
         }
 
-        &.widgetPositionRight {
+        &.gridPositionRight {
           float: right;
         }
 
-        &.widgetPositionCenter {
+        &.gridPositionCenter {
           margin: 0 auto;
         }
       }

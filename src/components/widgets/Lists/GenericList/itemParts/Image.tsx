@@ -1,7 +1,7 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {RingImage, TransformType} from "../../../../common/RingImage";
-import {WidgetHelper} from "../../../../../helpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
 
@@ -17,7 +17,7 @@ export default function Image(
     const image = data.image;
 
     if (!image || !image.url) {
-        return WidgetHelper.renderEmptyComponent('Image');
+        return WidgetHelper_renderEmptyComponent('Image');
     }
 
     const sizes = ((context.hatControllerParams.isMobile ? widgetConfig.imageSizeMobile : widgetConfig.imageSize) || '400x300').split('x');

@@ -14,7 +14,8 @@ export interface AppContext {
     id: string | undefined | null,
     url: string,
     customData: any,
-    hatControllerParams: any
+    hatControllerParams: any,
+    cssModules?: any
 }
 
 export interface ComponentParams {

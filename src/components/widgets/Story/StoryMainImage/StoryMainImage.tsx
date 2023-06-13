@@ -1,4 +1,4 @@
-"use server";
+
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
@@ -6,7 +6,7 @@ import {StoryMainImageParams, StoryMainImageResponse} from "./types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {RingImage, TransformType} from "../../../common/RingImage";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
-import {WidgetHelper} from "../../../../helpers/WidgetHelper";
+import {WidgetHelper_getImageDimensionsFromWidgetConfig} from "../../../../helpers/WidgetHelper";
 
 
 export async function StoryMainImage({widgetConfig, context}: StoryMainImageParams) {
@@ -21,7 +21,7 @@ export async function StoryMainImage({widgetConfig, context}: StoryMainImagePara
         }
     `;
 
-    const imageDimensions = WidgetHelper.getImageDimensionsFromWidgetConfig(widgetConfig, context);
+    const imageDimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(widgetConfig, context);
 
     const variables = {
         storyId: context.id,

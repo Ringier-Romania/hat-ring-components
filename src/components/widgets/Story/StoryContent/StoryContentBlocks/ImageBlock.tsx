@@ -2,22 +2,22 @@ import React from "react";
 import {RingImage, TransformType} from "../../../../common/RingImage";
 import {RingLink} from "../../../../common/RingLink";
 import {ImageBlockParams} from "../types";
-import {UtilsHelper} from "../../../../../helpers/UtilsHelper";
+import {UtilsHelper_convertToInt} from "../../../../../helpers/UtilsHelper";
 
 export default function ImageBlock({blockData, widgetConfig}: ImageBlockParams) {
     const {title, alt, image, url, link} = blockData;
     let imageWidth = image.width;
     let imageHeight = image.height;
-    let maxImageWidth = widgetConfig.standardImageWidth && UtilsHelper.convertToInt(widgetConfig.standardImageWidth);
-    let maxImageHeight = widgetConfig.standardImageHeight && UtilsHelper.convertToInt(widgetConfig.standardImageHeight);
+    let maxImageWidth = widgetConfig.standardImageWidth && UtilsHelper_convertToInt(widgetConfig.standardImageWidth);
+    let maxImageHeight = widgetConfig.standardImageHeight && UtilsHelper_convertToInt(widgetConfig.standardImageHeight);
 
     if(maxImageWidth &&  maxImageWidth < imageWidth){
-        imageHeight = UtilsHelper.convertToInt(maxImageWidth * imageHeight / imageWidth);
+        imageHeight = UtilsHelper_convertToInt(maxImageWidth * imageHeight / imageWidth);
         imageWidth = maxImageWidth;
     }
 
     if(maxImageHeight &&  maxImageHeight < imageHeight){
-        imageWidth = UtilsHelper.convertToInt(maxImageHeight * imageWidth / imageHeight);
+        imageWidth = UtilsHelper_convertToInt(maxImageHeight * imageWidth / imageHeight);
         imageHeight = maxImageHeight;
     }
 

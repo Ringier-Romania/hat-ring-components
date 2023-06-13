@@ -1,3 +1,8 @@
+import {
+    AbstractWebsitesWidgetConfigDefaultParams,
+    AbstractWebsitesWidgetConfigParamsDescription
+} from "../../../../types/abstracts";
+
 export let GenericListWebsitesConfig
     = {
     "sections": [],
@@ -8,6 +13,7 @@ export let GenericListWebsitesConfig
             "name": "Ring Generic List",
             "description": "",
             "defaultParams": {
+                ...AbstractWebsitesWidgetConfigDefaultParams,
                 "showOptions": [
                     "image",
                     "title",
@@ -20,18 +26,12 @@ export let GenericListWebsitesConfig
                 "paginationElements": 10,
                 "postShift": 0,
                 "customListUuid": "",
-                "customClass": "genericList",
-                "customPosition": "none",
-                "customWidth": "none",
                 "imageSize": "400x225",
                 "imageSizeMobile": "",
-                "platformDesktop": true,
-                "platformMobile": true,
-                "cache": "",
-                "onError": "",
                 "widgetType": "genericList"
             },
             "paramsDescription": {
+                ...AbstractWebsitesWidgetConfigParamsDescription,
                 "showOptions": {
                     "name": "Item elements to display",
                     "description": "(whether to display the property or not)",
@@ -100,34 +100,7 @@ export let GenericListWebsitesConfig
                     "description": "uuid",
                     "type": "textfield"
                 },
-                "customClass": {
-                    "name": "custom CSS class",
-                    "description": "custom CSS class",
-                    "type": "textfield",
-                    "required": true
-                },
-                "customPosition": {
-                    "name": "Custom position",
-                    "description": "(widget in BOX)",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "items": [
-                        "none",
-                        "left",
-                        "center",
-                        "right"
-                    ]
-                },
-                "customWidth": {
-                    "name": "Custom width",
-                    "description": "(widget in BOX)",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "items": ["none", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                    "required": false
-                },
+
                 "imageSize": {
                     "name": "Image resolution",
                     "type": "textfield",
@@ -142,46 +115,6 @@ export let GenericListWebsitesConfig
                     "name": "Display total elements",
                     "type": "checkbox"
                 },
-                "platformDesktop": {
-                    "name": "Desktop",
-                    "type": "checkbox",
-                    "description": "Desktop"
-                },
-                "platformMobile": {
-                    "name": "Mobile",
-                    "type": "checkbox",
-                    "description": "Mobile"
-                },
-                "cache": {
-                    "name": "cache",
-                    "description": "cache value",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "items": [
-                        "none",
-                        "min",
-                        "mdm",
-                        "max"
-                    ]
-                },
-                "onError": {
-                    "name": "onError",
-                    "description": "onError value",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "items": [
-                        "discard",
-                        "abort"
-                    ]
-                },
-                "widgetType": {
-                    "name": "widgetType",
-                    "description": "widget type",
-                    "type": "textfield",
-                    "required": true
-                }
             }
         }
     }

@@ -1,17 +1,15 @@
-"use server";
 import {ComponentParams} from "../../types/types";
 import {gql} from "graphql-tag";
 import React from "react";
 import * as _ from "lodash";
 import {Container} from "./Container";
 import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
-import {UtilsHelper} from "../../helpers/UtilsHelper";
-
+import {UtilsHelper_isDevelopmentMode} from "../../helpers/UtilsHelper";
 
 export interface GridParams extends ComponentParams {
     config: {
         containers: string[],
-        boxes: string[],
+        boxes?: string[],
     }
 }
 
@@ -19,10 +17,10 @@ export async function Grid(params: GridParams) {
     const variant = process.env.NEXT_PUBLIC_WEBSITE_API_VARIANT;
     const domain = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 
-    if (!params.config.boxes) {
-        params.config.boxes = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom'];
+    let boxes = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom'];
+    if (params.config.boxes) {
+        boxes = params.config.boxes;
     }
-
 
     let variablesQuery = '';
     let configQuery = '';
@@ -30,7 +28,7 @@ export async function Grid(params: GridParams) {
         configQuery += section + ':config(codeName: "' + section + '"){ data } ';
     })
 
-    const antycache = UtilsHelper.isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}`: 'antycacheStatusCode';
+    const antycache = UtilsHelper_isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}`: 'antycacheStatusCode';
     const query = gql`
         query($url: URL!, $variant:ID!){
             site(url:$url, variantId: $variant){
@@ -56,7 +54,7 @@ export async function Grid(params: GridParams) {
     return params.config.containers.map(
         sectionName => <Container
             context={params.context}
-            boxes={params.config.boxes}
+            boxes={boxes}
             sectionName={sectionName}
             sectionConfig={_.get(sectionsConfig, `${sectionName}.0.data`)}
         />);

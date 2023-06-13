@@ -1,4 +1,5 @@
-import { WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
+import {WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
+import { UtilsHelper_isDevelopmentMode} from "../helpers/UtilsHelper";
 
 
 export class WebsiteApiProvider {
@@ -9,9 +10,14 @@ export class WebsiteApiProvider {
         const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
         if (!global.websitesApiApolloClient) {
-            global.websitesApiApolloClient = new WebsitesApiClientBuilder({accessKey, secretKey, spaceUuid}).buildApolloClient();
+            global.websitesApiApolloClient = new WebsitesApiClientBuilder({
+                accessKey,
+                secretKey,
+                spaceUuid
+            }).buildApolloClient();
         }
 
-        return await global.websitesApiApolloClient.query({ query, variables });
+        const fetchPolicy = UtilsHelper_isDevelopmentMode() ? 'no-cache' : 'cache-first';
+        return await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
     }
 }
