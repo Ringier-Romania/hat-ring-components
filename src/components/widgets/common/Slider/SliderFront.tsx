@@ -1,7 +1,5 @@
 'use client'
 import React from "react";
-import styles from '../../../../../styles/widgets/common/Slider.module.scss';
-import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {UtilsHelper_getValueIfExists} from "../../../../helpers/UtilsHelper";
 import { useRef } from 'react';
 import { register } from 'swiper/element/bundle';
@@ -20,7 +18,7 @@ export function SliderFront(
     const navigation = UtilsHelper_getValueIfExists(widgetConfig.navigation, true);
     const pagination = UtilsHelper_getValueIfExists(widgetConfig.pagination, false);
 
-    return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, [styles.Slider])} suppressHydrationWarning={true}>
+    return <>
         <swiper-container
             ref={swiperElRef}
             autoplay={isAutoplay}
@@ -32,5 +30,5 @@ export function SliderFront(
         >
             {children}
         </swiper-container>
-    </div>;
+    </>;
 }

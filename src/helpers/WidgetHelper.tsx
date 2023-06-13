@@ -24,11 +24,16 @@ export function WidgetHelper_renderEmptyComponent(componentClassName, text = '')
                  dangerouslySetInnerHTML={{__html: text && `<!-- ${text} -->`}}/>);
 }
 
-export function WidgetHelper_getWidgetCssClasses(widgetConfig: AbstractWidgetConfig, additionalCssClasses: Array<string> = []): string {
+export function WidgetHelper_getWidgetCssClasses(widgetConfig: AbstractWidgetConfig, context: AppContext, additionalCssClasses: Array<string> = []): string {
     const cssClasses = [] as Array<string>;
+    const widgetType = _.upperFirst(widgetConfig.widgetType);
 
     if (widgetConfig.widgetType) {
-        cssClasses.push(_.upperFirst(widgetConfig.widgetType));
+        cssClasses.push(widgetType);
+    }
+
+    if (_.get(context, `cssModules.${widgetType}`, false)) {
+        cssClasses.push(_.get(context, `cssModules.${widgetType}`));
     }
 
     if (widgetConfig.customWidth && widgetConfig.customWidth !== 'none') {

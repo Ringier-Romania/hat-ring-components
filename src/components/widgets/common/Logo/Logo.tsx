@@ -1,7 +1,6 @@
 import React from "react";
 import {RingLink} from "../../../common/RingLink";
 import {RingImage, TransformType} from "../../../common/RingImage";
-import styles from '../../../../../styles/widgets/common/Logo.module.scss';
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {LogoParams} from "./types";
 
@@ -16,7 +15,7 @@ export function Logo(
     // TODO: Get service homepage url from general config
     const logoHref = widgetConfig.overrideLink || '/';
 
-    return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, [styles.Logo])}>
+    return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, context)}>
         {logoSrc &&
             <RingLink href={logoHref}>
                 <RingImage src={logoSrc} alt={logoTitle} width={Number(widgetConfig.imageWidth)}

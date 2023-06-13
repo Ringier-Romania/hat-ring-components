@@ -95,7 +95,7 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
     }
 
     function render() {
-        return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, ['GenericList', cssModules])}>
+        return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, context)}>
             <Header context={context} widgetConfig={widgetConfig} response={response}/>
             <Items context={context} widgetConfig={widgetConfig} response={response}
                    extendableAttributes={extendableAttributes}/>
