@@ -104,14 +104,20 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
         return <Component key={index} context={context} widgetConfig={widgetConfig} response={response} extendableAttributes={extendableAttributes}/>;
     });
 
+    let cssModules = styles.BasicWidget;
+
+    if (extendableAttributes.getCssModule) {
+        cssModules = extendableAttributes.getCssModule(styles.BasicWidget) || styles.BasicWidget;
+    }
+
     function render() {
-        return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, context)}>
+        return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, context, [cssModules])}>
             {generalComponents}
         </div>;
     }
 
     if (extendableAttributes.render) {
-        return extendableAttributes.render(generalComponents);
+        return extendableAttributes.render(generalComponents, cssModules);
     }
 
     return render();

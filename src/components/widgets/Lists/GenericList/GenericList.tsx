@@ -15,7 +15,7 @@ import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 
 
 export async function GenericList({widgetConfig, context, extendableAttributes = {}}: GenericListParams) {
-    
+
     const currentPage = parseInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
 
     async function getData(queryNodeFragment) {
@@ -92,7 +92,7 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
     }
 
     function render() {
-        return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, context)}>
+        return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, context, [cssModules])}>
             <Header context={context} widgetConfig={widgetConfig} response={response}/>
             <Items context={context} widgetConfig={widgetConfig} response={response}
                    extendableAttributes={extendableAttributes}/>
