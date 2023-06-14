@@ -4,7 +4,6 @@ import {AbstractWidgetConfig, AppContext, ComponentParams, WidgetParams} from ".
 export interface StoryDateWidgetConfig extends AbstractWidgetConfig {
     dateFormat: string,
     dateType: 'modificationTime' | 'creationTime',
-    language?: string
 }
 
 export interface StoryDateParams extends WidgetParams {

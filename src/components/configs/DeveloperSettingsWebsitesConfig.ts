@@ -28,12 +28,12 @@ export let DeveloperSettingsWebsitesConfig
        "dateFormat": {
             "timeZone": "Europe/London",
             "useExtendedDatesFormat": false,
-            "sameDay": "return 'LLL'",
-            "lastDay": "return 'LLL'",
-            "nextDay": "return 'LLL'",
-            "lastWeek": "return 'LLL'",
-            "nextWeek": "return 'LLL'",
-            "sameElse": "return 'LLL'"
+            "sameDay": "[Today at] h:mm A",
+            "lastDay": "[Yesterday at] h:mm A",
+            "nextDay": "[Tomorrow at] h:mm A",
+            "lastWeek": "[Last] dddd [at] h:mm A",
+            "nextWeek": "dddd [at] h:mm A",
+            "sameElse": "DD-MM-YYYY",
         }
     },
     "paramsDescription": {
@@ -41,14 +41,7 @@ export let DeveloperSettingsWebsitesConfig
             "timeZone": {
                 "name": "Service time zone (Moment Timezone)",
                 "description": "",
-                "type": "select",
-                "allowBlank": false,
-                "multiSelect": false,
-                "items": [
-                    "Europe/London",
-                    "Europe/Warsaw",
-                    "Europe/Berlin"
-                ],
+                "type": "textfield",
                 "required": true
             },
             "useExtendedDatesFormat": {

@@ -6,7 +6,9 @@ import {format, toDate} from "date-fns-tz";
 import {enGB} from 'date-fns/esm/locale'
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
-export default function PublicationDate(
+import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
+
+export default async function PublicationDate(
     {context, widgetConfig, data}:
         {
             context: AppContext,
@@ -20,29 +22,12 @@ export default function PublicationDate(
         return WidgetHelper_renderEmptyComponent('PublicationDate');
     }
 
-    const decoratedLocale = {
-        ...enGB, // @todo: get value from global config
-        formatRelative: (...args) => {
-            if (args && args[0] === 'other') {
-                return 'LLLL d. yyyy, h:mm:ss a'; // @todo: get value from global config
-            }
-            // @ts-ignore
-            return enGB.formatRelative(...args);
-        },
-    };
-
-    const options = {
-        locale: decoratedLocale,
-        timeZone: 'Europe/London' // @todo: get value from global config
-    };
-
-    const date = toDate(dateFromData, options);
-    const relativeDate = formatRelative(date, new Date(), options);
+    const displayDate = await DateHelper_convertDate(context, dateFromData);
 
     return (
         <div className={['PublicationDate'].join(' ')}>
-            <time dateTime={formatISO(date)}>
-                {relativeDate}
+            <time dateTime={dateFromData}>
+                {displayDate}
             </time>
         </div>
     )
