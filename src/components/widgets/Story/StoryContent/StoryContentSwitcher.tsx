@@ -8,7 +8,7 @@ import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 
 export function StoryContentSwitcher({content, widgetConfig, context}: StoryContentSwitcherParams) {
     let isGroupBlock = false;
-    const groupElements: any[] = [];
+    let groupElements: any[] = [];
 
     return content.map((block, index) => {
         block = {...block};
@@ -21,6 +21,7 @@ export function StoryContentSwitcher({content, widgetConfig, context}: StoryCont
             isGroupBlock = false;
             block.type = 'group';
             block.elements = [...groupElements];
+            groupElements = [];
         }
 
         if (isGroupBlock) {
