@@ -18,8 +18,8 @@ export function Logo(
     return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, context)}>
         {logoSrc &&
             <RingLink href={logoHref}>
-                <RingImage src={logoSrc} alt={logoTitle} width={Number(widgetConfig.imageWidth)}
-                           height={Number(widgetConfig.imageHeight)} transform={TransformType.ResizeCropAuto}/>
+                <RingImage src={logoSrc} alt={logoTitle} width={Number(widgetConfig.imageWidth || 200)}
+                           height={Number(widgetConfig.imageHeight || 200)} transform={TransformType.ResizeCropAuto}/>
             </RingLink>
         }
     </div>;
