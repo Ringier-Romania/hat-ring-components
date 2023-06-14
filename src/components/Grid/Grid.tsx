@@ -49,7 +49,6 @@ export async function Grid(params: GridParams) {
     };
 
     const response = await WebsiteApiProvider.call(query, variables);
-    console.log(JSON.stringify(response));
     const sectionsConfig = _.get(response, 'data.site.data.node.config');
 
     return params.config.containers.map(
