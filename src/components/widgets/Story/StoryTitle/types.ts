@@ -1,7 +1,7 @@
 import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "../../../../types/types";
 
 export interface StoryTitleResponse {
-    data: { story: { name: string } }
+    data: { story: { title: string } }
 }
 
 export interface StoryTitleWidgetConfig extends AbstractWidgetConfig {

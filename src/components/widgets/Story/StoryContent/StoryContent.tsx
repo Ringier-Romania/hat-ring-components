@@ -30,6 +30,7 @@ export async function StoryContent({widgetConfig, context}: StoryContentParams) 
                                     }
                                 }
                             }
+                            alignment
                         }
                         ... on ParagraphBlock {
                             type
