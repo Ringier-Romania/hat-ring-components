@@ -27,6 +27,7 @@ export interface ImageBlockParams {
         link: {
             url: string;
         }
+        alignment: string,
         image: {
             description: string;
             title: string;

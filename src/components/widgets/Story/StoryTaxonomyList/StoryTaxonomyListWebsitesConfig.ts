@@ -10,7 +10,7 @@ export let StoryTaxonomyListWebsitesConfig
     "paramsDescription": {},
     "modules": {
         "detailTaxonomyList_wdg": {
-            "name": "Detail Taxonomy List",
+            "name": "Story Taxonomy List",
             "description": "",
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,

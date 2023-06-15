@@ -9,7 +9,7 @@ export async function StoryTitle({widgetConfig, context}: StoryTitleParams) {
     const query = gql`
         query($storyId: UUID){
             story(id:$storyId){
-                name
+                title
             }
         }
     `;
@@ -22,7 +22,7 @@ export async function StoryTitle({widgetConfig, context}: StoryTitleParams) {
     if(!response){
         response = await WebsiteApiProvider.call(query, variables) as StoryTitleResponse;
     }
-    const title = _.get(response, 'data.story.name');
+    const title = _.get(response, 'data.story.title');
     return <h1>{title}</h1>;
 }
 

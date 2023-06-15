@@ -10,7 +10,7 @@ export let StoryMainImageWebsitesConfig
     "paramsDescription": {},
     "modules": {
         "detailMainImage_wdg": {
-            "name": "Detail Main Image",
+            "name": "Story Main Image",
             "description": "",
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
