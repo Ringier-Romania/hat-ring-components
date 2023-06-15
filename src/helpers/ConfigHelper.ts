@@ -37,6 +37,10 @@ export async function ConfigHelper_getGeneralConfig(context) {
     return ConfigHelper_getConfig(context, 'general');
 }
 
+export async function ConfigHelper_getDeveloperSettingsConfig(context) {
+    return ConfigHelper_getConfig(context, 'devGeneral');
+}
+
 export async function ConfigHelper_getLanguage(context) {
     const generalSettings = await ConfigHelper_getGeneralConfig(context);
     return generalSettings ? generalSettings.language : 'en';

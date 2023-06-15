@@ -1,5 +1,5 @@
 import React from "react";
-import {isNil} from 'lodash';
+import isNil from 'lodash/isNil';
 export function UtilsHelper_convertToInt(input: string | number) {
     return typeof input === "number" ? input : parseInt(input);
 }

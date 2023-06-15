@@ -4,6 +4,13 @@ export let DeveloperSettingsWebsitesConfig
         {
             "title": "Developer settings",
             "groups": {
+                "devGeneral": {
+                    "type": "group",
+                    "name": "General",
+                    "fields": [
+                        "devGeneral.textReplacers",
+                    ]
+                },
                 "dateFormat": {
                     "type": "group",
                     "name": "Date format (Moment.js) - globally",
@@ -20,11 +27,15 @@ export let DeveloperSettingsWebsitesConfig
                 }
             },
             "keys": [
+                "devGeneral",
                 "dateFormat",
             ]
         }
     ],
     "defaultParams": {
+        "devGeneral": {
+            "textReplacers": [],
+        },
        "dateFormat": {
             "timeZone": "Europe/London",
             "useExtendedDatesFormat": false,
@@ -37,6 +48,23 @@ export let DeveloperSettingsWebsitesConfig
         }
     },
     "paramsDescription": {
+        "devGeneral": {
+            "textReplacers": {
+                "type": "treeobject",
+                "name": "Text decorators",
+                "description": "Text decorators",
+                "properties": [
+                    {
+                        "name": "Match pattern",
+                        "type": "textfield"
+                    },
+                    {
+                        "name": "Replacement",
+                        "type": "textfield"
+                    }
+                ]
+            },
+        },
         "dateFormat": {
             "timeZone": {
                 "name": "Service time zone (Moment Timezone)",

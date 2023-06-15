@@ -5,6 +5,7 @@ import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import {RingLink} from "../../../../common/RingLink";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {TextReplacer} from "../../../../common/TextReplacer/TextReplacer";
 
 export default function Header(
     {context, widgetConfig, response}:
@@ -24,13 +25,23 @@ export default function Header(
     // @todo dynamic text?
     const headerUrl = widgetConfig.labelLink;
 
+    function renderHeaderText(text) {
+        return <HeaderTag>
+            {/* @ts-expect-error Server Component */}
+            <TextReplacer context={context} config={{}}>
+                {text}
+            </TextReplacer>
+        </HeaderTag>
+    }
+
     return (
         <div className={['Header'].join(' ')}>
-            {headerUrl && headerText
-            ? <RingLink href={headerUrl}>
-                <HeaderTag>{headerText}</HeaderTag>
-            </RingLink>
-            : <HeaderTag>{headerText}</HeaderTag>}
+                {headerUrl && headerText
+                    ? <RingLink href={headerUrl}>
+                        {renderHeaderText(headerText)}
+                    </RingLink>
+                    : <>{renderHeaderText(headerText)}</>
+                }
         </div>
     )
 }

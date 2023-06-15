@@ -16,3 +16,4 @@ export * from "./components/widgets/common/Menu/Menu";
 export * from "./components/widgets/common/Logo/Logo";
 export * from "./components/widgets/common/Slider/Slider";
 export * from "./components/widgets/Story/StoryDate/StoryDate";
+export * from "./components/common/TextReplacer/TextReplacer";
