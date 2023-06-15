@@ -3,6 +3,7 @@ import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryDateParams, StoryDateResponse} from "./types";
 import {DateHelper_convertDate} from "../../../../helpers/DateHelper";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 export async function StoryDate({widgetConfig, context}: StoryDateParams) {
     const query = gql`
@@ -24,7 +25,7 @@ export async function StoryDate({widgetConfig, context}: StoryDateParams) {
 
     const displayDate = await DateHelper_convertDate(context, date, widgetConfig.dateFormat);
 
-    return <div className={['StoryDate'].join(' ')}>
+    return <div className={WidgetHelper_getWidgetCssClasses('StoryDate', widgetConfig, context)}>
         <time dateTime={date}>{displayDate}</time>
     </div>
 }

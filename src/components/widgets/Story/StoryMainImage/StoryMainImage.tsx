@@ -6,7 +6,10 @@ import {StoryMainImageParams, StoryMainImageResponse} from "./types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {RingImage, TransformType} from "../../../common/RingImage";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
-import {WidgetHelper_getImageDimensionsFromWidgetConfig} from "../../../../helpers/WidgetHelper";
+import {
+    WidgetHelper_getImageDimensionsFromWidgetConfig,
+    WidgetHelper_getWidgetCssClasses
+} from "../../../../helpers/WidgetHelper";
 
 
 export async function StoryMainImage({widgetConfig, context}: StoryMainImageParams) {
@@ -37,10 +40,12 @@ export async function StoryMainImage({widgetConfig, context}: StoryMainImagePara
     const imgSrc = _.get(response, 'data.story.image.url');
     const caption = _.get(response, 'data.story.image.caption');
     // TransformType.None because we do transform on API level
-    return imgSrc ? <>
-        <RingImage priority={true} transform={TransformType.None} src={imgSrc} alt={caption || ''}
-                   width={imageDimensions.width} height={imageDimensions.height}/>
-        {caption && <StoryMainImageCaption caption={caption}/>}
-    </> : null;
+    return <div className={WidgetHelper_getWidgetCssClasses('StoryMainImage', widgetConfig, context)}>
+        {imgSrc ? <>
+            <RingImage priority={true} transform={TransformType.None} src={imgSrc} alt={caption || ''}
+                       width={imageDimensions.width} height={imageDimensions.height}/>
+            {caption && <StoryMainImageCaption caption={caption}/>}
+        </> : null}
+    </div>
 }
 

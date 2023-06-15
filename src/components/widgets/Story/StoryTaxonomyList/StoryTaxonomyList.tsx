@@ -3,6 +3,7 @@ import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTaxonomyListParams, StoryTaxonomyListResponse} from "./types";
 import {RingLink} from "../../../common/RingLink";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 export async function StoryTaxonomyList({widgetConfig, context}: StoryTaxonomyListParams) {
     const query = gql`
@@ -36,7 +37,8 @@ export async function StoryTaxonomyList({widgetConfig, context}: StoryTaxonomyLi
 
     const response = await WebsiteApiProvider.call(query, variables) as StoryTaxonomyListResponse;
 
-    return <div className={['StoryTaxonomyList'].join(' ')}>
+
+    return <div className={WidgetHelper_getWidgetCssClasses('StoryTaxonomyList', widgetConfig, context)}>
         {widgetConfig.listPrefix && <span className={'listPrefix'}>{widgetConfig.listPrefix}</span>}
 
         {response.data.story?.topics?.map(topic => {

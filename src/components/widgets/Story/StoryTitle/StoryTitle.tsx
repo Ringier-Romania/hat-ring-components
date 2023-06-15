@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTitleParams, StoryTitleResponse} from "./types";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 export async function StoryTitle({widgetConfig, context}: StoryTitleParams) {
     const query = gql`
@@ -23,6 +24,8 @@ export async function StoryTitle({widgetConfig, context}: StoryTitleParams) {
         response = await WebsiteApiProvider.call(query, variables) as StoryTitleResponse;
     }
     const title = _.get(response, 'data.story.title');
-    return <h1>{title}</h1>;
+    return <div className={WidgetHelper_getWidgetCssClasses('StoryTitle', widgetConfig, context)}>
+        <h1>{title}</h1>
+    </div>;
 }
 

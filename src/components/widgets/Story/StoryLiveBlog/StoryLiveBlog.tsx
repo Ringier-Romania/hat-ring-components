@@ -5,6 +5,7 @@ import {gql} from 'graphql-tag';
 import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "../../../../types/types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {ExternalApplication} from "../../common/ExternalApplication";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 interface StoryLiveBlogParams extends WidgetParams {
     widgetConfig: StoryLiveBlogParamsConfig
@@ -48,7 +49,7 @@ export async function StoryLiveBlog({widgetConfig, context}: StoryLiveBlogParams
     }
     let url = `${liveBlogPlatformUrl}/${liveblogUuid},${widgetConfig.liveBlogLanguage},${widgetConfig.liveBlogClientId},liveblog.html`;
 
-    return <div className="StoryLiveBlog">
+    return <div className={WidgetHelper_getWidgetCssClasses('StoryLiveBlog', widgetConfig, context)}>
         {/* @ts-expect-error Server Component */}
         <ExternalApplication widgetConfig={{controllerUrl: url, selector: '[name="block-html-head"]'}}
                              context={context}/>
