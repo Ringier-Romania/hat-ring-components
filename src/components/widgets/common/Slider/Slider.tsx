@@ -7,6 +7,7 @@ import {SliderFront} from "./SliderFront";
 import {RingImage} from "../../../common/RingImage";
 import {RingLink} from "../../../common/RingLink";
 import {SliderElement, SliderParams} from "./types";
+import styles from '../../../../../styles/widgets/common/Slider.module.scss';
 
 
 export async function Slider(
@@ -29,7 +30,7 @@ export async function Slider(
         </>
     }
 
-    return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, context)}>
+    return <div className={WidgetHelper_getWidgetCssClasses('Slider', widgetConfig, context, [styles.Slider])}>
         <SliderFront widgetConfig={widgetConfig} context={frontendContext}>
             {widgetConfig.slides.map((slide: SliderElement) => {
                 const dimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(slide, context, "Source desktop dimensions(eg. 600x300)", "Source mobile dimensions(eg. 600x300)", '600x300');

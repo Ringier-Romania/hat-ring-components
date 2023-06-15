@@ -58,7 +58,7 @@ export function Menu(
             </li>
     }
 
-    return <nav className={WidgetHelper_getWidgetCssClasses(widgetConfig, context)}
+    return <nav className={WidgetHelper_getWidgetCssClasses('Menu', widgetConfig, context, [styles.Menu])}
     >
         <ul>
             {widgetConfig.overrideMenuElements.map((menuElement) => {

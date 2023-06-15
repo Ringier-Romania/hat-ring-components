@@ -5,7 +5,7 @@ import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import {RingLink} from "../../../../common/RingLink";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
-import {TextReplacer} from "../../../../common/TextReplacer/TextReplacer";
+import {TextReplacer} from "../../../../common/TextReplacer";
 
 export default function Header(
     {context, widgetConfig, response}:
@@ -26,12 +26,12 @@ export default function Header(
     const headerUrl = widgetConfig.labelLink;
 
     function renderHeaderText(text) {
-        return <HeaderTag>
+        return <>
             {/* @ts-expect-error Server Component */}
-            <TextReplacer context={context} config={{}}>
+            <TextReplacer context={context} config={{}} parentComponent={HeaderTag}>
                 {text}
             </TextReplacer>
-        </HeaderTag>
+        </>
     }
 
     return (
