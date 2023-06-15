@@ -4,101 +4,124 @@ import {gql} from 'graphql-tag';
 import {StoryContentSwitcher} from "./StoryContentSwitcher";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryContentParams} from "./types";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
-export async function StoryContent({widgetConfig, context}: StoryContentParams) {
-    const query = gql`
-        query($storyId: UUID){
-            story(id:$storyId){
-                content {
-                    blocks {
-                        ... on ImageBlock {
-                            type
-                            title
-                            url
-                            alt
-                            link {
-                                url
-                            }
-                            image {
-                                description
+export async function StoryContent({widgetConfig, context, extendableAttributes = {}}: StoryContentParams) {
+
+    async function getData(queryStoryFragment) {
+        const query = gql`
+            query($storyId: UUID){
+                story(id:$storyId){
+                    content {
+                        blocks {
+                            ... on ImageBlock {
+                                type
                                 title
-                                width
-                                height
-                                sources {
-                                    source {
-                                        name
+                                url
+                                alt
+                                link {
+                                    url
+                                }
+                                image {
+                                    description
+                                    title
+                                    width
+                                    height
+                                    sources {
+                                        source {
+                                            name
+                                        }
+                                    }
+                                }
+                                alignment
+                            }
+                            ... on ParagraphBlock {
+                                type
+                                text
+                            }
+                            ... on HeadingBlock {
+                                type
+                                level
+                                text
+                            }
+                            ... on UnorderedListBlock {
+                                type
+                                styleType
+                                entries
+                                indentLevel
+                            }
+                            ... on OrderedListBlock {
+                                type
+                                styleType
+                                entries
+                                indentLevel
+                                startValue
+                            }
+                            ... on EmbedBlock {
+                                type
+                                embed {
+                                    html
+                                }
+                            }
+                            ... on TableBlock {
+                                type
+                                rows {
+                                    cells {
+                                        alignment
+                                        classes
+                                        colspan
+                                        isHeader
+                                        link {
+                                            url
+                                        }
+                                        rowspan
+                                        text
                                     }
                                 }
                             }
-                            alignment
-                        }
-                        ... on ParagraphBlock {
-                            type
-                            text
-                        }
-                        ... on HeadingBlock {
-                            type
-                            level
-                            text
-                        }
-                        ... on UnorderedListBlock {
-                            type
-                            styleType
-                            entries
-                            indentLevel
-                        }
-                        ... on OrderedListBlock {
-                            type
-                            styleType
-                            entries
-                            indentLevel
-                            startValue
-                        }
-                        ... on EmbedBlock {
-                            type
-                            embed {
-                                html
+                            ... on GroupBlock {
+                                name
+                                type
+                                alignment
                             }
-                        }
-                        ... on TableBlock {
-                            type
-                            rows {
-                                cells {
-                                    alignment
-                                    classes
-                                    colspan
-                                    isHeader
-                                    link {
-                                        url
-                                    }
-                                    rowspan
-                                    text
-                                }
+                            ... on PreformattedBlock {
+                                text
+                                type
                             }
-                        }
-                        ... on GroupBlock {
-                            name
-                            type
-                            alignment
-                        }
-                        ... on PreformattedBlock {
-                            text
-                            type
                         }
                     }
+                    ${queryStoryFragment}
                 }
             }
-        }
-    `;
-    const variables = {
-        storyId: context.id,
+        `;
+        const variables = {
+            storyId: context.id,
+        };
+
+        const response = await WebsiteApiProvider.call(query, variables);
+        return _.get(response, 'data.story.content[0].blocks');
+    }
+
+    let queryFragment = extendableAttributes?.getDataQueryStoryFragment || '';
+    const content = await getData(queryFragment);
+
+    let cssModules = '';
+
+    if (extendableAttributes.getCssModule) {
+        cssModules = extendableAttributes.getCssModule(cssModules) || '';
+    }
+
+    function render() {
+        return <div className={WidgetHelper_getWidgetCssClasses('StoryContent',widgetConfig, context)}>
+            {/* @ts-expect-error Server Component */}
+            <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context} extendableAttributes={extendableAttributes}/>
+        </div>
     };
 
-    const response = await WebsiteApiProvider.call(query, variables);
-    const content = _.get(response, 'data.story.content[0].blocks');
-    return <div className="StoryContent">
-        {/* @ts-expect-error Server Component */}
-        <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context}/>
-    </div>
+    if (extendableAttributes.render) {
+        return extendableAttributes.render(cssModules);
+    }
+
+    return render();
 }
 

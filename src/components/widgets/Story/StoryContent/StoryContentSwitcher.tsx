@@ -6,7 +6,12 @@ import {StoryContentWidgetConfig, StoryContentSwitcherParams} from "./types";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 
 
-export function StoryContentSwitcher({content, widgetConfig, context}: StoryContentSwitcherParams) {
+export function StoryContentSwitcher({
+                                         content,
+                                         widgetConfig,
+                                         context,
+                                         extendableAttributes
+                                     }: StoryContentSwitcherParams) {
     let isGroupBlock = false;
     let groupElements: any[] = [];
 
@@ -30,19 +35,24 @@ export function StoryContentSwitcher({content, widgetConfig, context}: StoryCont
         }
         const displayFrom = widgetConfig.displayFrom && UtilsHelper_convertToInt(widgetConfig.displayFrom);
         const displayTo = widgetConfig.displayTo && UtilsHelper_convertToInt(widgetConfig.displayTo);
-        if(displayFrom && displayFrom > index + 1){
+        if (displayFrom && displayFrom > index + 1) {
             return null;
         }
 
-        if(displayTo && displayTo < index + 1){
+        if (displayTo && displayTo < index + 1) {
             return null;
         }
 
         let clientContext = context;
         clientContext.customData.widgets = {};
         const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
-        const Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
+        let Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
         const isClientSideComponent = Block.$$typeof && Block.$$typeof === Symbol.for('react.client.reference');
+        if (blockType === 'GroupBlock' && extendableAttributes?.customGroupBlocks && extendableAttributes?.customGroupBlocks[block.name]) {
+
+            Block = extendableAttributes?.customGroupBlocks[block.name];
+
+        }
         return <Block blockData={block} widgetConfig={widgetConfig}
                       context={isClientSideComponent ? clientContext : context}/>;
     });
