@@ -2,9 +2,12 @@ import React from "react";
 import * as _ from 'lodash';
 import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
 import {RingLink} from "../../../common/RingLink";
-import {RingImage} from "../../../common/RingImage";
+import {RingImage, TransformType} from "../../../common/RingImage";
 import styles from '../../../../../styles/widgets/common/Menu.module.scss';
-import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {
+    WidgetHelper_getImageDimensionsFromWidgetConfig,
+    WidgetHelper_getWidgetCssClasses
+} from "../../../../helpers/WidgetHelper";
 
 interface MenuElement {
     "text": string,
@@ -31,11 +34,12 @@ export function Menu(
 ) {
 
     function renderMenuElement(menuElement: MenuElement) {
+        const imageDimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(menuElement,context,"image dimensions (eg. 200x200)");
         const item = <>
             <span className={'text'}>{menuElement.text}</span>
             {
                 menuElement["image url"] && menuElement["image dimensions (eg. 200x200)"] &&
-                <RingImage src={menuElement["image url"]} alt={menuElement.text} width={200} height={200}/>
+                <RingImage src={menuElement["image url"]} alt={menuElement.text} width={imageDimensions.width} height={imageDimensions.height} transform={TransformType.ResizeCropAuto}/>
             }
             {
                 menuElement.children && menuElement.children.length > 0 &&

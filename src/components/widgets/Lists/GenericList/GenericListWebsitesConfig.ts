@@ -110,11 +110,7 @@ export let GenericListWebsitesConfig
                     "name": "Mobile image resolution",
                     "type": "textfield",
                     "description": "Image resolution (empty = same as desktop), example: 600x330"
-                },
-                "showTotalElements": {
-                    "name": "Display total elements",
-                    "type": "checkbox"
-                },
+                }
             }
         }
     }
