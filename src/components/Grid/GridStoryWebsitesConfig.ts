@@ -1,26 +1,14 @@
 export let GridStoryWebsitesConfig = {
     "sections": [
         {
-            "title": "Detail (page)",
+            "title": "Story",
             "keys": [
-                "DetailPageGeneral",
                 "DetailExtendedWidgets1",
                 "DetailExtendedWidgets2",
                 "DetailExtendedWidgets3",
                 "DetailExtendedWidgets4"
             ],
             "groups": {
-                "group0": {
-                    "type": "group",
-                    "name": "General",
-                    "fields": [
-                        "DetailPageGeneral.customCSSClass",
-                        "DetailPageGeneral.main_html_tag",
-                        "DetailPageGeneral.section_html_tag",
-                        "DetailPageGeneral.article_html_tag",
-                        "DetailPageGeneral.additionalOptions"
-                    ]
-                },
                 "group1": {
                     "type": "group",
                     "name": "Grid configuration - Container 1",
@@ -161,13 +149,6 @@ export let GridStoryWebsitesConfig = {
         }
     ],
     "defaultParams": {
-        "DetailPageGeneral": {
-            "customCSSClass": "",
-            "main_html_tag": "div",
-            "section_html_tag": "section",
-            "article_html_tag": "article",
-            "additionalOptions": []
-        },
         "DetailExtendedWidgets1": {
             "container_order": "1",
             "container_name": false,
@@ -282,65 +263,6 @@ export let GridStoryWebsitesConfig = {
         }
     },
     "paramsDescription": {
-        "DetailPageGeneral": {
-            "customCSSClass": {
-                "name": "Custom class",
-                "type": "textfield",
-                "description": "",
-                "required": false
-            },
-            "main_html_tag": {
-                "name": "Main HTML tag",
-                "description": "",
-                "type": "select",
-                "allowBlank": false,
-                "multiSelect": false,
-                "items": [
-                    "main",
-                    "div",
-                    "section",
-                    "aside"
-                ],
-                "required": true
-            },
-            "section_html_tag": {
-                "name": "Section HTML tag",
-                "description": "",
-                "type": "select",
-                "allowBlank": false,
-                "multiSelect": false,
-                "items": [
-                    "div",
-                    "section",
-                    "aside",
-                    "main",
-                    "article"
-                ],
-                "required": true
-            },
-            "article_html_tag": {
-                "name": "Article HTML tag",
-                "description": "",
-                "type": "select",
-                "allowBlank": false,
-                "multiSelect": false,
-                "items": [
-                    "article",
-                    "div",
-                    "section",
-                    "aside"
-                ],
-                "required": true
-            },
-            "additionalOptions": {
-                "name": "Additional options",
-                "type": "select",
-                "allowBlank": true,
-                "multiSelect": true,
-                "items": [],
-                "required": false
-            }
-        },
         "DetailPageWidgets": {
             "widgets_above_article": {
                 "type": "modules",

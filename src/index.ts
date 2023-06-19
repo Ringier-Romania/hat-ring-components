@@ -17,4 +17,5 @@ export * from "./components/widgets/common/Logo/Logo";
 export * from "./components/widgets/common/Slider/Slider";
 export * from "./components/widgets/Story/StoryDate/StoryDate";
 export * from "./components/common/TextReplacer";
+export * from "./components/widgets/Lists/TopicTitle/TopicTitle";
 export * from "./components/widgets/common/SingleImage/SingleImage";

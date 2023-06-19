@@ -1,7 +1,7 @@
 export let GridHomeWebsitesConfig = {
     "sections": [
         {
-            "title": "Home (page)",
+            "title": "Home",
             "keys": [
                 "HomePage0",
                 "HomePage1",
@@ -11,15 +11,6 @@ export let GridHomeWebsitesConfig = {
                 "HomePage5"
             ],
             "groups": {
-                "group0": {
-                    "type": "group",
-                    "name": "Containers settings",
-                    "fields": [
-                        "HomePage0.section_main",
-                        "HomePage0.section_count",
-                        "HomePage0.section_html_tag"
-                    ]
-                },
                 "group1": {
                     "type": "group",
                     "name": "Container 1",
@@ -209,11 +200,6 @@ export let GridHomeWebsitesConfig = {
         }
     ],
     "defaultParams": {
-        "HomePage0": {
-            "section_main": "1",
-            "section_count": "5",
-            "section_html_tag": "main"
-        },
         "HomePage1": {
             "container_order": "1",
             "container_name": false,
@@ -356,53 +342,6 @@ export let GridHomeWebsitesConfig = {
         }
     },
     "paramsDescription": {
-        "HomePage0": {
-            "section_main": {
-                "name": "Main container",
-                "description": "Main container",
-                "type": "select",
-                "items": [
-                    "0",
-                    "1",
-                    "2",
-                    "3",
-                    "4",
-                    "5",
-                    "6",
-                    "7",
-                    "8",
-                    "9",
-                    "10"
-                ]
-            },
-            "section_count": {
-                "name": "Visible containers",
-                "description": "Visible containers",
-                "type": "select",
-                "items": [
-                    "0",
-                    "1",
-                    "2",
-                    "3",
-                    "4",
-                    "5"
-                ]
-            },
-            "section_html_tag": {
-                "name": "Main element HTML tag",
-                "description": "",
-                "type": "select",
-                "allowBlank": false,
-                "multiSelect": false,
-                "items": [
-                    "main",
-                    "div",
-                    "section",
-                    "aside"
-                ],
-                "required": true
-            }
-        },
         "HomePage1": {
             "container_order": {
                 "name": "Order",
