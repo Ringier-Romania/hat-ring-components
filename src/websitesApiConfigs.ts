@@ -7,6 +7,7 @@ export * from "./components/widgets/common/BasicWidget/BasicWidgetWebsitesConfig
 export * from "./components/widgets/common/Logo/LogoWebsitesConfig";
 export * from "./components/widgets/common/Menu/MenuWebsitesConfig";
 export * from "./components/widgets/common/Slider/SliderWebsitesConfig";
+export * from "./components/widgets/common/SingleImage/SingleImageWebsitesConfig";
 export * from './components/widgets/Story/StoryLiveBlog/StoryLiveBlogWebsitesConfig';
 export * from './components/widgets/Story/StoryTitle/StoryTitleWebsitesConfig';
 export * from './components/widgets/Story/StoryMainImage/StoryMainImageWebsitesConfig';

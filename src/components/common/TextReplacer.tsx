@@ -14,7 +14,7 @@ export async function TextReplacer({children, context, parentComponent}: {
             return (text) => text.replaceAll(replacerObj['Match pattern'], replacerObj['Replacement'])
         })
 
-        function replacer(text) {
+        const replacer = (text) => {
             return replacementFunctions.reduce(
                 (prevString, replacementFnc) => replacementFnc(prevString),
                 text
