@@ -11,7 +11,8 @@ export let GeneralWebsitesConfig
     "defaultParams": {
         "general": {
             "language": "en",
-        }
+        },
+        "defaultImage": "",
     },
     "paramsDescription": {
         "general": {
@@ -27,7 +28,12 @@ export let GeneralWebsitesConfig
                     "de",
                     "fr"
                 ]
-            }
+            },
+            "defaultImage": {
+                "name": "Default image on page",
+                "description": "Default image on page",
+                "type": "textfield"
+            },
         }
     }
 }
