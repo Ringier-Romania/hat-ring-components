@@ -16,9 +16,7 @@ export let GenericListWebsitesConfig
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "showOptions": [
                     "image",
-                    "title",
-                    "lead",
-                    "publicationDate"
+                    "title"
                 ],
                 "headerText": "",
                 "headerTag": "h2",
@@ -41,17 +39,7 @@ export let GenericListWebsitesConfig
                     "items": [
                         "image",
                         "title",
-                        "flags",
-                        "lead",
-                        "publicationDate",
-                        "modificationDate",
-                        "authors",
-                        "wrapperStart",
-                        "wrapperEnd",
-                        "titleExtras",
                         "taxonomies",
-                        "category",
-                        "alternativeTeasers"
                     ],
                     "required": false
                 },
@@ -100,7 +88,6 @@ export let GenericListWebsitesConfig
                     "description": "uuid",
                     "type": "textfield"
                 },
-
                 "imageSize": {
                     "name": "Image resolution",
                     "type": "textfield",
@@ -110,11 +97,7 @@ export let GenericListWebsitesConfig
                     "name": "Mobile image resolution",
                     "type": "textfield",
                     "description": "Image resolution (empty = same as desktop), example: 600x330"
-                },
-                "showTotalElements": {
-                    "name": "Display total elements",
-                    "type": "checkbox"
-                },
+                }
             }
         }
     }

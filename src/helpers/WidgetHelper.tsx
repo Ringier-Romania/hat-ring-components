@@ -34,17 +34,19 @@ export function WidgetHelper_getWidgetCssClasses(componentName: string, widgetCo
     if (get(context, `cssModules.${componentName}`, false)) {
         cssClasses.push(get(context, `cssModules.${componentName}`));
     }
+    
+    if(widgetConfig){
+        if (widgetConfig.customWidth && widgetConfig.customWidth !== 'none') {
+            cssClasses.push(`widgetWidth${widgetConfig.customWidth}`);
+        }
 
-    if (widgetConfig.customWidth && widgetConfig.customWidth !== 'none') {
-        cssClasses.push(`widgetWidth${widgetConfig.customWidth}`);
-    }
+        if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
+            cssClasses.push(`widgetPosition${upperFirst(widgetConfig.customPosition)}`);
+        }
 
-    if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
-        cssClasses.push(`widgetPosition${upperFirst(widgetConfig.customPosition)}`);
-    }
-
-    if (widgetConfig.customClass && widgetConfig.customClass !== '') {
-        cssClasses.push(widgetConfig.customClass);
+        if (widgetConfig.customClass && widgetConfig.customClass !== '') {
+            cssClasses.push(widgetConfig.customClass);
+        }
     }
 
     return [...additionalCssClasses, ...cssClasses].join(' ');

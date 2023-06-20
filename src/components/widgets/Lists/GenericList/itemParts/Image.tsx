@@ -4,8 +4,9 @@ import {RingImage, TransformType} from "../../../../common/RingImage";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
+import {ConfigHelper_getGeneralConfig} from "../../../../../helpers/ConfigHelper";
 
-export default function Image(
+export default async function Image(
     {itemIndex, context, widgetConfig, data}:
         {
             itemIndex: number,
@@ -14,16 +15,23 @@ export default function Image(
             data: GenericListResponseNode,
         }) {
 
-    const image = data.image;
+    let image = data.image;
 
     if (!image || !image.url) {
-        return WidgetHelper_renderEmptyComponent('Image');
+        const generalConfig = await ConfigHelper_getGeneralConfig(context);
+        if (generalConfig && generalConfig.defaultImage) {
+            image = {
+                url: generalConfig.defaultImage as string
+            }
+        } else {
+            return WidgetHelper_renderEmptyComponent('Image');
+        }
     }
 
     const sizes = ((context.hatControllerParams.isMobile ? widgetConfig.imageSizeMobile : widgetConfig.imageSize) || '400x300').split('x');
 
     const ringImageProps = {
-        src: image.url,
+        src: image.url as string,
         alt: image.caption || data.title || '',
         width: Number(sizes[0]),
         height: Number(sizes[1])
