@@ -4,7 +4,7 @@ import {
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
 import {SliderFront} from "./SliderFront";
-import {RingImage} from "../../../common/RingImage";
+import {RingImage, TransformType} from "../../../common/RingImage";
 import {RingLink} from "../../../common/RingLink";
 import {SliderElement, SliderParams} from "./types";
 import styles from '../../../../../styles/widgets/common/Slider.module.scss';
@@ -24,7 +24,7 @@ export async function Slider(
             {slide['Description'] && <div className={"slideDescription"}>{slide['Description']}</div>}
             {slide['Source url'] && slide['Source type'] === 'Image'
                 && <div className={"slideImage"}>
-                    <RingImage src={slide['Source url']} alt={slide['Title'] || ''} width={dimensions.width} height={dimensions.height} />
+                    <RingImage src={slide['Source url']} alt={slide['Title'] || ''} width={dimensions.width} height={dimensions.height} transform={TransformType.ResizeCropAuto}/>
                 </div>
             }
         </>
