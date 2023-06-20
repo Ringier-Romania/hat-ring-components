@@ -24,7 +24,7 @@ export async function Slider(
             {slide['Description'] && <div className={"slideDescription"}>{slide['Description']}</div>}
             {slide['Source url'] && slide['Source type'] === 'Image'
                 && <div className={"slideImage"}>
-                    <RingImage src={slide['Source url']} alt={slide['Title'] || ''} width={dimensions.width} height={dimensions.height} transform={TransformType.ResizeCropAuto}/>
+                    <RingImage src={slide['Source url']} alt={slide['Title'] || ''} width={dimensions.width} height={dimensions.height} transform={TransformType.ResizeCropAuto} />
                 </div>
             }
         </>

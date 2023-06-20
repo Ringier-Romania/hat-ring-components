@@ -21,6 +21,13 @@ export interface SliderConfig extends AbstractWidgetConfig {
     loop: boolean,
     navigation: boolean,
     pagination: boolean
+    centeredSlides: boolean,
+    breakpoints: Array<Breakpoint>
+}
+
+export interface Breakpoint {
+    "Minimal screen size": number,
+    "Slides per view": number
 }
 
 export interface SliderParams extends WidgetParams {

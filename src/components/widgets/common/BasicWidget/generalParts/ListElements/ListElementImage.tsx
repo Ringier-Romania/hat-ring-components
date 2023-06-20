@@ -1,14 +1,14 @@
 import React from 'react';
 import {AppContext} from "../../../../../../types/types";
-import {BasicWidgetConfig, ListElementsImageData} from "../../types";
+import {BasicWidgetConfig, ListElementImageData} from "../../types";
 import {RingImage, RingImageProps, TransformType} from "../../../../../common/RingImage";
 
-export default function ListElementsImage(
+export default function ListElementImage(
     {context, widgetConfig, data}:
         {
             context: AppContext,
             widgetConfig: BasicWidgetConfig,
-            data: ListElementsImageData,
+            data: ListElementImageData,
         }) {
 
     if (!data.url) {
@@ -38,9 +38,9 @@ export default function ListElementsImage(
     // @TODO: add priority from config and other props
     return (
         (data.url) ?
-            <div className={['ListElementsImage', (!imageWidth || !imageHeight) ? 'listElementsImageWrapper': ''].join(' ')}>
+            <div className={['ListElementImage', (!imageWidth || !imageHeight) ? 'listElementImageWrapper': ''].join(' ')}>
                 {/* @ts-ignore */}
-                <RingImage {...ringImageProps} className={(!imageWidth || !imageHeight) ? 'listElementsImageFill' : '' }/>
+                <RingImage {...ringImageProps} className={(!imageWidth || !imageHeight) ? 'listElementImageFill' : '' }/>
             </div> :
             <></>
     );
