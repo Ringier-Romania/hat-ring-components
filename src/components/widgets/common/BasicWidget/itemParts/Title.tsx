@@ -23,7 +23,7 @@ export default function Title(
     const itemsHeaderArr = HeaderTag.split('h');
     if (itemsHeaderArr.length === 2) {
         const tagLevel = Number(itemsHeaderArr[1]);
-        if (tagLevel === 6) {
+        if (tagLevel >= 6) {
             ItemHeaderTag = 'span';
         } else {
             ItemHeaderTag = `h${_.clamp(tagLevel + 1, 2, 6)}` as keyof JSX.IntrinsicElements;

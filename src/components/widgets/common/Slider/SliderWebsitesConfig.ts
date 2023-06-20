@@ -17,7 +17,7 @@ export let SliderWebsitesConfig
                 "widgetType": "slider",
                 "slides": [],
                 "slidesPerView": "auto",
-                "autoplayDelay": 3,
+                "autoplayDelay": 0,
                 "loop": false,
                 "navigation": true,
                 "pagination": false,

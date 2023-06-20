@@ -105,7 +105,7 @@ export interface ListElementsData {
     'Custom CSS Class': string
 }
 
-export interface ListElementsImageData {
+export interface ListElementImageData {
     url: string,
     caption: string,
     imageDim: string
