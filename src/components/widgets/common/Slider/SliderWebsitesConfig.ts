@@ -21,13 +21,15 @@ export let SliderWebsitesConfig
                 "loop": false,
                 "navigation": true,
                 "pagination": false,
+                "centeredSlides": false,
+                "breakpoints": []
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
                 "slides": {
                     "type": "treeobject",
                     "name": "Slides",
-                    "description": "slides",
+                    "description": "",
                     "properties": [
                         {
                             "name": "Title",
@@ -78,12 +80,12 @@ export let SliderWebsitesConfig
                 "autoplayDelay": {
                     "name": "Autoplay delay",
                     "description": "Delay between transitions (in ms). If this parameter is not specified (0), auto play will be disabled",
-                    "type": "number",
+                    "type": "numberfield",
                     "required": false
                 },
                 "loop": {
                     "name": "Loop",
-                    "description": "Check to enable continuous loop mode",
+                    "description": "Check to enable continuous loop mode. Because of nature of how the loop mode works (it will rearrange slides), total number of slides must be >= 'Slides per view' * 2",
                     "type": "checkbox",
                     "required": false
                 },
@@ -98,6 +100,26 @@ export let SliderWebsitesConfig
                     "description": "Check to enable dots for slider",
                     "type": "checkbox",
                     "required": false
+                },
+                "centeredSlides": {
+                    "name": "Centered slides",
+                    "description": "If true, then active slide will be centered, not always on the left side.",
+                    "type": "checkbox",
+                    "required": false
+                },
+                "breakpoints": {
+                    "type": "treeobject",
+                    "name": "Breakpoints",
+                    "description": "Allows to set different parameter for different responsive breakpoints (screen sizes).",
+                    "properties": [
+                        {
+                            "name": "Minimal screen size",
+                            "type": "textfield"
+                        }, {
+                            "name": "Slides per view",
+                            "type": "textfield"
+                        }
+                    ]
                 },
             }
         }
