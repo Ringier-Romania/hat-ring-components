@@ -9,7 +9,7 @@ import Header from "./generalParts/Header";
 import Items from "./generalParts/Items";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
-import styles from "../../../../../styles/widgets/common/GenericList.module.scss";
+import styles from "../../../../../styles/widgets/Lists/GenericList.module.scss";
 import Pagination from "./generalParts/Pagination";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 
