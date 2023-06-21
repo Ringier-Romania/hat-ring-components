@@ -1,6 +1,7 @@
 import Image, {ImageProps, ImageLoaderProps} from "next/image";
 import React from "react";
-const { OcdnUrl } = require('@ras-tech/ocdn');
+
+const {OcdnUrl} = require('@ras-tech/ocdn');
 import styles from "../../../styles/common/RingImage.module.scss";
 
 export interface RingImageProps extends ImageProps {
@@ -26,8 +27,9 @@ function ocdnLoader(src, width, height, transformType) {
     const ocdnBucketName = process.env.NEXT_PUBLIC_OCDN_BUCKET_NAME!;
     const ocdnTransformKey = process.env.NEXT_PUBLIC_OCDN_TRANSFORM_KEY!;
 
-    try{
-        if (ocdnBucketName && ocdnTransformKey) {
+
+    if (ocdnBucketName && ocdnTransformKey) {
+        try {
             const cropImage = new OcdnUrl(ocdnTransformKey, src);
             cropImage.setBucket(ocdnBucketName);
             cropImage.setDomain('ocdn.eu');
@@ -37,11 +39,23 @@ function ocdnLoader(src, width, height, transformType) {
                 cropImage.resizeCropAuto(width, height);
             }
             src = cropImage.getUrl();
+        } catch (e) {
+            console.info('Unable to transform image');
+            //@TODO fix https://jira.ringieraxelspringer.pl/servicedesk/customer/portal/4/DLSD-195830
+            const cropImage = new OcdnUrl();
+            cropImage.init(src);
+            cropImage.setKey(ocdnTransformKey);
+            cropImage.setBucket(ocdnBucketName);
+            if (transformType === TransformType.Resize) {
+                cropImage.resize(width, height);
+            } else {
+                cropImage.resizeCropAuto(width, height);
+            }
+            src = cropImage.getUrl();
         }
-    }catch(e){
-        console.info('Unable to transform image',e);
     }
-    
+
+
     return src;
 }
 
@@ -62,5 +76,6 @@ export function RingImage(props: RingImageProps) {
         src = ocdnLoader(src, props.width, props.height, props.transform);
     }
 
-    return <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src} unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
+    return <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
+                  unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
 }
