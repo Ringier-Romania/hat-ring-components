@@ -30,6 +30,7 @@ export interface GenericListResponseNode {
     mainPublicationPoint?: PublicationPoint,
     topics?: Array<{topic: Topic}>,
     image?: { url?: string, caption?: string, }
+    date?: {modificationTime: string, creationTime: string}
 }
 
 

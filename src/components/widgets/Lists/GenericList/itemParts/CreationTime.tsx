@@ -1,0 +1,39 @@
+import React from 'react';
+import {AppContext} from "../../../../../types/types";
+import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
+import * as _ from "lodash";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import gql from "graphql-tag";
+import {RingLink} from "../../../../common/RingLink";
+import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
+
+export default async function CreationTime(
+    {context, widgetConfig, data}:
+        {
+            context: AppContext,
+            widgetConfig: GenericListWidgetConfig,
+            data: GenericListResponseNode,
+        }) {
+
+    if (!data.date?.creationTime) {
+        return WidgetHelper_renderEmptyComponent('CreationTime');
+    }
+
+    return (
+        <div className={['CreationTime'].join(' ')}>
+            {await DateHelper_convertDate(context,data.date.creationTime)}
+        </div>
+    )
+}
+
+CreationTime.getFragment = () => {
+    return {
+        variables: {},
+        query: gql`fragment CreationTimeFragment on Story {
+            date {
+                creationTime
+            }
+        }`
+    }
+}
+

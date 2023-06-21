@@ -40,6 +40,8 @@ export let GenericListWebsitesConfig
                         "image",
                         "title",
                         "taxonomies",
+                        "modificationTime",
+                        "creationTime",
                     ],
                     "required": false
                 },
