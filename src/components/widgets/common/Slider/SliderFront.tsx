@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, {useEffect} from "react";
 import {UtilsHelper_getValueIfExists} from "../../../../helpers/UtilsHelper";
 import { useRef } from 'react';
 import { register } from 'swiper/element/bundle';
@@ -17,16 +17,42 @@ export function SliderFront(
     const slidesPerView = UtilsHelper_getValueIfExists(widgetConfig.slidesPerView, 'auto');
     const navigation = UtilsHelper_getValueIfExists(widgetConfig.navigation, true);
     const pagination = UtilsHelper_getValueIfExists(widgetConfig.pagination, false);
+    const centeredSlides = UtilsHelper_getValueIfExists(widgetConfig.centeredSlides, false);
+    const configBreakpoints = UtilsHelper_getValueIfExists(widgetConfig.breakpoints, []);
+
+    const breakpoints = {};
+    configBreakpoints.forEach(breakpoint => {
+        breakpoints[breakpoint["Minimal screen size"]] = {};
+        breakpoints[breakpoint["Minimal screen size"]].slidesPerView = breakpoint["Slides per view"];
+    });
+
+    const autoplay = isAutoplay ? {delay: autoplayDelay} : false;
+
+    let inited = false;
+    useEffect(() => {
+        if (swiperElRef.current && !inited) {
+            inited = true;
+            const swiperParams = {
+                autoplay,
+                loop: isLoop,
+                slidesPerView,
+                navigation,
+                pagination,
+                centeredSlides,
+                breakpoints,
+            };
+
+            Object.assign(swiperElRef.current, swiperParams);
+            swiperElRef.current.initialize();
+        }
+    }, []);
+
+
 
     return <>
         <swiper-container
+            init={false}
             ref={swiperElRef}
-            autoplay={isAutoplay}
-            data-swiper-autoplay={autoplayDelay}
-            loop={isLoop}
-            slidesPerView={slidesPerView}
-            navigation={navigation}
-            pagination={pagination}
             suppressHydrationWarning={true}
         >
             {children}

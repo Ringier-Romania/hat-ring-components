@@ -20,6 +20,12 @@
           }
         }
 
+        &.gridPositionLeft + *, &.gridPositionRight + * {
+          &:not(.gridPositionLeft, .gridPositionRight) {
+            clear: both;
+          }
+        }
+
         // widgetConfig.customPosition
         &.gridPositionLeft {
           float: left;
