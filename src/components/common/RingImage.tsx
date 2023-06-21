@@ -26,18 +26,22 @@ function ocdnLoader(src, width, height, transformType) {
     const ocdnBucketName = process.env.NEXT_PUBLIC_OCDN_BUCKET_NAME!;
     const ocdnTransformKey = process.env.NEXT_PUBLIC_OCDN_TRANSFORM_KEY!;
 
-    if (ocdnBucketName && ocdnTransformKey) {
-        const cropImage = new OcdnUrl(ocdnTransformKey, src);
-        cropImage.setBucket(ocdnBucketName);
-        cropImage.setDomain('ocdn.eu');
-        if (transformType === TransformType.Resize) {
-            cropImage.resize(width, height);
-        } else {
-            cropImage.resizeCropAuto(width, height);
+    try{
+        if (ocdnBucketName && ocdnTransformKey) {
+            const cropImage = new OcdnUrl(ocdnTransformKey, src);
+            cropImage.setBucket(ocdnBucketName);
+            cropImage.setDomain('ocdn.eu');
+            if (transformType === TransformType.Resize) {
+                cropImage.resize(width, height);
+            } else {
+                cropImage.resizeCropAuto(width, height);
+            }
+            src = cropImage.getUrl();
         }
-        src = cropImage.getUrl();
+    }catch(e){
+        console.info('Unable to transform image',e);
     }
-
+    
     return src;
 }
 

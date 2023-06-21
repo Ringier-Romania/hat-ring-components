@@ -18,21 +18,19 @@ export default function Taxonomies(
         return WidgetHelper_renderEmptyComponent('Taxonomies');
     }
 
-
-    const HeaderTag = 'span' as keyof JSX.IntrinsicElements;
-    let ItemHeaderTag = HeaderTag;
-
-
     return (
         <div className={['Taxonomies'].join(' ')}>
 
             {data.topics?.map(topic => {
                 let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
                 let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
-                return url ?
+                return <div className={'topic'} data-kind={topic.topic.kind.code}>
+                    { url ?
                     <RingLink href={url}>
-                        <span className={'topic'}>{topic.topic.name}</span>
-                    </RingLink> : <span className={'topic'}>{topic.topic.name}</span>
+                        <span>{topic.topic.name}</span>
+                    </RingLink> : <span>{topic.topic.name}</span>
+                    }
+                </div>
             })}
         </div>
     )

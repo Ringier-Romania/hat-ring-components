@@ -34,8 +34,7 @@ export default function Items(
                 });
                 const colClass = `col${colNumber}`;
                 return <div className={['Item', colClass].join(' ')}>
-                    <div className={'linkWrapper'}><RingLink href={edge.node?.mainPublicationPoint?.url || '#'} title={edge.node?.title}>
-
+                    <div className={'linkOverlay'}><RingLink href={edge.node?.mainPublicationPoint?.url || '#'} title={edge.node?.title}>
                     </RingLink></div>
                     {itemParts}
                 </div>;

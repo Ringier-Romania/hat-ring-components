@@ -36,7 +36,7 @@ export default function ImageBlock({blockData, widgetConfig}: ImageBlockParams) 
             {title && <span className="caption">{title}</span>}
             {image.description && <span className="description">{image.description}</span>}
             {/* TODO add translation */}
-            {image.sources?.length && <span className="copyright">{`Foto: ${image.sources[0].source.name}`}</span>}
+            {image.sources?.length && <span className="copyright">{`${image.sources[0].source.name}`}</span>}
         </div>
     </div>
 }
