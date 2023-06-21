@@ -20,8 +20,9 @@ export function Container({sectionName, sectionConfig, context, boxes}: GridCont
         return null;
     }
     const ContainerTag = `${sectionConfig.container_html_tag || 'main'}`;
+
     // @ts-ignore
-    return <ContainerTag className={['gridContainer', sectionName, styles.gridContainer].join(' ')}>
+    return <ContainerTag className={['gridContainer', sectionName, sectionConfig.container_classes, styles.gridContainer].join(' ')}>
         {boxes.map(boxName => {
             return !!sectionConfig[boxName + '_hide'] ? null :
                 <Box
