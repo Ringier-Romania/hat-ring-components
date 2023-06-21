@@ -42,6 +42,7 @@ export let GenericListWebsitesConfig
                         "taxonomies",
                         "modificationTime",
                         "creationTime",
+                        "lead",
                     ],
                     "required": false
                 },

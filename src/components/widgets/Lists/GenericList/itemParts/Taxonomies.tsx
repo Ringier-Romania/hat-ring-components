@@ -40,6 +40,7 @@ Taxonomies.getFragment = () => {
     return {
         variables: {},
         query: gql`fragment TopicsFragment on Story {
+            
             topics{
                 topic {
                     id
