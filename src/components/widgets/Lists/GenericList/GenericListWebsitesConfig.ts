@@ -28,6 +28,7 @@ export let GenericListWebsitesConfig
                 "imageSizeMobile": "",
                 "widgetType": "genericList",
                 "excludedFlags": [],
+                "linkLabel": ""
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -47,12 +48,12 @@ export let GenericListWebsitesConfig
                     ],
                     "required": false
                 },
-                "headerText" : {
+                "headerText": {
                     "name": "Header text",
                     "description": "",
                     "type": "textfield"
                 },
-                "headerTag" : {
+                "headerTag": {
                     "name": "Header tag",
                     "description": "Html tag for header",
                     "type": "select",
@@ -112,6 +113,11 @@ export let GenericListWebsitesConfig
                             "type": "textfield"
                         }
                     ]
+                },
+                "linkLabel": {
+                    "name": "Link label",
+                    "description": "",
+                    "type": "textfield"
                 },
             }
         }

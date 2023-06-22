@@ -12,6 +12,7 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
     "imageSize": string,
     "imageSizeMobile": string,
     "excludedFlags":[],
+    "linkLabel": string,
 }
 
 export interface GenericListExtendableAttributes {
