@@ -68,19 +68,17 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
             ${dynamicFragments}
         `;
 
-
+        const excludedFlags = widgetConfig.excludedFlags ? widgetConfig.excludedFlags.map(flag => {return flag.excludedFlag }) : null;
         const categoryId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id')|| _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.id');
-
         const offset = (UtilsHelper_convertToInt(widgetConfig.postShift) || 0) + ((currentPage - 1) * UtilsHelper_convertToInt(widgetConfig.paginationElements));
         const variables = {
             ...dynamicVariables,
             categoryId: categoryId,
             limit: UtilsHelper_convertToInt(widgetConfig.paginationElements),
             offset: offset,
-            excludedFlags: ['']
+            excludedFlags: excludedFlags,
         };
 
-        console.log(query.loc?.source.body,JSON.stringify(variables));
         return await WebsiteApiProvider.call(query, variables);
     }
 

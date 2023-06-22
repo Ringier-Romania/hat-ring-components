@@ -11,6 +11,7 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
     "customListUuid": string,
     "imageSize": string,
     "imageSizeMobile": string,
+    "excludedFlags":[],
 }
 
 export interface GenericListExtendableAttributes {
