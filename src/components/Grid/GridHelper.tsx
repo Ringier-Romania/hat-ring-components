@@ -4,7 +4,7 @@ export function GridHelper_generateGridConfig(configKey, title, containerCount =
 
     let indexes = Array.from({length: containerCount}, (value, index) => index);
     let sizes = Array.from({length: 12}, (value, index) => index + 1);
-    let keys = Array.from({length: containerCount}, (value, index) => configKey + index);
+    let keys = Array.from({length: containerCount}, (value, index) => configKey +  (UtilsHelper_convertToInt(index) + 1));
     const fields = [
         {
             name: 'container_html_tag',
@@ -281,7 +281,7 @@ export function GridHelper_generateGridConfig(configKey, title, containerCount =
 
     let groups = {};
     indexes.forEach((key, index) => {
-        groups['group' + key] = {
+        groups['group' + (UtilsHelper_convertToInt(key) + 1)] = {
             "type": "group",
             "name": "Container " + (UtilsHelper_convertToInt(index) + 1),
             "fields": fields.map((field) => {
