@@ -26,7 +26,8 @@ export let GenericListWebsitesConfig
                 "customListUuid": "",
                 "imageSize": "400x225",
                 "imageSizeMobile": "",
-                "widgetType": "genericList"
+                "widgetType": "genericList",
+                "excludedFlags": [],
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -100,7 +101,18 @@ export let GenericListWebsitesConfig
                     "name": "Mobile image resolution",
                     "type": "textfield",
                     "description": "Image resolution (empty = same as desktop), example: 600x330"
-                }
+                },
+                "excludedFlags": {
+                    "type": "treeobject",
+                    "name": "Excluded Flags",
+                    "description": "Flags excluded from results",
+                    "properties": [
+                        {
+                            "name": "excludedFlag",
+                            "type": "textfield"
+                        }
+                    ]
+                },
             }
         }
     }

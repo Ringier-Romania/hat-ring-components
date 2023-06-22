@@ -51,8 +51,8 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
 
 
         const query = gql`
-            query($categoryId: UUID!, $limit: Int!, $offset: Int! ${mappedDynamicVariablesTypes}){
-                stories(filter:{category: {in: [$categoryId]}},limit: $limit, offset: $offset ){
+            query($categoryId: UUID!, $limit: Int!, $excludedFlags: [String!], $offset: Int! ${mappedDynamicVariablesTypes}){
+                stories(filter:{category: {in: [$categoryId]}, flag: {notIn:$excludedFlags}},limit: $limit, offset: $offset ){
                     total
                     edges {
                         node {
@@ -76,9 +76,11 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
             ...dynamicVariables,
             categoryId: categoryId,
             limit: UtilsHelper_convertToInt(widgetConfig.paginationElements),
-            offset: offset
+            offset: offset,
+            excludedFlags: ['']
         };
 
+        console.log(query.loc?.source.body,JSON.stringify(variables));
         return await WebsiteApiProvider.call(query, variables);
     }
 
