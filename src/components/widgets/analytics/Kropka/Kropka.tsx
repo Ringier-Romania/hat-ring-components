@@ -47,7 +47,6 @@ export async function Kropka(
         const pubType = getPubType(kind);
         if(pubId){
             dlApi.DX = `PV,puls,${pubId},${widgetConfig.portalId},${pubType}`;
-            console.log(dlApi);
         }
     }
 
