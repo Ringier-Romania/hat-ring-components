@@ -19,3 +19,5 @@ export * from "./components/widgets/Story/StoryDate/StoryDateWebsitesConfig";
 export * from "./components/configs/DeveloperSettingsWebsitesConfig";
 export * from "./components/configs/GeneralWebsitesConfig";
 export * from "./components/widgets/Lists/TopicTitle/TopicTitleWebsitesConfig";
+export * from "./components/widgets/analytics/Kropka/KropkaWebsitesConfig";
+export * from "./components/widgets/analytics/RingDataLayer/RingDataLayerWebsitesConfig";
