@@ -15,6 +15,9 @@ export let SliderWebsitesConfig
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "widgetType": "slider",
+                "headerText": "",
+                "headerSeoTag": "h2",
+                "description": "",
                 "slides": [],
                 "slidesPerView": "auto",
                 "autoplayDelay": 0,
@@ -26,6 +29,33 @@ export let SliderWebsitesConfig
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
+                "headerText": {
+                    "name": "Header text",
+                    "description": "",
+                    "type": "textfield"
+                },
+                "headerSeoTag": {
+                    "name": "Header tag",
+                    "description": "Html tag for header",
+                    "type": "select",
+                    "allowBlank": false,
+                    "multiSelect": false,
+                    "required": true,
+                    "items": [
+                        "h1",
+                        "h2",
+                        "h3",
+                        "h4",
+                        "h5",
+                        "h6",
+                        "none"
+                    ]
+                },
+                "description": {
+                    "name": "Description text",
+                    "description": "",
+                    "type": "textfield"
+                },
                 "slides": {
                     "type": "treeobject",
                     "name": "Slides",

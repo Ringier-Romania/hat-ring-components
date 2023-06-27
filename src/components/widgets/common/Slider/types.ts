@@ -15,6 +15,9 @@ export interface SliderElement {
 }
 
 export interface SliderConfig extends AbstractWidgetConfig {
+    headerSeoTag: string,
+    headerText: string,
+    description: string,
     slides: Array<SliderElement>,
     slidesPerView: number | 'auto',
     autoplayDelay: number,
