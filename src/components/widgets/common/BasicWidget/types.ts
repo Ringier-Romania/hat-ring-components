@@ -51,6 +51,7 @@ export interface BasicWidgetConfig extends AbstractWidgetConfig {
     alternativeTeasersCodeNames?: string,
     classificationList?: string,
     additionalOptions?: Array<BasicWidgetAdditionalOptions>
+    linkLabel?: string,
 }
 
 export interface BasicWidgetExtendableAttributes {

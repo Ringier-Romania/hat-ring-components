@@ -26,13 +26,7 @@ export default function ListElements(
         <div className={['ListElements'].join(' ')}>
             {widgetConfig.listElements && widgetConfig.listElements.map(element => {
                 return <div className={['Item', 'col' + colClass].join(' ')}>
-                    {
-                        element['Link url'] ?
-                            <RingLink href={element['Link url']}>
-                                <ListElementContent context={context} widgetConfig={widgetConfig} data={element} headerTagLevel={headerTagLevel} childLevel={1}/>
-                            </RingLink> :
-                            <ListElementContent context={context} widgetConfig={widgetConfig} data={element} headerTagLevel={headerTagLevel} childLevel={1}/>
-                    }
+                    <ListElementContent context={context} widgetConfig={widgetConfig} data={element} headerTagLevel={headerTagLevel} childLevel={1}/>
                 </div>;
             })}
         </div>

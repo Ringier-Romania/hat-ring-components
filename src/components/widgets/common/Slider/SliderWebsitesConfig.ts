@@ -14,7 +14,6 @@ export let SliderWebsitesConfig
             "description": "",
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
-                "widgetType": "slider",
                 "headerText": "",
                 "headerSeoTag": "h2",
                 "description": "",
@@ -25,7 +24,8 @@ export let SliderWebsitesConfig
                 "navigation": true,
                 "pagination": false,
                 "centeredSlides": false,
-                "breakpoints": []
+                "breakpoints": [],
+                "widgetType": "slider",
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,

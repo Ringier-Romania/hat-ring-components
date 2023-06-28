@@ -35,13 +35,7 @@ export default function ListElementContent (
             return (<div className={['listElementChildren'].join(' ')}>
                 {data.children.map((element, index) => {
                     return (<div className={['listElementChild'].join(' ')}>
-                        {
-                            element['Link url'] ?
-                                <RingLink href={element['Link url']}>
-                                    <ListElementContent context={context} widgetConfig={widgetConfig} data={element} childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1}/>
-                                </RingLink> :
-                                <ListElementContent context={context} widgetConfig={widgetConfig} data={element} childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1}/>
-                        }
+                        <ListElementContent context={context} widgetConfig={widgetConfig} data={element} childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1}/>
                     </div>)
                 })}
             </div>)
@@ -50,6 +44,12 @@ export default function ListElementContent (
     }
 
     return <div className={['ListElementContent', `listElementLevel${childLevel}`, customCssClass].join(' ')}>
+        {
+            data['Link url'] &&
+            <div className={'linkOverlay'}>
+                <RingLink href={data['Link url']} title={data.Title || ''}></RingLink>
+            </div>
+        }
         {data['Image src'] && <ListElementImage context={context} widgetConfig={widgetConfig} data={imageProps}/>}
         {data.Title && <ItemHeaderTag className="title">{data.Title}</ItemHeaderTag>}
         {data.Description && <p className="description">{data.Description}</p>}

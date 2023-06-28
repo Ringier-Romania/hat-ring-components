@@ -1,41 +1,27 @@
+import {
+    AbstractWebsitesWidgetConfigDefaultParams,
+    AbstractWebsitesWidgetConfigParamsDescription
+} from "../../../../types/abstracts";
+
 export let BasicWidgetWebsitesConfig = {
     "sections": [],
-    "defaultParams": {
-        "general": {
-            "flagsOrder": "video,top,rank_1"
-        }
-    },
-    "paramsDescription": {
-        "general": {
-            "flagsOrder": {
-                "name": "Supported flags priority ( separated with , )",
-                "description": "Show flags in this order",
-                "type": "textfield"
-            }
-        }
-    },
+    "defaultParams": {},
+    "paramsDescription": {},
     "modules": {
         "basicWidget_wdg": {
             "name": "Ring Basic",
             "description": "",
             "defaultParams": {
-                "platformDesktop": true,
-                "platformMobile": true,
+                ...AbstractWebsitesWidgetConfigDefaultParams,
                 "generalShowOptions": ["sectionElements"],
                 "showOptions": ["image", "title", "publicationDate", "lead"],
                 "additionalOptions": [],
                 "section_name": "",
                 "listElements": [],
-                "customClass": "",
-                "template": "basicWidget",
-                "amdModule": "none",
-                "customPosition": "none",
-                "customWidth": "none",
                 "count": 10,
                 "offset": 0,
                 "countBig": 0,
                 "columns": 1,
-                "lazyload": "enabled",
                 "dedicatedStyleForWidget": "none",
                 "labelValue": "",
                 "headerSeoTag": "h2",
@@ -43,33 +29,13 @@ export let BasicWidgetWebsitesConfig = {
                 "description": "",
                 "moreText": "",
                 "moreUrl": "",
-                "customId": "",
-                "customBg": "",
                 "bigImageSize": "1200x660",
                 "standardImageSize": "600x330",
                 "listElementsImageSize": "600x330",
-                "preloadImagesCount": 0,
-                "mobilePreloadImagesCount": 0,
-                "titleExtrasCodeNames": "",
-                "alternativeTeasersCodeNames": "",
-                "classificationList": "category,tag",
-                "slider": "none",
-                "decorators": [],
-                "cache": "min",
-                "onError": "abort",
                 "widgetType": "basicWidget"
             },
             "paramsDescription": {
-                "platformDesktop": {
-                    "name": "Desktop",
-                    "type": "checkbox",
-                    "description": "Desktop"
-                },
-                "platformMobile": {
-                    "name": "Mobile",
-                    "type": "checkbox",
-                    "description": "Mobile"
-                },
+                ...AbstractWebsitesWidgetConfigParamsDescription,
                 "generalShowOptions": {
                     "name": "Widget elements to display",
                     "description": "",
@@ -96,17 +62,10 @@ export let BasicWidgetWebsitesConfig = {
                         "title",
                         "lead",
                         "image",
-                        "flags",
                         "publicationDate",
                         "modificationDate",
-                        "taxonomies",
                         "authors",
-                        "authorsImages",
-                        "wrapperStart",
-                        "wrapperEnd",
-                        "titleExtras",
-                        "alternativeTeasers",
-                        "ordinalNumber"
+                        "authorsImages"
                     ]
                 },
                 "additionalOptions": {
@@ -115,7 +74,7 @@ export let BasicWidgetWebsitesConfig = {
                     "type": "select",
                     "allowBlank": true,
                     "multiSelect": true,
-                    "items": ["disableCropAuto", "disableCropImage", "[Dedicated Styles] Preload", "[Dedicated Styles] Prefetch"],
+                    "items": ["disableCropAuto", "disableCropImage"],
                     "required": false
                 },
                 "section_name": {
@@ -160,58 +119,6 @@ export let BasicWidgetWebsitesConfig = {
                         }
                     ]
                 },
-                "customClass": {
-                    "name": "Custom CSS class",
-                    "type": "textfield",
-                    "description": "",
-                    "required": false
-                },
-                "template": {
-                    "name": "Template type",
-                    "type": "select",
-                    "description": "from list",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "required": true,
-                    "items": [
-                        "basicWidget"
-                    ]
-                },
-                "amdModule": {
-                    "name": "Custom AMD module",
-                    "description": "from list",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "required": true,
-                    "items": [
-                        "none",
-                        "collapsable list elements (local/common.collapsableList)"
-                    ]
-                },
-                "customPosition": {
-                    "name": "Custom position",
-                    "description": "in grid BOX",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "required": true,
-                    "items": [
-                        "none",
-                        "left",
-                        "center",
-                        "right"
-                    ]
-                },
-                "customWidth": {
-                    "name": "Custom width",
-                    "description": "in grid BOX",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "required": true,
-                    "items": ["none", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                },
                 "count": {
                     "name": "Elements",
                     "type": "textfield",
@@ -238,18 +145,6 @@ export let BasicWidgetWebsitesConfig = {
                     "multiSelect": false,
                     "required": true,
                     "items": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                },
-                "lazyload": {
-                    "name": "Lazyload behavior",
-                    "description": "Lazyload behavior elements",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "items": [
-                        "enabled",
-                        "disabled",
-                        "disabledFirstElement"
-                    ]
                 },
                 "dedicatedStyleForWidget": {
                     "name": "Dedicated style for for widget",
@@ -310,16 +205,10 @@ export let BasicWidgetWebsitesConfig = {
                     "description": "",
                     "required": false
                 },
-                "customId": {
-                    "name": "Custom CSS ID",
-                    "type": "textfield",
+                "linkLabel": {
+                    "name": "Link label inside section elements items",
                     "description": "",
-                    "required": false
-                },
-                "customBg": {
-                    "name": "Background image url or color",
                     "type": "textfield",
-                    "description": "",
                     "required": false
                 },
                 "standardImageSize": {
@@ -339,86 +228,6 @@ export let BasicWidgetWebsitesConfig = {
                     "type": "textfield",
                     "description": "empty = original, works with images from Ring CMS",
                     "required": false
-                },
-                "preloadImagesCount": {
-                    "name": "Number of images that would be preloaded",
-                    "type": "textfield",
-                    "description": "The number should correspond to the number of pictures the user sees first after entering the page",
-                    "required": false
-                },
-                "mobilePreloadImagesCount": {
-                    "name": "Number of images that would be preloaded on mobile",
-                    "type": "textfield",
-                    "description": "The number should correspond to the number of pictures the user sees first after entering the page",
-                    "required": false
-                },
-                "titleExtrasCodeNames": {
-                    "name": "Title extras code names to show",
-                    "description": "(comma separated code names)",
-                    "type": "textfield"
-                },
-                "alternativeTeasersCodeNames": {
-                    "name": "Alternative teasers code names to show",
-                    "description": "(comma separated code names)",
-                    "type": "textfield"
-                },
-                "classificationList": {
-                    "name": "Taxonomy types",
-                    "type": "textfield",
-                    "description": "comma separated | in view order",
-                    "required": false
-                },
-                "slider": {
-                    "name": "Automatic slider",
-                    "type": "select",
-                    "description": "source",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "required": true,
-                    "items": [
-                        "none",
-                        "section elements",
-                        "list elements"
-                    ]
-                },
-                "decorators": {
-                    "name": "Decorators",
-                    "description": "",
-                    "type": "select",
-                    "allowBlank": true,
-                    "multiSelect": true,
-                    "required": false,
-                    "items": []
-                },
-                "cache": {
-                    "name": "cache",
-                    "description": "value",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "required": true,
-                    "items": [
-                        "min",
-                        "max"
-                    ]
-                },
-                "onError": {
-                    "name": "onError",
-                    "description": "value",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "required": true,
-                    "items": [
-                        "discard",
-                        "abort"
-                    ]
-                },
-                "widgetType": {
-                    "name": "widgetType",
-                    "description": "widget type",
-                    "type": "textfield",
-                    "required": true
                 }
             }
         }

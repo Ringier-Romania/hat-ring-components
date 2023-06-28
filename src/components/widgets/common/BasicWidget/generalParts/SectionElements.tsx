@@ -50,9 +50,12 @@ export default function SectionElements(
                 const bigElementClass = isBig ? `bigElement` : '';
 
                 return <div className={['Item', colClass, bigElementClass].join(' ')}>
-                    <RingLink href={edge.node?.url || '/'}>
-                        {itemParts}
-                    </RingLink>
+                    <div className={'linkOverlay'}>
+                        <RingLink href={edge.node?.url || '#'} title={edge.node?.title || ''}>
+                            {widgetConfig.linkLabel}
+                        </RingLink>
+                    </div>
+                    {itemParts}
                 </div>;
             })}
         </div>
