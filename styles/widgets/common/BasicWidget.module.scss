@@ -6,7 +6,6 @@
         display: grid;
         grid-template-columns: repeat(12, [col-start] 1fr);
         gap: var(--basicWidgetGap, var(--ringGap, 20px));
-
       }
 
       .Item {
@@ -18,11 +17,29 @@
       }
     }
 
-    .listElementsImageFill {
+    .Item {
+      position: relative;
+      .linkOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+
+        a {
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .listElementImageFill {
       object-fit: contain;
     }
 
-    .listElementsImageWrapper {
+    .listElementImageWrapper {
       position: relative;
       aspect-ratio: 16 / 9;
     }

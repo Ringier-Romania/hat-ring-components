@@ -1,0 +1,59 @@
+.GenericList {
+  :global {
+    @media only screen and (min-width: 768px) {
+      .Items {
+        display: grid;
+        grid-template-columns: repeat(12, [col-start] 1fr);
+        gap: var(--basicWidgetGap, var(--ringGap, 20px));
+
+        .Item {
+          @for $i from 1 through 12 {
+            &.col#{$i} {
+              grid-column: auto / span $i;
+            }
+          }
+        }
+      }
+    }
+
+    .Item {
+      position: relative;
+
+      .linkOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+
+        a {
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .Taxonomies {
+        a {
+          position: relative;
+          z-index: 13;
+        }
+      }
+    }
+
+    .Pagination {
+      display: flex;
+      justify-content: center;
+
+      li {
+        padding: 5px;
+        list-style: none;
+
+        &.active {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}

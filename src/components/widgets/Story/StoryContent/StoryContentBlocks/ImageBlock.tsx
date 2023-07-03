@@ -11,12 +11,12 @@ export default function ImageBlock({blockData, widgetConfig}: ImageBlockParams) 
     let maxImageWidth = widgetConfig.standardImageWidth && UtilsHelper_convertToInt(widgetConfig.standardImageWidth);
     let maxImageHeight = widgetConfig.standardImageHeight && UtilsHelper_convertToInt(widgetConfig.standardImageHeight);
 
-    if(maxImageWidth &&  maxImageWidth < imageWidth){
+    if (maxImageWidth && maxImageWidth < imageWidth) {
         imageHeight = UtilsHelper_convertToInt(maxImageWidth * imageHeight / imageWidth);
         imageWidth = maxImageWidth;
     }
 
-    if(maxImageHeight &&  maxImageHeight < imageHeight){
+    if (maxImageHeight && maxImageHeight < imageHeight) {
         imageWidth = UtilsHelper_convertToInt(maxImageHeight * imageWidth / imageHeight);
         imageHeight = maxImageHeight;
     }
@@ -24,7 +24,7 @@ export default function ImageBlock({blockData, widgetConfig}: ImageBlockParams) 
     const img = <RingImage priority={true} src={url} alt={alt || ''} width={imageWidth} height={imageHeight}
                            transform={TransformType.ResizeCropAuto}/>;
 
-    return <div className="ImageBlock">
+    return <div className={['ImageBlock', 'alignment-' + blockData.alignment].join(' ')}>
         {
             link ?
                 <RingLink href={link.url}>
@@ -36,7 +36,7 @@ export default function ImageBlock({blockData, widgetConfig}: ImageBlockParams) 
             {title && <span className="caption">{title}</span>}
             {image.description && <span className="description">{image.description}</span>}
             {/* TODO add translation */}
-            {image.sources?.length && <span className="copyright">{`Foto: ${image.sources[0].source.name}`}</span>}
+            {image.sources?.length && <span className="copyright">{`${image.sources[0].source.name}`}</span>}
         </div>
     </div>
 }

@@ -9,7 +9,7 @@ import Header from "./generalParts/Header";
 import Items from "./generalParts/Items";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
-import styles from "../../../../../styles/widgets/common/GenericList.module.scss";
+import styles from "../../../../../styles/widgets/Lists/GenericList.module.scss";
 import Pagination from "./generalParts/Pagination";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 
@@ -51,8 +51,8 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
 
 
         const query = gql`
-            query($categoryId: UUID!, $limit: Int!, $offset: Int! ${mappedDynamicVariablesTypes}){
-                stories(filter:{category: {in: [$categoryId]}},limit: $limit, offset: $offset ){
+            query($categoryId: UUID!, $limit: Int!, $excludedFlags: [String!], $offset: Int! ${mappedDynamicVariablesTypes}){
+                stories(filter:{category: {in: [$categoryId]}, flag: {notIn:$excludedFlags}},limit: $limit, offset: $offset ){
                     total
                     edges {
                         node {
@@ -68,15 +68,15 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
             ${dynamicFragments}
         `;
 
-
+        const excludedFlags = widgetConfig.excludedFlags ? widgetConfig.excludedFlags.map(flag => {return flag.excludedFlag }) : null;
         const categoryId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id')|| _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.id');
-
         const offset = (UtilsHelper_convertToInt(widgetConfig.postShift) || 0) + ((currentPage - 1) * UtilsHelper_convertToInt(widgetConfig.paginationElements));
         const variables = {
             ...dynamicVariables,
             categoryId: categoryId,
             limit: UtilsHelper_convertToInt(widgetConfig.paginationElements),
-            offset: offset
+            offset: offset,
+            excludedFlags: excludedFlags,
         };
 
         return await WebsiteApiProvider.call(query, variables);
@@ -92,7 +92,7 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
     }
 
     function render() {
-        return <div className={WidgetHelper_getWidgetCssClasses(widgetConfig, context, [cssModules])}>
+        return <div className={WidgetHelper_getWidgetCssClasses('GenericList', widgetConfig, context, [cssModules])}>
             <Header context={context} widgetConfig={widgetConfig} response={response}/>
             <Items context={context} widgetConfig={widgetConfig} response={response}
                    extendableAttributes={extendableAttributes}/>

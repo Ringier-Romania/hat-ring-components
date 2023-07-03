@@ -1,20 +1,29 @@
 import {AbstractWidgetConfig, AppContext, ComponentParams, WidgetParams} from "../../../../types/types";
 
-export interface  StoryContentWidgetConfig extends AbstractWidgetConfig {
+export interface StoryContentWidgetConfig extends AbstractWidgetConfig {
     standardImageWidth?: string | number,
-    standardImageHeight?: string| number,
-    displayFrom?: string| number,
+    standardImageHeight?: string | number,
+    displayFrom?: string | number,
     displayTo?: string | number,
 }
 
+export interface StoryContentExtendableAttributes {
+    customGroupBlocks?: any,
+    render?: (defaultStyles) => JSX.Element | null,
+    getCssModule?: (defaultStyles) => string | null,
+    getDataQueryStoryFragment?: string | null,
+}
+
 export interface StoryContentParams extends WidgetParams {
-    widgetConfig: StoryContentWidgetConfig
+    widgetConfig: StoryContentWidgetConfig,
+    extendableAttributes?: StoryContentExtendableAttributes,
 }
 
 export interface StoryContentSwitcherParams {
     content: any[];
     context: AppContext;
-    widgetConfig: StoryContentWidgetConfig
+    widgetConfig: StoryContentWidgetConfig,
+    extendableAttributes?: StoryContentExtendableAttributes,
 }
 
 
@@ -27,6 +36,7 @@ export interface ImageBlockParams {
         link: {
             url: string;
         }
+        alignment: string,
         image: {
             description: string;
             title: string;

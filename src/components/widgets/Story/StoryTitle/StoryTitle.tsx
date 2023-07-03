@@ -1,15 +1,15 @@
-
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTitleParams, StoryTitleResponse} from "./types";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 export async function StoryTitle({widgetConfig, context}: StoryTitleParams) {
     const query = gql`
         query($storyId: UUID){
             story(id:$storyId){
-                name
+                title
             }
         }
     `;
@@ -22,7 +22,9 @@ export async function StoryTitle({widgetConfig, context}: StoryTitleParams) {
     if(!response){
         response = await WebsiteApiProvider.call(query, variables) as StoryTitleResponse;
     }
-    const title = _.get(response, 'data.story.name');
-    return <h1>{title}</h1>;
+    const title = _.get(response, 'data.story.title');
+    return <div className={WidgetHelper_getWidgetCssClasses('StoryTitle', widgetConfig, context)}>
+        <h1>{title}</h1>
+    </div>;
 }
 

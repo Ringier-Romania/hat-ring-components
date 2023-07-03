@@ -16,9 +16,7 @@ export let GenericListWebsitesConfig
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "showOptions": [
                     "image",
-                    "title",
-                    "lead",
-                    "publicationDate"
+                    "title"
                 ],
                 "headerText": "",
                 "headerTag": "h2",
@@ -28,7 +26,9 @@ export let GenericListWebsitesConfig
                 "customListUuid": "",
                 "imageSize": "400x225",
                 "imageSizeMobile": "",
-                "widgetType": "genericList"
+                "widgetType": "genericList",
+                "excludedFlags": [],
+                "linkLabel": ""
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -41,26 +41,19 @@ export let GenericListWebsitesConfig
                     "items": [
                         "image",
                         "title",
-                        "flags",
-                        "lead",
-                        "publicationDate",
-                        "modificationDate",
-                        "authors",
-                        "wrapperStart",
-                        "wrapperEnd",
-                        "titleExtras",
                         "taxonomies",
-                        "category",
-                        "alternativeTeasers"
+                        "modificationTime",
+                        "creationTime",
+                        "lead",
                     ],
                     "required": false
                 },
-                "headerText" : {
+                "headerText": {
                     "name": "Header text",
                     "description": "",
                     "type": "textfield"
                 },
-                "headerTag" : {
+                "headerTag": {
                     "name": "Header tag",
                     "description": "Html tag for header",
                     "type": "select",
@@ -100,7 +93,6 @@ export let GenericListWebsitesConfig
                     "description": "uuid",
                     "type": "textfield"
                 },
-
                 "imageSize": {
                     "name": "Image resolution",
                     "type": "textfield",
@@ -111,9 +103,21 @@ export let GenericListWebsitesConfig
                     "type": "textfield",
                     "description": "Image resolution (empty = same as desktop), example: 600x330"
                 },
-                "showTotalElements": {
-                    "name": "Display total elements",
-                    "type": "checkbox"
+                "excludedFlags": {
+                    "type": "treeobject",
+                    "name": "Excluded Flags",
+                    "description": "Flags excluded from results",
+                    "properties": [
+                        {
+                            "name": "excludedFlag",
+                            "type": "textfield"
+                        }
+                    ]
+                },
+                "linkLabel": {
+                    "name": "Link label",
+                    "description": "",
+                    "type": "textfield"
                 },
             }
         }

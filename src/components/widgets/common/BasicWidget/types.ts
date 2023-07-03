@@ -51,6 +51,7 @@ export interface BasicWidgetConfig extends AbstractWidgetConfig {
     alternativeTeasersCodeNames?: string,
     classificationList?: string,
     additionalOptions?: Array<BasicWidgetAdditionalOptions>
+    linkLabel?: string,
 }
 
 export interface BasicWidgetExtendableAttributes {
@@ -105,7 +106,7 @@ export interface ListElementsData {
     'Custom CSS Class': string
 }
 
-export interface ListElementsImageData {
+export interface ListElementImageData {
     url: string,
     caption: string,
     imageDim: string

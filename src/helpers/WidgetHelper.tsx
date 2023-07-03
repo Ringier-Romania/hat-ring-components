@@ -1,5 +1,6 @@
 import React from "react";
-import * as _ from 'lodash';
+import upperFirst from 'lodash/upperFirst';
+import get from 'lodash/get';
 import {AbstractWidgetConfig, AppContext} from "../types/types";
 import {UtilsHelper_isMobile} from "./UtilsHelper";
 export function WidgetHelper_shouldHideWidget(widgetConfig, context) {
@@ -16,7 +17,7 @@ export function WidgetHelper_shouldHideWidget(widgetConfig, context) {
 }
 
 export function WidgetHelper_renderEmptyWidget(widgetConfig, text = '') {
-    return WidgetHelper_renderEmptyComponent(_.upperFirst(widgetConfig.widgetType), text);
+    return WidgetHelper_renderEmptyComponent(upperFirst(widgetConfig.widgetType), text);
 }
 
 export function WidgetHelper_renderEmptyComponent(componentClassName, text = '') {
@@ -24,28 +25,28 @@ export function WidgetHelper_renderEmptyComponent(componentClassName, text = '')
                  dangerouslySetInnerHTML={{__html: text && `<!-- ${text} -->`}}/>);
 }
 
-export function WidgetHelper_getWidgetCssClasses(widgetConfig: AbstractWidgetConfig, context: AppContext, additionalCssClasses: Array<string> = []): string {
+export function WidgetHelper_getWidgetCssClasses(componentName: string, widgetConfig: AbstractWidgetConfig, context: AppContext, additionalCssClasses: Array<string> = []): string {
     const cssClasses = [] as Array<string>;
-    const widgetType = _.upperFirst(widgetConfig.widgetType);
+    componentName = upperFirst(componentName);
 
-    if (widgetConfig.widgetType) {
-        cssClasses.push(widgetType);
+    cssClasses.push(componentName);
+
+    if (get(context, `cssModules.${componentName}`, false)) {
+        cssClasses.push(get(context, `cssModules.${componentName}`));
     }
+    
+    if(widgetConfig){
+        if (widgetConfig.customWidth && widgetConfig.customWidth !== 'none') {
+            cssClasses.push(`widgetWidth${widgetConfig.customWidth}`);
+        }
 
-    if (_.get(context, `cssModules.${widgetType}`, false)) {
-        cssClasses.push(_.get(context, `cssModules.${widgetType}`));
-    }
+        if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
+            cssClasses.push(`widgetPosition${upperFirst(widgetConfig.customPosition)}`);
+        }
 
-    if (widgetConfig.customWidth && widgetConfig.customWidth !== 'none') {
-        cssClasses.push(`widgetWidth${widgetConfig.customWidth}`);
-    }
-
-    if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
-        cssClasses.push(`widgetPosition${_.upperFirst(widgetConfig.customPosition)}`);
-    }
-
-    if (widgetConfig.customClass && widgetConfig.customClass !== '') {
-        cssClasses.push(widgetConfig.customClass);
+        if (widgetConfig.customClass && widgetConfig.customClass !== '') {
+            cssClasses.push(widgetConfig.customClass);
+        }
     }
 
     return [...additionalCssClasses, ...cssClasses].join(' ');

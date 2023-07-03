@@ -1,4 +1,5 @@
 import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
+import {Content, PublicationPoint, Topic} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 
 export interface GenericListWidgetConfig extends AbstractWidgetConfig {
     "showOptions": Array<"image" | "title">,
@@ -10,6 +11,10 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
     "customListUuid": string,
     "imageSize": string,
     "imageSizeMobile": string,
+    "excludedFlags":Array<{
+        excludedFlag: string
+    }>,
+    "linkLabel": string,
 }
 
 export interface GenericListExtendableAttributes {
@@ -26,10 +31,11 @@ export interface GenericListParams extends WidgetParams {
 
 export interface GenericListResponseNode {
     title?: string,
-    mainPublicationPoint?: {
-        url: string
-    },
+    mainPublicationPoint?: PublicationPoint,
+    topics?: Array<{topic: Topic}>,
     image?: { url?: string, caption?: string, }
+    date?: {modificationTime: string, creationTime: string},
+    content?: Array<Content>
 }
 
 

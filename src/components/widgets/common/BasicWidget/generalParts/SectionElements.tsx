@@ -5,6 +5,7 @@ import * as ItemParts from "../itemParts";
 import * as _ from "lodash";
 import {RingLink} from "../../../../common/RingLink";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {UtilsHelper_getValueIfExists} from "../../../../../helpers/UtilsHelper";
 
 export default function SectionElements(
     {context, widgetConfig, response, extendableAttributes}:
@@ -25,10 +26,15 @@ export default function SectionElements(
     const colNumber = Math.floor(12 / columnsCount);
     const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
     const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
+    const maxElements = UtilsHelper_getValueIfExists(widgetConfig.count, null) || _.get(response, 'data.section.items.edges.length');
+    const elementsToRender = [...response.data.section.items.edges];
 
+    if (maxElements) {
+        elementsToRender.length = maxElements;
+    }
     return (
         <div className={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
-            {response.data.section.items.edges.map((edge, itemIndex) => {
+            {elementsToRender.map((edge, itemIndex) => {
                 const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
                     const Component = allItemParts[_.upperFirst(showOption)];
                     if (!Component) {
@@ -44,9 +50,12 @@ export default function SectionElements(
                 const bigElementClass = isBig ? `bigElement` : '';
 
                 return <div className={['Item', colClass, bigElementClass].join(' ')}>
-                    <RingLink href={edge.node?.url || '/'}>
-                        {itemParts}
-                    </RingLink>
+                    <div className={'linkOverlay'}>
+                        <RingLink href={edge.node?.url || '#'} title={edge.node?.title || ''}>
+                            {widgetConfig.linkLabel}
+                        </RingLink>
+                    </div>
+                    {itemParts}
                 </div>;
             })}
         </div>
