@@ -12,7 +12,7 @@ import * as _ from "lodash";
 
 
 export async function Slider(
-    {widgetConfig, context}: SliderParams
+    {widgetConfig, context, extendableAttributes}: SliderParams
 ) {
 
     const frontendContext = {...context};
@@ -64,7 +64,7 @@ export async function Slider(
     return <div className={WidgetHelper_getWidgetCssClasses('Slider', widgetConfig, context, [styles.Slider])}>
         {widgetConfig.headerText && <div className={"sliderTitle"}><HeaderTag>{widgetConfig.headerText}</HeaderTag></div>}
         {widgetConfig.description && <div className={"sliderDescription"}><p>{widgetConfig.description}</p></div>}
-        <SliderFront widgetConfig={widgetConfig} context={frontendContext}>
+        <SliderFront widgetConfig={widgetConfig} context={frontendContext} extendableAttributes={extendableAttributes}>
             {widgetConfig.slides.map((slide: SliderElement) => {
                 const dimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(slide, context, "Source desktop dimensions(eg. 600x300)", "Source mobile dimensions(eg. 600x300)", '600x300');
 

@@ -6,8 +6,10 @@ import { register } from 'swiper/element/bundle';
 import {SliderFrontParams, SwiperRef} from "./types";
 
 export function SliderFront(
-    {widgetConfig, context, children}: SliderFrontParams
+    {widgetConfig, context, children, extendableAttributes}: SliderFrontParams
 ) {
+    extendableAttributes = extendableAttributes || {};
+    extendableAttributes.swiperOptions = extendableAttributes.swiperOptions || {}
     register();
     const swiperElRef = useRef<SwiperRef>(null);
 
@@ -40,6 +42,7 @@ export function SliderFront(
                 pagination,
                 centeredSlides,
                 breakpoints,
+                ...extendableAttributes.swiperOptions
             };
 
             Object.assign(swiperElRef.current, swiperParams);
