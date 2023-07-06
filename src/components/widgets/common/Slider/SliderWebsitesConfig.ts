@@ -24,6 +24,7 @@ export let SliderWebsitesConfig
                 "navigation": true,
                 "pagination": false,
                 "centeredSlides": false,
+                "navigationButtonsOutside": false,
                 "breakpoints": [],
                 "widgetType": "slider",
             },
@@ -134,6 +135,12 @@ export let SliderWebsitesConfig
                 "centeredSlides": {
                     "name": "Centered slides",
                     "description": "If true, then active slide will be centered, not always on the left side.",
+                    "type": "checkbox",
+                    "required": false
+                },
+                "navigationButtonsOutside": {
+                    "name": "Navigation buttons outside slider",
+                    "description": "If enabled, it allows you to move the navigation outside the slider wrapper",
                     "type": "checkbox",
                     "required": false
                 },
