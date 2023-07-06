@@ -34,7 +34,8 @@ export interface Breakpoint {
 }
 
 export interface SliderParams extends WidgetParams {
-    widgetConfig: SliderConfig
+    widgetConfig: SliderConfig,
+    extendableAttributes?: any
 }
 
 /*
@@ -65,5 +66,6 @@ declare global {
 export interface SliderFrontParams extends WidgetParams {
     widgetConfig: SliderConfig,
     children: React.ReactNode,
+    extendableAttributes?: any
 }
 
