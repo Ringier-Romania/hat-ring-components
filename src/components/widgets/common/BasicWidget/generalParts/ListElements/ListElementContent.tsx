@@ -4,6 +4,7 @@ import {AppContext} from "../../../../../../types/types";
 import {BasicWidgetConfig, ListElementsData} from "../../types";
 import _ from "lodash";
 import {RingLink} from "../../../../../common/RingLink";
+import {TextReplacer} from "../../../../../common/TextReplacer";
 
 export default function ListElementContent (
     {context, widgetConfig, data, headerTagLevel, childLevel} : {
@@ -51,9 +52,18 @@ export default function ListElementContent (
             </div>
         }
         {data['Image src'] && <ListElementImage context={context} widgetConfig={widgetConfig} data={imageProps}/>}
-        {data.Title && <ItemHeaderTag className="title">{data.Title}</ItemHeaderTag>}
-        {data.Description && <p className="description">{data.Description}</p>}
-        {data.Text && <div className="text">{data.Text}</div>}
+        {/* @ts-expect-error Server Component */}
+        {data.Title && <TextReplacer props={{className: 'title'}} context={context} config={{}} parentComponent={ItemHeaderTag}>
+            {data.Title}
+        </TextReplacer>}
+        {/* @ts-expect-error Server Component */}
+        {data.Description && <TextReplacer props={{className: 'description'}} context={context} config={{}} parentComponent={'p'}>
+            {data.Description}
+        </TextReplacer>}
+        {/* @ts-expect-error Server Component */}
+        {data.Text && <TextReplacer props={{className: 'text'}} context={context} config={{}} parentComponent={'div'}>
+            {data.Text}
+        </TextReplacer>}
         {renderChildren()}
     </div>;
 };

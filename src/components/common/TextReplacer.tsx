@@ -2,10 +2,11 @@ import {ConfigHelper_getDeveloperSettingsConfig} from "../../helpers/ConfigHelpe
 import React from 'react'
 import {AppContext} from "../../types/types";
 
-export async function TextReplacer({children, context, parentComponent}: {
+export async function TextReplacer({children, context, parentComponent, props = {}}: {
     children?: React.ReactNode,
     context: AppContext,
-    parentComponent: keyof JSX.IntrinsicElements
+    parentComponent: keyof JSX.IntrinsicElements,
+    props?: any
 }) {
     const devSettingsConfig = await ConfigHelper_getDeveloperSettingsConfig(context);
 
@@ -26,10 +27,10 @@ export async function TextReplacer({children, context, parentComponent}: {
         return <>
             {Array.isArray(children)
                 ? children.map((child) => typeof child === 'string'
-                    ? <Parent dangerouslySetInnerHTML={{ __html: replacer(child) }}/>
+                    ? <Parent {...props} dangerouslySetInnerHTML={{ __html: replacer(child) }}/>
                     : child)
                 : typeof children === 'string'
-                    ? <Parent dangerouslySetInnerHTML={{ __html: replacer(children) }}/>
+                    ? <Parent {...props} dangerouslySetInnerHTML={{ __html: replacer(children) }}/>
                     : children
             }
             </>
