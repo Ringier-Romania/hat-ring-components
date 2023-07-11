@@ -26,6 +26,7 @@ export interface SliderConfig extends AbstractWidgetConfig {
     pagination: boolean
     centeredSlides: boolean,
     breakpoints: Array<Breakpoint>
+    navigationButtonsOutside: boolean
 }
 
 export interface Breakpoint {
@@ -34,7 +35,8 @@ export interface Breakpoint {
 }
 
 export interface SliderParams extends WidgetParams {
-    widgetConfig: SliderConfig
+    widgetConfig: SliderConfig,
+    extendableAttributes?: any
 }
 
 /*
@@ -65,5 +67,6 @@ declare global {
 export interface SliderFrontParams extends WidgetParams {
     widgetConfig: SliderConfig,
     children: React.ReactNode,
+    extendableAttributes?: any
 }
 

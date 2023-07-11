@@ -12,12 +12,24 @@ import * as _ from "lodash";
 
 
 export async function Slider(
-    {widgetConfig, context}: SliderParams
+    {widgetConfig, context, extendableAttributes = {}}: SliderParams
 ) {
-
     const frontendContext = {...context};
     frontendContext.customData = {...context.customData}
     frontendContext.customData.widgets = [];
+
+    const navigationClassNames = {
+        nextEl: '',
+        prevEl: '',
+    }
+
+    if (widgetConfig.navigationButtonsOutside) {
+        navigationClassNames.nextEl = _.get(extendableAttributes, 'swiperOptions.navigation.nextEl', '.customSwiperButtonNext');
+        navigationClassNames.prevEl = _.get(extendableAttributes, 'swiperOptions.navigation.prevEl', '.customSwiperButtonPrev');
+
+        _.set(extendableAttributes, 'swiperOptions.navigation.nextEl', navigationClassNames.nextEl);
+        _.set(extendableAttributes, 'swiperOptions.navigation.prevEl', navigationClassNames.prevEl);
+    }
 
     const headerTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span' ) as keyof JSX.IntrinsicElements;
 
@@ -64,7 +76,11 @@ export async function Slider(
     return <div className={WidgetHelper_getWidgetCssClasses('Slider', widgetConfig, context, [styles.Slider])}>
         {widgetConfig.headerText && <div className={"sliderTitle"}><HeaderTag>{widgetConfig.headerText}</HeaderTag></div>}
         {widgetConfig.description && <div className={"sliderDescription"}><p>{widgetConfig.description}</p></div>}
-        <SliderFront widgetConfig={widgetConfig} context={frontendContext}>
+        {widgetConfig.navigationButtonsOutside && <div className={"navigationButtons"}>
+            <button className={navigationClassNames.nextEl.replace('.', '')}></button>
+            <button className={navigationClassNames.prevEl.replace('.', '')}></button>
+        </div>}
+        <SliderFront widgetConfig={widgetConfig} context={frontendContext} extendableAttributes={extendableAttributes}>
             {widgetConfig.slides.map((slide: SliderElement) => {
                 const dimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(slide, context, "Source desktop dimensions(eg. 600x300)", "Source mobile dimensions(eg. 600x300)", '600x300');
 
