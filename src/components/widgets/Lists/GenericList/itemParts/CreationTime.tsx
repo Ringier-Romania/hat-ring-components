@@ -4,7 +4,7 @@ import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
 import * as _ from "lodash";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
-import {RingLink} from "../../../../common/RingLink";
+import {RingLink} from "../../../../common/RingLink/RingLink";
 import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
 
 export default async function CreationTime(

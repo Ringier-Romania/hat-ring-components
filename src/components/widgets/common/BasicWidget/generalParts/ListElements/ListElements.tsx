@@ -1,7 +1,7 @@
 import React from 'react';
 import {AppContext} from "../../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponse} from "../../types";
-import {RingLink} from "../../../../../common/RingLink";
+import {RingLink} from "../../../../../common/RingLink/RingLink";
 import ListElementContent from "./ListElementContent";
 import * as _ from "lodash";
 

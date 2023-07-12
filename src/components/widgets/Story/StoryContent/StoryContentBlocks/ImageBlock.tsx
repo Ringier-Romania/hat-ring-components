@@ -1,6 +1,6 @@
 import React from "react";
 import {RingImage, TransformType} from "../../../../common/RingImage";
-import {RingLink} from "../../../../common/RingLink";
+import {RingLink} from "../../../../common/RingLink/RingLink";
 import {ImageBlockParams} from "../types";
 import {UtilsHelper_convertToInt} from "../../../../../helpers/UtilsHelper";
 
