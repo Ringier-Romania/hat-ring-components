@@ -2,7 +2,7 @@ import React from 'react';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTaxonomyListParams, StoryTaxonomyListResponse} from "./types";
-import {RingLink} from "../../../common/RingLink";
+import {RingLink} from "../../../common/RingLink/RingLink";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 export async function StoryTaxonomyList({widgetConfig, context}: StoryTaxonomyListParams) {
