@@ -2,7 +2,7 @@ import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
-import {RingLink} from "../../../../common/RingLink";
+import {RingLink} from "../../../../common/RingLink/RingLink";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 
 export default function Taxonomies(
