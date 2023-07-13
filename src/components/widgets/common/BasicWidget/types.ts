@@ -20,6 +20,7 @@ export enum BasicWidgetShowOptions {
     // TitleExtras = 'titleExtras',
     // AlternativeTeasers = 'alternativeTeasers',
     // OrdinalNumber = 'ordinalNumber',
+    Taxonomies = 'taxonomies',
 }
 
 export enum BasicWidgetAdditionalOptions {
@@ -74,6 +75,7 @@ export interface BasicWidgetResponseNode {
     creationTime?: string,
     modificationTime?: string,
     authors?: Array<string>,
+    topics?: Array<string>
     originalContent?: {
         image?: {
             url?: string,
@@ -87,6 +89,17 @@ export interface BasicWidgetResponseNode {
                 image?: {
                     url?: string
                     caption?: string
+                }
+            }
+        }>,
+        topics?: Array<{
+            topic?: {
+                name?: string,
+                kind?: {
+                    code?: string
+                }
+                publicationPoint?: {
+                    url? : string
                 }
             }
         }>,

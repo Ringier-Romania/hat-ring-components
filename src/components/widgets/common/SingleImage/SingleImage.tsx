@@ -1,5 +1,5 @@
 import React from "react";
-import {RingLink} from "../../../common/RingLink";
+import {RingLink} from "../../../common/RingLink/RingLink";
 import {RingImage, RingImageProps, TransformType} from "../../../common/RingImage";
 import {
     WidgetHelper_getImageDimensionsFromWidgetConfig,

@@ -1,7 +1,7 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {GenericListResponse, GenericListWidgetConfig} from "../types";
-import {RingLink} from "../../../../common/RingLink";
+import {RingLink} from "../../../../common/RingLink/RingLink";
 import * as _ from 'lodash';
 import {UtilsHelper_convertToInt} from "../../../../../helpers/UtilsHelper";
 

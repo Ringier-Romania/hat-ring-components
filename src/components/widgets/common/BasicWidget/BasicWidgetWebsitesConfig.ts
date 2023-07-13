@@ -65,7 +65,8 @@ export let BasicWidgetWebsitesConfig = {
                         "publicationDate",
                         "modificationDate",
                         "authors",
-                        "authorsImages"
+                        "authorsImages",
+                        "taxonomies"
                     ]
                 },
                 "additionalOptions": {

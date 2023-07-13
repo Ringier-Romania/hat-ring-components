@@ -3,7 +3,7 @@ import ListElementImage from "./ListElementImage";
 import {AppContext} from "../../../../../../types/types";
 import {BasicWidgetConfig, ListElementsData} from "../../types";
 import _ from "lodash";
-import {RingLink} from "../../../../../common/RingLink";
+import {RingLink} from "../../../../../common/RingLink/RingLink";
 import {TextReplacer} from "../../../../../common/TextReplacer";
 
 export default function ListElementContent (
