@@ -21,3 +21,4 @@ export * from "./components/widgets/Lists/TopicTitle/TopicTitle";
 export * from "./components/widgets/common/SingleImage/SingleImage";
 export * from "./components/widgets/analytics/Kropka/Kropka";
 export * from "./components/widgets/analytics/RingDataLayer/RingDataLayer";
+export * from "./components/widgets/SEO/AlternateLinks/AlternateLinks";
