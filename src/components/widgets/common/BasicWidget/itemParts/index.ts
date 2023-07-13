@@ -5,3 +5,4 @@ export { default as PublicationDate } from './PublicationDate';
 export { default as ModificationDate } from './ModificationDate';
 export { default as Authors } from './Authors';
 export { default as AuthorsImages } from './AuthorsImages';
+export { default as Taxonomies } from './Taxonomies';
