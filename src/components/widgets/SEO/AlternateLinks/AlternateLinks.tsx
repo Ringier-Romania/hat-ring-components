@@ -1,57 +1,31 @@
 // Libraries
 import React from 'react';
-import {gql} from 'graphql-tag';
-import get from "lodash/get";
-
-// Providers
-import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 
 //Types
 import {AppContext} from "../../../../types/types";
-import {AlternateLinksResponse} from "./types";
+
+// Components
+import {AlternateLinksFromStory} from "./AlternateLinksFromStory";
+import {AlternateLinksFromNode} from "./AlternateLinksFromNode";
 
 // Helpers
-import {ConfigHelper_getSeoConfig} from "../../../../helpers/ConfigHelper";
+import {ConfigHelper_getSeoLanguagesConfig} from "../../../../helpers/ConfigHelper";
 
+/**
+ * I-Priority - Alternate links from Story publication data/package
+ * II-Priority - Fill alternate links via custom links from the node/page configuration
+ * @param context
+ * @constructor
+ */
 export async function AlternateLinks(context: AppContext) {
-    const response = await WebsiteApiProvider.call(gql`
-        query($storyId: UUID){
-            story(id:$storyId){
-                stories {
-                    url
-                    role {
-                        code
-                    }
-                }
-            }
-        }
-    `, {storyId: context.id,}) as AlternateLinksResponse;
+    const seoConfig = await ConfigHelper_getSeoLanguagesConfig(context);
+    let alternateLinks: object = {};
 
-    const alternateLinks = get(response, 'data.story.stories', []) || [];
-    const alternateLinksLength = alternateLinks.length;
-    let alternates: object | null = null;
-
-    if (alternateLinksLength > 0) {
-        const seoConfig = await ConfigHelper_getSeoConfig(context);
-        const supportedLanguages = (get(seoConfig, 'supportedLanguages', []) || []);
-        const supportedCodeNames = supportedLanguages.map((language) => {
-            return {
-                languageCode: language['Language code'],
-                alternativeCode: language['Alternative role codename'],
-            };
-        });
-
-        alternates = {languages: {}};
-
-        for (let i = 0; i < alternateLinksLength; i++) {
-            const linkRoleCode = get(alternateLinks[i], 'role.code');
-            const supportedLanguage = supportedCodeNames.find(({ alternativeCode }) => alternativeCode === linkRoleCode);
-
-            if (linkRoleCode && supportedLanguage && alternateLinks[i].url) {
-                alternates["languages"][supportedLanguage.languageCode] = alternateLinks[i].url;
-            }
-        }
+    if (context.siteContentType === "Story") {
+        alternateLinks = await AlternateLinksFromStory(context, seoConfig, alternateLinks);
+    } else {
+        alternateLinks = await AlternateLinksFromNode(context, seoConfig, alternateLinks);
     }
 
-    return alternates;
+    return alternateLinks;
 }

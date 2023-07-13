@@ -1,0 +1,67 @@
+// Libraries
+import React from 'react';
+import {gql} from 'graphql-tag';
+import get from "lodash/get";
+
+// Providers
+import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
+
+//Types
+import {AppContext} from "../../../../types/types";
+import {AlternateLinksResponse} from "./types";
+
+/**
+ * Alternate links from Story publication data/package
+ * @param context
+ * @param seoConfig
+ * @param alternateLinks
+ * @constructor
+ */
+export async function AlternateLinksFromStory(context: AppContext, seoConfig: object, alternateLinks: object = {}) {
+    let xDefault: string | null = null;
+    let alternateStories = [];
+
+    const response = await WebsiteApiProvider.call(gql`
+        query($storyId: UUID){
+            story(id:$storyId){
+                stories {
+                    url
+                    role {
+                        code
+                    }
+                }
+            }
+        }
+    `, {storyId: context.id,}) as AlternateLinksResponse;
+
+    alternateStories = get(response, 'data.story.stories', []) || [];
+    const alternateStoriesLength = alternateStories.length;
+
+    if (alternateStoriesLength > 0) {
+        const supportedLanguages = (get(seoConfig, 'supportedLanguages', []) || []);
+        const supportedLanguagesLength = supportedLanguages.length;
+        alternateLinks = {languages: {}};
+
+        for (let i = 0; i < supportedLanguagesLength; i++) {
+            const language = supportedLanguages[i]['Alternative role codename'];
+
+            for (let j = 0; j < alternateStoriesLength; j++) {
+                const linkRole = get(alternateStories[j], 'role.code');
+
+                if (alternateStories[j]['url'] && linkRole && linkRole === language) {
+                    alternateLinks["languages"][`${supportedLanguages[i]['Language code']}`] = alternateStories[j]['url'];
+
+                    if (supportedLanguages[i]['Default language'] === 'on') {
+                        xDefault = alternateStories[j]['url'];
+                    }
+                }
+            }
+        }
+    }
+
+    if (xDefault) {
+        alternateLinks["languages"]['x-default'] = xDefault;
+    }
+
+    return alternateLinks;
+}

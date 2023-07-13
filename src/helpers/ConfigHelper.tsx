@@ -37,8 +37,8 @@ export async function ConfigHelper_getGeneralConfig(context) {
     return ConfigHelper_getConfig(context, 'general');
 }
 
-export async function ConfigHelper_getSeoConfig(context) {
-    return ConfigHelper_getConfig(context, 'seoGeneral');
+export async function ConfigHelper_getSeoLanguagesConfig(context) {
+    return ConfigHelper_getConfig(context, 'seoLanguages');
 }
 
 export async function ConfigHelper_getDeveloperSettingsConfig(context) {

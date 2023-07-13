@@ -4,30 +4,32 @@ export let SEOWebsitesConfig
         {
             "title": "SEO & RSS",
             "groups": {
-                "seoGeneral": {
+                "seoLanguages": {
                     "type": "group",
-                    "name": "General",
+                    "name": "Languages",
                     "fields": [
-                        "seoGeneral.supportedLanguages",
+                        "seoLanguages.supportedLanguages",
+                        "seoLanguages.customAlternatives",
                     ]
                 },
             },
             "keys": [
-                "seoGeneral"
+                "seoLanguages"
             ]
         }
     ],
     "defaultParams": {
-        "seoGeneral": {
+        "seoLanguages": {
             "supportedLanguages": [],
+            "customAlternatives": [],
         },
     },
     "paramsDescription": {
-        "seoGeneral": {
+        "seoLanguages": {
             "supportedLanguages": {
                 "type": "treeobject",
                 "name": "Supported languages",
-                "description": "Languages supported in the multi-language version ot the page (via alternate links)",
+                "description": "Languages supported in the multi-language site version (via alternate links)",
                 "properties": [
                     {
                         "name": "Language code",
@@ -36,6 +38,29 @@ export let SEOWebsitesConfig
                     {
                         "name": "Alternative role codename",
                         "type": "textfield"
+                    },
+                    {
+                        "name": "Default language",
+                        "type": "checkbox"
+                    }
+                ]
+            },
+            "customAlternatives": {
+                "type": "treeobject",
+                "name": "Custom alternatives",
+                "description": "Custom alternate links for the current node/page",
+                "properties": [
+                    {
+                        "name": "Language code",
+                        "type": "textfield"
+                    },
+                    {
+                        "name": "Alternative href",
+                        "type": "textfield"
+                    },
+                    {
+                        "name": "Default language",
+                        "type": "checkbox"
                     }
                 ]
             }
