@@ -11,5 +11,5 @@ interface HtmlInsertConfig extends AbstractWidgetConfig {
 };
 
 export function HtmlInsert({widgetConfig, context}: HtmlInsertParams) {
-    return <div className={WidgetHelper_getWidgetCssClasses('HtmlInsert', widgetConfig, context)} dangerouslySetInnerHTML={{__html: widgetConfig.plainHtml}}/>;
+    return <div suppressHydrationWarning={true} className={WidgetHelper_getWidgetCssClasses('HtmlInsert', widgetConfig, context)} dangerouslySetInnerHTML={{__html: widgetConfig.plainHtml}}/>;
 }

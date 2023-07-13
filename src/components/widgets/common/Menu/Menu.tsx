@@ -1,7 +1,7 @@
 import React from "react";
 import * as _ from 'lodash';
 import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
-import {RingLink} from "../../../common/RingLink";
+import {RingLink} from "../../../common/RingLink/RingLink";
 import {RingImage, TransformType} from "../../../common/RingImage";
 import styles from '../../../../../styles/widgets/common/Menu.module.scss';
 import {

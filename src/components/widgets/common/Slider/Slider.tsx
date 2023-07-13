@@ -5,7 +5,7 @@ import {
 } from "../../../../helpers/WidgetHelper";
 import {SliderFront} from "./SliderFront";
 import {RingImage, TransformType} from "../../../common/RingImage";
-import {RingLink} from "../../../common/RingLink";
+import {RingLink} from "../../../common/RingLink/RingLink";
 import {SliderElement, SliderParams} from "./types";
 import styles from '../../../../../styles/widgets/common/Slider.module.scss';
 import * as _ from "lodash";
