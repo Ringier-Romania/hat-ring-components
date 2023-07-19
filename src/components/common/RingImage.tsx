@@ -23,7 +23,7 @@ function getPlaceholderData(width, height) {
     return `data:image/svg+xml;charset=utf8,${encodeURIComponent(svg)}`;
 }
 
-function ocdnLoader(src, width, height, transformType) {
+function ocdnLoader(src, width, height, transformType, format = 'original') {
     const ocdnBucketName = process.env.NEXT_PUBLIC_OCDN_BUCKET_NAME!;
     const ocdnTransformKey = process.env.NEXT_PUBLIC_OCDN_TRANSFORM_KEY!;
 
@@ -38,9 +38,11 @@ function ocdnLoader(src, width, height, transformType) {
             } else {
                 cropImage.resizeCropAuto(width, height);
             }
+            cropImage.imageFormat(format);
             src = cropImage.getUrl();
         } catch (e) {
             console.info('Unable to transform image');
+            try {
             //@TODO fix https://jira.ringieraxelspringer.pl/servicedesk/customer/portal/4/DLSD-195830
             const cropImage = new OcdnUrl();
             cropImage.init(src);
@@ -51,10 +53,13 @@ function ocdnLoader(src, width, height, transformType) {
             } else {
                 cropImage.resizeCropAuto(width, height);
             }
+            cropImage.imageFormat(format);
             src = cropImage.getUrl();
+            } catch (e) {
+                console.info('Unable to transform image second option');
+            }
         }
     }
-
 
     return src;
 }
@@ -76,6 +81,13 @@ export function RingImage(props: RingImageProps) {
         src = ocdnLoader(src, props.width, props.height, props.transform);
     }
 
-    return <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
-                  unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
+    const avifSrc = ocdnLoader(src, props.width, props.height, props.transform, 'avif');
+    const webpSrc = ocdnLoader(src, props.width, props.height, props.transform, 'webp');
+
+    return <picture>
+            <source srcSet={avifSrc} type="image/avif"/>
+            <source srcSet={webpSrc} type="image/webp"/>
+            <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
+               unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
+    </picture>
 }
