@@ -30,8 +30,11 @@ export let BasicWidgetWebsitesConfig = {
                 "moreText": "",
                 "moreUrl": "",
                 "bigImageSize": "1200x660",
+                "bigImageSizeMobile": "1200x660",
                 "standardImageSize": "600x330",
+                "standardImageSizeMobile": "600x330",
                 "listElementsImageSize": "600x330",
+                "listElementsImageSizeMobile": "600x330",
                 "widgetType": "basicWidget"
             },
             "paramsDescription": {
@@ -108,6 +111,14 @@ export let BasicWidgetWebsitesConfig = {
                         },
                         {
                             "name": "Image dimensions (eg. 600x300)",
+                            "type": "textfield"
+                        },
+                        {
+                            "name": "Image src mobile",
+                            "type": "textfield"
+                        },
+                        {
+                            "name": "Image dimensions mobile (eg. 600x300)",
                             "type": "textfield"
                         },
                         {
@@ -218,14 +229,32 @@ export let BasicWidgetWebsitesConfig = {
                     "description": "empty = original, example: 600x330",
                     "required": false
                 },
+                "standardImageSizeMobile": {
+                    "name": "Standard image resolution on mobile",
+                    "type": "textfield",
+                    "description": "empty = original, example: 600x330",
+                    "required": false
+                },
                 "bigImageSize": {
                     "name": "Big image resolution",
                     "type": "textfield",
                     "description": "empty = original, example: 1200x660",
                     "required": false
                 },
+                "bigImageSizeMobile": {
+                    "name": "Big image resolution on mobile",
+                    "type": "textfield",
+                    "description": "empty = original, example: 1200x660",
+                    "required": false
+                },
                 "listElementsImageSize": {
                     "name": "List elements image resolution",
+                    "type": "textfield",
+                    "description": "empty = original, works with images from Ring CMS",
+                    "required": false
+                },
+                "listElementsImageSizeMobile": {
+                    "name": "List elements image resolution on mobile",
                     "type": "textfield",
                     "description": "empty = original, works with images from Ring CMS",
                     "required": false

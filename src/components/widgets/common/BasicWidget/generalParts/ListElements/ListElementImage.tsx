@@ -15,20 +15,15 @@ export default function ListElementImage(
         return null;
     }
 
-    let sizes = '0x0';
-    sizes = data.imageDim || widgetConfig.listElementsImageSize || '0x0';
-    const imageWidth = Number(sizes.split('x')[0]);
-    const imageHeight = Number(sizes.split('x')[1]);
-
     const ringImageProps: RingImageProps = {
         src: data.url,
-        width: imageWidth,
-        height: imageHeight,
+        width: data.imageDim.width,
+        height: data.imageDim.height,
         transform: TransformType.ResizeCropAuto,
         alt: data.caption,
     };
 
-    if(!imageWidth || !imageHeight) {
+    if(!data.imageDim.width || !data.imageDim.height) {
         delete ringImageProps.width;
         delete ringImageProps.height;
         delete ringImageProps.transform;
@@ -38,9 +33,9 @@ export default function ListElementImage(
     // @TODO: add priority from config and other props
     return (
         (data.url) ?
-            <div className={['ListElementImage', (!imageWidth || !imageHeight) ? 'listElementImageWrapper': ''].join(' ')}>
+            <div className={['ListElementImage', (!data.imageDim.width || !data.imageDim.height) ? 'listElementImageWrapper': ''].join(' ')}>
                 {/* @ts-ignore */}
-                <RingImage {...ringImageProps} className={(!imageWidth || !imageHeight) ? 'listElementImageFill' : '' }/>
+                <RingImage {...ringImageProps} className={(!data.imageDim.width  || !data.imageDim.height) ? 'listElementImageFill' : '' }/>
             </div> :
             <></>
     );

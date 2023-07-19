@@ -5,6 +5,7 @@ import {BasicWidgetConfig, ListElementsData} from "../../types";
 import _ from "lodash";
 import {RingLink} from "../../../../../common/RingLink/RingLink";
 import {TextReplacer} from "../../../../../common/TextReplacer";
+import {WidgetHelper_getImageDimensionsFromWidgetConfig} from "../../../../../../helpers/WidgetHelper";
 
 export default function ListElementContent (
     {context, widgetConfig, data, headerTagLevel, childLevel} : {
@@ -15,10 +16,13 @@ export default function ListElementContent (
         childLevel: number
     }
 ) {
+    const itemDimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(data, context, 'Image dimensions (eg. 600x300)', 'Image dimensions mobile (eg. 600x300)', '0x0');
+    const widgetListDimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(widgetConfig, context, 'listElementsImageSize', 'listElementsImageSizeMobile', '0x0');
+    
     const imageProps = {
-        url: data['Image src'],
+        url: context?.hatControllerParams?.isMobile ? (data['Image src mobile'] || data['Image src']) : data['Image src'],
         caption: data.Title,
-        imageDim: _.get(data, 'Image dimensions (eg. 600x300)', ''),
+        imageDim: itemDimensions.width == 0 && itemDimensions.height == 0 ? widgetListDimensions : itemDimensions,
     };
     const customCssClass = _.get(data, 'Custom CSS Class', '');
 
