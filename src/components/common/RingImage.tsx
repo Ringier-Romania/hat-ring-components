@@ -42,6 +42,7 @@ function ocdnLoader(src, width, height, transformType, format = 'original') {
             src = cropImage.getUrl();
         } catch (e) {
             console.info('Unable to transform image');
+            try {
             //@TODO fix https://jira.ringieraxelspringer.pl/servicedesk/customer/portal/4/DLSD-195830
             const cropImage = new OcdnUrl();
             cropImage.init(src);
@@ -54,9 +55,11 @@ function ocdnLoader(src, width, height, transformType, format = 'original') {
             }
             cropImage.imageFormat(format);
             src = cropImage.getUrl();
+            } catch (e) {
+                console.info('Unable to transform image second option');
+            }
         }
     }
-
 
     return src;
 }
