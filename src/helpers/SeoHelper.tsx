@@ -1,6 +1,3 @@
-import React from "react";
-import get from 'lodash/get';
-
 export function SeoHelper_currentTitle() {
     return "Test title";
 }
