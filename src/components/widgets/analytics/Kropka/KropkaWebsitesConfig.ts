@@ -8,6 +8,8 @@ export let KropkaWebsitesConfig
             "name": "Kropka",
             "description": "",
             "defaultParams": {
+                "platformDesktop": true,
+                "platformMobile": true,
                 "widgetType": "kropka",
                 "mode": "static",
                 "target": "",
@@ -18,6 +20,16 @@ export let KropkaWebsitesConfig
                     "description": "widget type",
                     "type": "textfield",
                     "required": true
+                },
+                "platformDesktop": {
+                    "name": "Desktop",
+                    "type": "checkbox",
+                    "description": "Desktop"
+                },
+                "platformMobile": {
+                    "name": "Mobile",
+                    "type": "checkbox",
+                    "description": "Mobile"
                 },
                 "dv": {
                     "name": "DV",

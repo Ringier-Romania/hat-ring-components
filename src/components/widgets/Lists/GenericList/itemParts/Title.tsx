@@ -17,8 +17,18 @@ export default function Title(
         return WidgetHelper_renderEmptyComponent('Title');
     }
 
-    const HeaderTag = 'span' as keyof JSX.IntrinsicElements;
+    const HeaderTag = (widgetConfig.headerTag && widgetConfig.headerTag !== 'none' ? widgetConfig.headerTag : 'span' ) as keyof JSX.IntrinsicElements;
     let ItemHeaderTag = HeaderTag;
+
+    const itemsHeaderArr = HeaderTag.split('h');
+    if (itemsHeaderArr.length === 2) {
+        const tagLevel = Number(itemsHeaderArr[1]);
+        if (tagLevel >= 6) {
+            ItemHeaderTag = 'span';
+        } else {
+            ItemHeaderTag = `h${_.clamp(tagLevel + 1, 2, 6)}` as keyof JSX.IntrinsicElements;
+        }
+    }
 
     return (
         <div className={['Title'].join(' ')}>

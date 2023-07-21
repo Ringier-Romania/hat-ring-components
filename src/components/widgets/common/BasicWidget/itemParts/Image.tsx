@@ -2,7 +2,10 @@ import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import {RingImage, TransformType} from "../../../../common/RingImage";
-import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {
+    WidgetHelper_getImageDimensionsFromWidgetConfig,
+    WidgetHelper_renderEmptyComponent
+} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 
 export default function Image(
@@ -20,14 +23,16 @@ export default function Image(
     }
 
     const isBig = widgetConfig.countBig ? itemIndex < widgetConfig.countBig : false;
-    const sizes = isBig ? (widgetConfig.bigImageSize || '0x0').split('x') : (widgetConfig.standardImageSize || '0x0').split('x');
+    const sizes = isBig
+        ? WidgetHelper_getImageDimensionsFromWidgetConfig(widgetConfig, context, 'bigImageSize', 'bigImageSizeMobile', '0x0')
+        : WidgetHelper_getImageDimensionsFromWidgetConfig(widgetConfig, context, 'standardImageSize', 'standardImageSizeMobile', '0x0');
 
     const ringImageProps = {
         src: image.url,
         alt: image.caption || data.title || '',
         transform: TransformType.ResizeCropAuto,
-        width: Number(sizes[0]),
-        height: Number(sizes[1])
+        width: sizes.width,
+        height: sizes.height
     };
 
 

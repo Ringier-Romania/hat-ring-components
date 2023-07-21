@@ -1,8 +1,20 @@
 import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
 import {Content, PublicationPoint, Topic} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 
+export enum GenericListGeneralShowOptions {
+    Items = "items",
+    Header = "header",
+    Pagination = "pagination"
+}
+
+export enum GenericListShowOptions {
+    Image = "image",
+    Title = "title",
+}
+
 export interface GenericListWidgetConfig extends AbstractWidgetConfig {
-    "showOptions": Array<"image" | "title">,
+    generalShowOptions?: Array<GenericListGeneralShowOptions>,
+    "showOptions": Array<GenericListShowOptions>,
     "headerText": string,
     "headerTag": string,
     "columns": number | string,
@@ -18,6 +30,7 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
 }
 
 export interface GenericListExtendableAttributes {
+    generalParts?: any,
     itemParts?: any,
     render?: (cssModules) => JSX.Element | null,
     getCssModule?: (defaultStyles) => string | null,

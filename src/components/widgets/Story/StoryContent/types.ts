@@ -3,6 +3,8 @@ import {AbstractWidgetConfig, AppContext, ComponentParams, WidgetParams} from ".
 export interface StoryContentWidgetConfig extends AbstractWidgetConfig {
     standardImageWidth?: string | number,
     standardImageHeight?: string | number,
+    mobileImageWidth?: string | number,
+    mobileImageHeight?: string | number,
     displayFrom?: string | number,
     displayTo?: string | number,
 }
@@ -51,5 +53,6 @@ export interface ImageBlockParams {
             ]
         }
     }
-    widgetConfig: StoryContentWidgetConfig
+    widgetConfig: StoryContentWidgetConfig,
+    context: AppContext
 }

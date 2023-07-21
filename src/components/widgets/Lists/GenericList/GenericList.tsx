@@ -7,11 +7,12 @@ import * as ItemParts from "./itemParts";
 import {GenericListParams, GenericListResponse} from "./types";
 import Header from "./generalParts/Header";
 import Items from "./generalParts/Items";
-import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper";
 
 import styles from "../../../../../styles/widgets/Lists/GenericList.module.scss";
 import Pagination from "./generalParts/Pagination";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
+import * as GeneralParts from "../../Lists/GenericList/generalParts";
 
 
 export async function GenericList({widgetConfig, context, extendableAttributes = {}}: GenericListParams) {
@@ -82,8 +83,18 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
         return await WebsiteApiProvider.call(query, variables);
     }
 
+    const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
     const response = await getData(queryFragment) as GenericListResponse;
+
+    const generalComponents = widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
+        const Component = allGeneralParts[_.upperFirst(showOption)];
+        if (!Component) {
+            console.error(`No general show option name support ${showOption}`);
+            return WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet');
+        }
+        return <Component key={index} context={context} widgetConfig={widgetConfig} response={response} extendableAttributes={extendableAttributes} currentPage={currentPage}/>;
+    });
 
     let cssModules = styles.GenericList;
 
@@ -93,10 +104,7 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
 
     function render() {
         return <div className={WidgetHelper_getWidgetCssClasses('GenericList', widgetConfig, context, [cssModules])}>
-            <Header context={context} widgetConfig={widgetConfig} response={response}/>
-            <Items context={context} widgetConfig={widgetConfig} response={response}
-                   extendableAttributes={extendableAttributes}/>
-            <Pagination context={context} widgetConfig={widgetConfig} response={response} currentPage={currentPage}/>
+            {generalComponents}
         </div>;
     }
 

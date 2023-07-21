@@ -16,6 +16,8 @@ export let StoryContentWebsitesConfig
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "standardImageWidth": "",
                 "standardImageHeight": "",
+                "mobileImageWidth": "",
+                "mobileImageHeight": "",
                 "displayFrom": "",
                 "displayTo": "",
                 "widgetType": "detailContent",
@@ -32,10 +34,15 @@ export let StoryContentWebsitesConfig
                     "type": "textfield",
                     "description": "Maximum image height in px (empty = original)"
                 },
-                "displayFrom": {
-                    "name": "Display blocks from",
-                    "description": "1 is first, empty display all",
-                    "type": "textfield"
+                "mobileImageWidth": {
+                    "name": "Max image width for mobile",
+                    "type": "textfield",
+                    "description": "Maximum image width in px (empty = original) for mobile"
+                },
+                "mobileImageHeight": {
+                    "name": "Max image height for mobile",
+                    "type": "textfield",
+                    "description": "Maximum image height in px (empty = original) for mobile"
                 },
                 "displayTo": {
                     "name": "Display blocks to",

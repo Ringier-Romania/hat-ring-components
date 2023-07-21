@@ -20,6 +20,7 @@ export enum BasicWidgetShowOptions {
     // TitleExtras = 'titleExtras',
     // AlternativeTeasers = 'alternativeTeasers',
     // OrdinalNumber = 'ordinalNumber',
+    Taxonomies = 'taxonomies',
 }
 
 export enum BasicWidgetAdditionalOptions {
@@ -45,8 +46,11 @@ export interface BasicWidgetConfig extends AbstractWidgetConfig {
     moreText?: string,
     moreUrl?: string,
     bigImageSize?: string,
+    bigImageSizeMobile?: string,
     standardImageSize?: string,
+    standardImageSizeMobile?: string,
     listElementsImageSize?: string,
+    listElementsImageSizeMobile?: string,
     titleExtrasCodeNames?: string,
     alternativeTeasersCodeNames?: string,
     classificationList?: string,
@@ -74,6 +78,7 @@ export interface BasicWidgetResponseNode {
     creationTime?: string,
     modificationTime?: string,
     authors?: Array<string>,
+    topics?: Array<string>
     originalContent?: {
         image?: {
             url?: string,
@@ -90,6 +95,17 @@ export interface BasicWidgetResponseNode {
                 }
             }
         }>,
+        topics?: Array<{
+            topic?: {
+                name?: string,
+                kind?: {
+                    code?: string
+                }
+                publicationPoint?: {
+                    url? : string
+                }
+            }
+        }>,
     },
     image?: { url?: string, caption?: string, }
 }
@@ -102,6 +118,8 @@ export interface ListElementsData {
     Description: string,
     'Image src': string,
     'Image dimensions (eg. 600x300)': string,
+    'Image src mobile': string,
+    'Image dimensions mobile (eg. 600x300)': string,
     'Link url': string,
     'Custom CSS Class': string
 }
@@ -109,7 +127,7 @@ export interface ListElementsData {
 export interface ListElementImageData {
     url: string,
     caption: string,
-    imageDim: string
+    imageDim: { width: number | `${number}`; height: number | `${number}`; }
 }
 
 export interface BasicWidgetResponse {

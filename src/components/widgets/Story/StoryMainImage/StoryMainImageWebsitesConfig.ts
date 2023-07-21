@@ -15,6 +15,7 @@ export let StoryMainImageWebsitesConfig
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "standardImageSize": "920x500",
+                "imageSizeMobile": "450x253",
                 "widgetType": "detailMainImage"
             },
             "paramsDescription": {
@@ -24,7 +25,11 @@ export let StoryMainImageWebsitesConfig
                     "type": "textfield",
                     "description": "Standard image resolution (empty = original), example: 920x500"
                 },
-
+                "imageSizeMobile": {
+                    "name": "Mobile image resolution",
+                    "type": "textfield",
+                    "description": "Mobile image resolution (empty = original), example: 450x253"
+                },
             }
         }
     }

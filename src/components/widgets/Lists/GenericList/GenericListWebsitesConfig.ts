@@ -14,6 +14,7 @@ export let GenericListWebsitesConfig
             "description": "",
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
+                "generalShowOptions": ["items"],
                 "showOptions": [
                     "image",
                     "title"
@@ -32,6 +33,19 @@ export let GenericListWebsitesConfig
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
+                "generalShowOptions": {
+                    "name": "Widget elements to display",
+                    "description": "",
+                    "type": "select",
+                    "allowBlank": true,
+                    "multiSelect": true,
+                    "required": false,
+                    "items": [
+                        "items",
+                        "header",
+                        "pagination"
+                    ]
+                },
                 "showOptions": {
                     "name": "Item elements to display",
                     "description": "(whether to display the property or not)",

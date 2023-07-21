@@ -9,6 +9,8 @@ export let RingDataLayerWebsitesConfig
             "description": "",
             "defaultParams": {
                 "widgetType": "ringDataLayer",
+                "platformDesktop": true,
+                "platformMobile": true,
                 "mode": "static",
                 "target": "",
             },
@@ -18,6 +20,16 @@ export let RingDataLayerWebsitesConfig
                     "description": "widget type",
                     "type": "textfield",
                     "required": true
+                },
+                "platformDesktop": {
+                    "name": "Desktop",
+                    "type": "checkbox",
+                    "description": "Desktop"
+                },
+                "platformMobile": {
+                    "name": "Mobile",
+                    "type": "checkbox",
+                    "description": "Mobile"
                 },
             }
         }

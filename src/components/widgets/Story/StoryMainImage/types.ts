@@ -13,7 +13,8 @@ export interface StoryMainImageResponse {
 
 export interface  StoryMainImageWidgetConfig extends AbstractWidgetConfig {
     response?: StoryMainImageResponse,
-    standardImageSize?: string
+    standardImageSize?: string,
+    imageSizeMobile?: string,
 }
 
 export interface StoryMainImageParams extends WidgetParams {
