@@ -15,3 +15,8 @@ export function UtilsHelper_isDevelopmentMode() {
 export function UtilsHelper_isMobile(context) {
     return !!context.hatControllerParams?.isMobile;
 }
+
+export function UtilsHelper_getExtension(src: string): string|null{
+    const ext = src.split('.').pop()
+    return ext ? ext.toLowerCase() : null;
+}

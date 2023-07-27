@@ -3,6 +3,7 @@ import React from "react";
 
 const {OcdnUrl} = require('@ras-tech/ocdn');
 import styles from "../../../styles/common/RingImage.module.scss";
+import {UtilsHelper_getExtension} from "../../helpers/UtilsHelper";
 
 export interface RingImageProps extends ImageProps {
     transform?: TransformType
@@ -38,6 +39,7 @@ function ocdnLoader(src, width, height, transformType, format = 'original') {
                 cropImage.resizeCropAuto(width, height);
             }
             cropImage.setDomain('ocdn.eu');
+
             src = cropImage.getUrl();
         } catch (e) {
             console.info('Unable to transform image');
@@ -46,6 +48,8 @@ function ocdnLoader(src, width, height, transformType, format = 'original') {
 
     return src;
 }
+
+
 
 // TODO: checkout if they fixed bug with backend rendering https://github.com/vercel/next.js/issues/41924
 export function RingImage(props: RingImageProps) {
@@ -60,7 +64,11 @@ export function RingImage(props: RingImageProps) {
         placeholder = 'blur';
     }
     unoptimized = true;
-    if (transform !== TransformType.None) {
+    const ext = UtilsHelper_getExtension(src as string)
+    const isResizeable = ext != 'svg';
+    const isAvifWebpTransformAble = ext ? !['svg', 'gif'].includes(ext) : false;
+
+    if (isResizeable && transform !== TransformType.None) {
         src = ocdnLoader(src, props.width, props.height, props.transform);
     }
 
@@ -68,8 +76,8 @@ export function RingImage(props: RingImageProps) {
     const webpSrc = ocdnLoader(src, props.width, props.height, props.transform, 'webp');
 
     return <picture>
-        <source srcSet={avifSrc} type="image/avif"/>
-        <source srcSet={webpSrc} type="image/webp"/>
+        { isAvifWebpTransformAble && src != avifSrc ? <source srcSet={avifSrc} type="image/avif"/> : null}
+        { isAvifWebpTransformAble && src != webpSrc ? <source srcSet={webpSrc} type="image/webp"/> : null}
         <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
                unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
     </picture>
