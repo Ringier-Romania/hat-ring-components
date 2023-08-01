@@ -51,6 +51,8 @@ export interface BasicWidgetConfig extends AbstractWidgetConfig {
     standardImageSizeMobile?: string,
     listElementsImageSize?: string,
     listElementsImageSizeMobile?: string,
+    preloadImagesCount?: number,
+    mobilePreloadImagesCount?: number,
     titleExtrasCodeNames?: string,
     alternativeTeasersCodeNames?: string,
     classificationList?: string,
@@ -120,6 +122,7 @@ export interface ListElementsData {
     'Image dimensions (eg. 600x300)': string,
     'Image src mobile': string,
     'Image dimensions mobile (eg. 600x300)': string,
+    'Preload image': boolean,
     'Link url': string,
     'Custom CSS Class': string
 }
@@ -128,6 +131,7 @@ export interface ListElementImageData {
     url: string,
     caption: string,
     imageDim: { width: number | `${number}`; height: number | `${number}`; }
+    priority: boolean
 }
 
 export interface BasicWidgetResponse {

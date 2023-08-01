@@ -35,6 +35,8 @@ export let BasicWidgetWebsitesConfig = {
                 "standardImageSizeMobile": "600x330",
                 "listElementsImageSize": "600x330",
                 "listElementsImageSizeMobile": "600x330",
+                "preloadImagesCount": 0,
+                "mobilePreloadImagesCount": 0,
                 "widgetType": "basicWidget"
             },
             "paramsDescription": {
@@ -257,6 +259,18 @@ export let BasicWidgetWebsitesConfig = {
                     "name": "List elements image resolution on mobile",
                     "type": "textfield",
                     "description": "empty = original, works with images from Ring CMS",
+                    "required": false
+                },
+                "preloadImagesCount": {
+                    "name": "Number of images that would be preloaded",
+                    "type": "numberfield",
+                    "description": "The number should correspond to the number of pictures the user sees first after entering the page",
+                    "required": false
+                },
+                "mobilePreloadImagesCount": {
+                    "name": "Number of images that would be preloaded on mobile",
+                    "type": "numberfield",
+                    "description": "The number should correspond to the number of pictures the user sees first after entering the page",
                     "required": false
                 }
             }

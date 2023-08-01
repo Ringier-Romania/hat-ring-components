@@ -1,8 +1,9 @@
 import React from "react";
-import {RingImage, TransformType} from "../../../../common/RingImage";
+import {RingImage} from "../../../../common/RingImage";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import {ImageBlockParams} from "../types";
 import {UtilsHelper_convertToInt, UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
+import {TransformType} from "../../../../../helpers/OcdnHelper";
 
 export default function ImageBlock({blockData, widgetConfig, context}: ImageBlockParams) {
     const {title, alt, image, url, link} = blockData;
@@ -27,7 +28,7 @@ export default function ImageBlock({blockData, widgetConfig, context}: ImageBloc
         imageHeight = maxImageHeight;
     }
 
-    const img = <RingImage priority={true} src={url} alt={alt || ''} width={imageWidth} height={imageHeight}
+    const img = <RingImage src={url} alt={alt || ''} width={imageWidth} height={imageHeight}
                            transform={TransformType.ResizeCropAuto}/>;
 
     return <div className={['ImageBlock', 'alignment-' + blockData.alignment].join(' ')}>

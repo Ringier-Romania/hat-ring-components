@@ -1,6 +1,6 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
-import {RingImage, TransformType} from "../../../../common/RingImage";
+import {RingImage} from "../../../../common/RingImage";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
@@ -29,16 +29,18 @@ export default async function Image(
     }
 
     const sizes = ((context.hatControllerParams.isMobile ? widgetConfig.imageSizeMobile : widgetConfig.imageSize) || '400x300').split('x');
+    const isMobile = context?.hatControllerParams?.isMobile;
+    const preloadCount = isMobile ? (Number(widgetConfig?.mobilePreloadImagesCount) || 0) : (Number(widgetConfig?.preloadImagesCount) || 0);
+    const isPriority = (preloadCount >= itemIndex + 1) || false;
 
     const ringImageProps = {
         src: image.url as string,
         alt: image.caption || data.title || '',
         width: Number(sizes[0]),
-        height: Number(sizes[1])
+        height: Number(sizes[1]),
+        priority: isPriority
     };
 
-
-    // @TODO: add priority from config and other props
     return (
         <div className={['Image'].join(' ')}>
             <RingImage {...ringImageProps} />

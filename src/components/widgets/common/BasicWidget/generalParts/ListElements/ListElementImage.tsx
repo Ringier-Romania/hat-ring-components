@@ -1,7 +1,8 @@
 import React from 'react';
 import {AppContext} from "../../../../../../types/types";
 import {BasicWidgetConfig, ListElementImageData} from "../../types";
-import {RingImage, RingImageProps, TransformType} from "../../../../../common/RingImage";
+import {RingImage, RingImageProps} from "../../../../../common/RingImage";
+import {TransformType} from "../../../../../../helpers/OcdnHelper";
 
 export default function ListElementImage(
     {context, widgetConfig, data}:
@@ -21,6 +22,7 @@ export default function ListElementImage(
         height: data.imageDim.height,
         transform: TransformType.ResizeCropAuto,
         alt: data.caption,
+        priority: data.priority
     };
 
     if(!data.imageDim.width || !data.imageDim.height) {
@@ -30,7 +32,6 @@ export default function ListElementImage(
         ringImageProps.fill = true;
     }
 
-    // @TODO: add priority from config and other props
     return (
         (data.url) ?
             <div className={['ListElementImage', (!data.imageDim.width || !data.imageDim.height) ? 'listElementImageWrapper': ''].join(' ')}>

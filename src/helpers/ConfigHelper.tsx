@@ -33,12 +33,37 @@ export async function ConfigHelper_getConfig(context, configKey) {
     return sectionsConfig;
 }
 
-export async function ConfigHelper_getGeneralConfig(context) {
+export async function ConfigHelper_getGeneralConfig(context) :Promise<{
+    language: string,
+    defaultImage: string,
+    siteName: string,
+    homepageUrl: string
+}> {
     return ConfigHelper_getConfig(context, 'general');
+}
+
+export async function ConfigHelper_getSeoGeneralConfig(context) :Promise<{
+    defaultArticleAuthor: string,
+    defaultArticleAuthorEmail: string,
+}> {
+    return ConfigHelper_getConfig(context, 'seoSettings');
 }
 
 export async function ConfigHelper_getSeoLanguagesConfig(context) {
     return ConfigHelper_getConfig(context, 'seoLanguages');
+}
+
+export async function ConfigHelper_getSeoRssDefaultConfig(context): Promise<{
+    rssType: string,
+    limit: number,
+}> {
+    return ConfigHelper_getConfig(context, 'rssDefault');
+}
+
+export async function ConfigHelper_getMetaDataConfig(context): Promise<{
+    customMetaTags: Array<any>,
+}> {
+    return ConfigHelper_getConfig(context, 'metaData');
 }
 
 export async function ConfigHelper_getDeveloperSettingsConfig(context) {
@@ -52,13 +77,27 @@ export async function ConfigHelper_getLanguage(context) {
 
 export async function ConfigHelper_getDateFormatConfig(context) {
     return ConfigHelper_getConfig(context, 'dateFormat') as Promise<{
-        "timeZone": string,
-        "useExtendedDatesFormat": false,
-        "sameDay": string,
-        "lastDay": string,
-        "nextDay": string,
-        "lastWeek": string,
-        "nextWeek": string,
-        "sameElse": string
+        timeZone: string,
+        useExtendedDatesFormat: false,
+        sameDay: string,
+        lastDay: string,
+        nextDay: string,
+        lastWeek: string,
+        nextWeek: string,
+        sameElse: string
     }>;
+}
+
+export async function ConfigHelper_getSiteName(context) {
+    const generalSettings = await ConfigHelper_getGeneralConfig(context);
+    return generalSettings ? generalSettings.siteName : '';
+}
+
+export async function ConfigHelper_getSeoOpenGraphConfig(context) {
+    return ConfigHelper_getConfig(context, 'seoOpenGraph');
+}
+
+export async function ConfigHelper_getHomepageUrl(context) {
+    const generalSettings = await ConfigHelper_getGeneralConfig(context);
+    return generalSettings ? generalSettings.homepageUrl : '';
 }

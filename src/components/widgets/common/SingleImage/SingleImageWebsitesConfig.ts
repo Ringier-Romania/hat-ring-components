@@ -60,7 +60,8 @@ export let SingleImageWebsitesConfig = {
                     "multiSelect": true,
                     "items": [
                         ["openLinkAsExternal", "Open link as external"],
-                        ["openLinkInNewTab", "Open link in new a tab"]
+                        ["openLinkInNewTab", "Open link in new a tab"],
+                        ["preloadImage", "Preload image"]
                     ],
                     "required": false
                 },

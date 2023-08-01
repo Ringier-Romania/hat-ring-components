@@ -1,9 +1,10 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
-import {RingImage, TransformType} from "../../../../common/RingImage";
+import {RingImage} from "../../../../common/RingImage";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
+import {TransformType} from "../../../../../helpers/OcdnHelper";
 
 export default function AuthorsImages(
     {context, widgetConfig, data}:

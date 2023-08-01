@@ -27,6 +27,8 @@ export let GenericListWebsitesConfig
                 "customListUuid": "",
                 "imageSize": "400x225",
                 "imageSizeMobile": "",
+                "preloadImagesCount": 0,
+                "mobilePreloadImagesCount": 0,
                 "widgetType": "genericList",
                 "excludedFlags": [],
                 "linkLabel": ""
@@ -116,6 +118,18 @@ export let GenericListWebsitesConfig
                     "name": "Mobile image resolution",
                     "type": "textfield",
                     "description": "Image resolution (empty = same as desktop), example: 600x330"
+                },
+                "preloadImagesCount": {
+                    "name": "Number of images that would be preloaded",
+                    "type": "numberfield",
+                    "description": "The number should correspond to the number of pictures the user sees first after entering the page",
+                    "required": false
+                },
+                "mobilePreloadImagesCount": {
+                    "name": "Number of images that would be preloaded on mobile",
+                    "type": "numberfield",
+                    "description": "The number should correspond to the number of pictures the user sees first after entering the page",
+                    "required": false
                 },
                 "excludedFlags": {
                     "type": "treeobject",

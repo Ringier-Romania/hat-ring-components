@@ -1,18 +1,12 @@
 import Image, {ImageProps, ImageLoaderProps} from "next/image";
 import React from "react";
 
-const {OcdnUrl} = require('@ras-tech/ocdn');
 import styles from "../../../styles/common/RingImage.module.scss";
 import {UtilsHelper_getExtension} from "../../helpers/UtilsHelper";
+import {OcdnHelper_getUrl, TransformType} from "../../helpers/OcdnHelper";
 
 export interface RingImageProps extends ImageProps {
     transform?: TransformType
-}
-
-export enum TransformType {
-    ResizeCropAuto = 'resizeCropAuto',
-    Resize = 'resize',
-    None = 'none'
 }
 
 function getPlaceholderData(width, height) {
@@ -24,33 +18,6 @@ function getPlaceholderData(width, height) {
     return `data:image/svg+xml;charset=utf8,${encodeURIComponent(svg)}`;
 }
 
-function ocdnLoader(src, width, height, transformType, format = 'original') {
-    const ocdnBucketName = process.env.NEXT_PUBLIC_OCDN_BUCKET_NAME!;
-    const ocdnTransformKey = process.env.NEXT_PUBLIC_OCDN_TRANSFORM_KEY!;
-
-    if (ocdnBucketName && ocdnTransformKey) {
-        try {
-            const cropImage = new OcdnUrl(src);
-            cropImage.setKey(ocdnTransformKey);
-            cropImage.setBucket(ocdnBucketName);
-            if (transformType === TransformType.Resize) {
-                cropImage.resize(width, height);
-            } else {
-                cropImage.resizeCropAuto(width, height);
-            }
-            cropImage.setDomain('ocdn.eu');
-            cropImage.imageFormat(format);
-            src = cropImage.getUrl();
-        } catch (e) {
-            console.info('Unable to transform image');
-        }
-    }
-
-    return src;
-}
-
-
-
 // TODO: checkout if they fixed bug with backend rendering https://github.com/vercel/next.js/issues/41924
 export function RingImage(props: RingImageProps) {
     let src = props.src;
@@ -59,7 +26,7 @@ export function RingImage(props: RingImageProps) {
     let placeholder = props.placeholder;
     let transform = props.transform || TransformType.None;
 
-    if (!props.fill) {
+    if (!props.fill && !props.priority) {
         blurDataURL = getPlaceholderData(props.width, props.height);
         placeholder = 'blur';
     }
@@ -69,11 +36,11 @@ export function RingImage(props: RingImageProps) {
     const isAvifWebpTransformAble = ext ? !['svg', 'gif'].includes(ext) : false;
 
     if (isResizeable && transform !== TransformType.None) {
-        src = ocdnLoader(src, props.width, props.height, props.transform);
+        src = OcdnHelper_getUrl(src, props.width, props.height, props.transform);
     }
 
-    const avifSrc = ocdnLoader(src, props.width, props.height, props.transform, 'avif');
-    const webpSrc = ocdnLoader(src, props.width, props.height, props.transform, 'webp');
+    const avifSrc = OcdnHelper_getUrl(src, props.width, props.height, props.transform, 'avif');
+    const webpSrc = OcdnHelper_getUrl(src, props.width, props.height, props.transform, 'webp');
 
     return <picture>
         { isAvifWebpTransformAble && src != avifSrc ? <source srcSet={avifSrc} type="image/avif"/> : null}

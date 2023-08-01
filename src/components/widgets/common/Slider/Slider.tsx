@@ -1,14 +1,15 @@
 import React from "react";
 import {
-    WidgetHelper_getImageDimensionsFromWidgetConfig,
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
 import {SliderFront} from "./SliderFront";
-import {RingImage, TransformType} from "../../../common/RingImage";
+import {RingImage} from "../../../common/RingImage";
 import {RingLink} from "../../../common/RingLink/RingLink";
 import {SliderElement, SliderParams} from "./types";
 import styles from '../../../../../styles/widgets/common/Slider.module.scss';
 import * as _ from "lodash";
+import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
+import {TransformType} from "../../../../helpers/OcdnHelper";
 
 
 export async function Slider(
@@ -82,7 +83,7 @@ export async function Slider(
         </div>}
         <SliderFront widgetConfig={widgetConfig} context={frontendContext} extendableAttributes={extendableAttributes}>
             {widgetConfig.slides.map((slide: SliderElement) => {
-                const dimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(slide, context, "Source desktop dimensions(eg. 600x300)", "Source mobile dimensions(eg. 600x300)", '600x300');
+                const dimensions = ImageHelper_getImageDimensionsFromObject(slide, context, "Source desktop dimensions(eg. 600x300)", "Source mobile dimensions(eg. 600x300)", '600x300');
 
                 return (
                     // @ts-ignore in web-components class is valid

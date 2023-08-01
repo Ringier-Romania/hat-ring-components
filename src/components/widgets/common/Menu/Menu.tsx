@@ -2,12 +2,13 @@ import React from "react";
 import * as _ from 'lodash';
 import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
 import {RingLink} from "../../../common/RingLink/RingLink";
-import {RingImage, TransformType} from "../../../common/RingImage";
+import {RingImage} from "../../../common/RingImage";
 import styles from '../../../../../styles/widgets/common/Menu.module.scss';
 import {
-    WidgetHelper_getImageDimensionsFromWidgetConfig,
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
+import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
+import {TransformType} from "../../../../helpers/OcdnHelper";
 
 interface MenuElement {
     "text": string,
@@ -34,7 +35,7 @@ export function Menu(
 ) {
 
     function renderMenuElement(menuElement: MenuElement) {
-        const imageDimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(menuElement,context,"image dimensions (eg. 200x200)");
+        const imageDimensions = ImageHelper_getImageDimensionsFromObject(menuElement,context,"image dimensions (eg. 200x200)");
         const item = <>
             <span className={'text'}>{menuElement.text}</span>
             {

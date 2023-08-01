@@ -5,25 +5,32 @@ import {BasicWidgetConfig, ListElementsData} from "../../types";
 import _ from "lodash";
 import {RingLink} from "../../../../../common/RingLink/RingLink";
 import {TextReplacer} from "../../../../../common/TextReplacer";
-import {WidgetHelper_getImageDimensionsFromWidgetConfig} from "../../../../../../helpers/WidgetHelper";
+import {ImageHelper_getImageDimensionsFromObject} from "../../../../../../helpers/ImageHelper";
 
 export default function ListElementContent (
-    {context, widgetConfig, data, headerTagLevel, childLevel} : {
+    {context, widgetConfig, data, headerTagLevel, childLevel, itemIndex} : {
         context: AppContext,
         widgetConfig: BasicWidgetConfig,
         data: ListElementsData,
         headerTagLevel: number;
-        childLevel: number
+        childLevel: number,
+        itemIndex: number
     }
 ) {
-    const itemDimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(data, context, 'Image dimensions (eg. 600x300)', 'Image dimensions mobile (eg. 600x300)', '0x0');
-    const widgetListDimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(widgetConfig, context, 'listElementsImageSize', 'listElementsImageSizeMobile', '0x0');
-    
+    const isMobile = context?.hatControllerParams?.isMobile;
+    const preloadCount = isMobile ? (Number(widgetConfig?.mobilePreloadImagesCount) || 0) : (Number(widgetConfig?.preloadImagesCount) || 0);
+    const isPriority = (preloadCount >= itemIndex + 1) || false;
+
+    const itemDimensions = ImageHelper_getImageDimensionsFromObject(data, context, 'Image dimensions (eg. 600x300)', 'Image dimensions mobile (eg. 600x300)', '0x0');
+    const widgetListDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, context, 'listElementsImageSize', 'listElementsImageSizeMobile', '0x0');
+
     const imageProps = {
-        url: context?.hatControllerParams?.isMobile ? (data['Image src mobile'] || data['Image src']) : data['Image src'],
+        url: isMobile ? (data['Image src mobile'] || data['Image src']) : data['Image src'],
         caption: data.Title,
         imageDim: itemDimensions.width == 0 && itemDimensions.height == 0 ? widgetListDimensions : itemDimensions,
+        priority: isPriority,
     };
+
     const customCssClass = _.get(data, 'Custom CSS Class', '');
 
     const HeaderTag = (headerTagLevel >= 6 ? 'span' : headerTagLevel) as keyof JSX.IntrinsicElements;
@@ -40,7 +47,7 @@ export default function ListElementContent (
             return (<div className={['listElementChildren'].join(' ')}>
                 {data.children.map((element, index) => {
                     return (<div className={['listElementChild'].join(' ')}>
-                        <ListElementContent context={context} widgetConfig={widgetConfig} data={element} childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1}/>
+                        <ListElementContent context={context} widgetConfig={widgetConfig} data={element} childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1} itemIndex={itemIndex}/>
                     </div>)
                 })}
             </div>)

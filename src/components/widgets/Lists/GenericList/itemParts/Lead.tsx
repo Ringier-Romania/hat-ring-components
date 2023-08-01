@@ -6,6 +6,8 @@ import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHe
 import gql from "graphql-tag";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
+import {StoryHelper_getLeadBlock} from "../../../../../helpers/StoryHelper";
+import {Story} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 
 export default async function Lead(
     {context, widgetConfig, data}:
@@ -16,7 +18,7 @@ export default async function Lead(
         }) {
 
     // const paragraphFound = _.find(_.get(data, 'content.0.blocks',[]),{__typename:'ParagraphBlock'});
-    const paragraphFound = _.get(data, 'content.0.blocks.0',null);
+    const paragraphFound = StoryHelper_getLeadBlock(data as Story);
 
     if (!paragraphFound || !paragraphFound.text) {
         return WidgetHelper_renderEmptyComponent('Lead');

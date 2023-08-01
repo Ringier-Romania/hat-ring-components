@@ -4,12 +4,13 @@ import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {StoryMainImageParams, StoryMainImageResponse} from "./types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {RingImage, TransformType} from "../../../common/RingImage";
+import {RingImage} from "../../../common/RingImage";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
 import {
-    WidgetHelper_getImageDimensionsFromWidgetConfig,
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
+import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
+import {TransformType} from "../../../../helpers/OcdnHelper";
 
 
 export async function StoryMainImage({widgetConfig, context}: StoryMainImageParams) {
@@ -24,7 +25,7 @@ export async function StoryMainImage({widgetConfig, context}: StoryMainImagePara
         }
     `;
 
-    const imageDimensions = WidgetHelper_getImageDimensionsFromWidgetConfig(widgetConfig, context);
+    const imageDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, context);
 
     const variables = {
         storyId: context.id,

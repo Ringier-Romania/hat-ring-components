@@ -23,6 +23,8 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
     "customListUuid": string,
     "imageSize": string,
     "imageSizeMobile": string,
+    "preloadImagesCount": number,
+    "mobilePreloadImagesCount": number,
     "excludedFlags":Array<{
         excludedFlag: string
     }>,

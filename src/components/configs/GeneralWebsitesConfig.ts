@@ -13,6 +13,8 @@ export let GeneralWebsitesConfig
             "language": "en",
         },
         "defaultImage": "",
+        "siteName": "",
+        "homepageURL": ""
     },
     "paramsDescription": {
         "general": {
@@ -34,6 +36,16 @@ export let GeneralWebsitesConfig
                 "description": "Default image on page",
                 "type": "textfield"
             },
+            "siteName": {
+                "name": "Site name",
+                "description": "Site name",
+                "type": "textfield"
+            },
+            "homepageURL": {
+                "name": "Homepage URL",
+                "description": "Full homepage URL (without / at the end of URL)",
+                "type": "textfield"
+            }
         }
     }
 }

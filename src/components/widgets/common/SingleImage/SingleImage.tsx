@@ -1,20 +1,21 @@
 import React from "react";
 import {RingLink} from "../../../common/RingLink/RingLink";
-import {RingImage, RingImageProps, TransformType} from "../../../common/RingImage";
+import {RingImage, RingImageProps} from "../../../common/RingImage";
 import {
-    WidgetHelper_getImageDimensionsFromWidgetConfig,
     WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent
 } from "../../../../helpers/WidgetHelper";
 import {ImageConfig, ImageParams} from "./types";
 import styles from '../../../../../styles/widgets/common/SingleImage.module.scss';
 import {UtilsHelper_getValueIfExists} from "../../../../helpers/UtilsHelper";
+import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
+import {TransformType} from "../../../../helpers/OcdnHelper";
 
 
 export function SingleImage(
     {widgetConfig, context}: ImageParams
 ) {
     const additionalCssClasses = [styles.SingleImage];
-    const {width, height} =  WidgetHelper_getImageDimensionsFromWidgetConfig(widgetConfig, context, 'imageSize', 'mobileImageSize', '0x0');
+    const {width, height} =  ImageHelper_getImageDimensionsFromObject(widgetConfig, context, 'imageSize', 'mobileImageSize', '0x0');
 
     const additionalOptions = UtilsHelper_getValueIfExists(widgetConfig.additionalOptions, []);
     const desktopSrc = UtilsHelper_getValueIfExists(widgetConfig.imageSrc, '');
@@ -31,6 +32,7 @@ export function SingleImage(
         height,
         transform: TransformType.ResizeCropAuto,
         alt: UtilsHelper_getValueIfExists(widgetConfig.imageAlt, ''),
+        priority: additionalOptions.includes('preloadImage')
     };
 
     if(!Number(width) || !Number(height)) {
