@@ -39,7 +39,7 @@ function ocdnLoader(src, width, height, transformType, format = 'original') {
                 cropImage.resizeCropAuto(width, height);
             }
             cropImage.setDomain('ocdn.eu');
-
+            cropImage.imageFormat(format);
             src = cropImage.getUrl();
         } catch (e) {
             console.info('Unable to transform image');
