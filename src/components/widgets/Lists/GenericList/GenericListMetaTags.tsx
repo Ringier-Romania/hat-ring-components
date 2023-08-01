@@ -4,7 +4,7 @@ import {AppContext} from "../../../../types/types";
 // import {WidgetHelper_findWidgetConfig} from "../../../../helpers/WidgetHelper";
 // import {GenericList_getData} from "./GenericListGetData";
 
-export async function GenericListMetaTags(context: AppContext) {
+export function GenericListMetaTags({context}: {context:AppContext}) {
 
     // const containers = context.customData.gridContainers ? context.customData.gridContainers : ["ListExtendedWidgets1", "ListExtendedWidgets2"];
     // const foundGenericList = await WidgetHelper_findWidgetConfig(context, {module: "genericList_wdg"}, containers);
