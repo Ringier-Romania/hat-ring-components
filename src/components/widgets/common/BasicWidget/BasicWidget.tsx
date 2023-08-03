@@ -1,6 +1,6 @@
 
 import React from "react";
-import {BasicWidgetAdditionalOptions, BasicWidgetParams, BasicWidgetResponse} from "./types";
+import {BasicWidgetAdditionalOptions, BasicWidgetParams, BasicWidgetResponse, BasicWidgetResponseNode} from "./types";
 import {gql} from "graphql-tag";
 import * as GeneralParts from './generalParts';
 import * as _ from 'lodash';
@@ -50,9 +50,23 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
             return `, ${key}: ${dynamicVariablesTypes[key]}`;
         }).join(' ')
 
+        const sectionGroup = widgetConfig.sectionGroup || '';
+        const querySectionVariablesTypes = sectionGroup !== ''
+            ? '$codeName:  ID!, $sectionGroupCodeName: ID!'
+            : '$codeName:  ID!';
+
+        const querySection = sectionGroup !== ''
+            ? `sectionGroup(codeName: $sectionGroupCodeName, nodeId: $nodeId) {
+                    sections(codeName: $codeName)`
+            : 'section(codeName: $codeName, nodeId: $nodeId)';
+
+        const querySectionClose = sectionGroup !== ''
+            ? '}'
+            : '';
+
         const query = gql`
-            query($codeName:  ID!, $nodeId:  ID!, $first: Int ${mappedDynamicVariablesTypes}){
-                section(codeName: $codeName, nodeId: $nodeId) {
+            query($nodeId:  ID!, $first: Int ${mappedDynamicVariablesTypes}, ${querySectionVariablesTypes}){
+                ${querySection} {
                     items(first: $first) {
                         edges {
                             node {
@@ -63,9 +77,11 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
                         }
                     }
                 }
+                ${querySectionClose}
             }
             ${dynamicFragments}
         `;
+
 
         const variables = {
             ...dynamicVariables,
@@ -76,6 +92,10 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
             first: (Number(widgetConfig.offset) + Number(widgetConfig.count)) || null
         };
 
+        if (sectionGroup !== '') {
+            Object.assign(variables, {sectionGroupCodeName: sectionGroup})
+        }
+
         return await WebsiteApiProvider.call(query, variables);
     }
 
@@ -83,8 +103,17 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
 
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
 
-    const response = await getData(queryFragment) as BasicWidgetResponse;
-    let edges = response?.data?.section?.items?.edges ? [...response?.data?.section?.items?.edges] : [];
+    const response = widgetConfig.section_name !== ''
+        ? await getData(queryFragment) as BasicWidgetResponse
+        : {} as BasicWidgetResponse;
+
+    let edges:Array<any> = [];
+
+    if (response?.data?.section?.items?.edges) {
+        edges = [...response?.data?.section?.items?.edges]
+    } else if(response?.data?.sectionGroup?.sections && response.data.sectionGroup.sections[0].items?.edges) {
+        edges = [...response.data.sectionGroup.sections[0].items?.edges]
+    }
 
     if (edges.length > 0) {
         edges = edges.slice(Number(widgetConfig.offset));

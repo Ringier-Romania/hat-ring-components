@@ -16,7 +16,8 @@ export default function SectionElements(
             extendableAttributes: BasicWidgetExtendableAttributes,
         }) {
 
-    if (_.get(response, 'data.section.items.edges.length', 0) === 0) {
+    const elementsToRender = _.get(response, 'data.section.items.edges', _.get(response, 'data.sectionGroup.sections[0].items.edges', []));
+    if (_.get(elementsToRender, 'length', 0) === 0) {
         return WidgetHelper_renderEmptyComponent('SectionElements');
     }
 
@@ -27,7 +28,6 @@ export default function SectionElements(
     const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
     const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
     const maxElements = UtilsHelper_getValueIfExists(widgetConfig.count, null) || _.get(response, 'data.section.items.edges.length');
-    const elementsToRender = [...response.data.section.items.edges];
 
     if (maxElements) {
         elementsToRender.length = maxElements;

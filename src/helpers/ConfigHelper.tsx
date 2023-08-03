@@ -1,7 +1,7 @@
 import {UtilsHelper_isDevelopmentMode} from "./UtilsHelper";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
-import * as _ from "lodash";
+import get from "lodash/get";
 
 export async function ConfigHelper_getConfig(context, configKey) {
     const variant = process.env.NEXT_PUBLIC_WEBSITE_API_VARIANT;
@@ -29,7 +29,7 @@ export async function ConfigHelper_getConfig(context, configKey) {
         variant: variant,
     };
     const response = await WebsiteApiProvider.call(query, variables);
-    const sectionsConfig = _.get(response, 'data.site.data.node.config.config.0.data');
+    const sectionsConfig = get(response, 'data.site.data.node.config.config.0.data');
     return sectionsConfig;
 }
 
@@ -37,6 +37,7 @@ export async function ConfigHelper_getGeneralConfig(context) :Promise<{
     language: string,
     defaultImage: string,
     siteName: string,
+    siteDescription: string,
     homepageUrl: string
 }> {
     return ConfigHelper_getConfig(context, 'general');
@@ -93,6 +94,11 @@ export async function ConfigHelper_getSiteName(context) {
     return generalSettings ? generalSettings.siteName : '';
 }
 
+export async function ConfigHelper_getSiteDescription(context) {
+    const generalSettings = await ConfigHelper_getGeneralConfig(context);
+    return generalSettings ? generalSettings.siteDescription : '';
+}
+
 export async function ConfigHelper_getSeoOpenGraphConfig(context) {
     return ConfigHelper_getConfig(context, 'seoOpenGraph');
 }
@@ -101,3 +107,9 @@ export async function ConfigHelper_getHomepageUrl(context) {
     const generalSettings = await ConfigHelper_getGeneralConfig(context);
     return generalSettings ? generalSettings.homepageUrl : '';
 }
+
+export async function ConfigHelper_currentUrl(context) {
+    const fullHomepageUrl = await ConfigHelper_getHomepageUrl(context);
+    return fullHomepageUrl ? `${fullHomepageUrl}${context.url}` : `${context.url}`;
+}
+

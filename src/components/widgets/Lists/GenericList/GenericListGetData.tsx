@@ -2,7 +2,7 @@ import * as ItemParts from "./itemParts";
 import {gql} from "graphql-tag";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {AppContext} from "../../../../types/types";
+import {AppContext, SiteContentType} from "../../../../types/types";
 import _ from "lodash";
 
 export async function GenericList_getData(context: AppContext, queryNodeFragment, widgetConfig, extendableAttributes, currentPage) {
@@ -36,10 +36,13 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
         return `, ${key}: ${dynamicVariablesTypes[key]}`;
     }).join(' ');
 
+    const contentTypeFilter = context.siteContentType === SiteContentType.Topic
+        ? 'topic: {in: [$categoryId]}'
+        : 'category: {in: [$categoryId]}';
 
     const query = gql`
         query($categoryId: UUID!, $limit: Int!, $excludedFlags: [String!], $offset: Int! ${mappedDynamicVariablesTypes}){
-            stories(filter:{category: {in: [$categoryId]}, flag: {notIn:$excludedFlags}},limit: $limit, offset: $offset ){
+            stories(filter:{${contentTypeFilter}, flag: {notIn:$excludedFlags}},limit: $limit, offset: $offset ){
                 total
                 edges {
                     node {

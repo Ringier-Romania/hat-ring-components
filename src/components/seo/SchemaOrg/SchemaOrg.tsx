@@ -8,17 +8,14 @@ import {
     SeoHelper_getServiceName
 } from "../../../helpers/seo/SeoHelper";
 import {last, startCase} from "lodash";
-import {StoryDate} from "../../widgets/Story/StoryDate/StoryDate";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
-import {StoryTitleResponse} from "../../widgets/Story/StoryTitle/types";
 import get from "lodash/get";
-import {DateHelper_convertDate} from "../../../helpers/DateHelper";
-import {ConfigHelper_getHomepageUrl} from "../../../helpers/ConfigHelper";
-import {UtilsHelper_currentUrl} from "../../../helpers/UtilsHelper";
+import {ConfigHelper_currentUrl, ConfigHelper_getHomepageUrl} from "../../../helpers/ConfigHelper";
+import {UtilsHelper_isHomepage} from "../../../helpers/UtilsHelper";
 
 export async function SchemaOrg({context}: { context: AppContext }) {
-    const isHomePage = context.url === '/';
+    const isHomePage = UtilsHelper_isHomepage(context);
     const isArticle = context.siteContentType === SiteContentType.Story;
     return <>
         {isHomePage && JsonLd(await getOrganizationSchema(context))}
@@ -32,7 +29,7 @@ export async function getOrganizationSchema(context): Promise<WithContext<Organi
         "@context": "https://schema.org",
         "@type": "Organization",
         "@id": `${await ConfigHelper_getHomepageUrl(context)}/#organization`,
-        "name": SeoHelper_getServiceName(),
+        "name": await SeoHelper_getServiceName(context),
         "url": await ConfigHelper_getHomepageUrl(context),
         "logo": SeoHelper_getServiceLogo(),
         "description": SeoHelper_getServiceDescription(),
@@ -55,13 +52,13 @@ export async function getBreadcrumbListSchema(context: AppContext): Promise<With
         "item": homepageUrl
     }];
 
-    const splittedUrl = context.url.split('/').filter(url => url);
+    const splitUrl = context.url.split('/').filter(url => url);
     const breadcrumbsPaths: Array<string> = [];
 
-    splittedUrl.reduce((prev, curr, index) => {
+    splitUrl.reduce((prev, curr, index) => {
         // a, a/b, a/b/c
         const breadcrumb = `${prev}/${curr}`;
-        breadcrumbsPaths.push(breadcrumb)
+        breadcrumbsPaths.push(breadcrumb);
         return breadcrumb;
     }, '');
 
@@ -95,7 +92,7 @@ export async function getBreadcrumbListSchema(context: AppContext): Promise<With
 
 export async function getNewsArticleSchema(context: AppContext): Promise<WithContext<NewsArticle>> {
     const homepageUrl = await ConfigHelper_getHomepageUrl(context);
-    const articleUrl = await UtilsHelper_currentUrl(context);
+    const articleUrl = await ConfigHelper_currentUrl(context);
 
     const query = gql`
         query($storyId: UUID){
@@ -165,7 +162,7 @@ export async function getNewsArticleSchema(context: AppContext): Promise<WithCon
         "author": authors,
         "publisher": {
             "@type": "Organization",
-            "name": SeoHelper_getServiceName(),
+            "name": await SeoHelper_getServiceName(context),
             "logo": {
                 "@type": "ImageObject",
                 "url": SeoHelper_getServiceLogo(),
