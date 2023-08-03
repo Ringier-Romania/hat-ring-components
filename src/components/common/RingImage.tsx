@@ -35,6 +35,7 @@ export function RingImage(props: RingImageProps) {
     const ext = UtilsHelper_getExtension(src as string)
     const isResizeable = ext != 'svg';
     const isAvifWebpTransformAble = ext ? !['svg', 'gif'].includes(ext) : false;
+    const srcSet: Array<string> = [];
 
     if (isResizeable && transform !== TransformType.None) {
         src = OcdnHelper_getUrl(src, props.width, props.height, props.transform);
@@ -43,6 +44,16 @@ export function RingImage(props: RingImageProps) {
     const avifSrc = OcdnHelper_getUrl(src, props.width, props.height, props.transform, 'avif');
     const webpSrc = OcdnHelper_getUrl(src, props.width, props.height, props.transform, 'webp');
 
+
+    if (props.priority) {
+        if (isAvifWebpTransformAble && src != avifSrc) {
+            srcSet.push(avifSrc)
+        }
+        if (isAvifWebpTransformAble && src != webpSrc) {
+            srcSet.push(webpSrc)
+        }
+        srcSet.push(src as string)
+    }
     return <>
         <picture>
             { isAvifWebpTransformAble && src != avifSrc ? <source srcSet={avifSrc} type="image/avif"/> : null}
@@ -50,6 +61,6 @@ export function RingImage(props: RingImageProps) {
             <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
                    unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
         </picture>
-        {props.priority && isAvifWebpTransformAble && <RingImagePreload avifSrc={avifSrc}/>}
+        {props.priority && <RingImagePreload srcSet={srcSet}/>}
     </>
 }

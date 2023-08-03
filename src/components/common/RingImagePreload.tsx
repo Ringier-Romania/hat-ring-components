@@ -1,6 +1,3 @@
-'use client'
-import ReactDOM from 'react-dom'
-
 /**
  * Temp workaround for images preloading
  * waiting for: https://github.com/vercel/next.js/issues/52995
@@ -9,6 +6,5 @@ import ReactDOM from 'react-dom'
  */
 export function RingImagePreload(props) {
      // @ts-ignore
-    ReactDOM.preload(props.avifSrc, {as: "image"});
-    return null;
+    return (<link rel="preload" href="" srcset={props.srcSet.join(', ')} fetchpriority={"high"}/>);
 }
