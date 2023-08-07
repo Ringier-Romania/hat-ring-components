@@ -33,6 +33,7 @@ export enum BasicWidgetAdditionalOptions {
 export interface BasicWidgetConfig extends AbstractWidgetConfig {
     generalShowOptions?: Array<BasicWidgetGeneralShowOptions>,
     showOptions?: Array<BasicWidgetShowOptions>,
+    sectionGroup?: string,
     section_name?: string,
     listElements?: [],
     count?: string,
@@ -136,10 +137,17 @@ export interface ListElementImageData {
 
 export interface BasicWidgetResponse {
     "data": {
-        "section": {
-            "items": {
-                "edges": Array<{ node: BasicWidgetResponseNode }>
+        "section"?: {
+            "items"?: {
+                "edges"?: Array<{ node: BasicWidgetResponseNode }>
             }
+        }
+        "sectionGroup"?: {
+            "sections"?: Array<{
+                "items"?: {
+                    "edges"?: Array<{ node: BasicWidgetResponseNode }>
+                }
+            }>
         }
     }
 }

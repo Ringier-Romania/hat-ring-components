@@ -41,6 +41,11 @@ export let GeneralWebsitesConfig
                 "description": "Site name",
                 "type": "textfield"
             },
+            "siteDescription": {
+                "name": "Site description",
+                "description": "Site description",
+                "type": "textfield"
+            },
             "homepageURL": {
                 "name": "Homepage URL",
                 "description": "Full homepage URL (without / at the end of URL)",

@@ -1,6 +1,5 @@
 import React from "react";
 import isNil from 'lodash/isNil';
-import {ConfigHelper_getHomepageUrl} from "./ConfigHelper";
 
 export function UtilsHelper_convertToInt(input: string | number) {
     return typeof input === "number" ? input : parseInt(input);
@@ -19,7 +18,7 @@ export function UtilsHelper_isMobile(context) {
 }
 
 export function UtilsHelper_getExtension(src: string): string | null {
-    const ext = src.split('.').pop()
+    const ext = src.split('.').pop();
     return ext ? ext.toLowerCase() : null;
 }
 
@@ -29,9 +28,13 @@ export async function UtilsHelper_asyncForEach(array, callback) {
     }
 }
 
-export async function UtilsHelper_currentUrl(context) {
-    const fullHomepageUrl = await ConfigHelper_getHomepageUrl(context);
-    return fullHomepageUrl ? `${fullHomepageUrl}${context.url}` : `${context.url}`;
+export function UtilsHelper_isHomepage(context) {
+    return context.url === '/';
+}
+
+export function UtilsHelper_getCurrentPageType(context) {
+    const isHomePage = UtilsHelper_isHomepage(context);
+    return isHomePage ? 'Homepage' : (context.siteContentType || null);
 }
 
 export function UtilsHelper_ensureHttps(url: string): string {

@@ -5,6 +5,7 @@ import get from "lodash/get"
 import split from "lodash/split"
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
+import {UtilsHelper_isHomepage} from "../../../helpers/UtilsHelper";
 
 type StoryDataResponse = {
     "data": {
@@ -20,14 +21,14 @@ type StoryDataResponse = {
 export async function SeoMetaCustomMetaTags(context: AppContext) {
     const config = await ConfigHelper_getMetaDataConfig(context);
     const other = {};
-    const isHomePage = context.url === '/';
+    const isHomePage = UtilsHelper_isHomepage(context);
     const actualPageType = context.siteContentType;
     const actualTopicUuid = get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id', null);
     const notDynamicTypes = ['all', 'homepage', ...Object.keys(SiteContentType)];
     // dynamic type like uuid of topic
     const isDynamicTypeInCustomTags = config.customMetaTags.some((tagObject) => {
         return (split(get(tagObject, 'siteContentType', 'all'), ',') || []).some(type => !notDynamicTypes.includes(type));
-    })
+    });
     let topicsOfStory : Array<string> = [];
 
     if (actualPageType === SiteContentType.Story && isDynamicTypeInCustomTags) {

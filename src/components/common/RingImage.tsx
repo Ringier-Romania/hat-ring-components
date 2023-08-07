@@ -4,6 +4,7 @@ import React from "react";
 import styles from "../../../styles/common/RingImage.module.scss";
 import {UtilsHelper_getExtension} from "../../helpers/UtilsHelper";
 import {OcdnHelper_getUrl, TransformType} from "../../helpers/OcdnHelper";
+import {RingImagePreload} from "./RingImagePreload";
 
 export interface RingImageProps extends ImageProps {
     transform?: TransformType
@@ -34,6 +35,7 @@ export function RingImage(props: RingImageProps) {
     const ext = UtilsHelper_getExtension(src as string)
     const isResizeable = ext != 'svg';
     const isAvifWebpTransformAble = ext ? !['svg', 'gif'].includes(ext) : false;
+    const srcSet: Array<string> = [];
 
     if (isResizeable && transform !== TransformType.None) {
         src = OcdnHelper_getUrl(src, props.width, props.height, props.transform);
@@ -42,10 +44,23 @@ export function RingImage(props: RingImageProps) {
     const avifSrc = OcdnHelper_getUrl(src, props.width, props.height, props.transform, 'avif');
     const webpSrc = OcdnHelper_getUrl(src, props.width, props.height, props.transform, 'webp');
 
-    return <picture>
-        { isAvifWebpTransformAble && src != avifSrc ? <source srcSet={avifSrc} type="image/avif"/> : null}
-        { isAvifWebpTransformAble && src != webpSrc ? <source srcSet={webpSrc} type="image/webp"/> : null}
-        <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
-               unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
-    </picture>
+
+    if (props.priority) {
+        if (isAvifWebpTransformAble && src != avifSrc) {
+            srcSet.push(avifSrc)
+        }
+        if (isAvifWebpTransformAble && src != webpSrc) {
+            srcSet.push(webpSrc)
+        }
+        srcSet.push(src as string)
+    }
+    return <>
+        <picture>
+            { isAvifWebpTransformAble && src != avifSrc ? <source srcSet={avifSrc} type="image/avif"/> : null}
+            { isAvifWebpTransformAble && src != webpSrc ? <source srcSet={webpSrc} type="image/webp"/> : null}
+            <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
+                   unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL}/>
+        </picture>
+        {props.priority && <RingImagePreload srcSet={srcSet}/>}
+    </>
 }

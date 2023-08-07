@@ -16,6 +16,7 @@ export let BasicWidgetWebsitesConfig = {
                 "generalShowOptions": ["sectionElements"],
                 "showOptions": ["image", "title", "publicationDate", "lead"],
                 "additionalOptions": [],
+                "sectionGroup": "",
                 "section_name": "",
                 "listElements": [],
                 "count": 10,
@@ -81,6 +82,12 @@ export let BasicWidgetWebsitesConfig = {
                     "allowBlank": true,
                     "multiSelect": true,
                     "items": ["disableCropAuto", "disableCropImage"],
+                    "required": false
+                },
+                "sectionGroup": {
+                    "name": "Section group",
+                    "type": "textfield",
+                    "description": "",
                     "required": false
                 },
                 "section_name": {
