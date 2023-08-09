@@ -11,10 +11,11 @@ export let GeneralWebsitesConfig
     "defaultParams": {
         "general": {
             "language": "en",
+            "siteName": "",
+            "siteDescription": "",
+            "homepageURL": "",
+            "defaultImage": "",
         },
-        "defaultImage": "",
-        "siteName": "",
-        "homepageURL": ""
     },
     "paramsDescription": {
         "general": {
@@ -31,11 +32,6 @@ export let GeneralWebsitesConfig
                     "fr"
                 ]
             },
-            "defaultImage": {
-                "name": "Default image on page",
-                "description": "Default image on page",
-                "type": "textfield"
-            },
             "siteName": {
                 "name": "Site name",
                 "description": "Site name",
@@ -46,11 +42,26 @@ export let GeneralWebsitesConfig
                 "description": "Site description",
                 "type": "textfield"
             },
+            "siteContactNumber": {
+                "name": "Site contact number",
+                "description": "Site contact number",
+                "type": "textfield"
+            },
+            "siteLogo": {
+                "name": "Site logo",
+                "description": "Site logo",
+                "type": "textfield"
+            },
             "homepageURL": {
                 "name": "Homepage URL",
                 "description": "Full homepage URL (without / at the end of URL)",
                 "type": "textfield"
-            }
+            },
+            "defaultImage": {
+                "name": "Default image on page",
+                "description": "Default image on page",
+                "type": "textfield"
+            },
         }
     }
 }

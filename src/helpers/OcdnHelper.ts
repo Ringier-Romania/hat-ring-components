@@ -6,7 +6,7 @@ export enum TransformType {
     None = 'none'
 }
 
-export function OcdnHelper_getUrl(src, width, height, transformType, format = 'original') {
+export function OcdnHelper_getUrl(src: string | any, width: number | any, height: number | any, transformType: TransformType | undefined, format = 'original') {
     const ocdnBucketName = process.env.NEXT_PUBLIC_OCDN_BUCKET_NAME!;
     const ocdnTransformKey = process.env.NEXT_PUBLIC_OCDN_TRANSFORM_KEY!;
 
@@ -24,7 +24,7 @@ export function OcdnHelper_getUrl(src, width, height, transformType, format = 'o
             cropImage.imageFormat(format);
             src = cropImage.getUrl();
         } catch (e) {
-            console.info('Unable to transform image');
+            console.info('Unable to transform image ' + src);
         }
     }
 

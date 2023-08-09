@@ -21,8 +21,8 @@ export default function ListElementImage(
         width: data.imageDim.width,
         height: data.imageDim.height,
         transform: TransformType.ResizeCropAuto,
-        alt: data.caption,
-        priority: data.priority
+        priority: data.priority,
+        alt: data.customAlt ? data.customAlt : data.caption,
     };
 
     if(!data.imageDim.width || !data.imageDim.height) {

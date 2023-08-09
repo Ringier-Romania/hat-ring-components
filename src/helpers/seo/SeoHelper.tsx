@@ -1,4 +1,9 @@
-import {ConfigHelper_getLanguage, ConfigHelper_getSeoOpenGraphConfig, ConfigHelper_getSiteName} from "../ConfigHelper";
+import {
+    ConfigHelper_getLanguage,
+    ConfigHelper_getSeoOpenGraphConfig,
+    ConfigHelper_getSiteContactNumber, ConfigHelper_getSiteLogo,
+    ConfigHelper_getSiteName
+} from "../ConfigHelper";
 import {ImageHelper_getDefaultImageData, ImageHelper_getImageDimensionsFromObject} from "../ImageHelper";
 import {OpenGraphHelper_getMainStoryImageData} from "./OpenGraphHelper";
 import {SeoTitleHelper_pageTitle} from "./SeoTitleHelper";
@@ -16,17 +21,16 @@ export async function SeoHelper_getServiceName(context) {
     return await SeoTitleHelper_pageTitle(context, 'default');
 }
 
-export function SeoHelper_getServiceDescription() {
-    return "Looking for a partner for your digital transformation? Ring Publishing - an all-in-one digital publishing solution, with over 20 years of experience, helping media brands succeed in the digital era"
+export async function SeoHelper_getServiceDescription(context) {
+    return await SeoDescriptionHelper_pageDescription(context, 'default');
 }
 
-export function SeoHelper_getServiceLogo() {
-    return ""
+export async function SeoHelper_getServiceLogo(context) {
+    return await ConfigHelper_getSiteLogo(context);
 }
 
-export function SeoHelper_getContactNumber() {
-    return ""
-
+export async function SeoHelper_getContactNumber(context) {
+    return await ConfigHelper_getSiteContactNumber(context);
 }
 
 export function SeoHelper_currentType(context) {
@@ -40,6 +44,7 @@ export function SeoHelper_currentType(context) {
                 return "";
         }
     }
+
     return "";
 }
 
@@ -52,7 +57,6 @@ export async function SeoHelper_currentLocale(context) {
 }
 
 export async function SeoHelper_currentDefaultImageData(context) {
-
     const seoOpenGraphSettings = await ConfigHelper_getSeoOpenGraphConfig(context);
 
     if (seoOpenGraphSettings) {

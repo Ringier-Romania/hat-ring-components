@@ -29,6 +29,7 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
         excludedFlag: string
     }>,
     "linkLabel": string,
+    "mainSeoList": boolean,
 }
 
 export interface GenericListExtendableAttributes {

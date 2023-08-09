@@ -55,7 +55,7 @@ export function Menu(
         return menuElement.hidden ? null :
             <li className={[menuElement["custom css class"], isActive ? 'active' : ''].join(' ')}>
                 {menuElement.url ?
-                    <RingLink href={menuElement.url} target={menuElement["open in new tab"] ? '_blank' : ''}>
+                    <RingLink href={menuElement.url} target={menuElement["open in new tab"] ? '_blank' : undefined}>
                         {item}
                     </RingLink> : <>{item}</>
                 }

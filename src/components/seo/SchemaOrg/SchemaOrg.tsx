@@ -31,12 +31,12 @@ export async function getOrganizationSchema(context): Promise<WithContext<Organi
         "@id": `${await ConfigHelper_getHomepageUrl(context)}/#organization`,
         "name": await SeoHelper_getServiceName(context),
         "url": await ConfigHelper_getHomepageUrl(context),
-        "logo": SeoHelper_getServiceLogo(),
-        "description": SeoHelper_getServiceDescription(),
+        "logo": await SeoHelper_getServiceLogo(context),
+        "description": await SeoHelper_getServiceDescription(context),
         // "sameAs": [], // social media list
         "contactPoint": {
             "@type": "ContactPoint",
-            "telephone": SeoHelper_getContactNumber(),
+            "telephone": await SeoHelper_getContactNumber(context),
             "contactType": "Customer Service"
         }
     };
@@ -165,7 +165,7 @@ export async function getNewsArticleSchema(context: AppContext): Promise<WithCon
             "name": await SeoHelper_getServiceName(context),
             "logo": {
                 "@type": "ImageObject",
-                "url": SeoHelper_getServiceLogo(),
+                "url": await SeoHelper_getServiceLogo(context),
             }
         },
         "keywords": tagNames,

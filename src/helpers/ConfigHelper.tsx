@@ -35,10 +35,13 @@ export async function ConfigHelper_getConfig(context, configKey) {
 
 export async function ConfigHelper_getGeneralConfig(context) :Promise<{
     language: string,
-    defaultImage: string,
     siteName: string,
     siteDescription: string,
-    homepageUrl: string
+    siteContactNumber: string,
+    siteLogo: string,
+    homepageUrl: string,
+    homepageURL: string,
+    defaultImage: string,
 }> {
     return ConfigHelper_getConfig(context, 'general');
 }
@@ -99,12 +102,28 @@ export async function ConfigHelper_getSiteDescription(context) {
     return generalSettings ? generalSettings.siteDescription : '';
 }
 
+export async function ConfigHelper_getSiteContactNumber(context) {
+    const generalSettings = await ConfigHelper_getGeneralConfig(context);
+    return generalSettings ? generalSettings.siteContactNumber : '';
+}
+
+export async function ConfigHelper_getSiteLogo(context) {
+    const generalSettings = await ConfigHelper_getGeneralConfig(context);
+    return generalSettings ? generalSettings.siteLogo : '';
+}
+
 export async function ConfigHelper_getSeoOpenGraphConfig(context) {
     return ConfigHelper_getConfig(context, 'seoOpenGraph');
 }
 
 export async function ConfigHelper_getHomepageUrl(context) {
     const generalSettings = await ConfigHelper_getGeneralConfig(context);
+
+    // TODO: Check why there is difference between key names: homepageUrl | homepageURL
+    if (generalSettings && generalSettings.homepageURL) {
+        return generalSettings.homepageURL || '';
+    }
+
     return generalSettings ? generalSettings.homepageUrl : '';
 }
 
@@ -112,4 +131,3 @@ export async function ConfigHelper_currentUrl(context) {
     const fullHomepageUrl = await ConfigHelper_getHomepageUrl(context);
     return fullHomepageUrl ? `${fullHomepageUrl}${context.url}` : `${context.url}`;
 }
-

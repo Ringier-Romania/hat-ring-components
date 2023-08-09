@@ -131,6 +131,10 @@ export let BasicWidgetWebsitesConfig = {
                             "type": "textfield"
                         },
                         {
+                            "name": "Image alt attribute",
+                            "type": "textfield"
+                        },
+                        {
                             "name": "Link url",
                             "type": "textfield"
                         },

@@ -1,4 +1,6 @@
 import React from "react";
+
+// Libraries
 import isNil from 'lodash/isNil';
 
 export function UtilsHelper_convertToInt(input: string | number) {
@@ -39,4 +41,8 @@ export function UtilsHelper_getCurrentPageType(context) {
 
 export function UtilsHelper_ensureHttps(url: string): string {
     return url.replace('http://', 'https://');
+}
+
+export function UtilsHelper_getDomain(){
+    return process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 }

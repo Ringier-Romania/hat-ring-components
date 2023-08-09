@@ -73,10 +73,10 @@ export async function SeoMetaCustomMetaTags(context: AppContext) {
                 other[tag] = value;
             }
         }
-    })
+    });
 
     return {
-        other
+        other,
     };
 }
 

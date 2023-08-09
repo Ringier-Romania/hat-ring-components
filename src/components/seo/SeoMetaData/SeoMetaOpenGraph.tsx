@@ -1,4 +1,8 @@
 import React from "react";
+
+// Helpers
+import {OpenGraphHelper_getMainStoryImageData} from "../../../helpers/seo/OpenGraphHelper";
+import {ConfigHelper_currentUrl} from "../../../helpers/ConfigHelper";
 import {
     SeoHelper_currentDefaultImageData,
     SeoHelper_currentDescription,
@@ -6,9 +10,13 @@ import {
     SeoHelper_currentSiteName,
     SeoHelper_currentTitle
 } from "../../../helpers/seo/SeoHelper";
-import {ConfigHelper_currentUrl} from "../../../helpers/ConfigHelper";
-import {OpenGraphHelper_getMainStoryImageData} from "../../../helpers/seo/OpenGraphHelper";
 
+/**
+ * Method used to render opengraph elements
+ * TODO: (1) add support for different type/s of images
+ * @param {object} context > Application context
+ * @constructor
+ */
 export async function SeoMetaOpenGraph(context) {
     const imageData = await OpenGraphHelper_getMainStoryImageData(context); //format: png
     const defaultImageData = await SeoHelper_currentDefaultImageData(context); //format: png
@@ -27,8 +35,7 @@ export async function SeoMetaOpenGraph(context) {
                     width: imageData.src !== undefined ? imageData.width : defaultImageData !== null ? defaultImageData.width : null,
                     height: imageData.src !== undefined ? imageData.height : defaultImageData !== null ? defaultImageData.height : null,
                     caption: imageData.caption,
-                    //TODO add support for type
-                    type: "image/png"
+                    type: "image/png" // TODO: (1)
                 }
             ]
         }

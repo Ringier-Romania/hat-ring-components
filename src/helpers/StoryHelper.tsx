@@ -4,7 +4,6 @@ import _ from "lodash";
 import {UtilsHelper_ensureHttps} from "./UtilsHelper";
 
 export function StoryHelper_generateContentHtml(story: Story): string {
-
     let base: any = {}
 
     base.elements = [];

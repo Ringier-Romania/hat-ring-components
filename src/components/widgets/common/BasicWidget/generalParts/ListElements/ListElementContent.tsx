@@ -29,6 +29,7 @@ export default function ListElementContent (
         caption: data.Title,
         imageDim: itemDimensions.width == 0 && itemDimensions.height == 0 ? widgetListDimensions : itemDimensions,
         priority: isPriority,
+        customAlt: data['Image alt attribute'],
     };
 
     const customCssClass = _.get(data, 'Custom CSS Class', '');

@@ -6,7 +6,6 @@ import {ImageHelper_getImageDimensionsFromObject} from "../ImageHelper";
 
 export async function OpenGraphHelper_getMainStoryImageData(context) {
     const seoOpenGraphSettings = await ConfigHelper_getSeoOpenGraphConfig(context);
-
     const configImageSizes = ImageHelper_getImageDimensionsFromObject(seoOpenGraphSettings, context, 'imageSizesDesktop', 'imageSizesMobile', '0x0');
 
     //TODO add support for different format

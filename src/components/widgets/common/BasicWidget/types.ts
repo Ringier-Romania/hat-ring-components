@@ -131,8 +131,9 @@ export interface ListElementsData {
 export interface ListElementImageData {
     url: string,
     caption: string,
-    imageDim: { width: number | `${number}`; height: number | `${number}`; }
     priority: boolean
+    imageDim: { width: number | `${number}`; height: number | `${number}`; },
+    customAlt: string,
 }
 
 export interface BasicWidgetResponse {

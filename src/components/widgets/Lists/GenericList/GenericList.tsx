@@ -15,11 +15,8 @@ import * as GeneralParts from "../../Lists/GenericList/generalParts";
 import {GenericList_getData} from "./GenericListGetData";
 import {GenericListMetaTags} from "./GenericListMetaTags";
 
-
 export async function GenericList({widgetConfig, context, extendableAttributes = {}}: GenericListParams) {
-
     const currentPage = parseInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
-
     const allGeneralParts = extendableAttributes.generalParts || GeneralParts;
     let queryFragment = extendableAttributes.getDataQueryNodeFragment || '';
     const response = await GenericList_getData(context, queryFragment, widgetConfig, extendableAttributes, currentPage) as GenericListResponse;
@@ -44,7 +41,7 @@ export async function GenericList({widgetConfig, context, extendableAttributes =
         return <div suppressHydrationWarning={true}
                     className={WidgetHelper_getWidgetCssClasses('GenericList', widgetConfig, context, [cssModules])}>
             {generalComponents}
-            <GenericListMetaTags context={context}/>
+            <GenericListMetaTags currentPage={currentPage} totalItems={response.data?.stories.total} context={context} widgetConfig={widgetConfig}/>
         </div>;
     }
 

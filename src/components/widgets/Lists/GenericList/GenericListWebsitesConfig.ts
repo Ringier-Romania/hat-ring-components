@@ -31,7 +31,8 @@ export let GenericListWebsitesConfig
                 "mobilePreloadImagesCount": 0,
                 "widgetType": "genericList",
                 "excludedFlags": [],
-                "linkLabel": ""
+                "linkLabel": "",
+                "mainSeoList": true,
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -146,6 +147,11 @@ export let GenericListWebsitesConfig
                     "name": "Link label",
                     "description": "",
                     "type": "textfield"
+                },
+                "mainSeoList": {
+                    "name": "Set as main SEO list",
+                    "type": "checkbox",
+                    "description": "Set as main SEO list"
                 },
             }
         }
