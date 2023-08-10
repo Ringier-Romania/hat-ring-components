@@ -54,7 +54,7 @@ export async function Kropka(
         <Script strategy={"beforeInteractive"}>
             {`if ("undefined" === typeof dlApi) { dlApi = ${JSON.stringify(dlApi)}; }else{ dlApi = Object.assign(dlApi, ${JSON.stringify(dlApi)}) }`}
         </Script>
-        <Script strategy={"lazyOnload"} src="https://lib.onet.pl/s.csr/build/dlApi/dl.boot.min.js"
+        <Script strategy={"beforeInteractive"} src="https://lib.onet.pl/s.csr/build/dlApi/dl.boot.min.js"
                 async></Script>
     </>;
 }

@@ -39,7 +39,6 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
         return `, ${key}: ${dynamicVariablesTypes[key]}`;
     }).join(' ');
 
-    console.log(JSON.stringify(context.hatControllerParams.gqlResponse));
     const contentTypeFilter = context.siteContentType === SiteContentType.Topic
         ? 'topic: {in: [$topicId]}, category: {in: [$nodeCategoryId]}'
         : 'category: {in: [$topicId]}';
