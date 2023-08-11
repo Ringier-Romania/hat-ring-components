@@ -138,17 +138,10 @@ export interface ListElementImageData {
 
 export interface BasicWidgetResponse {
     "data": {
-        "section"?: {
-            "items"?: {
-                "edges"?: Array<{ node: BasicWidgetResponseNode }>
+        "section": {
+            "items": {
+                "edges": Array<{ node: BasicWidgetResponseNode }>
             }
-        }
-        "sectionGroup"?: {
-            "sections"?: Array<{
-                "items"?: {
-                    "edges"?: Array<{ node: BasicWidgetResponseNode }>
-                }
-            }>
         }
     }
 }
