@@ -29,35 +29,13 @@ export default function SectionElements(
     const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
     const maxElements = UtilsHelper_getValueIfExists(widgetConfig.count, null) || _.get(response, 'data.section.items.edges.length');
 
+    console.info('info',maxElements);
     if (maxElements) {
         elementsToRender.length = maxElements;
     }
     return (
         <div className={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
-            {elementsToRender.map((edge, itemIndex) => {
-                const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
-                    const Component = allItemParts[_.upperFirst(showOption)];
-                    if (!Component) {
-                        console.error(`No item part support ${showOption}`);
-                        return WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
-                    }
-
-                    return <Component key={index} itemIndex={itemIndex} context={context} widgetConfig={widgetConfig}
-                                      data={edge.node}/>;
-                });
-                const isBig = itemIndex < bigElementsCount;
-                const colClass = isBig ? `col12` : `col${colNumber}`;
-                const bigElementClass = isBig ? `bigElement` : '';
-
-                return <div className={['Item', colClass, bigElementClass].join(' ')}>
-                    <div className={'linkOverlay'}>
-                        <RingLink href={edge.node?.url || '#'} title={edge.node?.title || ''}>
-                            {widgetConfig.linkLabel}
-                        </RingLink>
-                    </div>
-                    {itemParts}
-                </div>;
-            })}
+            tutaj 2
         </div>
     )
 }
