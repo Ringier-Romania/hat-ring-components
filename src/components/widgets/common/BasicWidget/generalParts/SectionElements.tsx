@@ -17,7 +17,7 @@ export default function SectionElements(
         }) {
 
     const elementsToRender = _.get(response, 'data.section.items.edges', _.get(response, 'data.sectionGroup.sections[0].items.edges', []));
-    return <>tutaj 3 {JSON.stringify(elementsToRender)}</>
+
     if (_.get(elementsToRender, 'length', 0) === 0) {
         return WidgetHelper_renderEmptyComponent('SectionElements');
     }
@@ -28,6 +28,7 @@ export default function SectionElements(
     const colNumber = Math.floor(12 / columnsCount);
     const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
     const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
+    return <>tutaj 4</>
     const maxElements = UtilsHelper_getValueIfExists(widgetConfig.count, null) || _.get(response, 'data.section.items.edges.length');
 
     console.info('info',maxElements);
