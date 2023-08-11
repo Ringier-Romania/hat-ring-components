@@ -141,7 +141,7 @@ export async function BasicWidget({widgetConfig, context, extendableAttributes =
 
     function render() {
         return <div className={WidgetHelper_getWidgetCssClasses('BasicWidget', widgetConfig, context, [cssModules])}>
-            {generalComponents}
+           tutaj
         </div>;
     }
 
