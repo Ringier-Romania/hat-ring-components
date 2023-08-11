@@ -16,7 +16,7 @@ export default function SectionElements(
             extendableAttributes: BasicWidgetExtendableAttributes,
         }) {
 
-    const elementsToRender = _.get(response, 'data.section.items.edges', []);
+    const elementsToRender = _.get(response, 'data.section.items.edges', _.get(response, 'data.sectionGroup.sections[0].items.edges', []));
     if (_.get(elementsToRender, 'length', 0) === 0) {
         return WidgetHelper_renderEmptyComponent('SectionElements');
     }
@@ -27,13 +27,13 @@ export default function SectionElements(
     const colNumber = Math.floor(12 / columnsCount);
     const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
     const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
-    const maxElements = UtilsHelper_getValueIfExists(widgetConfig.count, null) || _.get(response, 'data.section.items.edges.length');
-
-    console.info('info',maxElements);
 
     return (
         <div className={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
             {elementsToRender.map((edge, itemIndex) => {
+                if(widgetConfig.count && itemIndex >= widgetConfig.count){
+                    return null;
+                }
                 const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
                     const Component = allItemParts[_.upperFirst(showOption)];
                     if (!Component) {
