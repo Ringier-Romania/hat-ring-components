@@ -30,9 +30,7 @@ export default function SectionElements(
     const maxElements = UtilsHelper_getValueIfExists(widgetConfig.count, null) || _.get(response, 'data.section.items.edges.length');
 
     console.info('info',maxElements);
-    if (maxElements) {
-        elementsToRender.length = maxElements;
-    }
+
     return (
         <div className={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
             {elementsToRender.map((edge, itemIndex) => {
