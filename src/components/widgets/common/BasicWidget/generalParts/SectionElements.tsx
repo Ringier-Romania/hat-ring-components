@@ -28,13 +28,14 @@ export default function SectionElements(
     const colNumber = Math.floor(12 / columnsCount);
     const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
     const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
-    return <>tutaj 4</>
     const maxElements = UtilsHelper_getValueIfExists(widgetConfig.count, null) || _.get(response, 'data.section.items.edges.length');
 
     console.info('info',maxElements);
     if (maxElements) {
         elementsToRender.length = maxElements;
     }
+
+    return <>tutaj 5</>
     return (
         <div className={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
             {elementsToRender.map((edge, itemIndex) => {
