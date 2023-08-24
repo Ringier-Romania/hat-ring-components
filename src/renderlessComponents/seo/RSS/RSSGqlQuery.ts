@@ -1,6 +1,6 @@
 import {gql} from "graphql-tag";
 
-export const RssGqlQuery = gql`
+export const RSSGqlQuery = gql`
     query($categoryId: UUID!, $limit: Int!, $offset: Int!){
         stories(filter:{category: {in: [$categoryId]}}, limit: $limit, offset: $offset ){
             total

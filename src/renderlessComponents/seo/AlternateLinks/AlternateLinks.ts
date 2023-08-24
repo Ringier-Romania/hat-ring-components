@@ -2,14 +2,14 @@
 import React from 'react';
 
 //Types
-import {AppContext} from "../../../../types/types";
+import {AppContext} from "../../../types/types";
 
 // Components
 import {AlternateLinksFromStory} from "./AlternateLinksFromStory";
 import {AlternateLinksFromNode} from "./AlternateLinksFromNode";
 
 // Helpers
-import {ConfigHelper_getSeoLanguagesConfig} from "../../../../helpers/ConfigHelper";
+import {ConfigHelper_getSeoLanguagesConfig} from "../../../helpers/ConfigHelper";
 
 /**
  * I-Priority - Alternate links from Story publication data/package

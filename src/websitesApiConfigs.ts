@@ -17,9 +17,9 @@ export * from './components/widgets/Story/StoryContent/StoryContentWebsitesConfi
 export * from './components/widgets/Story/StoryTaxonomyList/StoryTaxonomyListWebsitesConfig';
 export * from "./components/widgets/Lists/GenericList/GenericListWebsitesConfig";
 export * from "./components/widgets/Story/StoryDate/StoryDateWebsitesConfig";
-export * from "./components/configs/DeveloperSettingsWebsitesConfig";
-export * from "./components/configs/GeneralWebsitesConfig";
-export * from "./components/configs/SEOWebsitesConfig";
+export * from "./configs/DeveloperSettingsWebsitesConfig";
+export * from "./configs/GeneralWebsitesConfig";
+export * from "./configs/SEOWebsitesConfig";
 export * from "./components/widgets/Lists/TopicTitle/TopicTitleWebsitesConfig";
 export * from "./components/widgets/analytics/Kropka/KropkaWebsitesConfig";
 export * from "./components/widgets/analytics/RingDataLayer/RingDataLayerWebsitesConfig";

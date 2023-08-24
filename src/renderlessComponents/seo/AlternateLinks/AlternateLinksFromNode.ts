@@ -2,7 +2,7 @@
 import get from "lodash/get";
 
 //Types
-import {AppContext} from "../../../../types/types";
+import {AppContext} from "../../../types/types";
 
 /**
  * Fill alternate links via custom links from the node/page configuration

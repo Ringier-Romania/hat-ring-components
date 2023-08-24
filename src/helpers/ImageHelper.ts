@@ -2,7 +2,7 @@ import {UtilsHelper_isMobile} from "./UtilsHelper";
 import {ConfigHelper_getGeneralConfig} from "./ConfigHelper";
 import {AppContext} from "../types/types";
 import {TransformType} from "./OcdnHelper";
-import {RingImageObject} from "../components/common/RingImageObject";
+import {RingImageObject} from "../renderlessComponents/common/RingImageObject";
 
 export async function ImageHelper_getDefaultImageData(context, width, height, transform = TransformType.ResizeCropAuto, format = ['png']) {
 

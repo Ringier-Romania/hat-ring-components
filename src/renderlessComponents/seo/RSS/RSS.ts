@@ -9,17 +9,17 @@ import _ from "lodash";
 import {Story, StoryEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import {UtilsHelper_convertToInt} from "../../../helpers/UtilsHelper";
 import {Item} from "feed/src/typings";
-import {RssGqlQuery} from "./RssGqlQuery";
+import {RSSGqlQuery} from "./RSSGqlQuery";
 import {StoryHelper_generateContentHtml, StoryHelper_getLeadBlock} from "../../../helpers/StoryHelper";
 
-export async function Rss({context}: { context: AppContext }) {
+export async function RSS({context}: { context: AppContext }) {
     const seoRssConfig = await ConfigHelper_getSeoRssDefaultConfig(context);
     const generalConfig = await ConfigHelper_getGeneralConfig(context);
     const seoGeneralConfig = await ConfigHelper_getSeoGeneralConfig(context);
     const domain = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN as string;
     const page = UtilsHelper_convertToInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
 
-    const query = RssGqlQuery;
+    const query = RSSGqlQuery;
 
     const categoryId = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id');
     const limit = seoRssConfig.limit || 10;

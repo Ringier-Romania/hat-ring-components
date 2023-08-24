@@ -4,10 +4,10 @@ import {gql} from 'graphql-tag';
 import get from "lodash/get";
 
 // Providers
-import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
+import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 
 //Types
-import {AppContext} from "../../../../types/types";
+import {AppContext} from "../../../types/types";
 import {AlternateLinksResponse} from "./types";
 
 /**
