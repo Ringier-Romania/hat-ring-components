@@ -43,8 +43,9 @@ export function StoryContentSwitcher({
             return null;
         }
 
-        let clientContext = context;
-        clientContext.customData.widgets = {};
+        const clientContext = {...context};
+        clientContext.customData = {...context.customData}
+        clientContext.customData.widgets = [];
         const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
         let Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
         const isClientSideComponent = Block.$$typeof && Block.$$typeof === Symbol.for('react.client.reference');
