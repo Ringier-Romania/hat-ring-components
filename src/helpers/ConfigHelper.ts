@@ -64,6 +64,27 @@ export async function ConfigHelper_getSeoRssDefaultConfig(context): Promise<{
     return ConfigHelper_getConfig(context, 'rssDefault');
 }
 
+export interface SeoTitlesAndDescription {
+    homePageTitle: string,
+    homePageDescription: string,
+    listPageTitle: string,
+    listPageDescription: string,
+    listPageTitleWithNumeration: string,
+    listPageDescriptionWithNumeration: string,
+    topicPageTitle: string,
+    topicPageDescription: string,
+    topicPageTitleWithNumeration: string,
+    topicPageDescriptionWithNumeration: string,
+    otherPageTitle: string,
+    otherPageDescription: string,
+    detailPageTitle: string,
+    detailPageDescription: string
+}
+
+export async function ConfigHelper_getSeoTitlesAndDescriptionConfig(context) :Promise<SeoTitlesAndDescription> {
+    return ConfigHelper_getConfig(context, 'seoTitlesAndDescription');
+}
+
 export async function ConfigHelper_getMetaDataConfig(context): Promise<{
     customMetaTags: Array<any>,
 }> {

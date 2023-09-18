@@ -12,6 +12,26 @@ export let SEOWebsitesConfig
                         "seoSettings.defaultArticleAuthorEmail",
                     ]
                 },
+                "seoTitlesAndDescription": {
+                    "type": "group",
+                    "name": "SEO titles & description",
+                    "fields": [
+                        "seoTitlesAndDescription.homePageTitle",
+                        "seoTitlesAndDescription.homePageDescription",
+                        "seoTitlesAndDescription.listPageTitle",
+                        "seoTitlesAndDescription.listPageDescription",
+                        "seoTitlesAndDescription.listPageTitleWithNumeration",
+                        "seoTitlesAndDescription.listPageDescriptionWithNumeration",
+                        "seoTitlesAndDescription.topicPageTitle",
+                        "seoTitlesAndDescription.topicPageDescription",
+                        "seoTitlesAndDescription.topicPageTitleWithNumeration",
+                        "seoTitlesAndDescription.topicPageDescriptionWithNumeration",
+                        "seoTitlesAndDescription.otherPageTitle",
+                        "seoTitlesAndDescription.otherPageDescription",
+                        "seoTitlesAndDescription.detailPageTitle",
+                        "seoTitlesAndDescription.detailPageDescription",
+                    ]
+                },
                 "seoLanguages": {
                     "type": "group",
                     "name": "Languages",
@@ -46,6 +66,7 @@ export let SEOWebsitesConfig
             },
             "keys": [
                 "seoSettings",
+                "seoTitlesAndDescription",
                 "seoLanguages",
                 "rssDefault",
                 "seoOpenGraph",
@@ -57,6 +78,22 @@ export let SEOWebsitesConfig
         "seoSettings": {
             "defaultArticleAuthor": "",
             "defaultArticleAuthorEmail": "",
+        },
+        "seoTitlesAndDescription": {
+            "homePageTitle": "{{serviceName}}",
+            "homePageDescription": "{{serviceDescription}}",
+            "listPageTitle": "{{nodeName}} | {{serviceName}}",
+            "listPageDescription": "{{serviceDescription}}",
+            "listPageTitleWithNumeration": "Page {{number}} for {{nodeName}} | {{serviceName}}",
+            "listPageDescriptionWithNumeration": "Page {{number}} for {{nodeName}}. {{serviceDescription}}",
+            "topicPageTitle": "{{nodeName}} | {{serviceName}}",
+            "topicPageDescription": "Read the latest updates on {{topic}}. Exclusive videos, photos and more.",
+            "topicPageTitleWithNumeration": "Page {{number}} for {{topicName}} | {{serviceName}}",
+            "topicPageDescriptionWithNumeration": "Page {{number}} for {{topicName}}. {{serviceDescription}}",
+            "otherPageTitle": "{{pageTypeName}} | {{serviceName}}",
+            "otherPageDescription": "{{serviceDescription}}",
+            "detailPageTitle": "| {{serviceName}}",
+            "detailPageDescription": "| {{serviceName}}",
         },
         "seoLanguages": {
             "supportedLanguages": [],
@@ -85,6 +122,78 @@ export let SEOWebsitesConfig
                 "name": "Default author e-mail address (used when article author is missing)",
                 "description": "",
                 "type": "textfield"
+            },
+        },
+        "seoTitlesAndDescription": {
+            "homePageTitle": {
+                "name": "Home page title",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield"
+            },
+            "homePageDescription": {
+                "name": "Home page description",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield"
+            },
+            "listPageTitle": {
+                "name": "List page/s title",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
+            },
+            "listPageDescription": {
+                "name": "List page/s description",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
+            },
+            "listPageTitleWithNumeration": {
+                "name": "List page/s title (with numeration)",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
+            },
+            "listPageDescriptionWithNumeration": {
+                "name": "List page/s description (with numeration)",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
+            },
+            "topicPageTitle": {
+                "name": "Tag (topic) page/s title",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
+            },
+            "topicPageDescription": {
+                "name": "Tag (topic) page/s description",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
+            },
+            "topicPageTitleWithNumeration": {
+                "name": "Tag (topic) page/s title (with numeration)",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
+            },
+            "topicPageDescriptionWithNumeration": {
+                "name": "Tag (topic) page/s description (with numeration)",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
+            },
+            "otherPageTitle": {
+                "name": "Other page/s title",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
+            },
+            "otherPageDescription": {
+                "name": "Other page/s description",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
+            },
+            "detailPageTitle": {
+                "name": "Detail page/s title",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
+            },
+            "detailPageDescription": {
+                "name": "Detail page/s description",
+                "description": "Variables available to use: {{serviceName}} {{nodeName}} {{topic}} {{topicName}} {{number}} {{pageTypeName}} {{serviceDescription}}",
+                "type": "textfield",
             },
         },
         "seoLanguages": {
