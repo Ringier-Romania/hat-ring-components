@@ -17,7 +17,7 @@ export class WebsiteApiProvider {
             }).buildApolloClient();
         }
 
-        const fetchPolicy = UtilsHelper_isDevelopmentMode() ? 'no-cache' : 'cache-first';
+        const fetchPolicy = UtilsHelper_isDevelopmentMode() ? 'no-cache' : 'cache-and-network';
         return await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
     }
 }
