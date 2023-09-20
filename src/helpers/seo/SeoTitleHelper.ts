@@ -1,7 +1,6 @@
 // Helpers
-import {ConfigHelper_getSiteDescription, ConfigHelper_getSiteName} from "../ConfigHelper";
+import {ConfigHelper_getSiteName} from "../ConfigHelper";
 import {UtilsHelper_getCurrentPageType} from "../UtilsHelper";
-import {SeoHelper_addTextSeparator} from "./SeoHelper";
 
 // Providers
 import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
@@ -20,7 +19,6 @@ import {get} from "lodash";
  */
 export async function SeoTitleHelper_pageTitle(context, place: string) {
     const defaultPageTitle = await ConfigHelper_getSiteName(context);
-    const defaultPageDescription = await ConfigHelper_getSiteDescription(context);
     const pageType = UtilsHelper_getCurrentPageType(context);
 
     switch (pageType) {
@@ -32,11 +30,7 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
 
         case 'Homepage':
         default:
-            return prepareDefaultTitle();
-    }
-
-    function prepareDefaultTitle() {
-        return SeoHelper_addTextSeparator(defaultPageTitle, defaultPageDescription);
+            return defaultPageTitle;
     }
 
     async function getStoryTitles() {
@@ -70,26 +64,26 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
 
         switch (place) {
             case 'default':
-                return `${defaultPageTitle}`;
+                return defaultPageTitle;
 
             case 'meta-title':
             case 'schema-title':
                 if (seoTitle) {
-                    return SeoHelper_addTextSeparator(seoTitle, defaultPageTitle);
+                    return seoTitle || title || defaultPageTitle;
                 }
 
-                return SeoHelper_addTextSeparator(title, defaultPageTitle);
+                return title || defaultPageTitle;
 
             case 'og-title':
             case 'twitter-title':
                 if (socialMediaTitle) {
-                    return `${socialMediaTitle}`;
+                    return socialMediaTitle || title || defaultPageTitle;
                 }
 
-                return SeoHelper_addTextSeparator(title, defaultPageTitle);
+                return title || defaultPageTitle;
 
             default:
-                return SeoHelper_addTextSeparator(title, defaultPageTitle);
+                return title || defaultPageTitle;
         }
     }
 
@@ -123,10 +117,10 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
 
         switch (place) {
             case 'default':
-                return `${defaultPageTitle}`;
+                return defaultPageTitle;
 
             case 'meta-title':
-                return SeoHelper_addTextSeparator(categoryName, defaultPageTitle); // TODO: (2)
+                return categoryName || defaultPageTitle;
 
             case 'og-title':
             case 'schema-title':

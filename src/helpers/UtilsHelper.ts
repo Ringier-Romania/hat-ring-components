@@ -39,6 +39,10 @@ export function UtilsHelper_getCurrentPageType(context) {
     return isHomePage ? 'Homepage' : (context.siteContentType || null);
 }
 
+export function UtilsHelper_getCurrentNodeName(context) {
+    return context?.hatControllerParams?.gqlResponse?.data?.site?.data?.content;
+}
+
 export function UtilsHelper_ensureHttps(url: string): string {
     return url.replace('http://', 'https://');
 }

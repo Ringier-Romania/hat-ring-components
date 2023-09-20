@@ -3,9 +3,9 @@ import {BreadcrumbList, ListItem, NewsArticle, Organization, Thing, WithContext}
 import {AppContext, SiteContentType} from "../../../types/types";
 import {
     SeoHelper_getContactNumber,
-    SeoHelper_getServiceDescription,
+    SeoHelper_currentDescription,
     SeoHelper_getServiceLogo,
-    SeoHelper_getServiceName
+    SeoHelper_currentSiteName
 } from "../../../helpers/seo/SeoHelper";
 import {last, startCase} from "lodash";
 import {gql} from "graphql-tag";
@@ -29,10 +29,10 @@ export async function getOrganizationSchema(context): Promise<WithContext<Organi
         "@context": "https://schema.org",
         "@type": "Organization",
         "@id": `${await ConfigHelper_getHomepageUrl(context)}/#organization`,
-        "name": await SeoHelper_getServiceName(context),
+        "name": await SeoHelper_currentSiteName(context),
         "url": await ConfigHelper_getHomepageUrl(context),
         "logo": await SeoHelper_getServiceLogo(context),
-        "description": await SeoHelper_getServiceDescription(context),
+        "description": await SeoHelper_currentDescription(context, 'default'),
         // "sameAs": [], // social media list
         "contactPoint": {
             "@type": "ContactPoint",
@@ -162,7 +162,7 @@ export async function getNewsArticleSchema(context: AppContext): Promise<WithCon
         "author": authors,
         "publisher": {
             "@type": "Organization",
-            "name": await SeoHelper_getServiceName(context),
+            "name": await SeoHelper_currentSiteName(context),
             "logo": {
                 "@type": "ImageObject",
                 "url": await SeoHelper_getServiceLogo(context),
