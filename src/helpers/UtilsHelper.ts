@@ -40,7 +40,7 @@ export function UtilsHelper_getCurrentPageType(context) {
 }
 
 export function UtilsHelper_getCurrentNodeName(context) {
-    return context.hatControllerParams.gqlResponse.data.site.data.content;
+    return context?.hatControllerParams?.gqlResponse?.data?.site?.data?.content;
 }
 
 export function UtilsHelper_ensureHttps(url: string): string {
