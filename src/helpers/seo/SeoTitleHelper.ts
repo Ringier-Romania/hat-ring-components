@@ -1,7 +1,6 @@
 // Helpers
-import {ConfigHelper_getSeoTitlesAndDescriptionConfig, ConfigHelper_getSiteDescription, ConfigHelper_getSiteName} from "../ConfigHelper";
+import {ConfigHelper_getSiteName} from "../ConfigHelper";
 import {UtilsHelper_getCurrentPageType} from "../UtilsHelper";
-import {SeoHelper_addTextSeparator, SeoHelper_replaceBracketVariables} from "./SeoHelper";
 
 // Providers
 import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
@@ -20,27 +19,7 @@ import {get} from "lodash";
  */
 export async function SeoTitleHelper_pageTitle(context, place: string) {
     const defaultPageTitle = await ConfigHelper_getSiteName(context);
-    const defaultPageDescription = await ConfigHelper_getSiteDescription(context);
     const pageType = UtilsHelper_getCurrentPageType(context);
-    const seoTitlesAndDescriptionSettings = await ConfigHelper_getSeoTitlesAndDescriptionConfig(context);
-    let replacedValues = await SeoHelper_replaceBracketVariables(context, {
-        homePageTitle: seoTitlesAndDescriptionSettings.homePageTitle,
-        homePageDescription: seoTitlesAndDescriptionSettings.homePageDescription,
-        listPageTitle: seoTitlesAndDescriptionSettings.listPageTitle,
-        listPageDescription: seoTitlesAndDescriptionSettings.listPageDescription,
-        listPageTitleWithNumeration: seoTitlesAndDescriptionSettings.listPageTitleWithNumeration,
-        listPageDescriptionWithNumeration: seoTitlesAndDescriptionSettings.listPageDescriptionWithNumeration,
-        topicPageTitle: seoTitlesAndDescriptionSettings.topicPageTitle,
-        topicPageDescription: seoTitlesAndDescriptionSettings.topicPageDescription,
-        topicPageTitleWithNumeration: seoTitlesAndDescriptionSettings.topicPageTitleWithNumeration,
-        topicPageDescriptionWithNumeration: seoTitlesAndDescriptionSettings.topicPageDescriptionWithNumeration,
-        // searchPageTitle: config.staticParams.get('seoTitleDescription.searchPageTitle') || '',
-        // searchPageDescription: config.staticParams.get('seoTitleDescription.searchPageDescription') || '',
-        otherPageTitle: seoTitlesAndDescriptionSettings.otherPageTitle,
-        otherPageDescription: seoTitlesAndDescriptionSettings.otherPageDescription,
-        detailPageTitle: seoTitlesAndDescriptionSettings.detailPageTitle,
-        detailPageDescription: seoTitlesAndDescriptionSettings.detailPageDescription,
-    });
 
     switch (pageType) {
         case 'Story':
@@ -52,10 +31,6 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
         case 'Homepage':
         default:
             return defaultPageTitle;
-    }
-
-    function prepareDefaultTitle() {
-        return SeoHelper_addTextSeparator(defaultPageTitle, defaultPageDescription);
     }
 
     async function getStoryTitles() {
@@ -89,16 +64,12 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
 
         switch (place) {
             case 'default':
-                return `${defaultPageTitle}`;
+                return defaultPageTitle;
 
             case 'meta-title':
             case 'schema-title':
                 if (seoTitle) {
-                    return seoTitle || defaultPageTitle;
-                }
-
-                if (replacedValues.detailPageTitle) {
-                    return `${'displayTitle' || 'translations.topicName'}${replacedValues.detailPageTitle}`;
+                    return seoTitle || title || defaultPageTitle;
                 }
 
                 return title || defaultPageTitle;
@@ -106,7 +77,7 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
             case 'og-title':
             case 'twitter-title':
                 if (socialMediaTitle) {
-                    return `${socialMediaTitle}`;
+                    return socialMediaTitle || title || defaultPageTitle;
                 }
 
                 return title || defaultPageTitle;
@@ -146,10 +117,10 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
 
         switch (place) {
             case 'default':
-                return `${defaultPageTitle}`;
+                return defaultPageTitle;
 
             case 'meta-title':
-                return categoryName || defaultPageTitle; // TODO: (2)
+                return categoryName || defaultPageTitle;
 
             case 'og-title':
             case 'schema-title':

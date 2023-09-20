@@ -1,7 +1,6 @@
 // Helpers
 import {ConfigHelper_getSiteDescription} from "../ConfigHelper";
 import {UtilsHelper_getCurrentPageType} from "../UtilsHelper";
-import {SeoHelper_addTextSeparator} from "./SeoHelper";
 import {StoryHelper_getLeadBlock} from "../StoryHelper";
 
 // Providers
@@ -35,15 +34,10 @@ export async function SeoDescriptionHelper_pageDescription(context, place: strin
 
         case 'Homepage':
         default:
-            return prepareDefaultDescription();
-    }
-
-    function prepareDefaultDescription() {
-        return `${defaultPageDescription}`;
+            return defaultPageDescription;
     }
 
     async function getStoryDescriptions() {
-        // TODO: (2)
         const storyQuery = gql`
             query($storyId: UUID){
                 story(id:$storyId){
@@ -80,38 +74,38 @@ export async function SeoDescriptionHelper_pageDescription(context, place: strin
 
         switch (place) {
             case 'default':
-                return `${defaultPageDescription}`;
+                return defaultPageDescription;
 
             case 'meta-description':
             case 'schema-description':
                 if (seoDescription) {
-                    return `${seoDescription}`;
+                    return seoDescription || description || defaultPageDescription;
                 }
 
                 if (description) {
-                    return `${description}`;
+                    return description || defaultPageDescription;
                 }
 
-                return `${defaultPageDescription}`;
+                return defaultPageDescription;
 
             case 'og-description':
             case 'twitter-description':
                 if (socialMediaDescription) {
-                    return `${socialMediaDescription}`;
+                    return socialMediaDescription || description || defaultPageDescription;
                 }
 
                 if (description) {
-                    return `${description}`;
+                    return description || defaultPageDescription;
                 }
 
-                return `${defaultPageDescription}`;
+                return defaultPageDescription;
 
             default:
                 if (description) {
-                    return `${description}`;
+                    return description || defaultPageDescription;
                 }
 
-                return `${defaultPageDescription}`;
+                return defaultPageDescription;
         }
     }
 
@@ -145,7 +139,7 @@ export async function SeoDescriptionHelper_pageDescription(context, place: strin
         //
         // const categoryBlocks = get(nodeResponse, 'data.site.data.node.category.data.description.content', []);
 
-        // TODO: (4)
+        // TODO: Add support for category pages (content from published category)
         return '';
     }
 
@@ -154,16 +148,16 @@ export async function SeoDescriptionHelper_pageDescription(context, place: strin
 
         switch (place) {
             case 'default':
-                return `${defaultPageDescription}`;
+                return defaultPageDescription;
 
             case 'meta-title':
-                return SeoHelper_addTextSeparator(categoryDescription, defaultPageDescription); // TODO: (1)
+                return categoryDescription;
 
             case 'og-title':
             case 'schema-title':
             case 'twitter-title':
             default:
-                return `${defaultPageDescription}`;
+                return defaultPageDescription;
         }
     }
 }

@@ -30,6 +30,7 @@ export async function ConfigHelper_getConfig(context, configKey) {
     };
     const response = await WebsiteApiProvider.call(query, variables);
     const sectionsConfig = get(response, 'data.site.data.node.config.config.0.data');
+
     return sectionsConfig;
 }
 
