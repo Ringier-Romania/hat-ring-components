@@ -1,7 +1,6 @@
-import React from "react";
-
 // Libraries
 import isNil from 'lodash/isNil';
+import {SiteContentType} from "../types/types";
 
 export function UtilsHelper_convertToInt(input: string | number) {
     return typeof input === "number" ? input : parseInt(input);
@@ -40,7 +39,31 @@ export function UtilsHelper_getCurrentPageType(context) {
 }
 
 export function UtilsHelper_getCurrentNodeName(context) {
-    return context?.hatControllerParams?.gqlResponse?.data?.site?.data?.content;
+    try {
+        const content = context?.hatControllerParams?.gqlResponse?.data?.site?.data?.content;
+        if (content) {
+            const pageType = UtilsHelper_getCurrentPageType(context);
+
+            if (pageType === SiteContentType.SiteNode) {
+                // @TODO: getting name for sitenode/category in HAT Server?
+                const slug = content.slug?.replaceAll('-', ' ') || '';
+                return (slug.charAt(0).toUpperCase() + slug.slice(1)) || '';
+            } else if (pageType === SiteContentType.Story) {
+                return content.title || '';
+            } else if (pageType === SiteContentType.CustomAction) {
+                return content.action || '';
+            } else if ([SiteContentType.Source, SiteContentType.Topic].includes(pageType)) {
+                return content.name || '';
+            } else if (pageType === SiteContentType.Author) {
+                // @TODO: get author name in HAT Server
+                return '';
+            }
+        }
+    } catch (e) {
+        console.error('Error when getting current node name', e);
+    }
+
+    return '';
 }
 
 export function UtilsHelper_ensureHttps(url: string): string {

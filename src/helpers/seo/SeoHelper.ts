@@ -133,11 +133,11 @@ async function mapPatternVariables(context, place: string, fieldToCheck: string 
     }
 
     if (fieldToCheck.includes('{{currentTitle}}')) {
-        dynamicPatternMap['{{currentTitle}}'] = async() => {return await SeoHelper_currentTitle(context, place)};
+        dynamicPatternMap['{{currentTitle}}'] = async() => {return await SeoTitleHelper_pageTitle(context, place)};
     }
 
     if (fieldToCheck.includes('{{currentDescription}}')) {
-        dynamicPatternMap['{{currentDescription}}'] = async() => {return await SeoHelper_currentDescription(context, place)};
+        dynamicPatternMap['{{currentDescription}}'] = async() => {return await SeoDescriptionHelper_pageDescription(context, place)};
     }
 
     if (fieldToCheck.includes('{{nodeName}}')) {
