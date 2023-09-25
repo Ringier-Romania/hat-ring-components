@@ -17,7 +17,7 @@ export class WebsiteApiProvider {
                 spaceUuid
             }).buildApolloClient();
         }
-        
+
         const fetchPolicy = UtilsHelper_isDevelopmentMode() ? 'no-cache' : 'cache-first';
         return await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
     }
