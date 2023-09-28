@@ -106,7 +106,7 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
 
         const nodeResponse = await WebsiteApiProvider.call(nodeQuery, {
             url: process.env.NEXT_PUBLIC_WEBSITE_DOMAIN + context.url,
-            variant: context.hatControllerParams.websiteManagerVariant,
+            variant: context.websiteManagerVariant,
         });
 
         return get(nodeResponse, 'data.site.data.node.category.data.name', '');

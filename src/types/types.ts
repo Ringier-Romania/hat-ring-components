@@ -15,7 +15,8 @@ export interface AppContext {
     url: string,
     customData: any,
     hatControllerParams: any,
-    cssModules?: any
+    cssModules?: any,
+    websiteManagerVariant: string
 }
 
 export interface ComponentParams {

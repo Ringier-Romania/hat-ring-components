@@ -134,7 +134,7 @@ export async function SeoDescriptionHelper_pageDescription(context, place: strin
         //
         // const nodeResponse = await WebsiteApiProvider.call(nodeQuery, {
         //     url: process.env.NEXT_PUBLIC_WEBSITE_DOMAIN + context.url,
-        //     variant: process.env.NEXT_PUBLIC_WEBSITE_API_VARIANT,
+        //     variant: context.websiteManagerVariant,
         // });
         //
         // const categoryBlocks = get(nodeResponse, 'data.site.data.node.category.data.description.content', []);

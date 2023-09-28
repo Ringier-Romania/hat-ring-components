@@ -14,7 +14,7 @@ export interface GridParams extends ComponentParams {
 }
 
 export async function Grid(params: GridParams) {
-    const variant = params.context.hatControllerParams.websiteManagerVariant;
+    const variant = params.context.websiteManagerVariant;
     const domain = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 
     let boxes = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom'];

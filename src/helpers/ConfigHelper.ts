@@ -4,7 +4,7 @@ import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
 import get from "lodash/get";
 
 export async function ConfigHelper_getConfig(context, configKey) {
-    const variant = context.hatControllerParams.websiteManagerVariant;
+    const variant = context.websiteManagerVariant;
     const domain = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 
     const antycache = UtilsHelper_isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}` : 'antycacheStatusCode';
