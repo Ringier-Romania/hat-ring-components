@@ -58,7 +58,7 @@ export function WidgetHelper_getWidgetCssClasses(componentName: string, widgetCo
 
 export async function WidgetHelper_findWidgetConfig(context: AppContext, objToCompare, containers: string[], boxes: string[] = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom']): Promise<any> {
     return new Promise(async (resolve, reject) => {
-        const variant = process.env.NEXT_PUBLIC_WEBSITE_API_VARIANT;
+        const variant = context.websiteManagerVariant;
         const domain = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
         let variablesQuery = '';
         let configQuery = '';
