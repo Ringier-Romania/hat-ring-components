@@ -77,7 +77,7 @@ export function GridHelper_generateGridConfig(configKey, title, containerCount =
                 ],
                 "required": true
             },
-            defaultParams: 'aside'
+            defaultParams: 'div'
         },
         {
             name: 'box_top_hide',
@@ -265,7 +265,7 @@ export function GridHelper_generateGridConfig(configKey, title, containerCount =
                 ],
                 "required": true
             },
-            defaultParams: 'aside'
+            defaultParams: 'div'
         },
         {
             name: 'box_bottom_hide',

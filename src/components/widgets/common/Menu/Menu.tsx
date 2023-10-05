@@ -63,12 +63,12 @@ export function Menu(
             </li>
     }
 
-    return <nav className={WidgetHelper_getWidgetCssClasses('Menu', widgetConfig, context, [styles.Menu])}
+    return <div className={WidgetHelper_getWidgetCssClasses('Menu', widgetConfig, context, [styles.Menu])}
     >
         <ul>
             {widgetConfig.overrideMenuElements.map((menuElement) => {
                 return renderMenuElement(menuElement);
             })}
         </ul>
-    </nav>;
+    </div>;
 }

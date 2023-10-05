@@ -40,7 +40,7 @@ export default function ListElementContent (
     if (headerTagLevel >= 6) {
         ItemHeaderTag = 'span';
     } else {
-        ItemHeaderTag = `h${_.clamp(headerTagLevel, 2, 6)}` as keyof JSX.IntrinsicElements;
+        ItemHeaderTag = `h${_.clamp(headerTagLevel + 1, 2, 6)}` as keyof JSX.IntrinsicElements;
     }
 
     function renderChildren() {
