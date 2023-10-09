@@ -92,8 +92,8 @@ export let SEOWebsitesConfig
             "topicPageDescriptionWithNumeration": "Page {{number}} for {{topicName}}. {{currentDescription}}",
             "otherPageTitle": "{{pageTypeName}} | {{siteName}}",
             "otherPageDescription": "{{currentDescription}}",
-            "detailPageTitle": "| {{siteName}}",
-            "detailPageDescription": "| {{siteName}}",
+            "detailPageTitle": "{{currentTitle}} | {{siteName}}",
+            "detailPageDescription": "{{currentDescription}} | {{siteName}}",
         },
         "seoLanguages": {
             "supportedLanguages": [],
