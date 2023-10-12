@@ -4,7 +4,7 @@ import React from "react";
 import * as _ from "lodash";
 import {Container} from "./Container";
 import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
-import {UtilsHelper_isDevelopmentMode} from "../../helpers/UtilsHelper";
+import {UtilsHelper_getDomain, UtilsHelper_isDevelopmentMode} from "../../helpers/UtilsHelper";
 
 export interface GridParams extends ComponentParams {
     config: {
@@ -15,7 +15,7 @@ export interface GridParams extends ComponentParams {
 
 export async function Grid(params: GridParams) {
     const variant = params.context.websiteManagerVariant;
-    const domain = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
+    const domain = UtilsHelper_getDomain();
 
     let boxes = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom'];
     if (params.config.boxes) {
