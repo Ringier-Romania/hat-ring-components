@@ -22,7 +22,7 @@ export async function AlternateLinksFromNode(context: AppContext, seoConfig: obj
         alternateLinks["languages"][`${customAlternatives[i]['Language code']}`] = UtilsHelper_getDomain() + customAlternatives[i]['Alternative href'];
 
         if (customAlternatives[i]['Default language'] === 'on') {
-            xDefault = customAlternatives[i]['Alternative href'];
+            xDefault = UtilsHelper_getDomain() + customAlternatives[i]['Alternative href'];
         }
     }
 
