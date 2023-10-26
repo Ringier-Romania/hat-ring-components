@@ -1,6 +1,7 @@
 /**
- * Temp workaround for images preloading
- * waiting for: https://github.com/vercel/next.js/issues/52995
+ * Workaround for images preloading - React-dom doesnt allow empty href in preload() fnc,
+ * but we need this to resolve the Safari bug with preload, also there is an unstable fnc in nextjs at this moment: unstable_getImgProps
+ * solution: https://github.com/vercel/next.js/issues/43134#issuecomment-1634615162
  * @param props
  * @constructor
  */
