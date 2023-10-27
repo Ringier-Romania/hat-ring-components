@@ -66,7 +66,7 @@ declare global {
 }
 export interface SliderFrontParams extends WidgetParams {
     widgetConfig: SliderConfig,
-    children: React.ReactNode,
+    slides: React.ReactNode,
     extendableAttributes?: any
 }
 

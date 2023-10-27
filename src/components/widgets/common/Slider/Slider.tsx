@@ -74,6 +74,16 @@ export async function Slider(
         </div>
     }
 
+    const slides = widgetConfig.slides.map((slide: SliderElement) => {
+        const dimensions = ImageHelper_getImageDimensionsFromObject(slide, context, "Source desktop dimensions(eg. 600x300)", "Source mobile dimensions(eg. 600x300)", '600x300');
+
+        return (
+            // @ts-ignore in web-components class is valid
+            <swiper-slide class={slide['Custom CSS Class'] || ''} suppressHydrationWarning={true}>
+                {renderSlideContent(slide, dimensions, headerTagLevel + 1, 1)}
+            </swiper-slide>
+        )
+    });
     return <div className={WidgetHelper_getWidgetCssClasses('Slider', widgetConfig, context, [styles.Slider])}>
         {widgetConfig.headerText && <div className={"sliderTitle"}><HeaderTag>{widgetConfig.headerText}</HeaderTag></div>}
         {widgetConfig.description && <div className={"sliderDescription"}><p>{widgetConfig.description}</p></div>}
@@ -81,17 +91,6 @@ export async function Slider(
             <button className={navigationClassNames.nextEl.replace('.', '')}></button>
             <button className={navigationClassNames.prevEl.replace('.', '')}></button>
         </div>}
-        <SliderFront widgetConfig={widgetConfig} context={frontendContext} extendableAttributes={extendableAttributes}>
-            {widgetConfig.slides.map((slide: SliderElement) => {
-                const dimensions = ImageHelper_getImageDimensionsFromObject(slide, context, "Source desktop dimensions(eg. 600x300)", "Source mobile dimensions(eg. 600x300)", '600x300');
-
-                return (
-                    // @ts-ignore in web-components class is valid
-                    <swiper-slide class={slide['Custom CSS Class'] || ''} suppressHydrationWarning={true}>
-                        {renderSlideContent(slide, dimensions, headerTagLevel + 1, 1)}
-                    </swiper-slide>
-                )
-            })}
-        </SliderFront>
+        <SliderFront widgetConfig={widgetConfig} context={frontendContext} extendableAttributes={extendableAttributes} slides={slides}/>
     </div>
 }

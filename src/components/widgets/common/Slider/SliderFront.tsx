@@ -6,7 +6,7 @@ import { register } from 'swiper/element/bundle';
 import {SliderFrontParams, SwiperRef} from "./types";
 
 export function SliderFront(
-    {widgetConfig, context, children, extendableAttributes}: SliderFrontParams
+    {widgetConfig, context, slides, extendableAttributes}: SliderFrontParams
 ) {
     extendableAttributes = extendableAttributes || {};
     extendableAttributes.swiperOptions = extendableAttributes.swiperOptions || {}
@@ -58,7 +58,7 @@ export function SliderFront(
             ref={swiperElRef}
             suppressHydrationWarning={true}
         >
-            {children}
+            {slides}
         </swiper-container>
     </>;
 }
