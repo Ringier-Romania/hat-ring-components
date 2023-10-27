@@ -25,8 +25,8 @@ export default async function Lead(
     }
 
     return (
-        <div className={['Lead'].join(' ')} dangerouslySetInnerHTML={{__html: paragraphFound.text}}>
-
+        <div className={['Lead'].join(' ')} >
+            <div className={['leadContent'].join(' ')} dangerouslySetInnerHTML={{__html: paragraphFound.text}}></div>
         </div>
     )
 }
