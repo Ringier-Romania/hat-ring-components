@@ -14,7 +14,7 @@ export default function OrderedListBlock({blockData}: OrderedListBlockParams) {
     return <div className="OrderedListBlock">
         <ol>
             {
-                blockData.entries.map(entry => <li dangerouslySetInnerHTML={{ __html: entry }}/>)
+                blockData.entries.map((entry, index) => <li key={index} dangerouslySetInnerHTML={{ __html: entry }}/>)
             }
         </ol>
     </div>

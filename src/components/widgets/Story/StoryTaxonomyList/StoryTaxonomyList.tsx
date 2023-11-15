@@ -41,7 +41,7 @@ export async function StoryTaxonomyList({widgetConfig, context}: StoryTaxonomyLi
     return <div className={WidgetHelper_getWidgetCssClasses('StoryTaxonomyList', widgetConfig, context)}>
         {widgetConfig.listPrefix && <span className={'listPrefix'}>{widgetConfig.listPrefix}</span>}
 
-        {response.data.story?.topics?.map(topic => {
+        {response.data.story?.topics?.map((topic, index) => {
                 if (widgetConfig.taxonomyKind && topic.topic.kind.code != widgetConfig.taxonomyKind) {
                     return null;
                 }
@@ -54,9 +54,9 @@ export async function StoryTaxonomyList({widgetConfig, context}: StoryTaxonomyLi
                 let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
                 let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
                 return url && widgetConfig.links ?
-                    <RingLink href={url}>
+                    <RingLink key={index} href={url}>
                         <span className={'topic'}>{topic.topic.name}</span>
-                    </RingLink> : <span className={'topic'}>{topic.topic.name}</span>
+                    </RingLink> : <span key={index} className={'topic'}>{topic.topic.name}</span>
             }
         )}
 

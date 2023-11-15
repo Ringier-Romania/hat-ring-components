@@ -21,10 +21,10 @@ export default function Taxonomies(
     return (
         <div className={['Taxonomies'].join(' ')}>
 
-            {data.topics?.map(topic => {
+            {data.topics?.map((topic, index) => {
                 let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
                 let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
-                return <div className={'topic'} data-kind={topic.topic.kind.code}>
+                return <div className={'topic'} data-kind={topic.topic.kind.code} key={index}>
                     { url ?
                     <RingLink href={url}>
                         <span>{topic.topic.name}</span>

@@ -13,7 +13,7 @@ export default function UnorderedListBlock({blockData}: UnorderedListBlockParams
     return <div className="UnorderedListBlock">
         <ul>
             {
-             blockData.entries.map(entry => <li dangerouslySetInnerHTML={{ __html: entry }}/>)
+             blockData.entries.map((entry, index) => <li key={index} dangerouslySetInnerHTML={{ __html: entry }}/>)
             }
         </ul>
     </div>

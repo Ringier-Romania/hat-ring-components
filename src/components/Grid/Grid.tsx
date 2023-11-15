@@ -52,10 +52,11 @@ export async function Grid(params: GridParams) {
     const sectionsConfig = _.get(response, 'data.site.data.node.config');
 
     return params.config.containers.map(
-        sectionName => <Container
+        (sectionName, i) => <Container
             context={params.context}
             boxes={boxes}
             sectionName={sectionName}
             sectionConfig={_.get(sectionsConfig, `${sectionName}.0.data`)}
+            key={i}
         />);
 }

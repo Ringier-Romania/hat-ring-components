@@ -48,7 +48,7 @@ export default function ListElementContent (
             return (<div className={['listElementChildren'].join(' ')}>
                 {data.children.map((element, index) => {
                     return (<div className={['listElementChild'].join(' ')}>
-                        <ListElementContent context={context} widgetConfig={widgetConfig} data={element} childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1} itemIndex={itemIndex}/>
+                        <ListElementContent context={context} widgetConfig={widgetConfig} data={element} childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1} itemIndex={itemIndex} key={index}/>
                     </div>)
                 })}
             </div>)

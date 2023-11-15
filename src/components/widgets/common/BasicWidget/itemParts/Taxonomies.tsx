@@ -21,9 +21,9 @@ export default function Taxonomies(
 
     return (
         <div className={['Taxonomies'].join(' ')}>
-            {topics.map(topic => {
+            {topics.map((topic, index) => {
                 let url = topic?.publicationPoint?.url || false;
-                return <div className={'topic'} data-kind={topic?.kind?.code}>
+                return <div className={'topic'} data-kind={topic?.kind?.code} key={index}>
                     { url ?
                     <RingLink href={url} title={topic?.name}>
                         <span>{topic?.name}</span>
