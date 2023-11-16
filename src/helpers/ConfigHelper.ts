@@ -2,11 +2,20 @@ import {UtilsHelper_isDevelopmentMode} from "./UtilsHelper";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
 import get from "lodash/get";
+import {CacheHelper_get, CacheHelper_set} from "./CacheHelper";
 
 export async function ConfigHelper_getConfig(context, configKey) {
     const variant = context.websiteManagerVariant;
     const domain = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
+    const variables = {
+        url: domain + context.url,
+        variant: variant,
+    };
+    const cacheKey = {variables, configKey};
 
+    if(CacheHelper_get(cacheKey)){
+        return CacheHelper_get(cacheKey);
+    }
     const antycache = UtilsHelper_isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}` : 'antycacheStatusCode';
     const query = gql`
         query($url: URL!, $variant:ID!){
@@ -24,13 +33,11 @@ export async function ConfigHelper_getConfig(context, configKey) {
             }
         }
     `;
-    const variables = {
-        url: domain + context.url,
-        variant: variant,
-    };
+
     const response = await WebsiteApiProvider.call(query, variables);
     const sectionsConfig = get(response, 'data.site.data.node.config.config.0.data');
 
+    CacheHelper_set(cacheKey, sectionsConfig);
     return sectionsConfig;
 }
 

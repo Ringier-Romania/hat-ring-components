@@ -3,8 +3,12 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 import * as _ from "lodash";
 import {ConfigHelper_getSeoOpenGraphConfig} from "../ConfigHelper";
 import {ImageHelper_getImageDimensionsFromObject} from "../ImageHelper";
+import {AppContext, SiteContentType} from "../../types/types";
 
-export async function OpenGraphHelper_getMainStoryImageData(context) {
+export async function OpenGraphHelper_getMainStoryImageData(context:AppContext) {
+    if(context.siteContentType !== SiteContentType.Story){
+        return false;
+    }
     const seoOpenGraphSettings = await ConfigHelper_getSeoOpenGraphConfig(context);
     const configImageSizes = ImageHelper_getImageDimensionsFromObject(seoOpenGraphSettings, context, 'imageSizesDesktop', 'imageSizesMobile', '0x0');
 

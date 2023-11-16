@@ -30,11 +30,11 @@ export async function SeoMetaOpenGraph(context) {
             locale: await SeoHelper_currentLocale(context),
             images: [
                 {
-                    url: imageData.src !== undefined ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null,
-                    secure_url: imageData.src !== undefined && imageData.src.search('https://') ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null,
-                    width: imageData.src !== undefined ? imageData.width : defaultImageData !== null ? defaultImageData.width : null,
-                    height: imageData.src !== undefined ? imageData.height : defaultImageData !== null ? defaultImageData.height : null,
-                    caption: imageData.caption,
+                    url: imageData && imageData.src !== undefined ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null,
+                    secure_url: imageData && imageData.src !== undefined && imageData.src.search('https://') ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null,
+                    width: imageData && imageData.src !== undefined ? imageData.width : defaultImageData !== null ? defaultImageData.width : null,
+                    height: imageData && imageData.src !== undefined ? imageData.height : defaultImageData !== null ? defaultImageData.height : null,
+                    caption: imageData ? imageData.caption : '',
                     type: "image/png" // TODO: (1)
                 }
             ]
