@@ -3,12 +3,12 @@ import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
 import get from "lodash/get";
 import {CacheHelper_get, CacheHelper_set} from "./CacheHelper";
+import {AppContext} from "../types/types";
 
-export async function ConfigHelper_getConfig(context, configKey) {
+export async function ConfigHelper_getConfig(context: AppContext, configKey) {
     const variant = context.websiteManagerVariant;
-    const domain = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
     const variables = {
-        url: domain + context.url,
+        nodeID: context.siteNodeId,
         variant: variant,
     };
     const cacheKey = {variables, configKey};
@@ -17,17 +17,14 @@ export async function ConfigHelper_getConfig(context, configKey) {
         return CacheHelper_get(cacheKey);
     }
     const antycache = UtilsHelper_isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}` : 'antycacheStatusCode';
+
     const query = gql`
-        query($url: URL!, $variant:ID!){
-            site(url:$url, variantId: $variant){
-                ${antycache}:statusCode
-                data {
-                    node {
-                        config {
-                            config(codeName: "${configKey}"){
-                                data
-                            }
-                        }
+        query($nodeID: ID!, $variant:ID!){
+            node(id: $nodeID){
+                config(variantId: $variant){
+                    ${antycache}:__typename
+                    config(codeName: "${configKey}"){
+                        data
                     }
                 }
             }
@@ -35,7 +32,7 @@ export async function ConfigHelper_getConfig(context, configKey) {
     `;
 
     const response = await WebsiteApiProvider.call(query, variables);
-    const sectionsConfig = get(response, 'data.site.data.node.config.config.0.data');
+    const sectionsConfig = get(response, 'data.node.config.config.0.data');
 
     CacheHelper_set(cacheKey, sectionsConfig);
     return sectionsConfig;

@@ -5,6 +5,7 @@ import * as _ from "lodash";
 import {Container} from "./Container";
 import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 import {UtilsHelper_getDomain, UtilsHelper_isDevelopmentMode} from "../../helpers/UtilsHelper";
+import {CacheHelper_get} from "../../helpers/CacheHelper";
 
 export interface GridParams extends ComponentParams {
     config: {
@@ -15,12 +16,19 @@ export interface GridParams extends ComponentParams {
 
 export async function Grid(params: GridParams) {
     const variant = params.context.websiteManagerVariant;
-    const domain = UtilsHelper_getDomain();
 
     let boxes = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom'];
     if (params.config.boxes) {
         boxes = params.config.boxes;
     }
+
+    const variables = {
+        nodeID: params.context.siteNodeId,
+        variant: variant,
+    };
+
+    const cacheKey = {variables, boxes, containers: params.config.containers};
+
 
     let variablesQuery = '';
     let configQuery = '';
@@ -28,28 +36,25 @@ export async function Grid(params: GridParams) {
         configQuery += section + ':config(codeName: "' + section + '"){ data } ';
     })
 
-    const antycache = UtilsHelper_isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}`: 'antycacheStatusCode';
+    const antycache = UtilsHelper_isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}` : 'antycacheStatusCode';
     const query = gql`
-        query($url: URL!, $variant:ID!){
-            site(url:$url, variantId: $variant){
-                ${antycache}:statusCode
-                data {
-                    node {
-                        config {
-                            ${configQuery}
-                        }
-                    }
+        query($nodeID: ID!, $variant:ID!){
+            node(id: $nodeID){
+                config(variantId: $variant){
+                    ${antycache}:__typename
+                    ${configQuery}
                 }
             }
         }
     `;
-    const variables = {
-        url: domain + params.context.url,
-        variant: variant,
-    };
 
-    const response = await WebsiteApiProvider.call(query, variables);
-    const sectionsConfig = _.get(response, 'data.site.data.node.config');
+    let sectionsConfig = false;
+    if (CacheHelper_get(cacheKey)) {
+        sectionsConfig = CacheHelper_get(cacheKey);
+    } else {
+        const response = await WebsiteApiProvider.call(query, variables);
+        sectionsConfig = _.get(response, 'data.node.config');
+    }
 
     return params.config.containers.map(
         (sectionName, i) => <Container

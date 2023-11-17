@@ -10,8 +10,10 @@ export enum SiteContentType {
 }
 
 export interface AppContext {
+    nodeID: any;
     siteContentType: SiteContentType | undefined | null,
     id: string | undefined | null,
+    siteNodeId: string | undefined | null,
     url: string,
     customData: any,
     hatControllerParams: any,
