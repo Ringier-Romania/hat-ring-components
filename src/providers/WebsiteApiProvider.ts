@@ -2,6 +2,7 @@ import {WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
 import { UtilsHelper_isDevelopmentMode} from "../helpers/UtilsHelper";
 import gql from "graphql-tag";
 import {DocumentNode} from "graphql/language/ast";
+import {CacheHelper_get, CacheHelper_set} from "../helpers/CacheHelper";
 
 export class WebsiteApiProvider {
 
@@ -18,7 +19,14 @@ export class WebsiteApiProvider {
             }).buildApolloClient();
         }
 
-        const fetchPolicy = UtilsHelper_isDevelopmentMode() ? 'no-cache' : 'cache-first';
-        return await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
+        //console.log(query.loc?.source.body,variables);
+        const cacheKey = {query: query.loc?.source.body, variables};
+        if(CacheHelper_get(cacheKey)){
+            return CacheHelper_get(cacheKey);
+        }
+        const fetchPolicy = 'no-cache';
+        const res = await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
+        CacheHelper_set(cacheKey, res);
+        return res;
     }
 }
