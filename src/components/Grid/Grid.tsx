@@ -52,6 +52,8 @@ export async function Grid(params: GridParams) {
     if (CacheHelper_get(cacheKey)) {
         sectionsConfig = CacheHelper_get(cacheKey);
     } else {
+        console.log(query.loc?.source.body);
+        console.log(JSON.stringify(variables));
         const response = await WebsiteApiProvider.call(query, variables);
         sectionsConfig = _.get(response, 'data.node.config');
     }

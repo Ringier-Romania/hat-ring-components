@@ -28,15 +28,15 @@ export default function ImageBlock({blockData, widgetConfig, context}: ImageBloc
         imageHeight = maxImageHeight;
     }
 
-    const img = <RingImage src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight}
-                           transform={TransformType.ResizeCropAuto}/>;
+    const img = <img src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight}
+                        />;
 
     return <div className={['ImageBlock', 'alignment-' + blockData.alignment].join(' ')}>
         {
             link ?
-                <RingLink href={link.url}>
+                <a href={link.url}>
                     {img}
-                </RingLink> :
+                </a> :
                 img
         }
         <div className="imgMetaData">

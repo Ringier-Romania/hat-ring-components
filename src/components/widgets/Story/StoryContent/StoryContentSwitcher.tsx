@@ -48,13 +48,13 @@ export function StoryContentSwitcher({
         clientContext.customData.widgets = [];
         const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
         let Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
-        const isClientSideComponent = Block.$$typeof && Block.$$typeof === Symbol.for('react.client.reference');
         if (blockType === 'GroupBlock' && extendableAttributes?.customGroupBlocks && extendableAttributes?.customGroupBlocks[block.name]) {
 
             Block = extendableAttributes?.customGroupBlocks[block.name];
 
         }
-        return <Block blockData={block} widgetConfig={widgetConfig}
-                      context={isClientSideComponent ? clientContext : context}/>;
+
+        return Block ? <Block blockData={block} widgetConfig={widgetConfig}
+                      context={context}/> : null;
     });
 }

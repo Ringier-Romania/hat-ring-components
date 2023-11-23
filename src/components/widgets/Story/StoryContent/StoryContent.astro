@@ -1,3 +1,5 @@
+---
+const {context, widgetConfig} = Astro.props;
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
@@ -6,10 +8,8 @@ import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryContentParams} from "./types";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
-export async function StoryContent({widgetConfig, context, extendableAttributes = {}}: StoryContentParams) {
-
-    async function getData(queryStoryFragment) {
-        const query = gql`
+async function getData(queryStoryFragment) {
+    const query = gql`
             query($storyId: UUID){
                 story(id:$storyId){
                     content {
@@ -94,34 +94,24 @@ export async function StoryContent({widgetConfig, context, extendableAttributes 
                 }
             }
         `;
-        const variables = {
-            storyId: context.id,
-        };
-
-        const response = await WebsiteApiProvider.call(query, variables);
-        return _.get(response, 'data.story.content[0].blocks');
-    }
-
-    let queryFragment = extendableAttributes?.getDataQueryStoryFragment || '';
-    const content = await getData(queryFragment);
-
-    let cssModules = '';
-
-    if (extendableAttributes.getCssModule) {
-        cssModules = extendableAttributes.getCssModule(cssModules) || '';
-    }
-
-    function render() {
-        return <div className={WidgetHelper_getWidgetCssClasses('StoryContent',widgetConfig, context)}>
-            {/* @ts-expect-error Server Component */}
-            <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context} extendableAttributes={extendableAttributes}/>
-        </div>
+    const variables = {
+        storyId: context.id,
     };
 
-    if (extendableAttributes.render) {
-        return extendableAttributes.render(cssModules);
-    }
-
-    return render();
+    const response = await WebsiteApiProvider.call(query, variables);
+    return _.get(response, 'data.story.content[0].blocks');
 }
 
+let queryFragment = '';
+const content = await getData(queryFragment);
+
+let cssModules = '';
+
+---
+
+
+
+<div className={WidgetHelper_getWidgetCssClasses('StoryContent',widgetConfig, context)}>
+    {/* @ts-expect-error Server Component */}
+    <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context} extendableAttributes={{}}/>
+</div>

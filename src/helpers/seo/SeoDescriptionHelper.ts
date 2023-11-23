@@ -60,7 +60,9 @@ export async function SeoDescriptionHelper_pageDescription(context, place: strin
 
         const storyResponse = await WebsiteApiProvider.call(storyQuery, {storyId: context.id,});
 
+
         return {
+            // @ts-ignore
             description: get(StoryHelper_getLeadBlock(storyResponse.data.story as Story), 'text', '') || '',
             leads: get(storyResponse, 'data.story.leads', []) || [],
         }
