@@ -27,34 +27,24 @@ export async function Grid(params: GridParams) {
         variant: variant,
     };
 
-    const cacheKey = {variables, boxes, containers: params.config.containers};
-
-
     let variablesQuery = '';
     let configQuery = '';
     params.config.containers.forEach(section => {
         configQuery += section + ':config(codeName: "' + section + '"){ data } ';
     })
 
-    const antycache = UtilsHelper_isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}` : 'antycacheStatusCode';
     const query = gql`
         query($nodeID: ID!, $variant:ID!){
             node(id: $nodeID){
                 config(variantId: $variant){
-                    ${antycache}:__typename
                     ${configQuery}
                 }
             }
         }
     `;
 
-    let sectionsConfig = false;
-    if (CacheHelper_get(cacheKey)) {
-        sectionsConfig = CacheHelper_get(cacheKey);
-    } else {
-        const response = await WebsiteApiProvider.call(query, variables);
-        sectionsConfig = _.get(response, 'data.node.config');
-    }
+    const response = await WebsiteApiProvider.call(query, variables);
+    const sectionsConfig = _.get(response, 'data.node.config');
 
     return params.config.containers.map(
         (sectionName, i) => <Container
