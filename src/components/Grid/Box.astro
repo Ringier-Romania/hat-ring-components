@@ -1,0 +1,29 @@
+---
+const {context, boxName, widgets, size, tagName} = Astro.props;
+
+import React from "react";
+import * as _ from "lodash";
+import {AbstractWidgetConfig, AppContext} from "../../types/types";
+import Widget from "./Widget.astro";
+import styles from "../../../styles/Grid/Grid.module.scss";
+
+//@TODO section config type
+interface GridBoxParams {
+    context: AppContext;
+    boxName: string,
+    widgets: Array<AbstractWidgetConfig>,
+    size: number,
+    tagName: string
+};
+const BoxTag = `${tagName || 'div'}`;
+
+
+---
+
+<BoxTag className={['gridBox', boxName, 'gridCol' + size, styles.box].join(' ')}>
+    {widgets.map((widgetConfig, i) => {
+        return <>
+            {Widget && <Widget widgetConfig={widgetConfig} context={context} key={i}/>}
+            </>
+    })}
+</BoxTag>

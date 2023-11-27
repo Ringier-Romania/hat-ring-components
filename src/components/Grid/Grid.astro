@@ -1,0 +1,71 @@
+---
+const {context, config} = Astro.props;
+
+
+import {ComponentParams} from "../../types/types";
+import {gql} from "graphql-tag";
+import React from "react";
+import * as _ from "lodash";
+import Container from "./Container.astro";
+import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
+import {UtilsHelper_getDomain, UtilsHelper_isDevelopmentMode} from "../../helpers/UtilsHelper";
+import {CacheHelper_get} from "../../helpers/CacheHelper";
+
+export interface GridParams extends ComponentParams {
+    config: {
+        containers: string[],
+        boxes?: string[],
+    }
+}
+const variant = context.websiteManagerVariant;
+
+let boxes = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom'];
+if (config.boxes) {
+    boxes = config.boxes;
+}
+
+const variables = {
+    nodeID: context.siteNodeId,
+    variant: variant,
+};
+
+const cacheKey = {variables, boxes, containers: config.containers};
+
+
+let variablesQuery = '';
+let configQuery = '';
+config.containers.forEach(section => {
+    configQuery += section + ':config(codeName: "' + section + '"){ data } ';
+})
+
+const antycache =  'antycacheStatusCode';
+const query = gql`
+        query($nodeID: ID!, $variant:ID!){
+            node(id: $nodeID){
+                config(variantId: $variant){
+                    ${antycache}:__typename
+                    ${configQuery}
+                }
+            }
+        }
+    `;
+
+let sectionsConfig = false;
+if (CacheHelper_get(cacheKey)) {
+    sectionsConfig = CacheHelper_get(cacheKey);
+} else {
+    const response = await WebsiteApiProvider.call(query, variables);
+    sectionsConfig = _.get(response, 'data.node.config');
+}
+---
+
+{config.containers.map(
+    (sectionName, i) =>
+    <Container
+            context={context}
+            boxes={boxes}
+            sectionName={sectionName}
+            sectionConfig={_.get(sectionsConfig, `${sectionName}.0.data`)}
+            key={i}
+    />)}
+

@@ -12,7 +12,7 @@ export default function ListElements(
             widgetConfig: BasicWidgetConfig,
             response: BasicWidgetResponse
         }) {
-
+console.log('bbb',context);
     const headerTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span' ) as keyof JSX.IntrinsicElements;
     let headerTagLevel = 6;
 

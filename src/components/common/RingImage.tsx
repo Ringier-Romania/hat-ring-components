@@ -1,4 +1,3 @@
-import Image, {ImageProps, ImageLoaderProps} from "next/image";
 import React from "react";
 
 import styles from "../../../styles/common/RingImage.module.scss";
@@ -20,7 +19,7 @@ function getPlaceholderData(width, height) {
 }
 
 // TODO: checkout if they fixed bug with backend rendering https://github.com/vercel/next.js/issues/41924
-export function RingImage(props: RingImageProps) {
+export function RingImage(props) {
     let src = props.src;
     let unoptimized = props.unoptimized;
     let blurDataURL = props.blurDataURL;
@@ -58,7 +57,7 @@ export function RingImage(props: RingImageProps) {
         <picture>
             { isAvifWebpTransformAble && src != avifSrc ? <source srcSet={avifSrc} type="image/avif"/> : null}
             { isAvifWebpTransformAble && src != webpSrc ? <source srcSet={webpSrc} type="image/webp"/> : null}
-            <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
+            <img {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
                    unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL} priority={false}/>
         </picture>
         {props.priority && <RingImagePreload srcSet={srcSet}/>}

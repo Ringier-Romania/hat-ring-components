@@ -36,12 +36,7 @@ export default function Header(
 
     return (
         <div className={['Header'].join(' ')}>
-                {headerUrl && headerText
-                    ? <RingLink href={headerUrl}>
-                        {renderHeaderText(headerText)}
-                    </RingLink>
-                    : <>{renderHeaderText(headerText)}</>
-                }
+            {headerText}
         </div>
     )
 }

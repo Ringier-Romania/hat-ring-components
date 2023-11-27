@@ -25,8 +25,7 @@ export function WidgetHelper_renderEmptyWidget(widgetConfig, text = '') {
 }
 
 export function WidgetHelper_renderEmptyComponent(componentClassName, text = '') {
-    return (<div className={componentClassName} style={{display: 'none'}}
-                 dangerouslySetInnerHTML={{__html: text && `<!-- ${text} -->`}}/>);
+    return (null);
 }
 
 export function WidgetHelper_getWidgetCssClasses(componentName: string, widgetConfig: AbstractWidgetConfig, context: AppContext, additionalCssClasses: Array<string> = []): string {

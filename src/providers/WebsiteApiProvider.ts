@@ -20,13 +20,15 @@ export class WebsiteApiProvider {
         }
 
 
-        //console.log(query.loc?.source.body,variables);
+
         const cacheKey = {query: query.loc?.source.body, variables};
         if(CacheHelper_get(cacheKey)){
             return CacheHelper_get(cacheKey);
         }
         const fetchPolicy = 'no-cache';
         const res = await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
+        console.log('callllll');
+        console.log(query.loc?.source.body,variables);
         CacheHelper_set(cacheKey, res);
         return res;
     }

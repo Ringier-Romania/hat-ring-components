@@ -65,17 +65,17 @@ export default function ListElementContent (
         }
         {data['Image src'] && <ListElementImage context={context} widgetConfig={widgetConfig} data={imageProps}/>}
         {/* @ts-expect-error Server Component */}
-        {data.Title && <TextReplacer props={{className: 'title'}} context={context} config={{}} parentComponent={ItemHeaderTag}>
+        {data.Title && <ItemHeaderTag props={{className: 'title'}} context={context} config={{}} parentComponent={ItemHeaderTag}>
             {data.Title}
-        </TextReplacer>}
+        </ItemHeaderTag>}
         {/* @ts-expect-error Server Component */}
-        {data.Description && <TextReplacer props={{className: 'description'}} context={context} config={{}} parentComponent={'p'}>
+        {data.Description && <p props={{className: 'description'}} context={context} config={{}} parentComponent={'p'}>
             {data.Description}
-        </TextReplacer>}
+        </p>}
         {/* @ts-expect-error Server Component */}
-        {data.Text && <TextReplacer props={{className: 'text'}} context={context} config={{}} parentComponent={'div'}>
+        {data.Text && <div props={{className: 'text'}} context={context} config={{}} parentComponent={'div'}>
             {data.Text}
-        </TextReplacer>}
+        </div>}
         {renderChildren()}
     </div>;
 };
