@@ -1,4 +1,3 @@
-import React from "react";
 import dayjs from "dayjs";
 import {ConfigHelper_getDateFormatConfig, ConfigHelper_getLanguage} from "./ConfigHelper";
 import {AppContext} from "../types/types";

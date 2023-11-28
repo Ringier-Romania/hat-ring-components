@@ -38,7 +38,7 @@ config.containers.forEach(section => {
     configQuery += section + ':config(codeName: "' + section + '"){ data } ';
 })
 
-const antycache =  'antycacheStatusCode';
+const antycache = 'antycacheStatusCode';
 const query = gql`
         query($nodeID: ID!, $variant:ID!){
             node(id: $nodeID){
@@ -57,16 +57,18 @@ if (CacheHelper_get(cacheKey)) {
     const response = await WebsiteApiProvider.call(query, variables);
     sectionsConfig = _.get(response, 'data.node.config');
 }
-
 ---
 
-{config.containers.map(
-    (sectionName, i) =>
-    <Container
-            context={context}
-            boxes={boxes}
-            sectionName={sectionName}
-            sectionConfig={_.get(sectionsConfig, `${sectionName}.0.data`)}
-            key={i}
-    />)}
+{
+    config.containers.map(
+        (sectionName, i) =>
+        <Container
+                context={context}
+                boxes={boxes}
+                sectionName={sectionName}
+                sectionConfig={_.get(sectionsConfig, `${sectionName}.0.data`)}
+                key={i}
+        />
+        )
+    }
 

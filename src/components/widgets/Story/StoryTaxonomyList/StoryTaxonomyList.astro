@@ -1,3 +1,6 @@
+---
+const {context, widgetConfig} = Astro.props;
+
 import React from 'react';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
@@ -5,8 +8,7 @@ import {StoryTaxonomyListParams, StoryTaxonomyListResponse} from "./types";
 import {RingLink} from "../../../common/RingLink/RingLink";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
-export async function StoryTaxonomyList({widgetConfig, context}: StoryTaxonomyListParams) {
-    const query = gql`
+const query = gql`
         query($storyId: UUID){
             story(id:$storyId){
                 topics{
@@ -31,35 +33,36 @@ export async function StoryTaxonomyList({widgetConfig, context}: StoryTaxonomyLi
             }
         }
     `;
-    const variables = {
-        storyId: context.id,
-    };
+const variables = {
+    storyId: context.id,
+};
 
-    const response = await WebsiteApiProvider.call(query, variables) as StoryTaxonomyListResponse;
+const response = await WebsiteApiProvider.call(query, variables) as StoryTaxonomyListResponse;
+---
 
 
-    return <div className={WidgetHelper_getWidgetCssClasses('StoryTaxonomyList', widgetConfig, context)}>
-        {widgetConfig.listPrefix && <span className={'listPrefix'}>{widgetConfig.listPrefix}</span>}
+<div className={WidgetHelper_getWidgetCssClasses('StoryTaxonomyList', widgetConfig, context)}>
+    {widgetConfig.listPrefix && <span className={'listPrefix'}>{widgetConfig.listPrefix}</span>}
 
-        {response.data.story?.topics?.map((topic, index) => {
-                if (widgetConfig.taxonomyKind && topic.topic.kind.code != widgetConfig.taxonomyKind) {
+    {response.data.story?.topics?.map((topic, index) => {
+            if (widgetConfig.taxonomyKind && topic.topic.kind.code != widgetConfig.taxonomyKind) {
+                return null;
+            }
+            if (widgetConfig.excludedUuids) {
+                const excludedUuids = widgetConfig.excludedUuids.split(',');
+                if (excludedUuids.includes(topic.topic.id)) {
                     return null;
                 }
-                if(widgetConfig.excludedUuids){
-                    const excludedUuids = widgetConfig.excludedUuids.split(',');
-                    if(excludedUuids.includes(topic.topic.id)){
-                        return null;
-                    }
-                }
-                let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
-                let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
-                return url && widgetConfig.links ?
+            }
+            let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
+            let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
+            return url && widgetConfig.links ?
                     <RingLink key={index} href={url}>
                         <span className={'topic'}>{topic.topic.name}</span>
                     </RingLink> : <span key={index} className={'topic'}>{topic.topic.name}</span>
-            }
-        )}
+        }
+    )}
 
-    </div>
-}
+</div>
+
 
