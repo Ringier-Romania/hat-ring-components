@@ -57,6 +57,7 @@ if (CacheHelper_get(cacheKey)) {
     const response = await WebsiteApiProvider.call(query, variables);
     sectionsConfig = _.get(response, 'data.node.config');
 }
+console.log(JSON.stringify(sectionsConfig));
 ---
 
 {config.containers.map(

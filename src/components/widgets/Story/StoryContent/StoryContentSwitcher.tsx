@@ -15,6 +15,9 @@ export function StoryContentSwitcher({
     let isGroupBlock = false;
     let groupElements: any[] = [];
 
+    if (!content) {
+        return null;
+    }
     return content.map((block, index) => {
         block = {...block};
         if (block.type === 'groupStart') {
@@ -55,6 +58,6 @@ export function StoryContentSwitcher({
         }
 
         return Block ? <Block blockData={block} widgetConfig={widgetConfig}
-                      context={context}/> : null;
+                              context={context}/> : null;
     });
 }

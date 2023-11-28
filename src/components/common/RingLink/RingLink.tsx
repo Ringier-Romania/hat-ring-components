@@ -12,7 +12,7 @@ export function RingLink(props: { children?: React.ReactNode } & React.AnchorHTM
     }
 
 
-    return  <a {...props} href={href}>{props.children}</a>;
+    return  (<a {...props} href={href}>{props.children}</a>);
 }
 
 

@@ -21,11 +21,13 @@ export function WidgetHelper_shouldHideWidget(widgetConfig, context) {
 }
 
 export function WidgetHelper_renderEmptyWidget(widgetConfig, text = '') {
-    return WidgetHelper_renderEmptyComponent(upperFirst(widgetConfig.widgetType), text);
+    return (WidgetHelper_renderEmptyComponent(upperFirst(widgetConfig.widgetType), text));
 }
 
 export function WidgetHelper_renderEmptyComponent(componentClassName, text = '') {
-    return (null);
+    return null;
+    return (<div className={componentClassName} style={{display: 'none'}}
+                 dangerouslySetInnerHTML={{__html: text && `<!-- ${text} -->`}}/>);
 }
 
 export function WidgetHelper_getWidgetCssClasses(componentName: string, widgetConfig: AbstractWidgetConfig, context: AppContext, additionalCssClasses: Array<string> = []): string {

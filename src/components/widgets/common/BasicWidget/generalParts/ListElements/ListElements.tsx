@@ -12,8 +12,8 @@ export default function ListElements(
             widgetConfig: BasicWidgetConfig,
             response: BasicWidgetResponse
         }) {
-console.log('bbb',context);
-    const headerTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span' ) as keyof JSX.IntrinsicElements;
+
+    const headerTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span') as keyof JSX.IntrinsicElements;
     let headerTagLevel = 6;
 
     const itemsHeaderArr = headerTag.split('h');
@@ -25,9 +25,14 @@ console.log('bbb',context);
     return (
         <div className={['ListElements'].join(' ')}>
             {widgetConfig.listElements && widgetConfig.listElements.map((element, itemIndex) => {
-                return <div className={['Item', 'col' + colClass].join(' ')}>
-                    <ListElementContent context={context} widgetConfig={widgetConfig} data={element} headerTagLevel={headerTagLevel} childLevel={1} itemIndex={itemIndex} key={itemIndex}/>
-                </div>;
+                return <>Problem</>;
+                return (
+                    <div className={['Item', 'col' + colClass].join(' ')}>
+                        <ListElementContent context={context} widgetConfig={widgetConfig} data={element}
+                                            headerTagLevel={headerTagLevel} childLevel={1} itemIndex={itemIndex}
+                                            key={itemIndex}/>
+                    </div>
+                );
             })}
         </div>
     );

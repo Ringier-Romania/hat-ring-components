@@ -16,11 +16,11 @@ import {
 } from "../../../../helpers/WidgetHelper";
 import * as ItemParts from "./itemParts";
 
-if(!widgetConfig){
+if (!widgetConfig) {
     return WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
-    return WidgetHelper_renderEmptyWidget(widgetConfig);
+    return (WidgetHelper_renderEmptyWidget(widgetConfig));
 }
 
 async function getData(queryNodeFragment) {
@@ -103,19 +103,19 @@ async function getData(queryNodeFragment) {
     return await WebsiteApiProvider.call(query, variables);
 }
 
-const allGeneralParts =  GeneralParts;
+const allGeneralParts = GeneralParts;
 
-let queryFragment =  '';
+let queryFragment = '';
 
 const response = widgetConfig.section_name !== ''
     ? await getData(queryFragment) as BasicWidgetResponse
     : {} as BasicWidgetResponse;
 
-let edges:Array<any> = [];
+let edges: Array<any> = [];
 
 if (response?.data?.section?.items?.edges) {
     edges = [...response?.data?.section?.items?.edges]
-} else if(response?.data?.sectionGroup?.sections && response.data.sectionGroup.sections[0].items?.edges) {
+} else if (response?.data?.sectionGroup?.sections && response.data.sectionGroup.sections[0].items?.edges) {
     edges = [...response.data.sectionGroup.sections[0].items?.edges]
 }
 
@@ -125,21 +125,25 @@ if (edges.length > 0) {
 
 const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
 if (hideWhenNoItems && _.get(edges, 'length', 0) === 0) {
-    return WidgetHelper_renderEmptyWidget(widgetConfig);
+    return (WidgetHelper_renderEmptyWidget(widgetConfig));
 }
 
 let cssModules = styles.BasicWidget;
-console.log('aaaa',context);
 ---
 
 
 <div className={WidgetHelper_getWidgetCssClasses('BasicWidget', widgetConfig, context, [cssModules])}>
-        {widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
-            const Component = allGeneralParts[_.upperFirst(showOption)];
-            if (!Component) {
-                console.error(`No general show option name support ${showOption}`);
-                return WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet');
-            }
-            return <Component key={index} context={context} widgetConfig={widgetConfig} response={response} extendableAttributes={{}}/>;
-        })}
+    {widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
+        const Component = allGeneralParts[_.upperFirst(showOption)];
+
+        if (!Component || !context) {
+            console.error(`No general show option name support ${showOption}`);
+            return (WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet'));
+        }
+
+        return (
+                <Component key={index} context={context} widgetConfig={widgetConfig} response={response}
+                           extendableAttributes={{}}/>
+        )
+    })}
 </div>

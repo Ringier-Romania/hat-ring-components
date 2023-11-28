@@ -7,8 +7,8 @@ import {RingLink} from "../../../../../common/RingLink/RingLink";
 import {TextReplacer} from "../../../../../common/TextReplacer";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../../../helpers/ImageHelper";
 
-export default function ListElementContent (
-    {context, widgetConfig, data, headerTagLevel, childLevel, itemIndex} : {
+export default function ListElementContent(
+    {context, widgetConfig, data, headerTagLevel, childLevel, itemIndex}: {
         context: AppContext,
         widgetConfig: BasicWidgetConfig,
         data: ListElementsData,
@@ -48,7 +48,9 @@ export default function ListElementContent (
             return (<div className={['listElementChildren'].join(' ')}>
                 {data.children.map((element, index) => {
                     return (<div className={['listElementChild'].join(' ')}>
-                        <ListElementContent context={context} widgetConfig={widgetConfig} data={element} childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1} itemIndex={itemIndex} key={index}/>
+                        <ListElementContent context={context} widgetConfig={widgetConfig} data={element}
+                                            childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1}
+                                            itemIndex={itemIndex} key={index}/>
                     </div>)
                 })}
             </div>)
@@ -56,26 +58,28 @@ export default function ListElementContent (
         return null;
     }
 
-    return <div className={['ListElementContent', `listElementLevel${childLevel}`, customCssClass].join(' ')}>
-        {
-            data['Link url'] &&
-            <div className={'linkOverlay'}>
-                <RingLink href={data['Link url']} title={data.Title || ''}></RingLink>
-            </div>
-        }
-        {data['Image src'] && <ListElementImage context={context} widgetConfig={widgetConfig} data={imageProps}/>}
-        {/* @ts-expect-error Server Component */}
-        {data.Title && <ItemHeaderTag props={{className: 'title'}} context={context} config={{}} parentComponent={ItemHeaderTag}>
-            {data.Title}
-        </ItemHeaderTag>}
-        {/* @ts-expect-error Server Component */}
-        {data.Description && <p props={{className: 'description'}} context={context} config={{}} parentComponent={'p'}>
-            {data.Description}
-        </p>}
-        {/* @ts-expect-error Server Component */}
-        {data.Text && <div props={{className: 'text'}} context={context} config={{}} parentComponent={'div'}>
-            {data.Text}
-        </div>}
-        {renderChildren()}
-    </div>;
+    return (
+        <div className={['ListElementContent', `listElementLevel${childLevel}`, customCssClass].join(' ')}>
+            {
+                data['Link url'] &&
+                <div className={'linkOverlay'}>
+                    <RingLink href={data['Link url']} title={data.Title || ''}></RingLink>
+                </div>
+            }
+            {data['Image src'] && <ListElementImage context={context} widgetConfig={widgetConfig} data={imageProps}/>}
+
+            {data.Title && <ItemHeaderTag>
+                {data.Title}
+            </ItemHeaderTag>}
+
+            {data.Description && <p>
+                {data.Description}
+            </p>}
+
+            {data.Text && <div>
+                {data.Text}
+            </div>}
+            {renderChildren()}
+        </div>
+    );
 };

@@ -1,3 +1,4 @@
+// @ts-ignore
 export { default as SectionElements } from './SectionElements.astro';
 //export { default as ListElements } from './ListElements/ListElements';
 export { default as Header } from './Header';
