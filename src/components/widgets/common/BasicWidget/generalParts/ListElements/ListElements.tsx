@@ -6,34 +6,42 @@ import ListElementContent from "./ListElementContent";
 import * as _ from "lodash";
 
 export default function ListElements(
-    {context, widgetConfig, response}:
-        {
-            context: AppContext,
-            widgetConfig: BasicWidgetConfig,
-            response: BasicWidgetResponse
-        }) {
+    params) {
 
-    const headerTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span') as keyof JSX.IntrinsicElements;
-    let headerTagLevel = 6;
 
-    const itemsHeaderArr = headerTag.split('h');
-    if (itemsHeaderArr.length === 2) {
-        headerTagLevel = _.clamp(Number(itemsHeaderArr[1]), 2, 6);
+
+    try{
+        const {context, widgetConfig, response} = params;
+        const headerTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span') as keyof JSX.IntrinsicElements;
+        let headerTagLevel = 6;
+
+        const itemsHeaderArr = headerTag.split('h');
+        if (itemsHeaderArr.length === 2) {
+            headerTagLevel = _.clamp(Number(itemsHeaderArr[1]), 2, 6);
+        }
+
+        const colClass = Math.floor(12 / parseInt(widgetConfig.columns || '0'));
+
+        return (
+            <div className={['ListElements'].join(' ')}>
+                {widgetConfig.listElements && widgetConfig.listElements.map((element, itemIndex) => {
+
+                    return (
+                        <div className={['Item', 'col' + colClass].join(' ')}>
+                            <ListElementContent context={context} widgetConfig={widgetConfig} data={element}
+                                                headerTagLevel={headerTagLevel} childLevel={1} itemIndex={itemIndex}
+                                                key={itemIndex}/>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+
+    }catch(e){
+        console.log('ListElements', e);
+
     }
 
-    const colClass = Math.floor(12 / parseInt(widgetConfig.columns || '0'));
-    return (
-        <div className={['ListElements'].join(' ')}>
-            {widgetConfig.listElements && widgetConfig.listElements.map((element, itemIndex) => {
-                return <>Problem</>;
-                return (
-                    <div className={['Item', 'col' + colClass].join(' ')}>
-                        <ListElementContent context={context} widgetConfig={widgetConfig} data={element}
-                                            headerTagLevel={headerTagLevel} childLevel={1} itemIndex={itemIndex}
-                                            key={itemIndex}/>
-                    </div>
-                );
-            })}
-        </div>
-    );
+
+
 }

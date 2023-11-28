@@ -31,44 +31,54 @@ export interface MenuParams extends WidgetParams {
 }
 
 export function Menu(
-    {widgetConfig, context}: MenuParams
+    params: MenuParams
 ) {
 
-    function renderMenuElement(menuElement: MenuElement) {
-        const imageDimensions = ImageHelper_getImageDimensionsFromObject(menuElement,context,"image dimensions (eg. 200x200)");
-        const item = <>
-            <span className={'text'}>{menuElement.text}</span>
-            {
-                menuElement["image url"] && menuElement["image dimensions (eg. 200x200)"] &&
-                <RingImage src={menuElement["image url"]} alt={menuElement.text} width={imageDimensions.width} height={imageDimensions.height} transform={TransformType.ResizeCropAuto}/>
-            }
-            {
-                menuElement.children && menuElement.children.length > 0 &&
-                <ul>{menuElement.children.map((menuElement) => {
-                    return renderMenuElement(menuElement);
-                })}</ul>
-            }</>;
+    try {
 
-        const currentUrl = _.get(context, 'hatControllerParams.urlWithParsedQuery.pathname') || context.url;
-        const isActive = currentUrl == menuElement.url;
+        const {context, widgetConfig} = params;
 
-        return menuElement.hidden ? null :
-            <li className={[menuElement["custom css class"], isActive ? 'active' : ''].join(' ')}>
-                {menuElement.url ?
-                    <RingLink href={menuElement.url} target={menuElement["open in new tab"] ? '_blank' : undefined}>
-                        {item}
-                    </RingLink> : <>{item}</>
+        function renderMenuElement(menuElement: MenuElement) {
+            const imageDimensions = ImageHelper_getImageDimensionsFromObject(menuElement, context, "image dimensions (eg. 200x200)");
+            const item = <>
+                <span className={'text'}>{menuElement.text}</span>
+                {
+                    menuElement["image url"] && menuElement["image dimensions (eg. 200x200)"] &&
+                    <RingImage src={menuElement["image url"]} alt={menuElement.text} width={imageDimensions.width}
+                               height={imageDimensions.height} transform={TransformType.ResizeCropAuto}/>
                 }
+                {
+                    menuElement.children && menuElement.children.length > 0 &&
+                    <ul>{menuElement.children.map((menuElement) => {
+                        return renderMenuElement(menuElement);
+                    })}</ul>
+                }</>;
 
-            </li>
+            const currentUrl = _.get(context, 'hatControllerParams.urlWithParsedQuery.pathname') || context.url;
+            const isActive = currentUrl == menuElement.url;
+
+            return menuElement.hidden ? null :
+                <li className={[menuElement["custom css class"], isActive ? 'active' : ''].join(' ')}>
+                    {menuElement.url ?
+                        <RingLink href={menuElement.url} target={menuElement["open in new tab"] ? '_blank' : undefined}>
+                            {item}
+                        </RingLink> : <>{item}</>
+                    }
+
+                </li>
+        }
+
+        return (<div className={WidgetHelper_getWidgetCssClasses('Menu', widgetConfig, context, [styles.Menu])}
+        >
+            <ul>
+                {widgetConfig.overrideMenuElements.map((menuElement) => {
+                    return (renderMenuElement(menuElement));
+                })}
+            </ul>
+        </div>);
+    } catch (e) {
+        console.log('Menu', e);
+
     }
 
-    return <div className={WidgetHelper_getWidgetCssClasses('Menu', widgetConfig, context, [styles.Menu])}
-    >
-        <ul>
-            {widgetConfig.overrideMenuElements.map((menuElement) => {
-                return renderMenuElement(menuElement);
-            })}
-        </ul>
-    </div>;
 }

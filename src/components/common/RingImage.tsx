@@ -57,8 +57,8 @@ export function RingImage(props) {
         <picture>
             { isAvifWebpTransformAble && src != avifSrc ? <source srcSet={avifSrc} type="image/avif"/> : null}
             { isAvifWebpTransformAble && src != webpSrc ? <source srcSet={webpSrc} type="image/webp"/> : null}
-            <img {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
-                   unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL} priority={false}/>
+            <img  src={src}
+                   />
         </picture>
         {props.priority && <RingImagePreload srcSet={srcSet}/>}
     </>
