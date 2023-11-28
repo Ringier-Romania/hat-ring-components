@@ -14,7 +14,7 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
         dynamicVariablesTypes.$nodeCategoryId = 'UUID!';
     }
     const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
-        const allItemParts = extendableAttributes.itemParts || ItemParts;
+        const allItemParts = ItemParts;
 
         const ItemPart = allItemParts[_.upperFirst(showOption)];
 

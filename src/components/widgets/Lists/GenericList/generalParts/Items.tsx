@@ -16,7 +16,7 @@ export default function Items(
             extendableAttributes: GenericListExtendableAttributes
         }) {
 
-    const allItemParts = extendableAttributes.itemParts || ItemParts;
+    const allItemParts =  ItemParts;
     const columnsCount = UtilsHelper_convertToInt(widgetConfig.columns) || 1;
     const colNumber = Math.floor(12 / columnsCount);
     return (

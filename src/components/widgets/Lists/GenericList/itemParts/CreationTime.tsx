@@ -7,7 +7,7 @@ import gql from "graphql-tag";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
 
-export default async function CreationTime(
+export default function CreationTime(
     {context, widgetConfig, data}:
         {
             context: AppContext,
@@ -21,7 +21,7 @@ export default async function CreationTime(
 
     return (
         <div className={['CreationTime'].join(' ')}>
-            {await DateHelper_convertDate(context,data.date.creationTime)}
+            {data.date.creationTime}
         </div>
     )
 }

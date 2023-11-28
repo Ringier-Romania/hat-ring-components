@@ -7,7 +7,7 @@ import gql from "graphql-tag";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
 
-export default async function ModificationTime(
+export default function ModificationTime(
     {context, widgetConfig, data}:
         {
             context: AppContext,
@@ -21,7 +21,7 @@ export default async function ModificationTime(
 
     return (
         <div className={['ModificationTime'].join(' ')}>
-            {await DateHelper_convertDate(context,data.date.modificationTime)}
+            {data.date.modificationTime}
         </div>
     )
 }

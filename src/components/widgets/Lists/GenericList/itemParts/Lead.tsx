@@ -9,7 +9,7 @@ import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
 import {StoryHelper_getLeadBlock} from "../../../../../helpers/StoryHelper";
 import {Story} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 
-export default async function Lead(
+export default function Lead(
     {context, widgetConfig, data}:
         {
             context: AppContext,

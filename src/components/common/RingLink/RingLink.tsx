@@ -1,6 +1,5 @@
 import React from "react";
 import {UtilsHelper_isDevelopmentMode} from "../../../helpers/UtilsHelper";
-import dynamic from 'next/dynamic';
 
 export function RingLink(props: { children?: React.ReactNode } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
 

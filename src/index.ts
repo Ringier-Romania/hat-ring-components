@@ -6,7 +6,7 @@ export {default as BasicWidget} from "./components/widgets/common/BasicWidget/Ba
 // export * from "./components/widgets/Story/StoryLiveBlog/StoryLiveBlog";
 export * from "./components/common/RingImage";
 // export * from "./components/common/RingLink/RingLink";
-// export * from "./components/widgets/Lists/GenericList/GenericList";
+export {default as GenericList} from "./components/widgets/Lists/GenericList/GenericList.astro";
 // export * from "./components/widgets/Lists/GenericList/GenericListMetaTags";
 // export * from "./components/widgets/Story/StoryTaxonomyList/StoryTaxonomyList";
 export * from "./components/widgets/common/Menu/Menu";
