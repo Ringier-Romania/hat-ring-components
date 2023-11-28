@@ -25,11 +25,11 @@ export function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback:
         global.HATcache = [];
     }
     key = JSON.stringify(key);
-    const timeStamp = global.HATcache[`timeStamp_${key}`] || Infinity;
+    const timeStamp = global.HATcache[`timeStamp_${key}`];
     const currentTime = new Date().getTime();
     const TTL = process.env.KEY_CACHE_TTL ? UtilsHelper_convertToInt(process.env.KEY_CACHE_TTL) : 60;
 
-    if (currentTime - timeStamp >= (TTL * 1000)) {
+    if (timeStamp && (currentTime - timeStamp >= (TTL * 1000))) {
         callback();
     }
 }
