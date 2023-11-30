@@ -1,5 +1,5 @@
 import React from 'react';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import * as BlocksTypes from "./StoryContentBlocks";
 import {AppContext} from "../../../../types/types";
 import {StoryContentWidgetConfig, StoryContentSwitcherParams} from "./types";

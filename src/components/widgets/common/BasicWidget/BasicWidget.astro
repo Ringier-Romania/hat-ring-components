@@ -1,12 +1,10 @@
 ---
 const {context, widgetConfig} = Astro.props;
-
-
 import React from "react";
 import {BasicWidgetAdditionalOptions, BasicWidgetParams, BasicWidgetResponse, BasicWidgetResponseNode} from "./types";
 import {gql} from "graphql-tag";
 import * as GeneralParts from './generalParts';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {

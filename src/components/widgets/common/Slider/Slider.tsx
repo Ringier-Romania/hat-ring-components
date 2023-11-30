@@ -7,7 +7,7 @@ import {RingImage} from "../../../common/RingImage";
 import {RingLink} from "../../../common/RingLink/RingLink";
 import {SliderElement, SliderParams} from "./types";
 import styles from '../../../../../styles/widgets/common/Slider.module.scss';
-import * as _ from "lodash";
+import _ from "lodash";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
 import {TransformType} from "../../../../helpers/OcdnHelper";
 

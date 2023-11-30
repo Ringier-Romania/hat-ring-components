@@ -3,7 +3,7 @@ import {AppContext} from "../../../../../types/types";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import {GenericListExtendableAttributes, GenericListResponse, GenericListWidgetConfig} from "../types";
 import * as ItemParts from "./../itemParts";
-import * as _ from "lodash";
+import _ from "lodash";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import {UtilsHelper_convertToInt} from "../../../../../helpers/UtilsHelper";
 

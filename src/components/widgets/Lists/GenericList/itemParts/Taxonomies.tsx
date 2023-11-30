@@ -1,7 +1,7 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
-import * as _ from "lodash";
+import _ from "lodash";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 import {RingLink} from "../../../../common/RingLink/RingLink";

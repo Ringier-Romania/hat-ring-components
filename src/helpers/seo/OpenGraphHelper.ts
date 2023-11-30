@@ -1,6 +1,6 @@
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
-import * as _ from "lodash";
+import _ from "lodash";
 import {ConfigHelper_getSeoOpenGraphConfig} from "../ConfigHelper";
 import {ImageHelper_getImageDimensionsFromObject} from "../ImageHelper";
 import {AppContext, SiteContentType} from "../../types/types";
