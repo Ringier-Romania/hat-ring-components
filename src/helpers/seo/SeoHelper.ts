@@ -8,7 +8,7 @@ import {ImageHelper_getDefaultImageData, ImageHelper_getImageDimensionsFromObjec
 import {OpenGraphHelper_getMainStoryImageData} from "./OpenGraphHelper";
 import {SeoTitleHelper_pageTitle} from "./SeoTitleHelper";
 import {SeoDescriptionHelper_pageDescription} from "./SeoDescriptionHelper";
-import {UtilsHelper_asyncForEach, UtilsHelper_getCurrentNodeName, UtilsHelper_getCurrentPageType} from "../UtilsHelper";
+import {UtilsHelper_asyncSequentialForEach, UtilsHelper_getCurrentNodeName, UtilsHelper_getCurrentPageType} from "../UtilsHelper";
 import get from "lodash/get";
 
 export async function SeoHelper_currentTitle(context, place: string) {
@@ -158,7 +158,7 @@ async function mapPatternVariables(context, place: string, fieldToCheck: string 
 export async function SeoHelper_replaceBracketVariables(mapToReplace, homePattern: string) {
     let replacedText = homePattern;
 
-    await UtilsHelper_asyncForEach(Object.keys(mapToReplace), async (key) => {
+    await UtilsHelper_asyncSequentialForEach(Object.keys(mapToReplace), async (key) => {
         replacedText = replacedText.replaceAll(`${key}`, await mapToReplace[key]());
     });
 

@@ -23,13 +23,13 @@ export function UtilsHelper_getExtension(src: string): string | null {
     return ext ? ext.toLowerCase() : null;
 }
 
-export async function UtilsHelper_asyncForEach(array, callback) {
+export async function UtilsHelper_asyncSequentialForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
         await callback(array[index], index, array);
     }
 }
 
-export async function UtilsHelper_asyncForEachParallel(arr, callback){
+export async function UtilsHelper_asyncParallelForEach(arr, callback){
     return await Promise.allSettled(arr.map(callback));
 }
 
