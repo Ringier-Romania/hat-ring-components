@@ -26,9 +26,10 @@ export class WebsiteApiProvider {
             return CacheHelper_get(cacheKey);
         }
         const fetchPolicy = 'no-cache';
+       // console.log(query.loc?.source.body,variables);
         const res = await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
 
-       // console.log(query.loc?.source.body,variables);
+
         CacheHelper_set(cacheKey, res);
         return res;
     }
