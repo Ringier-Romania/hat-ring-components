@@ -29,6 +29,10 @@ export async function UtilsHelper_asyncForEach(array, callback) {
     }
 }
 
+export async function UtilsHelper_asyncForEachParallel(arr, callback){
+    return await Promise.allSettled(arr.map(callback));
+}
+
 export function UtilsHelper_isHomepage(context) {
     return context.url === '/';
 }
