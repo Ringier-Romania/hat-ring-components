@@ -14,17 +14,12 @@ import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 
 /**
  * Support for canonicals
- * TODO: (1) Check double // on Homepage (without extra condition)
  * @param {object} context > Application context
  * @constructor
  */
 export async function SeoMetaCanonical(context: AppContext) {
     const pageType = UtilsHelper_getCurrentPageType(context);
     let canonicalToReturn = (await ConfigHelper_currentUrl(context) || '').split('?')[0];
-
-    if (pageType === "Homepage") {
-        return canonicalToReturn; // TODO: (1)
-    }
 
     if (pageType === SiteContentType.Story) {
         const canonicalQuery = gql`
