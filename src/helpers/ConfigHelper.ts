@@ -147,5 +147,5 @@ export async function ConfigHelper_getHomepageUrl(context) {
 
 export async function ConfigHelper_currentUrl(context) {
     const fullHomepageUrl = await ConfigHelper_getHomepageUrl(context);
-    return fullHomepageUrl ? `${fullHomepageUrl}${context.url}` : `${context.url}`;
+    return fullHomepageUrl ? `${fullHomepageUrl.replace(/\/+$/, '')}${context.url}` : `${context.url}`;
 }
