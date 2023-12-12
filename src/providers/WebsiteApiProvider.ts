@@ -1,8 +1,9 @@
 import {WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
-import { UtilsHelper_isDevelopmentMode} from "../helpers/UtilsHelper";
-import gql from "graphql-tag";
 import {DocumentNode} from "graphql/language/ast";
-import {CacheHelper_get, CacheHelper_set} from "../helpers/CacheHelper";
+import {
+    CacheHelper_get,
+    CacheHelper_set, CacheHelper_runCallbackIfTimeStampHasExpired
+} from "../helpers/CacheHelper";
 
 export class WebsiteApiProvider {
 
@@ -19,14 +20,19 @@ export class WebsiteApiProvider {
             }).buildApolloClient();
         }
 
-        //console.log(query.loc?.source.body,variables);
-        const cacheKey = {query: query.loc?.source.body, variables};
-        if(CacheHelper_get(cacheKey)){
-            return CacheHelper_get(cacheKey);
-        }
         const fetchPolicy = 'no-cache';
-        const res = await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
-        CacheHelper_set(cacheKey, res);
-        return res;
+        const cacheKey = {query: query.loc?.source.body, variables};
+        let cachedResponse = CacheHelper_get(cacheKey);
+
+        if(cachedResponse) {
+            CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
+                CacheHelper_set(cacheKey, await global.websitesApiApolloClient.query({query, variables, fetchPolicy}));
+            });
+            return cachedResponse;
+        }
+
+        const response = await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
+        CacheHelper_set(cacheKey, response);
+        return response;
     }
 }

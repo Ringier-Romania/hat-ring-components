@@ -66,11 +66,9 @@ export async function WidgetHelper_findWidgetConfig(context: AppContext, objToCo
             configQuery += section + ':config(codeName: "' + section + '"){ data } ';
         })
 
-        const antycache = UtilsHelper_isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}` : 'antycacheStatusCode';
         const query = gql`
             query($url: URL!, $variant:ID!){
                 site(url:$url, variantId: $variant){
-                    ${antycache}:statusCode
                     data {
                         node {
                             config {
