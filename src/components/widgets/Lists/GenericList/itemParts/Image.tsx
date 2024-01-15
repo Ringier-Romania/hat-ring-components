@@ -1,10 +1,14 @@
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {RingImage} from "../../../../common/RingImage";
-import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {
+    WidgetHelper_getAppropriateTeaserImage,
+    WidgetHelper_renderEmptyComponent
+} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
 import {ConfigHelper_getGeneralConfig} from "../../../../../helpers/ConfigHelper";
+import {UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
 
 export default async function Image(
     {itemIndex, context, widgetConfig, data}:
@@ -16,6 +20,7 @@ export default async function Image(
         }) {
 
     let image = data.image;
+    let customTeaserImageUrl: string | null = null;
 
     if (!image || !image.url) {
         const generalConfig = await ConfigHelper_getGeneralConfig(context);
@@ -28,13 +33,15 @@ export default async function Image(
         }
     }
 
-    const sizes = ((context.hatControllerParams.isMobile ? widgetConfig.imageSizeMobile : widgetConfig.imageSize) || '400x300').split('x');
-    const isMobile = context?.hatControllerParams?.isMobile;
+    const isMobile = UtilsHelper_isMobile(context);
+    const sizes = ((isMobile ? widgetConfig.imageSizeMobile : widgetConfig.imageSize) || '400x300').split('x');
     const preloadCount = isMobile ? (Number(widgetConfig?.mobilePreloadImagesCount) || 0) : (Number(widgetConfig?.preloadImagesCount) || 0);
     const isPriority = (preloadCount >= itemIndex + 1) || false;
 
+    customTeaserImageUrl = await WidgetHelper_getAppropriateTeaserImage(widgetConfig, context, data.leads || []);
+
     const ringImageProps = {
-        src: image.url as string,
+        src: customTeaserImageUrl || image.url as string,
         alt: image.caption || data.title || '',
         width: Number(sizes[0]),
         height: Number(sizes[1]),
@@ -61,6 +68,14 @@ Image.getFragment = (widgetConfig) => {
             $mainImageHeight: 'Int!',
         },
         query: gql`fragment ImageFragment on Story {
+            leads {
+                role {
+                    code
+                }
+                image {
+                    url
+                }
+            }
             image {
                 url(transforms:{resizeCropAuto:{width:$mainImageWidth,height:$mainImageHeight}}),
                 caption

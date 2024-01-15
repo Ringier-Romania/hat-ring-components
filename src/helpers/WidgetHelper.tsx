@@ -6,6 +6,7 @@ import {UtilsHelper_isDevelopmentMode, UtilsHelper_isMobile} from "./UtilsHelper
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
 import _ from "lodash";
+import {ConfigHelper_getDeveloperSettingsConfig} from "./ConfigHelper";
 
 export function WidgetHelper_shouldHideWidget(widgetConfig, context) {
     if (typeof context.hatControllerParams.isMobile === 'boolean'
@@ -107,4 +108,35 @@ export async function WidgetHelper_findWidgetConfig(context: AppContext, objToCo
 
         resolve(widgetFound)
     });
+}
+
+export async function WidgetHelper_getAppropriateTeaserImage(widgetConfig, context, leads: Array<any>, isBig = false): Promise<string | null> {
+    let customTeaserImageUrl = null;
+    let customRole = null;
+
+    if (widgetConfig.customTeasers) {
+        const teaser = widgetConfig.customTeasers.find((child) => {
+            return !!child['For big image'] === isBig && !!child['For mobile'] === UtilsHelper_isMobile(context);
+        })
+        if (teaser) {
+            customRole = teaser['Teaser code name'];
+        }
+    }
+    if (!customRole) {
+        const devSettingsConfig = await ConfigHelper_getDeveloperSettingsConfig(context);
+        if (devSettingsConfig.globalCustomTeasers) {
+            const teaser = devSettingsConfig.globalCustomTeasers.find((child) => {
+                return child['Widget type']?.toLowerCase().trim() === widgetConfig.widgetType?.toLowerCase() && !!child['For big image'] === isBig && !!child['For mobile'] === UtilsHelper_isMobile(context);
+            })
+            if (teaser) {
+                customRole = teaser['Teaser code name'];
+            }
+        }
+    }
+    if (customRole) {
+        const lead: any = leads?.find((lead) => lead?.role?.code === customRole);
+        customTeaserImageUrl = lead?.image?.url;
+    }
+
+    return customTeaserImageUrl;
 }
