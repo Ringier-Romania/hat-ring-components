@@ -33,6 +33,7 @@ export let GenericListWebsitesConfig
                 "excludedFlags": [],
                 "linkLabel": "",
                 "mainSeoList": true,
+                "customTeasers": []
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -153,6 +154,26 @@ export let GenericListWebsitesConfig
                     "type": "checkbox",
                     "description": "Set as main SEO list"
                 },
+                "customTeasers": {
+                    "type": "treeobject",
+                    "name": "Custom teasers",
+                    "description": "",
+                    "properties": [
+                        {
+                            "name": "Teaser code name",
+                            "type": "textfield"
+                        },
+                        // for future
+                        // {
+                        //     "namnpme": "For big image",
+                        //     "type": "checkbox",
+                        // },
+                        {
+                            "name": "For mobile",
+                            "type": "checkbox",
+                        }
+                    ]
+                }
             }
         }
     }

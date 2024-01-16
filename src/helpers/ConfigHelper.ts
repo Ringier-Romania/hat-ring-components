@@ -88,7 +88,18 @@ export async function ConfigHelper_getMetaDataConfig(context): Promise<{
     return ConfigHelper_getConfig(context, 'metaData');
 }
 
-export async function ConfigHelper_getDeveloperSettingsConfig(context) {
+export async function ConfigHelper_getDeveloperSettingsConfig(context): Promise<{
+    globalCustomTeasers: Array<{
+        'Widget type'?: string,
+        'For big image'?: 'on',
+        'For mobile'?: 'on',
+        'Teaser code name'?: string
+    }>,
+    textReplacers: Array<{
+        'Match pattern'?: string,
+        'Replacement'?: string,
+    }>
+}> {
     return ConfigHelper_getConfig(context, 'devGeneral');
 }
 

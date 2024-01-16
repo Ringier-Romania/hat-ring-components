@@ -30,6 +30,12 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
     }>,
     "linkLabel": string,
     "mainSeoList": boolean,
+    customTeasers?: Array<{
+        'Teaser code name'?: string,
+        'For mobile'?: 'on',
+        // for future
+        // 'For big image'?: 'on'
+    }>,
 }
 
 export interface GenericListExtendableAttributes {
@@ -52,6 +58,14 @@ export interface GenericListResponseNode {
     image?: { url?: string, caption?: string, }
     date?: {modificationTime: string, creationTime: string},
     content?: Array<Content>
+    leads?: Array<{
+        role?: {
+            code?: string
+        }
+        image?: {
+            url?: string
+        }
+    }>
 }
 
 

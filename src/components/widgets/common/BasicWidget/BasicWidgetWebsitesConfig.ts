@@ -38,7 +38,8 @@ export let BasicWidgetWebsitesConfig = {
                 "listElementsImageSizeMobile": "600x330",
                 "preloadImagesCount": 0,
                 "mobilePreloadImagesCount": 0,
-                "widgetType": "basicWidget"
+                "widgetType": "basicWidget",
+                "customTeasers": []
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -283,6 +284,25 @@ export let BasicWidgetWebsitesConfig = {
                     "type": "numberfield",
                     "description": "The number should correspond to the number of pictures the user sees first after entering the page",
                     "required": false
+                },
+                "customTeasers": {
+                    "type": "treeobject",
+                    "name": "Custom teasers",
+                    "description": "",
+                    "properties": [
+                        {
+                            "name": "Teaser code name",
+                            "type": "textfield"
+                        },
+                        {
+                            "name": "For big image",
+                            "type": "checkbox",
+                        },
+                        {
+                            "name": "For mobile",
+                            "type": "checkbox",
+                        }
+                    ]
                 }
             }
         }

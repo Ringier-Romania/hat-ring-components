@@ -59,6 +59,11 @@ export interface BasicWidgetConfig extends AbstractWidgetConfig {
     classificationList?: string,
     additionalOptions?: Array<BasicWidgetAdditionalOptions>
     linkLabel?: string,
+    customTeasers?: Array<{
+        'Teaser code name'?: string,
+        'For mobile'?: 'on',
+        'For big image'?: 'on'
+    }>,
 }
 
 export interface BasicWidgetExtendableAttributes {
@@ -111,6 +116,14 @@ export interface BasicWidgetResponseNode {
         }>,
     },
     image?: { url?: string, caption?: string, }
+    leads?: Array<{
+        role?: {
+            code?: string
+        }
+        image?: {
+            url?: string
+        }
+    }>
 }
 
 export interface ListElementsData {
