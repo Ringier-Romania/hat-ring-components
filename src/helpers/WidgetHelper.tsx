@@ -7,6 +7,8 @@ import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
 import _ from "lodash";
 import {ConfigHelper_getDeveloperSettingsConfig} from "./ConfigHelper";
+import {BasicWidgetConfig} from "../components/widgets/common/BasicWidget/types";
+import {GenericListWidgetConfig} from "../components/widgets/Lists/GenericList/types";
 
 export function WidgetHelper_shouldHideWidget(widgetConfig, context) {
     if (typeof context.hatControllerParams.isMobile === 'boolean'
@@ -110,15 +112,15 @@ export async function WidgetHelper_findWidgetConfig(context: AppContext, objToCo
     });
 }
 
-export async function WidgetHelper_getAppropriateTeaserImage(widgetConfig, context, leads: Array<any>, isBig = false): Promise<string | null> {
+export async function WidgetHelper_getAppropriateTeaserImage(widgetConfig: BasicWidgetConfig | GenericListWidgetConfig, context: AppContext, leads: Array<any>, isBig = false): Promise<string | null> {
     let customTeaserImageUrl = null;
-    let customRole = null;
+    let customRole: string | null = null;
 
     if (widgetConfig.customTeasers) {
         const teaser = widgetConfig.customTeasers.find((child) => {
             return !!child['For big image'] === isBig && !!child['For mobile'] === UtilsHelper_isMobile(context);
         })
-        if (teaser) {
+        if (teaser && teaser['Teaser code name']) {
             customRole = teaser['Teaser code name'];
         }
     }
@@ -128,12 +130,12 @@ export async function WidgetHelper_getAppropriateTeaserImage(widgetConfig, conte
             const teaser = devSettingsConfig.globalCustomTeasers.find((child) => {
                 return child['Widget type']?.toLowerCase().trim() === widgetConfig.widgetType?.toLowerCase() && !!child['For big image'] === isBig && !!child['For mobile'] === UtilsHelper_isMobile(context);
             })
-            if (teaser) {
+            if (teaser && teaser['Teaser code name']) {
                 customRole = teaser['Teaser code name'];
             }
         }
     }
-    if (customRole) {
+    if (customRole && customRole !== 'none') {
         const lead: any = leads?.find((lead) => lead?.role?.code === customRole);
         customTeaserImageUrl = lead?.image?.url;
     }
