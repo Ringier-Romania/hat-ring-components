@@ -35,3 +35,4 @@ export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaRobots";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaCustomMetaTags";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaCanonical";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaBase";
+export * from "./components/widgets/Story/StoryAuthors/StoryAuthors";
