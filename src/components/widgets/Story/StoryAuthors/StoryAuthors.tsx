@@ -1,25 +1,25 @@
 import React from 'react';
 import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
-import {StoryAuthorsParams, StoryAuthorsResponse} from "./types";
+import {StoryAuthorsParams, StoryAuthorsResponse, StoryAuthorsShowOptions} from "./types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {
-    WidgetHelper_getWidgetCssClasses
-} from "../../../../helpers/WidgetHelper";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
 import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import {StoryAuthor} from "./StoryAuthor";
 import styles from "../../../../../styles/widgets/Story/StoryAuthors.module.scss";
+import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
 
 export async function StoryAuthors({widgetConfig, context}: StoryAuthorsParams) {
 
-    const descriptionFragment = '';
+    const descriptionFragment = widgetConfig.showOptions?.includes(StoryAuthorsShowOptions.Description) ? `description { ${StoryHelper_getGqlContentFragment()} }` : '';
 
     const query = gql`
         query($storyId: UUID, $imageWidth:Int!, $imageHeight:Int!){
             story(id:$storyId){
                 authors {
                     author {
+                        ${descriptionFragment}
                         publicationPoint {
                             url
                         }
@@ -28,7 +28,7 @@ export async function StoryAuthors({widgetConfig, context}: StoryAuthorsParams) 
                         image{
                             url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}})
                         }
-                        ${descriptionFragment}
+                       
                     }
                 }
             }
@@ -48,6 +48,8 @@ export async function StoryAuthors({widgetConfig, context}: StoryAuthorsParams) 
     if (!response) {
         response = await WebsiteApiProvider.call(query, variables) as StoryAuthorsResponse;
     }
+
+    console.log(JSON.stringify(response));
 
     const authors: Author[] = _.get(response, 'data.story.authors', []).map(author => author.author);
 
