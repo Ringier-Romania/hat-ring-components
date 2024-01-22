@@ -3,6 +3,7 @@ export * from "./components/Grid/HeaderFooterWebsitesConfig";
 export * from "./components/Grid/GridStoryWebsitesConfig";
 export * from "./components/Grid/GridListWebsitesConfig";
 export * from "./components/Grid/GridTopicWebsitesConfig";
+export * from "./components/Grid/GridAuthorWebsitesConfig";
 export * from "./components/widgets/common/ExternalApplicationWebsitesConfig";
 export * from "./components/widgets/common/HtmlInsertWebsitesConfig";
 export * from "./components/widgets/common/BasicWidget/BasicWidgetWebsitesConfig";
