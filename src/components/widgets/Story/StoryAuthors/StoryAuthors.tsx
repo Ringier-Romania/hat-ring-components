@@ -49,8 +49,6 @@ export async function StoryAuthors({widgetConfig, context}: StoryAuthorsParams) 
         response = await WebsiteApiProvider.call(query, variables) as StoryAuthorsResponse;
     }
 
-    console.log(JSON.stringify(response));
-
     const authors: Author[] = _.get(response, 'data.story.authors', []).map(author => author.author);
 
     let cssModules = styles.StoryAuthors;
