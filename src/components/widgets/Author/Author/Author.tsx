@@ -23,6 +23,12 @@ export async function Author({widgetConfig, context}: AuthorParams) {
                     url
                 }
                 name
+                socialProfiles{
+                    url
+                    role {
+                        code
+                    }
+                }
                 tagline
                 image{
                     url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}})

@@ -58,7 +58,7 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
             contentTypeFilter = 'category: {in: [$topicId]}';
             break;
     }
-    
+
     let mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
         return `, ${key}: ${dynamicVariablesTypes[key]}`;
     }).join(' ');
@@ -97,7 +97,7 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
     `;
 
 
-    console.log(query.loc?.source.body, JSON.stringify(variables));
+    //console.log(query.loc?.source.body, JSON.stringify(variables));
     const result = await WebsiteApiProvider.call(query, variables);
     return result;
 }
