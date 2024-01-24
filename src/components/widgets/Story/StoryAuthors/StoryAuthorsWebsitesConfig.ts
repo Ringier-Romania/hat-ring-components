@@ -43,7 +43,7 @@ export let StoryAuthorsWebsitesConfig
                     "items": [
                         "image",
                         "name",
-                        "linkOverlay",
+                        ["linkOverlay","Link"],
                         "tagline",
                         "description",
                         ["socialProfiles", "Social profiles"]
