@@ -1,6 +1,5 @@
 import React from 'react';
-import {AppContext} from "../../../../../types/types";
-import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {AppContext, SiteContentType} from "../../../../../types/types";
 import {StoryAuthorsWidgetConfig} from "../types";
 import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import {RingImage} from "../../../../common/RingImage";
@@ -18,7 +17,7 @@ export default function Image(
 
     return (
         <div className={['Image'].join(' ')}>
-            {author.image?.url ? <RingImage src={author.image?.url} alt={author.name} width={dimensions.width} height={dimensions.height}/> : null}
+            {author.image?.url ? <RingImage src={author.image?.url} priority={context.siteContentType === SiteContentType.Author} alt={author.name} width={dimensions.width} height={dimensions.height}/> : null}
         </div>
     )
 }
