@@ -1,6 +1,7 @@
 import {StoryAuthorsWebsitesConfig} from "../../Story/StoryAuthors/StoryAuthorsWebsitesConfig";
+import _ from "lodash";
 
-let wdg = {...StoryAuthorsWebsitesConfig.modules.StoryAuthors_wdg};
+let wdg = _.cloneDeep(StoryAuthorsWebsitesConfig);
 wdg.name = 'Author';
 wdg.defaultParams.widgetType = 'author';
 export let AuthorWebsitesConfig

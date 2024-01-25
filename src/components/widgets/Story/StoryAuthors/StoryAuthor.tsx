@@ -13,8 +13,9 @@ export async function StoryAuthor({author, context, widgetConfig}: {
     widgetConfig: StoryAuthorsWidgetConfig
 }) {
 
-
-
+    if(!author){
+        return  null;
+    }
     return <div className="StoryAuthor">
         {widgetConfig.showOptions?.map((showOption, index) => {
             const Component = Parts[_.upperFirst(showOption)];
