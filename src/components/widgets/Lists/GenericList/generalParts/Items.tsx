@@ -19,6 +19,7 @@ export default function Items(
     const allItemParts = extendableAttributes.itemParts || ItemParts;
     const columnsCount = UtilsHelper_convertToInt(widgetConfig.columns) || 1;
     const colNumber = Math.floor(12 / columnsCount);
+    console.log( 'aaaaaaaaaa',JSON.stringify(response.data?.stories?.edges) );
     return (
         <div className={['Items'].join(' ')}>
             {(response.data?.stories?.edges.map((edge, itemIndex) => {

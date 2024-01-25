@@ -37,3 +37,4 @@ export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaCanonical";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaBase";
 export * from "./components/widgets/Story/StoryAuthors/StoryAuthors";
 export * from "./components/widgets/Author/Author/Author";
+export * from "./components/widgets/Story/StoryRelatedContent/StoryRelatedContent";
