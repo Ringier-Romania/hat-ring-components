@@ -1,6 +1,7 @@
 // Libraries
 import isNil from 'lodash/isNil';
-import {SiteContentType} from "../types/types";
+import {AppContext, SiteContentType} from "../types/types";
+import _ from "lodash";
 
 export function UtilsHelper_convertToInt(input: string | number) {
     return typeof input === "number" ? input : parseInt(input);
@@ -76,4 +77,8 @@ export function UtilsHelper_ensureHttps(url: string): string {
 
 export function UtilsHelper_getDomain(){
     return process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
+}
+
+export function UtilsHelper_getCurrentNodeCategoryId(context: AppContext){
+    return _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.id', null);
 }

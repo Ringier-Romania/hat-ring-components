@@ -26,6 +26,7 @@ export let StoryRelatedContentWebsitesConfig
                 "imageSize": "400x225",
                 "imageSizeMobile": "",
                 "excludedFlags": [],
+                "linkLabel": "",
                 "customTeasers": [],
                 "autocomplete": false,
                 "autocompleteFrom": 'firstStoryTag'
@@ -38,6 +39,7 @@ export let StoryRelatedContentWebsitesConfig
                 "imageSize": genericListConfig.paramsDescription.imageSize,
                 "imageSizeMobile": genericListConfig.paramsDescription.imageSizeMobile,
                 "excludedFlags": genericListConfig.paramsDescription.excludedFlags,
+                "linkLabel": genericListConfig.paramsDescription.linkLabel,
                 "customTeasers": genericListConfig.paramsDescription.customTeasers,
                 "autocomplete": {
                     "name": "Autocomplete",

@@ -1,6 +1,9 @@
 import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "../../../../types/types";
 import {GenericListWidgetConfig} from "../../Lists/GenericList/types";
 
+export enum StoryRelatedContentAutocompleteFromEnum {
+    FirstStoryTag = 'firstStoryTag'
+}
 
 export interface StoryRelatedContentWidgetConfig extends AbstractWidgetConfig {
     showOptions?: GenericListWidgetConfig['showOptions'],
@@ -9,7 +12,7 @@ export interface StoryRelatedContentWidgetConfig extends AbstractWidgetConfig {
     paginationElements?: number,
     imageSize?: string,
     imageSizeMobile?: string,
-    "excludedFlags":Array<{
+    "excludedFlags": Array<{
         excludedFlag: string
     }>,
     customTeasers?: Array<{
@@ -18,6 +21,8 @@ export interface StoryRelatedContentWidgetConfig extends AbstractWidgetConfig {
         // for future
         // 'For big image'?: 'on'
     }>,
+    autocomplete?: boolean,
+    autocompleteFrom?: StoryRelatedContentAutocompleteFromEnum,
 }
 
 export interface StoryRelatedContentParams extends WidgetParams {
