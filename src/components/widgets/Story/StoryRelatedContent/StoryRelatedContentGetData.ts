@@ -44,7 +44,7 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
 
 
     const query = gql`
-        query($storyId: UUID ${mappedDynamicVariablesTypes}){
+        query($storyId: UUID, $relatedContentRole: String! ${mappedDynamicVariablesTypes}){
             story(id:$storyId){
                 topics{
                     topic {
@@ -54,7 +54,10 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
                         id
                     }
                 }
-                stories{
+                stories(role: $relatedContentRole){
+                    role {
+                        code
+                    }
                     story {
                         mainPublicationPoint {
                             url
@@ -70,6 +73,7 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
 
     const variables = {
         storyId: context.id,
+        relatedContentRole: widgetConfig.relatedContentCodeName,
         ...dynamicVariables,
     };
 
@@ -118,7 +122,7 @@ async function autocompleteByFirstStoryTag(context: AppContext, widgetConfig: St
     }) : null;
 
     const mainCategoryUuid = await ConfigHelper_getMainCategoryUuid(context);
-    if(!mainCategoryUuid){
+    if (!mainCategoryUuid) {
         console.warn('no main category uuid configured in developers settings in Website Manager');
         return [];
     }

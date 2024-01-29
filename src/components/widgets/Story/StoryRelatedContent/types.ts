@@ -7,6 +7,7 @@ export enum StoryRelatedContentAutocompleteFromEnum {
 
 export interface StoryRelatedContentWidgetConfig extends AbstractWidgetConfig {
     showOptions?: GenericListWidgetConfig['showOptions'],
+    relatedContentCodeName?: string,
     widgetType?: string,
     columns?: number,
     paginationElements?: number,

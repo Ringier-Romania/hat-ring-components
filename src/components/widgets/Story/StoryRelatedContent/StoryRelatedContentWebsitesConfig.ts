@@ -21,6 +21,7 @@ export let StoryRelatedContentWebsitesConfig
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "widgetType": "storyRelatedContent",
                 "showOptions": genericListConfig.defaultParams.showOptions,
+                "relatedContentCodeName":"",
                 "columns": 1,
                 "paginationElements": 10,
                 "imageSize": "400x225",
@@ -34,6 +35,11 @@ export let StoryRelatedContentWebsitesConfig
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
                 "showOptions": genericListConfig.paramsDescription.showOptions,
+                "relatedContentCodeName":{
+                    "type" : "textfield",
+                    "name":"Related content code name",
+                    "required": true
+                },
                 "columns": genericListConfig.paramsDescription.columns,
                 "paginationElements": genericListConfig.paramsDescription.paginationElements,
                 "imageSize": genericListConfig.paramsDescription.imageSize,
