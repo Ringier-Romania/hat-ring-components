@@ -9,7 +9,6 @@ import gql from "graphql-tag";
 import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
 import {ConfigHelper_getGeneralConfig} from "../../../../../helpers/ConfigHelper";
 import {UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
-import {MainImageReference, Maybe} from '@ringpublishing/graphql-api-client/lib/types/websites-api';
 
 export default async function Image(
     {itemIndex, context, widgetConfig, data}:
