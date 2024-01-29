@@ -7,6 +7,7 @@ import {StoryRelatedContentAutocompleteFromEnum, StoryRelatedContentWidgetConfig
 import {GenericListResponse} from "../../Lists/GenericList/types";
 import {Story, StoryEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import {UtilsHelper_convertToInt, UtilsHelper_getCurrentNodeCategoryId} from "../../../../helpers/UtilsHelper";
+import {ConfigHelper_getMainCategoryUuid} from "../../../../helpers/ConfigHelper";
 
 export async function StoryRelatedContent_getData(context: AppContext, widgetConfig: StoryRelatedContentWidgetConfig): Promise<GenericListResponse> {
     let dynamicVariablesTypes: any = {};
@@ -116,11 +117,15 @@ async function autocompleteByFirstStoryTag(context: AppContext, widgetConfig: St
         return flag.excludedFlag
     }) : null;
 
-    //const nodeCategoryId = UtilsHelper_getCurrentNodeCategoryId(context);
+    const mainCategoryUuid = await ConfigHelper_getMainCategoryUuid(context);
+    if(!mainCategoryUuid){
+        console.warn('no main category uuid configured in developers settings in Website Manager');
+        return [];
+    }
 
-    const contentTypeFilter = 'topic: {in: [$topicId]}';
-    //dynamicVariablesTypes.$nodeCategoryId = 'UUID!';
-    //dynamicVariables.nodeCategoryId = nodeCategoryId;
+    const contentTypeFilter = 'topic: {in: [$topicId]}, category: {in: [$nodeCategoryId]}';
+    dynamicVariablesTypes.$nodeCategoryId = 'UUID!';
+    dynamicVariables.nodeCategoryId = mainCategoryUuid;
 
     let mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
         return `, ${key}: ${dynamicVariablesTypes[key]}`;

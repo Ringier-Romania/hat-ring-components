@@ -9,7 +9,8 @@ export let DeveloperSettingsWebsitesConfig
                     "name": "General",
                     "fields": [
                         "devGeneral.textReplacers",
-                        "devGeneral.globalCustomTeasers"
+                        "devGeneral.globalCustomTeasers",
+                        "devGeneral.mainCategoryUuid"
                     ]
                 },
                 "dateFormat": {
@@ -36,7 +37,8 @@ export let DeveloperSettingsWebsitesConfig
     "defaultParams": {
         "devGeneral": {
             "textReplacers": [],
-            "globalCustomTeasers": []
+            "globalCustomTeasers": [],
+            "mainCategoryUuid": ""
         },
        "dateFormat": {
             "timeZone": "Europe/London",
@@ -92,6 +94,12 @@ export let DeveloperSettingsWebsitesConfig
                         ]
                     }
                 ]
+            },
+            "mainCategoryUuid": {
+                "name": "Main Category UUID",
+                "description": "",
+                "type": "textfield",
+                "required": true
             },
         },
         "dateFormat": {

@@ -98,7 +98,8 @@ export async function ConfigHelper_getDeveloperSettingsConfig(context): Promise<
     textReplacers: Array<{
         'Match pattern'?: string,
         'Replacement'?: string,
-    }>
+    }>,
+    mainCategoryUuid: string,
 }> {
     return ConfigHelper_getConfig(context, 'devGeneral');
 }
@@ -159,4 +160,9 @@ export async function ConfigHelper_getHomepageUrl(context) {
 export async function ConfigHelper_currentUrl(context) {
     const fullHomepageUrl = await ConfigHelper_getHomepageUrl(context);
     return fullHomepageUrl ? `${fullHomepageUrl.replace(/\/+$/, '')}${context.url}` : `${context.url}`;
+}
+
+export async function ConfigHelper_getMainCategoryUuid(context) {
+    const developerSettings = await ConfigHelper_getDeveloperSettingsConfig(context);
+    return developerSettings ? developerSettings.mainCategoryUuid : '';
 }
