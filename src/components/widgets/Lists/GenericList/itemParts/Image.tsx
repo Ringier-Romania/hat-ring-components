@@ -25,6 +25,7 @@ export default async function Image(
     if (!image || !image.url) {
         const generalConfig = await ConfigHelper_getGeneralConfig(context);
         if (generalConfig && generalConfig.defaultImage) {
+            // @ts-ignore
             image = {
                 url: generalConfig.defaultImage as string
             }
@@ -40,8 +41,11 @@ export default async function Image(
 
     customTeaserImageUrl = await WidgetHelper_getAppropriateTeaserImage(widgetConfig, context, data.leads || []);
 
+
     const ringImageProps = {
+        // @ts-ignore
         src: customTeaserImageUrl || image.url as string,
+        // @ts-ignore
         alt: image.caption || data.title || '',
         width: Number(sizes[0]),
         height: Number(sizes[1]),

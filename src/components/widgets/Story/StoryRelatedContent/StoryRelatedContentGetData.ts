@@ -5,7 +5,7 @@ import {AppContext} from "../../../../types/types";
 import _ from "lodash";
 import {StoryRelatedContentAutocompleteFromEnum, StoryRelatedContentWidgetConfig} from "./types";
 import {GenericListResponse} from "../../Lists/GenericList/types";
-import {Story} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import {Story, StoryEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import {UtilsHelper_convertToInt, UtilsHelper_getCurrentNodeCategoryId} from "../../../../helpers/UtilsHelper";
 
 export async function StoryRelatedContent_getData(context: AppContext, widgetConfig: StoryRelatedContentWidgetConfig): Promise<GenericListResponse> {
@@ -79,14 +79,13 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
 
     res.data.stories.edges = res.data.stories.edges.concat(_.get(result, 'data.story.stories', []).map(story => {
         return {node: story.story}
-    }));
+    })) ;
 
     if (widgetConfig.autocomplete) {
         switch (widgetConfig.autocompleteFrom) {
             case StoryRelatedContentAutocompleteFromEnum.FirstStoryTag:
                 const storiesNodes = await autocompleteByFirstStoryTag(context, widgetConfig, result, dynamicVariables, dynamicFragments, dynamicFragmentsNames, dynamicVariablesTypes);
                 res.data.stories.edges = res.data.stories.edges.concat(storiesNodes);
-
                 break;
         }
     }
