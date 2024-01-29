@@ -1,5 +1,11 @@
 import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
-import {Content, PublicationPoint, StoryEdge, Topic} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import {
+    Content,
+    PublicationPoint,
+    Story,
+    StoryEdge,
+    Topic
+} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 
 export enum GenericListGeneralShowOptions {
     Items = "items",

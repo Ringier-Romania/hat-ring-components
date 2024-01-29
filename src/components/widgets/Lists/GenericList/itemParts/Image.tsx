@@ -9,6 +9,7 @@ import gql from "graphql-tag";
 import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
 import {ConfigHelper_getGeneralConfig} from "../../../../../helpers/ConfigHelper";
 import {UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
+import {MainImageReference, Maybe} from '@ringpublishing/graphql-api-client/lib/types/websites-api';
 
 export default async function Image(
     {itemIndex, context, widgetConfig, data}:
@@ -43,10 +44,9 @@ export default async function Image(
 
 
     const ringImageProps = {
-        // @ts-ignore
-        src: customTeaserImageUrl || image.url as string,
-        // @ts-ignore
-        alt: image.caption || data.title || '',
+
+        src: customTeaserImageUrl || (image && image.url) as string,
+        alt: (image && image.caption) || data.title || '',
         width: Number(sizes[0]),
         height: Number(sizes[1]),
         priority: isPriority
