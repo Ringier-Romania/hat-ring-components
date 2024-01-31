@@ -59,7 +59,9 @@ export function RingImage(props: RingImageProps) {
             { isAvifWebpTransformAble && src != avifSrc ? <source srcSet={avifSrc} type="image/avif"/> : null}
             { isAvifWebpTransformAble && src != webpSrc ? <source srcSet={webpSrc} type="image/webp"/> : null}
             <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
-                   unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL} priority={false}/>
+                   // we force priority={false} because next.js will add preload link, and it doesn't work properly for safari, so we are using with our preload
+                   // additionally we override loading because for priority={false} loading is set to 'lazy'
+                   unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL} priority={false} loading={props.priority ? 'eager' : 'lazy'}/>
         </picture>
         {props.priority && <RingImagePreload srcSet={srcSet}/>}
     </>

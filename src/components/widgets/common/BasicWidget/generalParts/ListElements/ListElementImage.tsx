@@ -22,7 +22,7 @@ export default function ListElementImage(
         height: data.imageDim.height,
         transform: TransformType.ResizeCropAuto,
         priority: data.priority,
-        alt: data.customAlt ? data.customAlt : data.caption,
+        alt: (data.customAlt ? data.customAlt : data.caption) || '',
     };
 
     if(!data.imageDim.width || !data.imageDim.height) {
