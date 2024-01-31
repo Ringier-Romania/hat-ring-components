@@ -22,6 +22,8 @@ export let StoryRelatedContentWebsitesConfig
                 "widgetType": "storyRelatedContent",
                 "showOptions": genericListConfig.defaultParams.showOptions,
                 "relatedContentCodeName":"",
+                "headerText": "",
+                "headerTag": "h2",
                 "columns": 1,
                 "paginationElements": 10,
                 "imageSize": "400x225",
@@ -40,6 +42,8 @@ export let StoryRelatedContentWebsitesConfig
                     "name":"Related content code name",
                     "required": true
                 },
+                "headerText": genericListConfig.paramsDescription.headerText,
+                "headerTag": genericListConfig.paramsDescription.headerTag,
                 "columns": genericListConfig.paramsDescription.columns,
                 "paginationElements": genericListConfig.paramsDescription.paginationElements,
                 "imageSize": genericListConfig.paramsDescription.imageSize,

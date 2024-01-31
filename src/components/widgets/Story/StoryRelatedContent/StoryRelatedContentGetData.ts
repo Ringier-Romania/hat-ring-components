@@ -55,9 +55,6 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
                     }
                 }
                 stories(role: $relatedContentRole){
-                    role {
-                        code
-                    }
                     story {
                         mainPublicationPoint {
                             url
