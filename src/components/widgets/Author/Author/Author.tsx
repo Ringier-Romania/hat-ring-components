@@ -9,6 +9,7 @@ import styles from "../../../../../styles/widgets/Story/StoryAuthors.module.scss
 import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
 import {StoryAuthorsShowOptions} from "../../Story/StoryAuthors/types";
 import {StoryAuthor} from "../../Story/StoryAuthors/StoryAuthor";
+import {authorGqlFragment} from "../../Story/StoryAuthors/StoryAuthors";
 
 export async function Author({widgetConfig, context}: AuthorParams) {
 
@@ -19,20 +20,7 @@ export async function Author({widgetConfig, context}: AuthorParams) {
         query($uuid: UUID, $imageWidth:Int!, $imageHeight:Int!){
             author(id:$uuid){
                 ${descriptionFragment}
-                publicationPoint {
-                    url
-                }
-                name
-                socialProfiles{
-                    url
-                    role {
-                        code
-                    }
-                }
-                tagline
-                image{
-                    url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}})
-                }
+                ${authorGqlFragment}
             }
         }
     `;

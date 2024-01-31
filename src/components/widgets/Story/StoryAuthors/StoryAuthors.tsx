@@ -10,6 +10,21 @@ import {StoryAuthor} from "./StoryAuthor";
 import styles from "../../../../../styles/widgets/Story/StoryAuthors.module.scss";
 import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
 
+export const authorGqlFragment = `publicationPoint {
+                            url
+                        }
+                        socialProfiles{
+                            url
+                            role {
+                                code
+                            }
+                        }
+                        name
+                        tagline
+                        image{
+                            url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}})
+                        }`;
+
 export async function StoryAuthors({widgetConfig, context}: StoryAuthorsParams) {
 
     const descriptionFragment = widgetConfig.showOptions?.includes(StoryAuthorsShowOptions.Description) ? `description { ${StoryHelper_getGqlContentFragment()} }` : '';
@@ -20,15 +35,7 @@ export async function StoryAuthors({widgetConfig, context}: StoryAuthorsParams) 
                 authors {
                     author {
                         ${descriptionFragment}
-                        publicationPoint {
-                            url
-                        }
-                        name
-                        tagline
-                        image{
-                            url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}})
-                        }
-                       
+                        ${authorGqlFragment}
                     }
                 }
             }
