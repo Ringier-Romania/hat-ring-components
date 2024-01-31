@@ -16,10 +16,10 @@ export default function Button(
     return (
         <div className={['Button'].join(' ')}>
             {widgetConfig.moreUrl
-                ? <RingLink href={widgetConfig.moreUrl}>
+                ? <RingLink href={widgetConfig.moreUrl} title={widgetConfig.moreText}>
                     {widgetConfig.moreText}
                 </RingLink>
-                : <button type="button">{widgetConfig.moreText}</button>
+                : <button type="button" title={widgetConfig.moreText}>{widgetConfig.moreText}</button>
             }
         </div>
     )

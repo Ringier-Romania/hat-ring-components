@@ -47,6 +47,7 @@ export function SliderFront(
 
             Object.assign(swiperElRef.current, swiperParams);
             swiperElRef.current.initialize();
+            swiperElRef.current.setAttribute('id', swiperElRef.current.swiper.wrapperEl.id)
         }
     }, []);
 

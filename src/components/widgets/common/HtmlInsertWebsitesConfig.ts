@@ -24,7 +24,7 @@ export let HtmlInsertWebsitesConfig
                 "plainHtml": {
                     "name": "HTML",
                     "description": "HTML code",
-                    "type": "textfield",
+                    "type": "code",
                     "required": false
                 },
 

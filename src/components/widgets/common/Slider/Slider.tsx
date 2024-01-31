@@ -56,7 +56,7 @@ export async function Slider(
         return <div className={"item"}>
             {slide['Link url'] &&
                 <div className={'linkOverlay'}>
-                    <RingLink href={slide['Link url']} title={slide['Title'] || ''}></RingLink>
+                    <RingLink href={slide['Link url']} title={slide.Title || slide.Text || slide.Description || ''}></RingLink>
                 </div>
             }
             {slide['Title'] && <div className={"title"}><ItemsHeaderTag>{slide['Title']}</ItemsHeaderTag></div>}
@@ -80,7 +80,7 @@ export async function Slider(
         return (
             // @ts-ignore in web-components class is valid
             <swiper-slide class={slide['Custom CSS Class'] || ''} suppressHydrationWarning={true}>
-                {renderSlideContent(slide, dimensions, headerTagLevel + 1, 1)}
+                {renderSlideContent(slide, dimensions, headerTagLevel, 1)}
             </swiper-slide>
         )
     });
