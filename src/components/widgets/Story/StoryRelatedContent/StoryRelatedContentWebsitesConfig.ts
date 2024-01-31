@@ -39,7 +39,7 @@ export let StoryRelatedContentWebsitesConfig
                 "showOptions": genericListConfig.paramsDescription.showOptions,
                 "relatedContentCodeName":{
                     "type" : "textfield",
-                    "name":"Related content code name",
+                    "name":"Related content role code name",
                     "required": true
                 },
                 "headerText": genericListConfig.paramsDescription.headerText,
