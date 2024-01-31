@@ -15,11 +15,11 @@ export default function SocialProfiles(
 
     return (
         <div className={['SocialProfiles'].join(' ')}>
-            {author.socialProfiles.map(socialProfile => {
+            {author.socialProfiles? author.socialProfiles.map(socialProfile => {
                 return <RingLink className={socialProfile.role.code} href={socialProfile.url}>
                     {socialProfile.role.code}
                 </RingLink>;
-            })}
+            }) : null}
         </div>
     )
 }

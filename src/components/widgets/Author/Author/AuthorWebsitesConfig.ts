@@ -2,14 +2,15 @@ import {StoryAuthorsWebsitesConfig} from "../../Story/StoryAuthors/StoryAuthorsW
 import _ from "lodash";
 
 let wdg = _.cloneDeep(StoryAuthorsWebsitesConfig);
-wdg.name = 'Author';
-wdg.defaultParams.widgetType = 'author';
+wdg.modules.StoryAuthors_wdg.name = 'Author';
+wdg.modules.StoryAuthors_wdg.defaultParams.widgetType = 'author';
+
 export let AuthorWebsitesConfig
     = {
     "sections": [],
     "defaultParams": {},
     "paramsDescription": {},
     "modules": {
-        "Author_wdg": wdg
+        "Author_wdg": wdg.modules.StoryAuthors_wdg
     }
 }
