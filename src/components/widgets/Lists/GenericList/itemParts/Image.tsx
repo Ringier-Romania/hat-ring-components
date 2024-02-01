@@ -19,6 +19,7 @@ export default async function Image(
             data: GenericListResponseNode,
         }) {
 
+
     let image = data.image;
     let customTeaserImageUrl: string | null = null;
 

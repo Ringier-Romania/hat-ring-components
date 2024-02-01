@@ -33,7 +33,9 @@ export let GenericListWebsitesConfig
                 "excludedFlags": [],
                 "linkLabel": "",
                 "mainSeoList": true,
-                "customTeasers": []
+                "customTeasers": [],
+                "moreText": "",
+                "moreUrl": "",
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -47,7 +49,8 @@ export let GenericListWebsitesConfig
                     "items": [
                         "items",
                         "header",
-                        "pagination"
+                        "pagination",
+                        "button"
                     ]
                 },
                 "showOptions": {
@@ -173,7 +176,20 @@ export let GenericListWebsitesConfig
                             "type": "checkbox",
                         }
                     ]
+                },
+                "moreText": {
+                    "name": "Button text",
+                    "type": "textfield",
+                    "description": "",
+                    "required": false
+                },
+                "moreUrl": {
+                    "name": "Button url",
+                    "type": "textfield",
+                    "description": "",
+                    "required": false
                 }
+
             }
         }
     }

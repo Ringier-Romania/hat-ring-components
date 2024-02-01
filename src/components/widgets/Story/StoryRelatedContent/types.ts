@@ -22,6 +22,8 @@ export interface StoryRelatedContentWidgetConfig extends AbstractWidgetConfig {
         // for future
         // 'For big image'?: 'on'
     }>,
+    moreText?: string,
+    moreUrl?: string,
     autocomplete?: boolean,
     autocompleteFrom?: StoryRelatedContentAutocompleteFromEnum,
 }

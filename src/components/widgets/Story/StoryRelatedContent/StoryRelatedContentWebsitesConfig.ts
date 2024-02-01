@@ -32,7 +32,9 @@ export let StoryRelatedContentWebsitesConfig
                 "linkLabel": "",
                 "customTeasers": [],
                 "autocomplete": false,
-                "autocompleteFrom": 'firstStoryTag'
+                "autocompleteFrom": 'firstStoryTag',
+                "moreText": "",
+                "moreUrl": "",
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -51,6 +53,8 @@ export let StoryRelatedContentWebsitesConfig
                 "excludedFlags": genericListConfig.paramsDescription.excludedFlags,
                 "linkLabel": genericListConfig.paramsDescription.linkLabel,
                 "customTeasers": genericListConfig.paramsDescription.customTeasers,
+                "moreText": genericListConfig.paramsDescription.moreText,
+                "moreUrl": genericListConfig.paramsDescription.moreUrl,
                 "autocomplete": {
                     "name": "Autocomplete",
                     "type": "checkbox",

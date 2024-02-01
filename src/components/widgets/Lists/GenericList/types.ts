@@ -31,7 +31,7 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
     "imageSizeMobile": string,
     "preloadImagesCount": number,
     "mobilePreloadImagesCount": number,
-    "excludedFlags":Array<{
+    "excludedFlags": Array<{
         excludedFlag: string
     }>,
     "linkLabel": string,
@@ -42,6 +42,8 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
         // for future
         // 'For big image'?: 'on'
     }>,
+    moreText?: string,
+    moreUrl?: string,
 }
 
 export interface GenericListExtendableAttributes {
@@ -57,7 +59,7 @@ export interface GenericListParams extends WidgetParams {
     extendableAttributes?: GenericListExtendableAttributes,
 }
 
-export interface GenericListResponseNode extends Story{
+export interface GenericListResponseNode extends Story {
 
 }
 
