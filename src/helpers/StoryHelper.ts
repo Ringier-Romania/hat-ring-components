@@ -126,5 +126,86 @@ export function StoryHelper_generateContentHtml(story: Story): string {
 }
 
 export function StoryHelper_getLeadBlock(story: Story): any {
-    return  _.get(story, 'content.0.blocks.0',null);
+    return _.get(story, 'content.0.blocks.0', null);
+}
+
+export function StoryHelper_getGqlContentFragment(): any {
+    return `content {
+                blocks {
+                    ... on ImageBlock {
+                        type
+                        title
+                        url
+                        alt
+                        link {
+                            url
+                        }
+                        image {
+                            description
+                            title
+                            width
+                            height
+                            sources {
+                                source {
+                                    name
+                                }
+                            }
+                        }
+                        alignment
+                    }
+                    ... on ParagraphBlock {
+                        type
+                        text
+                    }
+                    ... on HeadingBlock {
+                        type
+                        level
+                        text
+                    }
+                    ... on UnorderedListBlock {
+                        type
+                        styleType
+                        entries
+                        indentLevel
+                    }
+                    ... on OrderedListBlock {
+                        type
+                        styleType
+                        entries
+                        indentLevel
+                        startValue
+                    }
+                    ... on EmbedBlock {
+                        type
+                        embed {
+                            html
+                        }
+                    }
+                    ... on TableBlock {
+                        type
+                        rows {
+                            cells {
+                                alignment
+                                classes
+                                colspan
+                                isHeader
+                                link {
+                                    url
+                                }
+                                rowspan
+                                text
+                            }
+                        }
+                    }
+                    ... on GroupBlock {
+                        name
+                        type
+                        alignment
+                    }
+                    ... on PreformattedBlock {
+                        text
+                        type
+                    }
+                }
+            }`;
 }

@@ -88,7 +88,19 @@ export async function ConfigHelper_getMetaDataConfig(context): Promise<{
     return ConfigHelper_getConfig(context, 'metaData');
 }
 
-export async function ConfigHelper_getDeveloperSettingsConfig(context) {
+export async function ConfigHelper_getDeveloperSettingsConfig(context): Promise<{
+    globalCustomTeasers: Array<{
+        'Widget type'?: string,
+        'For big image'?: 'on',
+        'For mobile'?: 'on',
+        'Teaser code name'?: string
+    }>,
+    textReplacers: Array<{
+        'Match pattern'?: string,
+        'Replacement'?: string,
+    }>,
+    mainCategoryUuid: string,
+}> {
     return ConfigHelper_getConfig(context, 'devGeneral');
 }
 
@@ -148,4 +160,9 @@ export async function ConfigHelper_getHomepageUrl(context) {
 export async function ConfigHelper_currentUrl(context) {
     const fullHomepageUrl = await ConfigHelper_getHomepageUrl(context);
     return fullHomepageUrl ? `${fullHomepageUrl.replace(/\/+$/, '')}${context.url}` : `${context.url}`;
+}
+
+export async function ConfigHelper_getMainCategoryUuid(context) {
+    const developerSettings = await ConfigHelper_getDeveloperSettingsConfig(context);
+    return developerSettings ? developerSettings.mainCategoryUuid : '';
 }

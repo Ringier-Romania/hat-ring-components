@@ -6,13 +6,11 @@ import {AppContext, SiteContentType} from "../../../../types/types";
 import _ from "lodash";
 
 export async function GenericList_getData(context: AppContext, queryNodeFragment, widgetConfig, extendableAttributes, currentPage) {
-    let dynamicVariablesTypes:any = {};
-    let dynamicVariables = {};
+    let dynamicVariablesTypes: any = {};
+    let dynamicVariables: any = {};
     let dynamicFragmentsNames = '';
 
-    if(context.siteContentType === SiteContentType.Topic){
-        dynamicVariablesTypes.$nodeCategoryId = 'UUID!';
-    }
+
     const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
         const allItemParts = extendableAttributes.itemParts || ItemParts;
 
@@ -35,13 +33,50 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
         }
     }).join('\n');
 
-    const mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
+    let topicId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id') || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.id');
+    const nodeCategoryId = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.id');
+
+    let contentTypeFilter = '';
+
+    switch (context.siteContentType) {
+        case SiteContentType.Topic:
+            contentTypeFilter = 'topic: {in: [$topicId]}, category: {in: [$nodeCategoryId]}';
+            dynamicVariablesTypes.$nodeCategoryId = 'UUID!';
+            dynamicVariables.nodeCategoryId = nodeCategoryId;
+            break;
+        case SiteContentType.Author:
+            if(!widgetConfig.customListUuid){
+                contentTypeFilter = 'category: {in: [$topicId]}, author:{in:[$authorId]}';
+                dynamicVariablesTypes.$authorId = 'UUID!';
+                topicId = nodeCategoryId;
+                dynamicVariables.authorId = context.id;
+            }else{
+                contentTypeFilter = 'category: {in: [$topicId]}';
+            }
+            break;
+        default:
+            contentTypeFilter = 'category: {in: [$topicId]}';
+            break;
+    }
+
+    let mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
         return `, ${key}: ${dynamicVariablesTypes[key]}`;
     }).join(' ');
 
-    const contentTypeFilter = context.siteContentType === SiteContentType.Topic
-        ? 'topic: {in: [$topicId]}, category: {in: [$nodeCategoryId]}'
-        : 'category: {in: [$topicId]}';
+
+    const excludedFlags = widgetConfig.excludedFlags ? widgetConfig.excludedFlags.map(flag => {
+        return flag.excludedFlag
+    }) : null;
+
+    const offset = (UtilsHelper_convertToInt(widgetConfig.postShift) || 0) + ((currentPage - 1) * UtilsHelper_convertToInt(widgetConfig.paginationElements));
+    const variables: any = {
+        ...dynamicVariables,
+        topicId: topicId,
+        limit: UtilsHelper_convertToInt(widgetConfig.paginationElements),
+        offset: offset,
+        excludedFlags: excludedFlags,
+    };
+
 
     const query = gql`
         query($topicId: UUID!, $limit: Int!, $excludedFlags: [String!], $offset: Int! ${mappedDynamicVariablesTypes}){
@@ -61,27 +96,8 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
         ${dynamicFragments}
     `;
 
-    const excludedFlags = widgetConfig.excludedFlags ? widgetConfig.excludedFlags.map(flag => {
-        return flag.excludedFlag
-    }) : null;
 
-    const topicId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id') || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.id');
-    const nodeCategoryId = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.id');
-
-    const offset = (UtilsHelper_convertToInt(widgetConfig.postShift) || 0) + ((currentPage - 1) * UtilsHelper_convertToInt(widgetConfig.paginationElements));
-    const variables:any = {
-        ...dynamicVariables,
-        topicId: topicId,
-        limit: UtilsHelper_convertToInt(widgetConfig.paginationElements),
-        offset: offset,
-        excludedFlags: excludedFlags,
-    };
-
-    if(context.siteContentType === SiteContentType.Topic){
-        variables.nodeCategoryId = nodeCategoryId;
-    }
-
-    //console.log(query.loc?.source.body);
-    const result =  await WebsiteApiProvider.call(query, variables);
+    //console.log(query.loc?.source.body, JSON.stringify(variables));
+    const result = await WebsiteApiProvider.call(query, variables);
     return result;
 }

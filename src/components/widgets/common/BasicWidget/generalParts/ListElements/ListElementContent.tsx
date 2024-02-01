@@ -60,7 +60,7 @@ export default function ListElementContent (
         {
             data['Link url'] &&
             <div className={'linkOverlay'}>
-                <RingLink href={data['Link url']} title={data.Title || ''}></RingLink>
+                <RingLink href={data['Link url']} title={data.Title || data.Text || data.Description || ''}></RingLink>
             </div>
         }
         {data['Image src'] && <ListElementImage context={context} widgetConfig={widgetConfig} data={imageProps}/>}

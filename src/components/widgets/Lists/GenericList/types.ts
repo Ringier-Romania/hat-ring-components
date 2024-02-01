@@ -1,5 +1,11 @@
 import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
-import {Content, PublicationPoint, Topic} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import {
+    Content,
+    PublicationPoint,
+    Story,
+    StoryEdge,
+    Topic
+} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 
 export enum GenericListGeneralShowOptions {
     Items = "items",
@@ -30,6 +36,12 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
     }>,
     "linkLabel": string,
     "mainSeoList": boolean,
+    customTeasers?: Array<{
+        'Teaser code name'?: string,
+        'For mobile'?: 'on',
+        // for future
+        // 'For big image'?: 'on'
+    }>,
 }
 
 export interface GenericListExtendableAttributes {
@@ -45,13 +57,8 @@ export interface GenericListParams extends WidgetParams {
     extendableAttributes?: GenericListExtendableAttributes,
 }
 
-export interface GenericListResponseNode {
-    title?: string,
-    mainPublicationPoint?: PublicationPoint,
-    topics?: Array<{topic: Topic}>,
-    image?: { url?: string, caption?: string, }
-    date?: {modificationTime: string, creationTime: string},
-    content?: Array<Content>
+export interface GenericListResponseNode extends Story{
+
 }
 
 
