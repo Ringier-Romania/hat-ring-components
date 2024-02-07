@@ -1,4 +1,4 @@
-import {UtilsHelper_isDevelopmentMode} from "./UtilsHelper";
+import {UtilsHelper_getDomain, UtilsHelper_isDevelopmentMode} from "./UtilsHelper";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
 import get from "lodash/get";
@@ -158,8 +158,7 @@ export async function ConfigHelper_getHomepageUrl(context) {
 }
 
 export async function ConfigHelper_currentUrl(context) {
-    const fullHomepageUrl = await ConfigHelper_getHomepageUrl(context);
-    return fullHomepageUrl ? `${fullHomepageUrl.replace(/\/+$/, '')}${context.url}` : `${context.url}`;
+    return  `${UtilsHelper_getDomain()}${context.url}`;
 }
 
 export async function ConfigHelper_getMainCategoryUuid(context) {
