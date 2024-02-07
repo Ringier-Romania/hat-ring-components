@@ -4,6 +4,7 @@ import get from "lodash/get";
 //Types
 import {AppContext} from "../../../types/types";
 import {UtilsHelper_getDomain} from "../../../helpers/UtilsHelper";
+import {ConfigHelper_getLanguage} from "../../../helpers/ConfigHelper";
 
 /**
  * Fill alternate links via custom links from the node/page configuration
@@ -15,6 +16,7 @@ import {UtilsHelper_getDomain} from "../../../helpers/UtilsHelper";
 export async function AlternateLinksFromNode(context: AppContext, seoConfig: object, alternateLinks: object = {}) {
     const customAlternatives = (get(seoConfig, 'customAlternatives', []) || []);
     const customAlternativesLength = customAlternatives.length;
+    const curentLanguage = await ConfigHelper_getLanguage(context) || 'en';
     let xDefault: string | null = null;
     alternateLinks = {languages: {}};
 
@@ -28,6 +30,10 @@ export async function AlternateLinksFromNode(context: AppContext, seoConfig: obj
 
     if (xDefault) {
         alternateLinks["languages"]['x-default'] = xDefault;
+    }
+
+    if(!alternateLinks["languages"][curentLanguage]) {
+        alternateLinks["languages"][curentLanguage] = UtilsHelper_getDomain() + context.url;
     }
 
     return alternateLinks;
