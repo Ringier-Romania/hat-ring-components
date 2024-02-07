@@ -28,6 +28,8 @@ export let SEOWebsitesConfig
                         "seoTitlesAndDescription.topicPageDescriptionWithNumeration",
                         "seoTitlesAndDescription.otherPageTitle",
                         "seoTitlesAndDescription.otherPageDescription",
+                        "seoTitlesAndDescription.authorPageTitle",
+                        "seoTitlesAndDescription.authorPageDescription",
                         "seoTitlesAndDescription.detailPageTitle",
                         "seoTitlesAndDescription.detailPageDescription",
                     ]
@@ -92,6 +94,8 @@ export let SEOWebsitesConfig
             "topicPageDescriptionWithNumeration": "Page {{number}} for {{topicName}}. {{currentDescription}}",
             "otherPageTitle": "{{pageTypeName}} | {{siteName}}",
             "otherPageDescription": "{{currentDescription}}",
+            "authorPageTitle": "{{authorName}} | {{siteName}}",
+            "authorPageDescription": "{{authorName}}. {{currentDescription}}",
             "detailPageTitle": "{{currentTitle}} | {{siteName}}",
             "detailPageDescription": "{{currentDescription}} | {{siteName}}",
         },
@@ -183,6 +187,16 @@ export let SEOWebsitesConfig
             "otherPageDescription": {
                 "name": "Other page/s description",
                 "description": "Variables available to use: {{siteName}} {{siteDescription}} {{currentTitle}} {{currentDescription}} {{nodeName}} {{number}} {{pageTypeName}}",
+                "type": "textfield",
+            },
+            "authorPageTitle": {
+                "name": "Author page/s title",
+                "description": "Variables available to use: {{authorName}} {{siteName}} {{siteDescription}} {{currentTitle}} {{currentDescription}} {{nodeName}} {{number}} {{pageTypeName}}",
+                "type": "textfield",
+            },
+            "authorPageDescription": {
+                "name": "Author page/s description",
+                "description": "Variables available to use: {{authorName}} {{siteName}} {{siteDescription}} {{currentTitle}} {{currentDescription}} {{nodeName}} {{number}} {{pageTypeName}}",
                 "type": "textfield",
             },
             "detailPageTitle": {
