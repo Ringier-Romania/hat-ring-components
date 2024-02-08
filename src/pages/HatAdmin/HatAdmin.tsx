@@ -3,6 +3,9 @@ import {UpdateVersionForm} from "./UpdateVersionForm";
 import {redirect} from 'next/navigation'
 import {UtilsHelper_isDevelopmentMode} from "../../helpers/UtilsHelper";
 import React from "react";
+// import styles from "../../../styles/pages/HatAdmin.module.scss";
+
+import "../../../styles/pages/HatAdmin.scss";
 
 export const revalidate = 0;
 
@@ -24,13 +27,19 @@ export function HatAdmin({params, searchParams}: {
     }
 
     return <>
-        <div>
-            <h1>HAT Admin</h1>
-            <section>
-                <h2>Websites Manager configuration management</h2>
-                <CreateVersionForm />
-                <UpdateVersionForm/>
-            </section>
+        <div className={[].join(' ')}>
+            <div className={'container'}>
+                <h1>HAT Admin</h1>
+                <section>
+                    <h2>Websites Manager configuration management</h2>
+                    <div className={'col'}>
+                        <CreateVersionForm/>
+                    </div>
+                    <div className={'col'}>
+                        <UpdateVersionForm/>
+                    </div>
+                </section>
+            </div>
         </div>
 
     </>;

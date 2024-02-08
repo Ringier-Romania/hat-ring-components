@@ -17,8 +17,8 @@ export function CreateVersionForm({}) {
         <form action={formAction}>
             <fieldset>
                 <legend>Create Version of configuration </legend>
-                <label>version </label>
-                <input type="text" name="version" required/>
+
+                <input type="text" name="version" required placeholder={'version'}/>
 
                 <button type="submit">Create</button>
                 <p className="status" role="status">
