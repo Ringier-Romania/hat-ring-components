@@ -9,24 +9,6 @@ export async function Kropka(
     {widgetConfig, context}: KropkaParams
 ) {
 
-    function getPubType(kind) {
-        // Map kind to pub type
-        const kindMap = {
-            article: 'a',
-            gallery: 'g',
-            video: 'v',
-            poll: 'p',
-            listicle: 'l',
-            quiz: 'q',
-            liveblog: 'lb',
-            livevideo: 'lv',
-        };
-
-        if (!(kind in kindMap)) {
-            return 'a';
-        }
-        return kindMap[kind];
-    }
 
     let dlApi:any = {
         async: 1,
@@ -37,18 +19,12 @@ export async function Kropka(
         mobile: `${UtilsHelper_isMobile(context)}`,
         target: `${widgetConfig.target}`,
         tid: `${widgetConfig.tid}`,
-        DV: `${widgetConfig.dv}`
+        DV: `${widgetConfig.dv}`,
+        kropka: {
+            PU: context.id
+        }
     };
 
-    if (context.siteContentType === SiteContentType.Story) {
-
-        const pubId = get(context, 'hatControllerParams.gqlResponse.data.site.data.content.mainPublicationPoint.id', false);
-        const kind = get(context, 'hatControllerParams.gqlResponse.data.site.data.content.kind.code', 'a');
-        const pubType = getPubType(kind);
-        if(pubId){
-            dlApi.DX = `PV,puls,${pubId},${widgetConfig.portalId},${pubType}`;
-        }
-    }
 
     return <>
         <Script strategy={"beforeInteractive"}>
