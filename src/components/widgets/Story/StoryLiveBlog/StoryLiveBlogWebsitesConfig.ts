@@ -15,7 +15,7 @@ export let StoryLiveBlogWebsitesConfig
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "extensionAppCodeName": "liveblog",
-                "liveBlogPlatformUrl": "client.liveblog.dreamlab.pl",
+                "liveBlogPlatformUrl": "https://client.liveblog.dreamlab.pl",
                 "liveBlogClientId": "",
                 "liveBlogLanguage":"",
                 "liveBlogId": "",
