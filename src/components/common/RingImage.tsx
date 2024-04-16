@@ -3,9 +3,8 @@ import React from "react";
 
 import styles from "../../../styles/common/RingImage.module.scss";
 import {UtilsHelper_getExtension} from "../../helpers/UtilsHelper";
-import {OcdnHelper_getUrl, TransformType} from "../../helpers/OcdnHelper";
+import {AcceleratorImagesHelper_getUrl, TransformType} from "../../helpers/AcceleratorImagesHelper";
 import {RingImagePreload} from "./RingImagePreload";
-import { AcceleratorImage } from '@ringpublishing/accelerator-images';
 
 export interface RingImageProps extends ImageProps {
     transform?: TransformType
@@ -21,7 +20,7 @@ function getPlaceholderData(width, height) {
 }
 
 // TODO: checkout if they fixed bug with backend rendering https://github.com/vercel/next.js/issues/41924
-export function RingImage(props) {
+export function RingImage(props: RingImageProps) {
     let src = props.src;
     let unoptimized = props.unoptimized;
     let blurDataURL = props.blurDataURL;
@@ -35,29 +34,18 @@ export function RingImage(props) {
     unoptimized = true;
     const ext = UtilsHelper_getExtension(src as string)
     const isResizeable = ext != 'svg';
-    const isAvifWebpTransformAble = ext ? !['svg', 'gif'].includes(ext) : false;
-    const srcSet: Array<string> = [];
 
+    if (isResizeable && transform !== TransformType.None) {
+        src = AcceleratorImagesHelper_getUrl(src, props.width, props.height, props.transform);
+    }
 
-    const image = new AcceleratorImage({
-        originalImageUrl: src as string,
-        transformationKey: 'j0t56uwltg',
-        transformationHost: 'images-for-rp.ringpublishing.dev'
-    })
-        .imageQuality('auto')
-        .resize(props.width, props.height)
-
-    const url = image.getUrl();
-
-    let propsCopy = {... props};
-    propsCopy.src = url;
     return <>
         <picture>
-            <Image {...propsCopy} className={['RingImage', styles.RingImage, props.className].join(' ')}
-                   // we force priority={false} because next.js will add preload link, and it doesn't work properly for safari, so we are using with our preload
-                   // additionally we override loading because for priority={false} loading is set to 'lazy'
+            <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
+                // we force priority={false} because next.js will add preload link, and it doesn't work properly for safari, so we are using with our preload
+                // additionally we override loading because for priority={false} loading is set to 'lazy'
                    unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL} priority={false} loading={props.priority ? 'eager' : 'lazy'}/>
         </picture>
-
+        {props.priority && <RingImagePreload src={src}/>}
     </>
 }

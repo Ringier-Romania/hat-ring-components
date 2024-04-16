@@ -8,7 +8,7 @@ import {
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
-import {TransformType} from "../../../../helpers/OcdnHelper";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
 
 interface MenuElement {
     "text": string,
