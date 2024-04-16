@@ -21,8 +21,7 @@ export function AcceleratorImagesHelper_getUrl(src: string | any, width: number 
                 transformationHost: accImagesEndpoint
             })
                 .imageQuality('auto');
-
-            console.log(width, height);
+            
             if (transformType === TransformType.Resize) {
                 image.resize(width, height);
             } else {
