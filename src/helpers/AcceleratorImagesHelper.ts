@@ -10,6 +10,8 @@ export function AcceleratorImagesHelper_getUrl(src: string | any, width: number 
     const accImagesEndpoint = process.env.NEXT_PUBLIC_ACC_IMAGES_ENDPOINT!;
     const accImagesTransformationKey = process.env.NEXT_PUBLIC_ACC_IMAGES_TRANSFORMATION_KEY!;
 
+    width = Math.floor(width);
+    height = Math.floor(height);
     if (accImagesEndpoint && accImagesTransformationKey) {
         try {
 
@@ -19,6 +21,8 @@ export function AcceleratorImagesHelper_getUrl(src: string | any, width: number 
                 transformationHost: accImagesEndpoint
             })
                 .imageQuality('auto');
+
+            console.log(width, height);
             if (transformType === TransformType.Resize) {
                 image.resize(width, height);
             } else {
