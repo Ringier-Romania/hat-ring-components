@@ -3,7 +3,7 @@ import React from "react";
 
 import styles from "../../../styles/common/RingImage.module.scss";
 import {UtilsHelper_getExtension} from "../../helpers/UtilsHelper";
-import {OcdnHelper_getUrl, TransformType} from "../../helpers/OcdnHelper";
+import {AcceleratorImagesHelper_getUrl, TransformType} from "../../helpers/AcceleratorImagesHelper";
 import {RingImagePreload} from "./RingImagePreload";
 
 export interface RingImageProps extends ImageProps {
@@ -34,35 +34,18 @@ export function RingImage(props: RingImageProps) {
     unoptimized = true;
     const ext = UtilsHelper_getExtension(src as string)
     const isResizeable = ext != 'svg';
-    const isAvifWebpTransformAble = ext ? !['svg', 'gif'].includes(ext) : false;
-    const srcSet: Array<string> = [];
 
     if (isResizeable && transform !== TransformType.None) {
-        src = OcdnHelper_getUrl(src, props.width, props.height, props.transform);
+        src = AcceleratorImagesHelper_getUrl(src, props.width, props.height, props.transform);
     }
 
-    const avifSrc = OcdnHelper_getUrl(src, props.width, props.height, props.transform, 'avif');
-    const webpSrc = OcdnHelper_getUrl(src, props.width, props.height, props.transform, 'webp');
-
-
-    if (props.priority) {
-        if (isAvifWebpTransformAble && src != avifSrc) {
-            srcSet.push(avifSrc)
-        }
-        if (isAvifWebpTransformAble && src != webpSrc) {
-            srcSet.push(webpSrc)
-        }
-        srcSet.push(src as string)
-    }
     return <>
         <picture>
-            { isAvifWebpTransformAble && src != avifSrc ? <source srcSet={avifSrc} type="image/avif"/> : null}
-            { isAvifWebpTransformAble && src != webpSrc ? <source srcSet={webpSrc} type="image/webp"/> : null}
             <Image {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}
-                   // we force priority={false} because next.js will add preload link, and it doesn't work properly for safari, so we are using with our preload
-                   // additionally we override loading because for priority={false} loading is set to 'lazy'
+                // we force priority={false} because next.js will add preload link, and it doesn't work properly for safari, so we are using with our preload
+                // additionally we override loading because for priority={false} loading is set to 'lazy'
                    unoptimized={unoptimized} placeholder={placeholder} blurDataURL={blurDataURL} priority={false} loading={props.priority ? 'eager' : 'lazy'}/>
         </picture>
-        {props.priority && <RingImagePreload srcSet={srcSet}/>}
+        {props.priority && <RingImagePreload src={src}/>}
     </>
 }

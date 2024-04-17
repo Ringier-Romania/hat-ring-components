@@ -7,5 +7,5 @@
  */
 export function RingImagePreload(props) {
      // @ts-ignore
-    return (<link rel="preload" href="" srcSet={props.srcSet.join(', ')} fetchPriority={"high"}/>);
+    return (<link rel="preload" as="image" href={props.src} fetchPriority={"high"}/>);
 }

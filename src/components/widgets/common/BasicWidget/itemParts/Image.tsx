@@ -8,7 +8,7 @@ import {
 } from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../../helpers/ImageHelper";
-import {TransformType} from "../../../../../helpers/OcdnHelper";
+import {TransformType} from "../../../../../helpers/AcceleratorImagesHelper";
 import {UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
 
 export default async function Image(

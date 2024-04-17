@@ -4,7 +4,7 @@ import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import {RingImage} from "../../../../common/RingImage";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
-import {TransformType} from "../../../../../helpers/OcdnHelper";
+import {TransformType} from "../../../../../helpers/AcceleratorImagesHelper";
 
 export default function Authors(
     {context, widgetConfig, data}:

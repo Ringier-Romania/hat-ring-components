@@ -2,7 +2,7 @@ import React from 'react';
 import {AppContext} from "../../../../../../types/types";
 import {BasicWidgetConfig, ListElementImageData} from "../../types";
 import {RingImage, RingImageProps} from "../../../../../common/RingImage";
-import {TransformType} from "../../../../../../helpers/OcdnHelper";
+import {TransformType} from "../../../../../../helpers/AcceleratorImagesHelper";
 
 export default function ListElementImage(
     {context, widgetConfig, data}:

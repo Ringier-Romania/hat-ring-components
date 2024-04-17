@@ -9,7 +9,7 @@ import {SliderElement, SliderParams} from "./types";
 import styles from '../../../../../styles/widgets/common/Slider.module.scss';
 import * as _ from "lodash";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
-import {TransformType} from "../../../../helpers/OcdnHelper";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
 
 
 export async function Slider(

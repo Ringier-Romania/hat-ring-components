@@ -10,7 +10,7 @@ import {
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
-import {TransformType} from "../../../../helpers/OcdnHelper";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
 
 
 export async function StoryMainImage({widgetConfig, context}: StoryMainImageParams) {

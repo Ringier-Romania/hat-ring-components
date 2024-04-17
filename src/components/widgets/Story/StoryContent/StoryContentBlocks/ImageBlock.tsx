@@ -3,7 +3,7 @@ import {RingImage} from "../../../../common/RingImage";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import {ImageBlockParams} from "../types";
 import {UtilsHelper_convertToInt, UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
-import {TransformType} from "../../../../../helpers/OcdnHelper";
+import {TransformType} from "../../../../../helpers/AcceleratorImagesHelper";
 
 export default function ImageBlock({blockData, widgetConfig, context}: ImageBlockParams) {
     const {title, alt, image, url, link} = blockData;

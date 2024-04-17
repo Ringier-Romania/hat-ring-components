@@ -1,20 +1,21 @@
-import {OcdnHelper_getUrl, TransformType} from "../../helpers/OcdnHelper";
+import {AcceleratorImagesHelper_getUrl, TransformType} from "../../helpers/AcceleratorImagesHelper";
+import {ImageFormat} from "@ringpublishing/accelerator-images";
 
-export function RingImageObject(src, width, height, transform?: TransformType, format?: string[]) {
+export function RingImageObject(src, width, height, transform?: TransformType, format?: ImageFormat[]) {
 
     type srcType = {
         [key: string]: string;
     }
 
     if (transform !== TransformType.None) {
-        src = OcdnHelper_getUrl(src,width, height, transform);
+        src = AcceleratorImagesHelper_getUrl(src,width, height, transform);
     }
 
     let returnSrcObject: srcType = {};
 
     if (format && format.length > 0) {
         format.forEach(format => {
-            returnSrcObject[format] = OcdnHelper_getUrl(src, width, height, transform, format);
+            returnSrcObject[format] = AcceleratorImagesHelper_getUrl(src, width, height, transform, format);
         })
 
         return {src: returnSrcObject, width: width, height: height};
