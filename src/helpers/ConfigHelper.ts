@@ -1,8 +1,8 @@
-import {UtilsHelper_isDevelopmentMode} from "./UtilsHelper";
+import {UtilsHelper_getDomain, UtilsHelper_isDevelopmentMode} from "./UtilsHelper";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
-import get from "lodash/get";
-import {CacheHelper_get, CacheHelper_set} from "./CacheHelper";
+import _ from "lodash";
+import {CacheHelper_get, CacheHelper_runCallbackIfTimeStampHasExpired, CacheHelper_set} from "./CacheHelper";
 import {AppContext} from "../types/types";
 
 export async function ConfigHelper_getConfig(context: AppContext, configKey) {
@@ -11,18 +11,11 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
         nodeID: context.siteNodeId,
         variant: variant,
     };
-    const cacheKey = {variables, configKey};
-
-    if(CacheHelper_get(cacheKey)){
-        return CacheHelper_get(cacheKey);
-    }
-    const antycache = UtilsHelper_isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}` : 'antycacheStatusCode';
 
     const query = gql`
         query($nodeID: ID!, $variant:ID!){
             node(id: $nodeID){
                 config(variantId: $variant){
-                    ${antycache}:__typename
                     config(codeName: "${configKey}"){
                         data
                     }
@@ -32,9 +25,8 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
     `;
 
     const response = await WebsiteApiProvider.call(query, variables);
-    const sectionsConfig = get(response, 'data.node.config.config.0.data');
+    const sectionsConfig = _.get(response, 'data.node.config.config.0.data');
 
-    CacheHelper_set(cacheKey, sectionsConfig);
     return sectionsConfig;
 }
 
@@ -96,7 +88,19 @@ export async function ConfigHelper_getMetaDataConfig(context): Promise<{
     return ConfigHelper_getConfig(context, 'metaData');
 }
 
-export async function ConfigHelper_getDeveloperSettingsConfig(context) {
+export async function ConfigHelper_getDeveloperSettingsConfig(context): Promise<{
+    globalCustomTeasers: Array<{
+        'Widget type'?: string,
+        'For big image'?: 'on',
+        'For mobile'?: 'on',
+        'Teaser code name'?: string
+    }>,
+    textReplacers: Array<{
+        'Match pattern'?: string,
+        'Replacement'?: string,
+    }>,
+    mainCategoryUuid: string,
+}> {
     return ConfigHelper_getConfig(context, 'devGeneral');
 }
 
@@ -154,6 +158,10 @@ export async function ConfigHelper_getHomepageUrl(context) {
 }
 
 export async function ConfigHelper_currentUrl(context) {
-    const fullHomepageUrl = await ConfigHelper_getHomepageUrl(context);
-    return fullHomepageUrl ? `${fullHomepageUrl}${context.url}` : `${context.url}`;
+    return  `${UtilsHelper_getDomain()}${context.url}`;
+}
+
+export async function ConfigHelper_getMainCategoryUuid(context) {
+    const developerSettings = await ConfigHelper_getDeveloperSettingsConfig(context);
+    return developerSettings ? developerSettings.mainCategoryUuid : '';
 }

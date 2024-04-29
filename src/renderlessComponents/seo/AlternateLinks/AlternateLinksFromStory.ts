@@ -1,7 +1,7 @@
 // Libraries
 import React from 'react';
 import {gql} from 'graphql-tag';
-import get from "lodash/get";
+import _ from "lodash";
 
 // Providers
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
@@ -34,11 +34,11 @@ export async function AlternateLinksFromStory(context: AppContext, seoConfig: ob
         }
     `, {storyId: context.id,}) as AlternateLinksResponse;
 
-    alternateStories = get(response, 'data.story.stories', []) || [];
+    alternateStories = _.get(response, 'data.story.stories', []) || [];
     const alternateStoriesLength = alternateStories.length;
 
     if (alternateStoriesLength > 0) {
-        const supportedLanguages = (get(seoConfig, 'supportedLanguages', []) || []);
+        const supportedLanguages = (_.get(seoConfig, 'supportedLanguages', []) || []);
         const supportedLanguagesLength = supportedLanguages.length;
         alternateLinks = {languages: {}};
 
@@ -46,7 +46,7 @@ export async function AlternateLinksFromStory(context: AppContext, seoConfig: ob
             const language = supportedLanguages[i]['Alternative role codename'];
 
             for (let j = 0; j < alternateStoriesLength; j++) {
-                const linkRole = get(alternateStories[j], 'role.code');
+                const linkRole = _.get(alternateStories[j], 'role.code');
 
                 if (alternateStories[j]['url'] && linkRole && linkRole === language) {
                     alternateLinks["languages"][`${supportedLanguages[i]['Language code']}`] = alternateStories[j]['url'];

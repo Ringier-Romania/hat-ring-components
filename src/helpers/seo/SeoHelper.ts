@@ -1,15 +1,27 @@
 import {
     ConfigHelper_getLanguage,
-    ConfigHelper_getSeoOpenGraphConfig, ConfigHelper_getSeoTitlesAndDescriptionConfig,
-    ConfigHelper_getSiteContactNumber, ConfigHelper_getSiteDescription, ConfigHelper_getSiteLogo,
-    ConfigHelper_getSiteName, SeoTitlesAndDescription
+    ConfigHelper_getSeoOpenGraphConfig,
+    ConfigHelper_getSeoTitlesAndDescriptionConfig,
+    ConfigHelper_getSiteContactNumber,
+    ConfigHelper_getSiteDescription,
+    ConfigHelper_getSiteLogo,
+    ConfigHelper_getSiteName
 } from "../ConfigHelper";
 import {ImageHelper_getDefaultImageData, ImageHelper_getImageDimensionsFromObject} from "../ImageHelper";
 import {OpenGraphHelper_getMainStoryImageData} from "./OpenGraphHelper";
 import {SeoTitleHelper_pageTitle} from "./SeoTitleHelper";
 import {SeoDescriptionHelper_pageDescription} from "./SeoDescriptionHelper";
-import {UtilsHelper_asyncForEach, UtilsHelper_getCurrentNodeName, UtilsHelper_getCurrentPageType} from "../UtilsHelper";
-import get from "lodash/get";
+import {
+    UtilsHelper_asyncSequentialForEach,
+    UtilsHelper_getCurrentNodeName,
+    UtilsHelper_getCurrentPageType
+} from "../UtilsHelper";
+import _ from "lodash";
+import {SiteContentType} from "../../types/types";
+import {gql} from "graphql-tag";
+import {authorGqlFragment} from "../../components/widgets/Story/StoryAuthors/StoryAuthors";
+import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
+import {AuthorResponse} from "../../components/widgets/Author/Author/types";
 
 export async function SeoHelper_currentTitle(context, place: string) {
     const seoTitlesSettings = await ConfigHelper_getSeoTitlesAndDescriptionConfig(context);
@@ -17,24 +29,28 @@ export async function SeoHelper_currentTitle(context, place: string) {
     let pattern= null;
 
     switch (pageType) {
-        case 'Story':
-            pattern = get(seoTitlesSettings, 'detailPageTitle');
+        case SiteContentType.Story:
+            pattern = _.get(seoTitlesSettings, 'detailPageTitle');
             break;
 
-        case 'SiteNode':
-            pattern = get(seoTitlesSettings, 'listPageTitle');
+        case SiteContentType.SiteNode:
+            pattern = _.get(seoTitlesSettings, 'listPageTitle');
             break;
 
         case 'Homepage':
-            pattern = get(seoTitlesSettings, 'homePageTitle');
+            pattern = _.get(seoTitlesSettings, 'homePageTitle');
             break;
 
-        case 'Topic':
-            pattern = get(seoTitlesSettings, 'topicPageTitle');
+        case SiteContentType.Topic:
+            pattern = _.get(seoTitlesSettings, 'topicPageTitle');
+            break;
+
+        case SiteContentType.Author:
+            pattern = _.get(seoTitlesSettings, 'authorPageTitle');
             break;
 
         default:
-            pattern = get(seoTitlesSettings, 'otherPageTitle');
+            pattern = _.get(seoTitlesSettings, 'otherPageTitle');
             break;
     }
 
@@ -52,24 +68,28 @@ export async function SeoHelper_currentDescription(context, place: string) {
     let pattern= null;
 
     switch (pageType) {
-        case 'Story':
-            pattern = get(seoDescriptionSettings, 'detailPageDescription');
+        case SiteContentType.Story:
+            pattern = _.get(seoDescriptionSettings, 'detailPageDescription');
             break;
 
-        case 'SiteNode':
-            pattern = get(seoDescriptionSettings, 'listPageDescription');
+        case SiteContentType.SiteNode:
+            pattern = _.get(seoDescriptionSettings, 'listPageDescription');
             break;
 
         case 'Homepage':
-            pattern = get(seoDescriptionSettings, 'homePageDescription');
+            pattern = _.get(seoDescriptionSettings, 'homePageDescription');
             break;
 
-        case 'Topic':
-            pattern = get(seoDescriptionSettings, 'topicPageDescription');
+        case SiteContentType.Topic:
+            pattern = _.get(seoDescriptionSettings, 'topicPageDescription');
+            break;
+
+        case SiteContentType.Author:
+            pattern = _.get(seoDescriptionSettings, 'authorPageDescription');
             break;
 
         default:
-            pattern = get(seoDescriptionSettings, 'otherPageDescription');
+            pattern = _.get(seoDescriptionSettings, 'otherPageDescription');
             break;
     }
 
@@ -99,6 +119,22 @@ export async function SeoHelper_currentLocale(context) {
 
 export async function SeoHelper_currentMainStoryImageData(context) {
     return OpenGraphHelper_getMainStoryImageData(context);
+}
+
+export async function SeoHelper_authorName(context) {
+    const query = gql`
+        query($uuid: UUID){
+            author(id:$uuid){
+                name
+            }
+        }
+    `;
+    const variables = {
+        uuid: context.id,
+    };
+
+    const response = await WebsiteApiProvider.call(query, variables);
+    return _.get(response, 'data.author.name', '');
 }
 
 export async function SeoHelper_currentDefaultImageData(context) {
@@ -152,13 +188,17 @@ async function mapPatternVariables(context, place: string, fieldToCheck: string 
         dynamicPatternMap['{{number}}'] = 'number'; //TODO: Add support for page numbers
     }
 
+    if (fieldToCheck.includes('{{authorName}}')) {
+        dynamicPatternMap['{{authorName}}'] = async() => {return await SeoHelper_authorName(context)};
+    }
+
     return dynamicPatternMap;
 }
 
 export async function SeoHelper_replaceBracketVariables(mapToReplace, homePattern: string) {
     let replacedText = homePattern;
 
-    await UtilsHelper_asyncForEach(Object.keys(mapToReplace), async (key) => {
+    await UtilsHelper_asyncSequentialForEach(Object.keys(mapToReplace), async (key) => {
         replacedText = replacedText.replaceAll(`${key}`, await mapToReplace[key]());
     });
 

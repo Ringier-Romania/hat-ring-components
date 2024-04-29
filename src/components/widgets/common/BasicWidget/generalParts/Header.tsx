@@ -27,10 +27,9 @@ export default function Header(
 
     function renderHeaderText(text) {
         return <>
-            {/* @ts-expect-error Server Component */}
-            <TextReplacer context={context} config={{}} parentComponent={HeaderTag}>
+            <HeaderTag>
                 {text}
-            </TextReplacer>
+            </HeaderTag>
         </>
     }
 

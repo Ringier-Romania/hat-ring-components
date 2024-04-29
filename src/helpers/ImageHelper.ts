@@ -1,10 +1,11 @@
 import {UtilsHelper_isMobile} from "./UtilsHelper";
 import {ConfigHelper_getGeneralConfig} from "./ConfigHelper";
 import {AppContext} from "../types/types";
-import {TransformType} from "./OcdnHelper";
+import {TransformType} from "./AcceleratorImagesHelper";
 import {RingImageObject} from "../renderlessComponents/common/RingImageObject";
+import {ImageFormat} from "@ringpublishing/accelerator-images";
 
-export async function ImageHelper_getDefaultImageData(context, width, height, transform = TransformType.ResizeCropAuto, format = ['png']) {
+export async function ImageHelper_getDefaultImageData(context, width, height, transform = TransformType.ResizeCropAuto, format:ImageFormat[] = ['png']) {
 
     const generalSettings = await ConfigHelper_getGeneralConfig(context);
 

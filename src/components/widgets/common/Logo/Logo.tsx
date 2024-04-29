@@ -4,7 +4,7 @@ import {RingImage} from "../../../common/RingImage";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {LogoParams} from "./types";
 import styles from '../../../../../styles/widgets/common/Logo.module.scss';
-import {TransformType} from "../../../../helpers/OcdnHelper";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
 
 
 export function Logo(

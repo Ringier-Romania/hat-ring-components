@@ -1,0 +1,48 @@
+import React from 'react';
+import _ from 'lodash';
+import {gql} from 'graphql-tag';
+import {AuthorParams, AuthorResponse} from "./types";
+import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
+import styles from "../../../../../styles/widgets/Story/StoryAuthors.module.scss";
+import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
+import {StoryAuthorsShowOptions} from "../../Story/StoryAuthors/types";
+import {StoryAuthor} from "../../Story/StoryAuthors/StoryAuthor";
+import {authorGqlFragment} from "../../Story/StoryAuthors/StoryAuthors";
+
+export async function Author({widgetConfig, context}: AuthorParams) {
+
+    const descriptionFragment = widgetConfig.showOptions?.includes(StoryAuthorsShowOptions.Description) ? `description { ${StoryHelper_getGqlContentFragment()} }` : '';
+
+
+    const query = gql`
+        query($uuid: UUID, $imageWidth:Int!, $imageHeight:Int!){
+            author(id:$uuid){
+                ${descriptionFragment}
+                ${authorGqlFragment}
+            }
+        }
+    `;
+
+    const imageDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, context);
+
+    const variables = {
+        uuid: context.id,
+        imageWidth: imageDimensions.width,
+        imageHeight: imageDimensions.height,
+    };
+
+
+    let response = widgetConfig?.response;
+    if (!response) {
+        response = await WebsiteApiProvider.call(query, variables) as AuthorResponse;
+    }
+
+    let cssModules = styles.StoryAuthors;
+    return <div className={WidgetHelper_getWidgetCssClasses('Author', widgetConfig, context,[cssModules])}>
+        {/* @ts-expect-error Server Component */}
+        <StoryAuthor author={response.data.author} context={context} widgetConfig={widgetConfig}/>
+    </div>
+}
+

@@ -1,8 +1,7 @@
 import React from "react";
 import {AppContext, SiteContentType} from "../../../types/types";
 import {ConfigHelper_getMetaDataConfig} from "../../../helpers/ConfigHelper";
-import get from "lodash/get"
-import split from "lodash/split"
+import _ from "lodash"
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import {UtilsHelper_isHomepage} from "../../../helpers/UtilsHelper";
@@ -23,11 +22,11 @@ export async function SeoMetaCustomMetaTags(context: AppContext) {
     const other = {};
     const isHomePage = UtilsHelper_isHomepage(context);
     const actualPageType = context.siteContentType;
-    const actualTopicUuid = get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id', null);
+    const actualTopicUuid = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id', null);
     const notDynamicTypes = ['all', 'homepage', ...Object.keys(SiteContentType)];
     // dynamic type like uuid of topic
     const isDynamicTypeInCustomTags = config.customMetaTags.some((tagObject) => {
-        return (split(get(tagObject, 'siteContentType', 'all'), ',') || []).some(type => !notDynamicTypes.includes(type));
+        return (_.split(_.get(tagObject, 'siteContentType', 'all'), ',') || []).some(type => !notDynamicTypes.includes(type));
     });
     let topicsOfStory : Array<string> = [];
 
@@ -53,9 +52,9 @@ export async function SeoMetaCustomMetaTags(context: AppContext) {
     }
 
     config.customMetaTags.forEach(tagObject => {
-        const tag = get(tagObject, 'metaTag', '').toLowerCase().replace(/\s/g, '');
-        const value = get(tagObject, 'tagValue', '').toLowerCase().replace(/\s/g, '');
-        const type = split(get(tagObject, 'siteContentType', 'all'), ',') || [];
+        const tag = _.get(tagObject, 'metaTag', '').toLowerCase().replace(/\s/g, '');
+        const value = _.get(tagObject, 'tagValue', '').toLowerCase().replace(/\s/g, '');
+        const type = _.split(_.get(tagObject, 'siteContentType', 'all'), ',') || [];
 
         if (tag && value) {
             const isSupportedHomePage = isHomePage && type.includes('homepage');

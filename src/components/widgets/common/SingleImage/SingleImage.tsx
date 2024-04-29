@@ -8,7 +8,7 @@ import {ImageConfig, ImageParams} from "./types";
 import styles from '../../../../../styles/widgets/common/SingleImage.module.scss';
 import {UtilsHelper_getValueIfExists} from "../../../../helpers/UtilsHelper";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
-import {TransformType} from "../../../../helpers/OcdnHelper";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
 
 
 export function SingleImage(

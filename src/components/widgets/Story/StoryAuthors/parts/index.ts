@@ -1,0 +1,6 @@
+export { default as Name } from './Name';
+export { default as Image } from './Image';
+export { default as LinkOverlay } from './LinkOverlay';
+export { default as Tagline } from './Tagline';
+export { default as Description } from './Description';
+export { default as SocialProfiles } from './SocialProfiles';

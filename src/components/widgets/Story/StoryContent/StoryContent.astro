@@ -7,89 +7,13 @@ import {StoryContentSwitcher} from "./StoryContentSwitcher";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryContentParams} from "./types";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
 
 async function getData(queryStoryFragment) {
     const query = gql`
             query($storyId: UUID){
                 story(id:$storyId){
-                    content {
-                        blocks {
-                            ... on ImageBlock {
-                                type
-                                title
-                                url
-                                alt
-                                link {
-                                    url
-                                }
-                                image {
-                                    description
-                                    title
-                                    width
-                                    height
-                                    sources {
-                                        source {
-                                            name
-                                        }
-                                    }
-                                }
-                                alignment
-                            }
-                            ... on ParagraphBlock {
-                                type
-                                text
-                            }
-                            ... on HeadingBlock {
-                                type
-                                level
-                                text
-                            }
-                            ... on UnorderedListBlock {
-                                type
-                                styleType
-                                entries
-                                indentLevel
-                            }
-                            ... on OrderedListBlock {
-                                type
-                                styleType
-                                entries
-                                indentLevel
-                                startValue
-                            }
-                            ... on EmbedBlock {
-                                type
-                                embed {
-                                    html
-                                }
-                            }
-                            ... on TableBlock {
-                                type
-                                rows {
-                                    cells {
-                                        alignment
-                                        classes
-                                        colspan
-                                        isHeader
-                                        link {
-                                            url
-                                        }
-                                        rowspan
-                                        text
-                                    }
-                                }
-                            }
-                            ... on GroupBlock {
-                                name
-                                type
-                                alignment
-                            }
-                            ... on PreformattedBlock {
-                                text
-                                type
-                            }
-                        }
-                    }
+                    ${StoryHelper_getGqlContentFragment()}
                     ${queryStoryFragment}
                 }
             }

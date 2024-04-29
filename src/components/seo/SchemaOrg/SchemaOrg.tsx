@@ -7,10 +7,9 @@ import {
     SeoHelper_getServiceLogo,
     SeoHelper_currentSiteName
 } from "../../../helpers/seo/SeoHelper";
-import {last, startCase} from "lodash";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
-import get from "lodash/get";
+import _ from "lodash";
 import {ConfigHelper_currentUrl, ConfigHelper_getHomepageUrl} from "../../../helpers/ConfigHelper";
 import {UtilsHelper_isHomepage} from "../../../helpers/UtilsHelper";
 
@@ -74,7 +73,7 @@ export async function getBreadcrumbListSchema(context: AppContext): Promise<With
             splittedPath.splice(splittedPath.length - 1, 1);
         }
 
-        const nameFromLastPathSegment = startCase(last(splittedPath));
+        const nameFromLastPathSegment = _.startCase(_.last(splittedPath));
         itemListElement.push({
             "@type": "ListItem",
             "position": index + 2,
@@ -131,16 +130,16 @@ export async function getNewsArticleSchema(context: AppContext): Promise<WithCon
     };
 
     const response = await WebsiteApiProvider.call(query, variables);
-    const authors = get(response, 'data.story.authors', []).map(authorObj => {
+    const authors = _.get(response, 'data.story.authors', []).map(authorObj => {
         return {
             "@type": "Person",
             "name": authorObj.author.name
         }
     })
 
-    const dateModified = get(response, 'data.story.date.modificationTime') || get(response, 'data.story.date.creationTime');
-    const datePublished = get(response, 'data.story.date.creationTime');
-    const tagNames = get(response, 'data.story.topics', []).map((topicObj) => {
+    const dateModified = _.get(response, 'data.story.date.modificationTime') || _.get(response, 'data.story.date.creationTime');
+    const datePublished = _.get(response, 'data.story.date.creationTime');
+    const tagNames = _.get(response, 'data.story.topics', []).map((topicObj) => {
         return topicObj.topic.name
     })
 
@@ -155,8 +154,8 @@ export async function getNewsArticleSchema(context: AppContext): Promise<WithCon
                 "@id": `${articleUrl}#mainPhoto`
             },
         },
-        "headline": get(response, 'data.story.title', ''),
-        "image": [get(response, 'data.story.image.url', '')],
+        "headline": _.get(response, 'data.story.title', ''),
+        "image": [_.get(response, 'data.story.image.url', '')],
         "datePublished": datePublished,
         "dateModified": dateModified,
         "author": authors,
@@ -169,7 +168,7 @@ export async function getNewsArticleSchema(context: AppContext): Promise<WithCon
             }
         },
         "keywords": tagNames,
-        "description": get(get(response, 'data.story.content[0].blocks', []).filter(block => block.text), '[0].text', ''),
+        "description": _.get(_.get(response, 'data.story.content[0].blocks', []).filter(block => block.text), '[0].text', ''),
         "isAccessibleForFree": true
     }
 }

@@ -1,8 +1,6 @@
 import React from "react";
 import {AppContext, SiteContentType} from "../../../types/types";
 import {ConfigHelper_getMetaDataConfig} from "../../../helpers/ConfigHelper";
-import get from "lodash/get"
-import split from "lodash/split"
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 

@@ -33,6 +33,9 @@ export let GenericListWebsitesConfig
                 "excludedFlags": [],
                 "linkLabel": "",
                 "mainSeoList": true,
+                "customTeasers": [],
+                "moreText": "",
+                "moreUrl": "",
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -46,7 +49,8 @@ export let GenericListWebsitesConfig
                     "items": [
                         "items",
                         "header",
-                        "pagination"
+                        "pagination",
+                        "button"
                     ]
                 },
                 "showOptions": {
@@ -153,6 +157,39 @@ export let GenericListWebsitesConfig
                     "type": "checkbox",
                     "description": "Set as main SEO list"
                 },
+                "customTeasers": {
+                    "type": "treeobject",
+                    "name": "Custom teasers",
+                    "description": "",
+                    "properties": [
+                        {
+                            "name": "Teaser code name",
+                            "type": "textfield"
+                        },
+                        // for future
+                        // {
+                        //     "namnpme": "For big image",
+                        //     "type": "checkbox",
+                        // },
+                        {
+                            "name": "For mobile",
+                            "type": "checkbox",
+                        }
+                    ]
+                },
+                "moreText": {
+                    "name": "Button text",
+                    "type": "textfield",
+                    "description": "",
+                    "required": false
+                },
+                "moreUrl": {
+                    "name": "Button url",
+                    "type": "textfield",
+                    "description": "",
+                    "required": false
+                }
+
             }
         }
     }

@@ -1,8 +1,9 @@
+import Image, {ImageProps, ImageLoaderProps} from "next/image";
 import React from "react";
 
 import styles from "../../../styles/common/RingImage.module.scss";
 import {UtilsHelper_getExtension} from "../../helpers/UtilsHelper";
-import {OcdnHelper_getUrl, TransformType} from "../../helpers/OcdnHelper";
+import {AcceleratorImagesHelper_getUrl, TransformType} from "../../helpers/AcceleratorImagesHelper";
 import {RingImagePreload} from "./RingImagePreload";
 
 export interface RingImageProps extends ImageProps {
@@ -33,33 +34,15 @@ export function RingImage(props) {
     unoptimized = true;
     const ext = UtilsHelper_getExtension(src as string)
     const isResizeable = ext != 'svg';
-    const isAvifWebpTransformAble = ext ? !['svg', 'gif'].includes(ext) : false;
-    const srcSet: Array<string> = [];
 
     if (isResizeable && transform !== TransformType.None) {
-        src = OcdnHelper_getUrl(src, props.width, props.height, props.transform);
+        src = AcceleratorImagesHelper_getUrl(src, props.width, props.height, props.transform);
     }
 
-    const avifSrc = OcdnHelper_getUrl(src, props.width, props.height, props.transform, 'avif');
-    const webpSrc = OcdnHelper_getUrl(src, props.width, props.height, props.transform, 'webp');
-
-
-    if (props.priority) {
-        if (isAvifWebpTransformAble && src != avifSrc) {
-            srcSet.push(avifSrc)
-        }
-        if (isAvifWebpTransformAble && src != webpSrc) {
-            srcSet.push(webpSrc)
-        }
-        srcSet.push(src as string)
-    }
     return <>
         <picture>
-            { isAvifWebpTransformAble && src != avifSrc ? <source srcSet={avifSrc} type="image/avif"/> : null}
-            { isAvifWebpTransformAble && src != webpSrc ? <source srcSet={webpSrc} type="image/webp"/> : null}
-            <img  src={src}
-                   />
+            <img src={src}/>
         </picture>
-        {props.priority && <RingImagePreload srcSet={srcSet}/>}
+        {props.priority && <RingImagePreload src={src}/>}
     </>
 }

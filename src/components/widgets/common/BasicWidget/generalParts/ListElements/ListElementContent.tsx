@@ -4,11 +4,10 @@ import {AppContext} from "../../../../../../types/types";
 import {BasicWidgetConfig, ListElementsData} from "../../types";
 import _ from "lodash";
 import {RingLink} from "../../../../../common/RingLink/RingLink";
-import {TextReplacer} from "../../../../../common/TextReplacer";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../../../helpers/ImageHelper";
 
-export default function ListElementContent(
-    {context, widgetConfig, data, headerTagLevel, childLevel, itemIndex}: {
+export default function ListElementContent (
+    {context, widgetConfig, data, headerTagLevel, childLevel, itemIndex} : {
         context: AppContext,
         widgetConfig: BasicWidgetConfig,
         data: ListElementsData,
@@ -48,9 +47,7 @@ export default function ListElementContent(
             return (<div className={['listElementChildren'].join(' ')}>
                 {data.children.map((element, index) => {
                     return (<div className={['listElementChild'].join(' ')}>
-                        <ListElementContent context={context} widgetConfig={widgetConfig} data={element}
-                                            childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1}
-                                            itemIndex={itemIndex} key={index}/>
+                        <ListElementContent context={context} widgetConfig={widgetConfig} data={element} childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1} itemIndex={itemIndex} key={index}/>
                     </div>)
                 })}
             </div>)

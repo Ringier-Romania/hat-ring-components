@@ -40,7 +40,7 @@ const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
         const colClass = isBig ? `col12` : `col${colNumber}`;
         const bigElementClass = isBig ? `bigElement` : '';
         return (
-                <div className={['Item', colClass, bigElementClass].join(' ')}>
+                <div className={['Item', colClass, bigElementClass].join(' ')} key={itemIndex}>
                     <div className={'linkOverlay'}>
                         <RingLink href={edge.node?.url || '#'} title={edge.node?.title || ''}>
                             {widgetConfig.linkLabel}
@@ -55,7 +55,7 @@ const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
                         }
 
                         return (
-                                <Component key={index} itemIndex={itemIndex} context={context}
+                                <Component key={'aa' + itemIndex + index} itemIndex={itemIndex} context={context}
                                            widgetConfig={widgetConfig}
                                            data={edge.node}/>)
                     })}

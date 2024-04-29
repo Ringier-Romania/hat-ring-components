@@ -1,13 +1,14 @@
 // Libraries
-import isNil from 'lodash/isNil';
-import {SiteContentType} from "../types/types";
+import _ from 'lodash';
+import {AppContext, SiteContentType} from "../types/types";
+import _ from "lodash";
 
 export function UtilsHelper_convertToInt(input: string | number) {
     return typeof input === "number" ? input : parseInt(input);
 }
 
 export function UtilsHelper_getValueIfExists(value, defaultValue) {
-    return isNil(value) ? defaultValue : value;
+    return _.isNil(value) ? defaultValue : value;
 }
 
 export function UtilsHelper_isDevelopmentMode() {
@@ -23,10 +24,14 @@ export function UtilsHelper_getExtension(src: string): string | null {
     return ext ? ext.toLowerCase() : null;
 }
 
-export async function UtilsHelper_asyncForEach(array, callback) {
+export async function UtilsHelper_asyncSequentialForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
         await callback(array[index], index, array);
     }
+}
+
+export async function UtilsHelper_asyncParallelForEach(arr, callback){
+    return await Promise.allSettled(arr.map(callback));
 }
 
 export function UtilsHelper_isHomepage(context) {
@@ -72,4 +77,8 @@ export function UtilsHelper_ensureHttps(url: string): string {
 
 export function UtilsHelper_getDomain(){
     return process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
+}
+
+export function UtilsHelper_getCurrentNodeCategoryId(context: AppContext){
+    return _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.id', null);
 }

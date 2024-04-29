@@ -22,13 +22,14 @@ export default function Taxonomies(
         <div className={['Taxonomies'].join(' ')}>
 
             {data.topics?.map((topic, index) => {
+                if (!topic) return null;
                 let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
                 let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
-                return <div className={'topic'} data-kind={topic.topic.kind.code} key={index}>
+                return <div className={'topic'} data-kind={topic.topic?.kind.code} key={index}>
                     { url ?
                     <RingLink href={url}>
-                        <span>{topic.topic.name}</span>
-                    </RingLink> : <span>{topic.topic.name}</span>
+                        <span>{topic.topic?.name}</span>
+                    </RingLink> : <span>{topic.topic?.name}</span>
                     }
                 </div>
             })}

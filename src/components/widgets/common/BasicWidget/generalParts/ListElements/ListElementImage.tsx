@@ -2,7 +2,7 @@ import React from 'react';
 import {AppContext} from "../../../../../../types/types";
 import {BasicWidgetConfig, ListElementImageData} from "../../types";
 import {RingImage, RingImageProps} from "../../../../../common/RingImage";
-import {TransformType} from "../../../../../../helpers/OcdnHelper";
+import {TransformType} from "../../../../../../helpers/AcceleratorImagesHelper";
 
 export default function ListElementImage(
     {context, widgetConfig, data}:
@@ -22,7 +22,7 @@ export default function ListElementImage(
         height: data.imageDim.height,
         transform: TransformType.ResizeCropAuto,
         priority: data.priority,
-        alt: data.customAlt ? data.customAlt : data.caption,
+        alt: (data.customAlt ? data.customAlt : data.caption) || '',
     };
 
     if(!data.imageDim.width || !data.imageDim.height) {

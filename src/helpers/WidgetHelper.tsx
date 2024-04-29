@@ -1,11 +1,12 @@
 import React from "react";
-import upperFirst from 'lodash/upperFirst';
-import get from 'lodash/get';
 import {AbstractWidgetConfig, AppContext} from "../types/types";
 import {UtilsHelper_isDevelopmentMode, UtilsHelper_isMobile} from "./UtilsHelper";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
 import _ from "lodash";
+import {ConfigHelper_getDeveloperSettingsConfig} from "./ConfigHelper";
+import {BasicWidgetConfig} from "../components/widgets/common/BasicWidget/types";
+import {GenericListWidgetConfig} from "../components/widgets/Lists/GenericList/types";
 
 export function WidgetHelper_shouldHideWidget(widgetConfig, context) {
     if (typeof context.hatControllerParams.isMobile === 'boolean'
@@ -21,7 +22,7 @@ export function WidgetHelper_shouldHideWidget(widgetConfig, context) {
 }
 
 export function WidgetHelper_renderEmptyWidget(widgetConfig, text = '') {
-    return (WidgetHelper_renderEmptyComponent(upperFirst(widgetConfig.widgetType), text));
+    return (WidgetHelper_renderEmptyComponent(_.upperFirst(widgetConfig.widgetType), text));
 }
 
 export function WidgetHelper_renderEmptyComponent(componentClassName, text = '') {
@@ -32,12 +33,12 @@ export function WidgetHelper_renderEmptyComponent(componentClassName, text = '')
 
 export function WidgetHelper_getWidgetCssClasses(componentName: string, widgetConfig: AbstractWidgetConfig, context: AppContext, additionalCssClasses: Array<string> = []): string {
     const cssClasses = [] as Array<string>;
-    componentName = upperFirst(componentName);
+    componentName = _.upperFirst(componentName);
 
     cssClasses.push(componentName);
 
-    if (get(context, `cssModules.${componentName}`, false)) {
-        cssClasses.push(get(context, `cssModules.${componentName}`));
+    if (_.get(context, `cssModules.${componentName}`, false)) {
+        cssClasses.push(_.get(context, `cssModules.${componentName}`));
     }
 
     if (widgetConfig) {
@@ -46,7 +47,7 @@ export function WidgetHelper_getWidgetCssClasses(componentName: string, widgetCo
         }
 
         if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
-            cssClasses.push(`widgetPosition${upperFirst(widgetConfig.customPosition)}`);
+            cssClasses.push(`widgetPosition${_.upperFirst(widgetConfig.customPosition)}`);
         }
 
         if (widgetConfig.customClass && widgetConfig.customClass !== '') {
@@ -67,11 +68,9 @@ export async function WidgetHelper_findWidgetConfig(context: AppContext, objToCo
             configQuery += section + ':config(codeName: "' + section + '"){ data } ';
         })
 
-        const antycache = UtilsHelper_isDevelopmentMode() ? `antycacheStatusCode${new Date().getTime()}` : 'antycacheStatusCode';
         const query = gql`
             query($url: URL!, $variant:ID!){
                 site(url:$url, variantId: $variant){
-                    ${antycache}:statusCode
                     data {
                         node {
                             config {
@@ -88,7 +87,7 @@ export async function WidgetHelper_findWidgetConfig(context: AppContext, objToCo
         };
 
         const response = await WebsiteApiProvider.call(query, variables);
-        const sectionsConfig = get(response, 'data.site.data.node.config');
+        const sectionsConfig = _.get(response, 'data.site.data.node.config');
 
         if (!sectionsConfig) {
             return null;
@@ -110,4 +109,35 @@ export async function WidgetHelper_findWidgetConfig(context: AppContext, objToCo
 
         resolve(widgetFound)
     });
+}
+
+export async function WidgetHelper_getAppropriateTeaserImage(widgetConfig: BasicWidgetConfig | GenericListWidgetConfig, context: AppContext, leads: Array<any>, isBig = false): Promise<string | null> {
+    let customTeaserImageUrl = null;
+    let customRole: string | null = null;
+
+    if (widgetConfig.customTeasers) {
+        const teaser = widgetConfig.customTeasers.find((child) => {
+            return !!child['For big image'] === isBig && !!child['For mobile'] === UtilsHelper_isMobile(context);
+        })
+        if (teaser && teaser['Teaser code name']) {
+            customRole = teaser['Teaser code name'];
+        }
+    }
+    if (!customRole) {
+        const devSettingsConfig = await ConfigHelper_getDeveloperSettingsConfig(context);
+        if (devSettingsConfig.globalCustomTeasers) {
+            const teaser = devSettingsConfig.globalCustomTeasers.find((child) => {
+                return child['Widget type']?.toLowerCase().trim() === widgetConfig.widgetType?.toLowerCase() && !!child['For big image'] === isBig && !!child['For mobile'] === UtilsHelper_isMobile(context);
+            })
+            if (teaser && teaser['Teaser code name']) {
+                customRole = teaser['Teaser code name'];
+            }
+        }
+    }
+    if (customRole && customRole !== 'none') {
+        const lead: any = leads?.find((lead) => lead?.role?.code === customRole);
+        customTeaserImageUrl = lead?.image?.url;
+    }
+
+    return customTeaserImageUrl;
 }
