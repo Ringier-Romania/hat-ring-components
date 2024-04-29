@@ -16,20 +16,32 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
 
         const ItemPart = allItemParts[_.upperFirst(showOption)];
 
-        if (ItemPart && ItemPart.getFragment) {
-            const fragment = ItemPart.getFragment(widgetConfig);
-            if (fragment.variables) {
-                dynamicVariables = {...dynamicVariables, ...fragment.variables}
+        if (ItemPart) {
+            let getFragment = ItemPart.getFragment;
+            if(!getFragment){
+                const ItemPart = allItemParts[_.upperFirst(showOption)+'_getFragment'];
+                if(ItemPart){
+                    getFragment = ItemPart;
+                }
+            }
+            if(getFragment){
+                const fragment = getFragment(widgetConfig);
+                if (fragment.variables) {
+                    dynamicVariables = {...dynamicVariables, ...fragment.variables}
+                }
+
+                if (fragment.variablesTypes) {
+                    dynamicVariablesTypes = {...dynamicVariablesTypes, ...fragment.variablesTypes}
+                }
+
+                if (fragment.query) {
+                    dynamicFragmentsNames += ` ...${fragment.query.definitions[0].name.value} \n`;
+                    return `${fragment.query.loc?.source.body}`
+                }
+            }else{
+                console.error(`ItemPart getFragment ${showOption} not found`);
             }
 
-            if (fragment.variablesTypes) {
-                dynamicVariablesTypes = {...dynamicVariablesTypes, ...fragment.variablesTypes}
-            }
-
-            if (fragment.query) {
-                dynamicFragmentsNames += ` ...${fragment.query.definitions[0].name.value} \n`;
-                return `${fragment.query.loc?.source.body}`
-            }
         }
     }).join('\n');
 

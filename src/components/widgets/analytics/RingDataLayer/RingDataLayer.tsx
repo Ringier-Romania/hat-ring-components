@@ -1,5 +1,4 @@
 import React from "react";
-import Script from 'next/script'
 import {SiteContentType, WidgetParams} from "../../../../types/types";
 
 export async function RingDataLayer(
@@ -7,10 +6,10 @@ export async function RingDataLayer(
 ) {
 
     return <>
-        <Script strategy={"beforeInteractive"}>{`
+        <script>{`
         if(typeof ringDataLayer === "undefined"){
             ringDataLayer = {};
         }
-        ringDataLayer = Object.assign(ringDataLayer, ${JSON.stringify(context.hatControllerParams?.ringDataLayer || {})})`}</Script>
+        ringDataLayer = Object.assign(ringDataLayer, ${JSON.stringify(context.hatControllerParams?.ringDataLayer || {})})`}</script>
     </>;
 }

@@ -26,7 +26,8 @@ export function WidgetHelper_renderEmptyWidget(widgetConfig, text = '') {
 }
 
 export function WidgetHelper_renderEmptyComponent(componentClassName, text = '') {
-    return null;
+    // @TODO
+    return  null;
     return (<div className={componentClassName} style={{display: 'none'}}
                  dangerouslySetInnerHTML={{__html: text && `<!-- ${text} -->`}}/>);
 }

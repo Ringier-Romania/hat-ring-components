@@ -1,8 +1,6 @@
 import React from "react";
-import Script from 'next/script'
 import {KropkaParams} from "./types";
 import {UtilsHelper_isMobile} from "../../../../helpers/UtilsHelper";
-import {SiteContentType} from "../../../../types/types";
 
 export async function Kropka(
     {widgetConfig, context}: KropkaParams
@@ -26,10 +24,10 @@ export async function Kropka(
 
 
     return <>
-        <Script strategy={"beforeInteractive"}>
+        <script >
             {`if ("undefined" === typeof dlApi) { dlApi = ${JSON.stringify(dlApi)}; }else{ dlApi = Object.assign(dlApi, ${JSON.stringify(dlApi)}) }`}
-        </Script>
-        <Script strategy={"beforeInteractive"} src="https://lib.onet.pl/s.csr/build/dlApi/dl.boot.min.js"
-                async></Script>
+        </script>
+        <script src="https://lib.onet.pl/s.csr/build/dlApi/dl.boot.min.js"
+                async></script>
     </>;
 }

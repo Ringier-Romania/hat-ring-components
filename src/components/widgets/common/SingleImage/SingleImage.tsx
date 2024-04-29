@@ -39,7 +39,7 @@ export function SingleImage(
         delete ringImageProps.width;
         delete ringImageProps.height;
         delete ringImageProps.transform;
-        ringImageProps.fill = true;
+        //ringImageProps.fill = true; //@TODO
         additionalCssClasses.push("imageFill");
     }
 

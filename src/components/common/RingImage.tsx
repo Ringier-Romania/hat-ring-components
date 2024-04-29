@@ -1,13 +1,14 @@
-import Image, {ImageProps, ImageLoaderProps} from "next/image";
-import React from "react";
+import React, {ImgHTMLAttributes} from "react";
 
+//@TODO AStro images import { Image } from 'astro:assets';
 import styles from "../../../styles/common/RingImage.module.scss";
 import {UtilsHelper_getExtension} from "../../helpers/UtilsHelper";
 import {AcceleratorImagesHelper_getUrl, TransformType} from "../../helpers/AcceleratorImagesHelper";
 import {RingImagePreload} from "./RingImagePreload";
 
-export interface RingImageProps extends ImageProps {
-    transform?: TransformType
+export interface RingImageProps extends ImgHTMLAttributes<any> {
+    transform?: TransformType,
+    priority?: boolean,
 }
 
 function getPlaceholderData(width, height) {

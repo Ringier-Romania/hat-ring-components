@@ -29,7 +29,6 @@ export default function ListElementImage(
         delete ringImageProps.width;
         delete ringImageProps.height;
         delete ringImageProps.transform;
-        ringImageProps.fill = true;
     }
 
     return (
