@@ -1,4 +1,5 @@
 ---
+import TextReplacer from "../../../../../common/TextReplacer.astro";
 const {context, widgetConfig, data, headerTagLevel, childLevel, itemIndex} = Astro.props;
 import React from 'react';
 import ListElementImage from "./ListElementImage";
@@ -46,17 +47,12 @@ import {ImageHelper_getImageDimensionsFromObject} from "../../../../../../helper
     }
     {data['Image src'] && <ListElementImage context={context} widgetConfig={widgetConfig} data={imageProps}/>}
 
-    {data.Title && <ItemHeaderTag>
-        {data.Title}
-    </ItemHeaderTag>}
+    {data.Title && <TextReplacer props={{className: 'title'}} context={context} config={{}} tag={ItemHeaderTag} text={data.Title}/>}
+    {/* @ts-expect-error Server Component */}
+    {data.Description && <TextReplacer props={{className: 'description'}} context={context} config={{}} tag={'p'} text={data.Description}/>}
+    {/* @ts-expect-error Server Component */}
+    {data.Text && <TextReplacer props={{className: 'text'}} context={context} config={{}} tag={'div'}  text={data.Text}/>}
 
-    {data.Description && <p>
-        {data.Description}
-    </p>}
-
-    {data.Text && <div>
-        {data.Text}
-    </div>}
     {(data.children && data.children.length > 0) && <div className={['listElementChildren'].join(' ')}>
         {data.children.map((element, index) => {
             return (<div className={['listElementChild'].join(' ')}>
