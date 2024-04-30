@@ -5,7 +5,7 @@ import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHe
 import gql from "graphql-tag";
 import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
 
-export default async function PublicationDate(
+export default async function ModificationDate(
     {context, widgetConfig, data}:
         {
             context: AppContext,
@@ -13,16 +13,16 @@ export default async function PublicationDate(
             data: BasicWidgetResponseNode,
         }) {
 
-    const dateFromData = data.creationTime || data.originalContent?.creationTime;
+    const dateFromData = data.modificationTime || data.originalContent?.modificationTime;
 
     if (!dateFromData) {
-        return WidgetHelper_renderEmptyComponent('PublicationDate');
+        return WidgetHelper_renderEmptyComponent('ModificationDate');
     }
 
     const displayDate = await DateHelper_convertDate(context, dateFromData);
 
     return (
-        <div className={['PublicationDate'].join(' ')}>
+        <div className={['ModificationDate'].join(' ')}>
             <time dateTime={dateFromData}>
                 {displayDate}
             </time>
@@ -30,16 +30,15 @@ export default async function PublicationDate(
     )
 }
 
-
-PublicationDate.getFragment = () => {
+ModificationDate.getFragment = () => {
     return {
         variables: {},
-        query: gql`fragment PublicationDateFragment on SectionItem {
-            creationTime
+        query: gql`fragment ModificationDateFragment on SectionItem {
+            modificationTime
             originalContent {
                 ... on Story {
                     date {
-                        creationTime
+                        modificationTime
                     }
                 }
             }

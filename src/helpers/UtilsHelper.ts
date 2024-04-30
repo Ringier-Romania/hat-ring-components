@@ -1,7 +1,6 @@
 // Libraries
 import _ from 'lodash';
 import {AppContext, SiteContentType} from "../types/types";
-import _ from "lodash";
 
 export function UtilsHelper_convertToInt(input: string | number) {
     return typeof input === "number" ? input : parseInt(input);

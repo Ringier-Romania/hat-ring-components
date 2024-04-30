@@ -1,0 +1,48 @@
+---
+const {context, widgetConfig, data} = Astro.props;
+
+import React from 'react';
+import {AppContext} from "../../../../../types/types";
+import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import gql from "graphql-tag";
+import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
+
+let toRender: boolean | JSX.Element = false;
+
+const dateFromData = data.creationTime || data.originalContent?.creationTime;
+3
+if (!dateFromData) {
+    toRender = WidgetHelper_renderEmptyComponent('PublicationDate');
+}
+
+const displayDate = await DateHelper_convertDate(context, dateFromData);
+
+
+export const getFragment = () => {
+    return {
+        variables: {},
+        query: gql`fragment PublicationDateFragment on SectionItem {
+            creationTime
+            originalContent {
+                ... on Story {
+                    date {
+                        creationTime
+                    }
+                }
+            }
+        }`
+    }
+}
+---
+{
+    toRender ||
+    <div className={['PublicationDate'].join(' ')}>
+        <time dateTime={dateFromData}>
+            {displayDate}
+        </time>
+    </div>
+}
+
+
+
