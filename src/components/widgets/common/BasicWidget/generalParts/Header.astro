@@ -1,0 +1,30 @@
+---
+const {context, widgetConfig, response} = Astro.props;
+import React from 'react';
+import {AppContext} from "../../../../../types/types";
+import {BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse} from "../types";
+import * as ItemParts from "../itemParts";
+import _ from "lodash";
+import {RingLink} from "../../../../common/RingLink/RingLink";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {default as TextReplacer} from "../../../../common/TextReplacer.astro";
+
+const headerText = widgetConfig.labelValue;
+let toRender: boolean | JSX.Element = false;
+if (!headerText) {
+    toRender = WidgetHelper_renderEmptyComponent('Header');
+}
+
+const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span') as keyof JSX.IntrinsicElements;
+// @todo dynamic text?
+const headerUrl = widgetConfig.labelLink;
+---
+
+{toRender ||
+<div className={['Header'].join(' ')}>
+
+    <RingLink href={headerUrl}>
+        <TextReplacer context={context} config={{}} text={headerText} tag={HeaderTag}/>
+    </RingLink>
+
+</div>}

@@ -1,0 +1,27 @@
+---
+const {text, context, tag, props = {}} = Astro.props;
+import {ConfigHelper_getDeveloperSettingsConfig} from "../../helpers/ConfigHelper";
+import React from 'react'
+import {AppContext} from "../../types/types";
+
+const devSettingsConfig = await ConfigHelper_getDeveloperSettingsConfig(context);
+let replacer = (text) => text;
+
+if (devSettingsConfig.textReplacers && text) {
+    const replacementFunctions = devSettingsConfig.textReplacers.map((replacerObj) => {
+        return (text) => text.replaceAll(replacerObj['Match pattern'], replacerObj['Replacement'])
+    })
+
+    replacer = (text) => {
+        return replacementFunctions.reduce(
+            (prevString, replacementFnc) => replacementFnc(prevString),
+            text
+        );
+    }
+}
+
+const Tag = tag;
+
+---
+<Tag set:html={replacer(text)} />
+

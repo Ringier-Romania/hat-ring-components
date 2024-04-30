@@ -14,7 +14,7 @@ export default function Taxonomies(
             data: GenericListResponseNode,
         }) {
 
-    if (!data.topics) {
+    if (!data?.topics) {
         return WidgetHelper_renderEmptyComponent('Taxonomies');
     }
 

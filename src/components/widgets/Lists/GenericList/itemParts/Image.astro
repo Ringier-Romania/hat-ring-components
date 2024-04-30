@@ -14,7 +14,7 @@ import {ConfigHelper_getGeneralConfig} from "../../../../../helpers/ConfigHelper
 import {UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
 
 
-let image = data.image;
+let image = data?.image;
 let customTeaserImageUrl: string | null = null;
 
 if (!image || !image.url) {

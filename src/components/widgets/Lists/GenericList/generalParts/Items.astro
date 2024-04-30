@@ -23,7 +23,7 @@ const colNumber = Math.floor(12 / columnsCount);
 ---
 <div className={['Items'].join(' ')}>
     {(response.data?.stories?.edges.map((edge, itemIndex) => {
-
+        if (!edge.node) return;
         const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
             const Component = allItemParts[_.upperFirst(showOption)];
             if (!Component) {

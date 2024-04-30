@@ -15,10 +15,10 @@ export default function CreationTime(
             data: GenericListResponseNode,
         }) {
 
-    if (!data.date?.creationTime) {
+    if (!data?.date?.creationTime) {
         return WidgetHelper_renderEmptyComponent('CreationTime');
     }
-
+//@TODO dayjs similarly oto basicWidget
     return (
         <div className={['CreationTime'].join(' ')}>
             {data.date.creationTime}

@@ -16,7 +16,7 @@ export * from "./components/widgets/common/Menu/Menu";
 export * from "./components/widgets/common/Logo/Logo";
 // export * from "./components/widgets/common/Slider/Slider";
 export {default as StoryDate} from "./components/widgets/Story/StoryDate/StoryDate.astro";
-export * from "./components/common/TextReplacer";
+export {default as TextReplacer} from "./components/common/TextReplacer.astro";
 // export * from "./components/widgets/Lists/TopicTitle/TopicTitle";
 export * from "./components/widgets/common/SingleImage/SingleImage";
 // export * from "./components/widgets/analytics/Kropka/Kropka";

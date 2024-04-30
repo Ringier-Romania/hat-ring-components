@@ -1,0 +1,32 @@
+---
+const {context, widgetConfig, response} = Astro.props;
+
+import React from 'react';
+import {AppContext} from "../../../../../../types/types";
+import {BasicWidgetConfig, BasicWidgetResponse} from "../../types";
+import {RingLink} from "../../../../../common/RingLink/RingLink";
+import {default as ListElementContent} from "./ListElementContent.astro";
+import _ from "lodash";
+const headerTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span') as keyof JSX.IntrinsicElements;
+let headerTagLevel = 6;
+
+const itemsHeaderArr = headerTag.split('h');
+if (itemsHeaderArr.length === 2) {
+    headerTagLevel = _.clamp(Number(itemsHeaderArr[1]), 2, 6);
+}
+
+const colClass = Math.floor(12 / parseInt(widgetConfig.columns || '0'));
+---
+
+<div className={['ListElements'].join(' ')}>
+    {widgetConfig.listElements && widgetConfig.listElements.map((element, itemIndex) => {
+
+        return (
+                <div className={['Item', 'col' + colClass].join(' ')}>
+                    <ListElementContent context={context} widgetConfig={widgetConfig} data={element}
+                                        headerTagLevel={headerTagLevel} childLevel={1} itemIndex={itemIndex}
+                                        key={itemIndex}/>
+                </div>
+        );
+    })}
+</div>
