@@ -8,3 +8,4 @@ export { default as TableBlock } from './TableBlock';
 export { default as GroupBlock } from './GroupBlock';
 export { default as PreformattedBlock } from './PreformattedBlock';
 export { default as NotHandledBlock } from './NotHandledBlock';
+export { default as SlotBlock } from './SlotBlock';

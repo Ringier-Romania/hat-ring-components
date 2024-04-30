@@ -206,6 +206,13 @@ export function StoryHelper_getGqlContentFragment(): any {
                         text
                         type
                     }
+                     ... on SlotBlock{
+                        type
+                        data
+                        kind{
+                            code
+                        }
+                     }
                 }
             }`;
 }
