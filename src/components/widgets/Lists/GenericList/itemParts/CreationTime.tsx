@@ -15,7 +15,7 @@ export default async function CreationTime(
             data: GenericListResponseNode,
         }) {
 
-    if (!data.date?.creationTime) {
+    if (!data?.date?.creationTime) {
         return WidgetHelper_renderEmptyComponent('CreationTime');
     }
 
