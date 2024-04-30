@@ -20,7 +20,7 @@ export default async function Image(
         }) {
 
 
-    let image = data.image;
+    let image = data?.image;
     let customTeaserImageUrl: string | null = null;
 
     if (!image || !image.url) {
@@ -40,13 +40,13 @@ export default async function Image(
     const preloadCount = isMobile ? (Number(widgetConfig?.mobilePreloadImagesCount) || 0) : (Number(widgetConfig?.preloadImagesCount) || 0);
     const isPriority = (preloadCount >= itemIndex + 1) || false;
 
-    customTeaserImageUrl = await WidgetHelper_getAppropriateTeaserImage(widgetConfig, context, data.leads || []);
+    customTeaserImageUrl = await WidgetHelper_getAppropriateTeaserImage(widgetConfig, context, data?.leads || []);
 
 
     const ringImageProps = {
 
         src: customTeaserImageUrl || (image && image.url) as string,
-        alt: (image && image.caption) || data.title || '',
+        alt: (image && image.caption) || data?.title || '',
         width: Number(sizes[0]),
         height: Number(sizes[1]),
         priority: isPriority

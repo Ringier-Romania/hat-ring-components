@@ -13,7 +13,7 @@ export default function Title(
             data: GenericListResponseNode,
         }) {
 
-    if (!data.title) {
+    if (!data?.title) {
         return WidgetHelper_renderEmptyComponent('Title');
     }
 

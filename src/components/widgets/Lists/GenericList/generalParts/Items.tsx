@@ -22,13 +22,13 @@ export default function Items(
     return (
         <div className={['Items'].join(' ')}>
             {(response.data?.stories?.edges.map((edge, itemIndex) => {
+                if (!edge.node) return;
                 const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
                     const Component = allItemParts[_.upperFirst(showOption)];
                     if (!Component) {
                         console.error(`No item part support ${showOption}`);
                         return WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
                     }
-
                     return <Component key={index} itemIndex={itemIndex} context={context} widgetConfig={widgetConfig}
                                       data={edge.node}/>;
                 });
