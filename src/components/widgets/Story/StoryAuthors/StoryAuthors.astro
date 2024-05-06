@@ -60,7 +60,7 @@ if (!response) {
 const authors: Author[] = _.get(response, 'data.story.authors', []).map(author => author.author);
 
 let cssModules = styles.StoryAuthors;
-
+const sum = (a, b) => a + b;
 ---
 
 

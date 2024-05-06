@@ -35,6 +35,6 @@ export * from "./renderlessComponents/seo/RSS/RSS";
 // export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaCanonical";
 // export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaBase";
 export {default as StoryAuthors} from "./components/widgets/Story/StoryAuthors/StoryAuthors.astro";
-// export * from "./components/widgets/Author/Author/Author";
+export {default as Author} from "./components/widgets/Author/Author/Author.astro";
 // export * from "./components/widgets/Story/StoryRelatedContent/StoryRelatedContent";
 // export * from "./pages/HatAdmin/HatAdmin"
