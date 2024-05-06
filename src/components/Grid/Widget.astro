@@ -5,11 +5,6 @@ const {widgetConfig, context} = Astro.props;
 import React from "react";
 import _ from "lodash";
 import {AbstractWidget, AbstractWidgetConfig, AppContext, WidgetParams} from "../../types/types";
-import {
-    WidgetHelper_getWidgetCssClasses,
-    WidgetHelper_renderEmptyComponent,
-    WidgetHelper_shouldHideWidget
-} from "../../helpers/WidgetHelper";
 
 interface GridWidgetParams {
     context: AppContext;

@@ -20,7 +20,7 @@ const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'n
 const headerUrl = widgetConfig.labelLink;
 ---
 
-{toRender ||
+{toRender ? <div set:html={toRender}/> :
 <div className={['Header'].join(' ')}>
 
     <RingLink href={headerUrl}>

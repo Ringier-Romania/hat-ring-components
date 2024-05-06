@@ -29,7 +29,7 @@ const colNumber = Math.floor(12 / columnsCount);
 const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
 const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
 ---
-{toRender ||
+{toRender ? <div set:html={toRender}/> :
     <div className={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
         {elementsToRender.map((edge, itemIndex) => {
             if (widgetConfig.count && itemIndex >= widgetConfig.count) {

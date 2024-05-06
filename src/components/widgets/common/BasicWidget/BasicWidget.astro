@@ -1,6 +1,5 @@
 ---
 const {context, widgetConfig} = Astro.props;
-import React from "react";
 import {BasicWidgetAdditionalOptions, BasicWidgetParams, BasicWidgetResponse, BasicWidgetResponseNode} from "./types";
 import {gql} from "graphql-tag";
 import * as GeneralParts from './generalParts';
@@ -19,9 +18,34 @@ if (!widgetConfig) {
     toRender =  WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
-    toRender = (WidgetHelper_renderEmptyWidget(widgetConfig));
+    toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 }
+const allGeneralParts = GeneralParts;
+let response = null;
+if(!toRender) {
+    let queryFragment = '';
 
+    const response = widgetConfig.section_name !== ''
+        ? await getData(queryFragment) as BasicWidgetResponse
+        : {} as BasicWidgetResponse;
+
+    let edges: Array<any> = [];
+
+    if (response?.data?.section?.items?.edges) {
+        edges = [...response?.data?.section?.items?.edges]
+    } else if (response?.data?.sectionGroup?.sections && response.data.sectionGroup.sections[0].items?.edges) {
+        edges = [...response.data.sectionGroup.sections[0].items?.edges]
+    }
+
+    if (edges.length > 0) {
+        edges = edges.slice(Number(widgetConfig.offset));
+    }
+
+    const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
+    if (hideWhenNoItems && _.get(edges, 'length', 0) === 0) {
+        toRender = (WidgetHelper_renderEmptyWidget(widgetConfig));
+    }
+}
 async function getData(queryNodeFragment) {
     let dynamicVariablesTypes = {}
     let dynamicVariables = {}
@@ -111,35 +135,12 @@ async function getData(queryNodeFragment) {
     return await WebsiteApiProvider.call(query, variables);
 }
 
-const allGeneralParts = GeneralParts;
 
-let queryFragment = '';
-
-const response = widgetConfig.section_name !== ''
-    ? await getData(queryFragment) as BasicWidgetResponse
-    : {} as BasicWidgetResponse;
-
-let edges: Array<any> = [];
-
-if (response?.data?.section?.items?.edges) {
-    edges = [...response?.data?.section?.items?.edges]
-} else if (response?.data?.sectionGroup?.sections && response.data.sectionGroup.sections[0].items?.edges) {
-    edges = [...response.data.sectionGroup.sections[0].items?.edges]
-}
-
-if (edges.length > 0) {
-    edges = edges.slice(Number(widgetConfig.offset));
-}
-
-const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
-if (hideWhenNoItems && _.get(edges, 'length', 0) === 0) {
-    toRender = (WidgetHelper_renderEmptyWidget(widgetConfig));
-}
 
 let cssModules = styles.BasicWidget;
 ---
 
-{toRender ||
+{toRender ? <div set:html={toRender}/> :
 <div className={WidgetHelper_getWidgetCssClasses('BasicWidget', widgetConfig, context, [cssModules])}>
     {widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];

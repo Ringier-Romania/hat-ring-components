@@ -9,6 +9,7 @@ import {BasicWidgetConfig} from "../components/widgets/common/BasicWidget/types"
 import {GenericListWidgetConfig} from "../components/widgets/Lists/GenericList/types";
 
 export function WidgetHelper_shouldHideWidget(widgetConfig, context) {
+
     if (typeof context.hatControllerParams.isMobile === 'boolean'
         && typeof widgetConfig.platformDesktop === 'boolean'
         && typeof widgetConfig.platformMobile === 'boolean'
@@ -26,10 +27,7 @@ export function WidgetHelper_renderEmptyWidget(widgetConfig, text = '') {
 }
 
 export function WidgetHelper_renderEmptyComponent(componentClassName, text = '') {
-    // @TODO
-    return  null;
-    return (<div className={componentClassName} style={{display: 'none'}}
-                 dangerouslySetInnerHTML={{__html: text && `<!-- ${text} -->`}}/>);
+    return `<div class="${componentClassName}" style="display: none">${text}</div>`;
 }
 
 export function WidgetHelper_getWidgetCssClasses(componentName: string, widgetConfig: AbstractWidgetConfig, context: AppContext, additionalCssClasses: Array<string> = []): string {
