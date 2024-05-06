@@ -43,9 +43,10 @@ export function GenericListMetaTags({
     const nextUrl = new URL(UtilsHelper_getDomain() + currentUrlPath);
     nextUrl.searchParams.set('page', `${currentPage + 1}`);
 
+    //@TODO put into <head>
     return <>
-        {currentPage != 1 && <link rel="prev" href={prevUrl.toString()}></link>}
-        {currentPage < pages && <link rel="next" href={nextUrl.toString()}></link>}
+        {currentPage != 1 && <link slot={'head'} rel="prev" href={prevUrl.toString()}></link>}
+        {currentPage < pages && <link slot={'head'} rel="next" href={nextUrl.toString()}></link>}
     </>
 }
 

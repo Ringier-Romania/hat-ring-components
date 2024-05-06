@@ -1,5 +1,7 @@
+---
+const {widgetConfig, context} = Astro.props;
 import React from 'react';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {StoryAuthorsParams, StoryAuthorsResponse, StoryAuthorsShowOptions} from "./types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
@@ -25,11 +27,9 @@ export const authorGqlFragment = `publicationPoint {
                             url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}})
                         }`;
 
-export async function StoryAuthors({widgetConfig, context}: StoryAuthorsParams) {
+const descriptionFragment = widgetConfig.showOptions?.includes(StoryAuthorsShowOptions.Description) ? `description { ${StoryHelper_getGqlContentFragment()} }` : '';
 
-    const descriptionFragment = widgetConfig.showOptions?.includes(StoryAuthorsShowOptions.Description) ? `description { ${StoryHelper_getGqlContentFragment()} }` : '';
-
-    const query = gql`
+const query = gql`
         query($storyId: UUID, $imageWidth:Int!, $imageHeight:Int!){
             story(id:$storyId){
                 authors {
@@ -42,29 +42,34 @@ export async function StoryAuthors({widgetConfig, context}: StoryAuthorsParams) 
         }
     `;
 
-    const imageDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, context);
+const imageDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, context);
 
-    const variables = {
-        storyId: context.id,
-        imageWidth: imageDimensions.width,
-        imageHeight: imageDimensions.height,
-    };
+const variables = {
+    storyId: context.id,
+    imageWidth: imageDimensions.width,
+    imageHeight: imageDimensions.height,
+};
 
 
-    let response = widgetConfig?.response;
-    if (!response) {
-        response = await WebsiteApiProvider.call(query, variables) as StoryAuthorsResponse;
-    }
-
-    const authors: Author[] = _.get(response, 'data.story.authors', []).map(author => author.author);
-
-    let cssModules = styles.StoryAuthors;
-    return <div className={WidgetHelper_getWidgetCssClasses('StoryAuthors', widgetConfig, context,[cssModules])}>
-        {authors.map(author => {
-            {/* @ts-expect-error Server Component */}
-            return <StoryAuthor author={author} context={context} widgetConfig={widgetConfig}/>
-        })}
-
-    </div>
+let response = widgetConfig?.response;
+if (!response) {
+    response = await WebsiteApiProvider.call(query, variables) as StoryAuthorsResponse;
 }
+
+
+const authors: Author[] = _.get(response, 'data.story.authors', []).map(author => author.author);
+
+let cssModules = styles.StoryAuthors;
+
+---
+
+
+<div className={WidgetHelper_getWidgetCssClasses('StoryAuthors', widgetConfig, context, [cssModules])}>
+    {authors.map(author => {
+        return (
+            <StoryAuthor author={author} context={context} widgetConfig={widgetConfig}/>
+        );
+    })}
+
+</div>
 

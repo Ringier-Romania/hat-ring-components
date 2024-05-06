@@ -13,12 +13,13 @@ import {
     WidgetHelper_shouldHideWidget
 } from "../../../../helpers/WidgetHelper";
 import * as ItemParts from "./itemParts";
+let toRender: boolean | JSX.Element = false;
 
 if (!widgetConfig) {
-    return WidgetHelper_renderEmptyWidget(widgetConfig);
+    toRender =  WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
-    return (WidgetHelper_renderEmptyWidget(widgetConfig));
+    toRender = (WidgetHelper_renderEmptyWidget(widgetConfig));
 }
 
 async function getData(queryNodeFragment) {
@@ -132,13 +133,13 @@ if (edges.length > 0) {
 
 const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
 if (hideWhenNoItems && _.get(edges, 'length', 0) === 0) {
-    return (WidgetHelper_renderEmptyWidget(widgetConfig));
+    toRender = (WidgetHelper_renderEmptyWidget(widgetConfig));
 }
 
 let cssModules = styles.BasicWidget;
 ---
 
-
+{toRender ||
 <div className={WidgetHelper_getWidgetCssClasses('BasicWidget', widgetConfig, context, [cssModules])}>
     {widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
@@ -154,3 +155,4 @@ let cssModules = styles.BasicWidget;
         )
     })}
 </div>
+}

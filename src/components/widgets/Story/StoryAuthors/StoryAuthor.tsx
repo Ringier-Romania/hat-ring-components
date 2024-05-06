@@ -2,12 +2,12 @@ import {Author} from '@ringpublishing/graphql-api-client/lib/types/websites-api'
 import React from 'react';
 import {AppContext} from "../../../../types/types";
 import {StoryAuthorsWidgetConfig} from "./types";
-import * as _ from "lodash";
+import _ from "lodash";
 import {WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper";
 import * as Parts from "../StoryAuthors/parts";
 
 
-export async function StoryAuthor({author, context, widgetConfig}: {
+export function StoryAuthor({author, context, widgetConfig}: {
     author: Author,
     context: AppContext,
     widgetConfig: StoryAuthorsWidgetConfig
