@@ -1,3 +1,5 @@
+---
+const {context, widgetConfig, data} = Astro.props;
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
@@ -7,26 +9,15 @@ import gql from "graphql-tag";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
 
-export default function ModificationTime(
-    {context, widgetConfig, data}:
-        {
-            context: AppContext,
-            widgetConfig: GenericListWidgetConfig,
-            data: GenericListResponseNode,
-        }) {
-
-    if (!data.date?.modificationTime) {
-        return WidgetHelper_renderEmptyComponent('ModificationTime');
-    }
-
-    return (
-        <div className={['ModificationTime'].join(' ')}>
-            {data.date.modificationTime}
-        </div>
-    )
+let toRender: boolean | JSX.Element = false;
+if (!data?.date?.creationTime) {
+    toRender = WidgetHelper_renderEmptyComponent('ModificationTime');
 }
 
-ModificationTime.getFragment = () => {
+const displayDate = await DateHelper_convertDate(context, data?.date?.modificationTime);
+
+
+export const getFragment = () => {
     return {
         variables: {},
         query: gql`fragment ModificationTimeFragment on Story {
@@ -36,4 +27,14 @@ ModificationTime.getFragment = () => {
         }`
     }
 }
+---
+
+{toRender ||
+<div className={['ModificationTime'].join(' ')}>
+    {displayDate}
+</div>}
+
+
+
+
 

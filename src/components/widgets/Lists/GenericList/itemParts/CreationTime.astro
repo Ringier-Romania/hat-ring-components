@@ -1,3 +1,5 @@
+---
+const {context, widgetConfig, data} = Astro.props;
 import React from 'react';
 import {AppContext} from "../../../../../types/types";
 import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
@@ -7,26 +9,15 @@ import gql from "graphql-tag";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
 
-export default function CreationTime(
-    {context, widgetConfig, data}:
-        {
-            context: AppContext,
-            widgetConfig: GenericListWidgetConfig,
-            data: GenericListResponseNode,
-        }) {
-
-    if (!data?.date?.creationTime) {
-        return WidgetHelper_renderEmptyComponent('CreationTime');
-    }
-//@TODO dayjs similarly oto basicWidget
-    return (
-        <div className={['CreationTime'].join(' ')}>
-            {data.date.creationTime}
-        </div>
-    )
+let toRender: boolean | JSX.Element = false;
+if (!data?.date?.creationTime) {
+    toRender = WidgetHelper_renderEmptyComponent('CreationTime');
 }
 
-CreationTime.getFragment = () => {
+const displayDate = await DateHelper_convertDate(context, data?.date?.creationTime);
+
+
+export const getFragment = () => {
     return {
         variables: {},
         query: gql`fragment CreationTimeFragment on Story {
@@ -36,4 +27,14 @@ CreationTime.getFragment = () => {
         }`
     }
 }
+---
+
+{toRender ||
+<div className={['CreationTime'].join(' ')}>
+    {displayDate}
+</div>}
+
+
+
+
 

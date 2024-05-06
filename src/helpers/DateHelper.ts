@@ -33,7 +33,7 @@ export async function DateHelper_convertDate(context: AppContext, date: string, 
         return dateJsObj;
     }
 
-    console.log(dateJsObj);
+
     return dateJsObj.format('DD-MM-YYYY, HH:MM:ss');
 
 }
