@@ -16,7 +16,7 @@
         // widgetConfig.customWidth
         @for $i from 1 through 12 {
           &.gridWidth#{$i} {
-            width: $i / 12 * 100%;
+            width: calc($i / 12) * 100%;
           }
         }
 
