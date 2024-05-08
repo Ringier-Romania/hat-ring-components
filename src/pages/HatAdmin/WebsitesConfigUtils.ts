@@ -23,7 +23,6 @@ export async function createConfig(config, templateName, version) {
             }
         }
     `;
-
     const response = await WebsiteApiProvider.call(query, variables);
     return response;
 }

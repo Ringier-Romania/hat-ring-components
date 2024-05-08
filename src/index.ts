@@ -37,4 +37,4 @@ export * from "./renderlessComponents/seo/RSS/RSS";
 export {default as StoryAuthors} from "./components/widgets/Story/StoryAuthors/StoryAuthors.astro";
 export {default as Author} from "./components/widgets/Author/Author/Author.astro";
 export {default as StoryRelatedContent} from "./components/widgets/Story/StoryRelatedContent/StoryRelatedContent.astro";
-// export * from "./pages/HatAdmin/HatAdmin"
+export {default as HatAdmin}  from "./pages/HatAdmin/HatAdmin.astro"

@@ -1,0 +1,43 @@
+---
+const {formData} = Astro.props;
+import {createVersionHandler} from "./actions";
+
+let errors = [];
+let version = '';
+let message = '';
+if (Astro.request.method === "POST") {
+    try {
+        const action = formData.get("action");
+        if(action === 'create') {
+            const res = await createVersionHandler(formData);
+            errors = res.errors;
+            message = res.status;
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            message = error.message;
+        }
+    }
+}
+
+---
+
+
+<form method="post">
+    <fieldset>
+        <legend>Create Version of configuration</legend>
+
+        <input type="text" name="create_version" required placeholder={'version'} value={version}/>
+
+        <button type="submit" name="action" value="create">Create</button>
+
+        <p className="status" role="status">
+            {message}
+        </p>
+        <p className="error">
+            {errors.map((error) => {
+                return <span>{error.message}</span>
+            })}
+        </p>
+    </fieldset>
+</form>

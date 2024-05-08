@@ -11,7 +11,7 @@ export function UtilsHelper_getValueIfExists(value, defaultValue) {
 }
 
 export function UtilsHelper_isDevelopmentMode() {
-    return process.env.NODE_ENV === 'development';
+    return import.meta.env.MODE === 'development';
 }
 
 export function UtilsHelper_isMobile(context) {

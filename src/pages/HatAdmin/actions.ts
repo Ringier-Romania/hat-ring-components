@@ -1,16 +1,12 @@
-'use server'
-
 import _ from "lodash";
 import {createConfig, updateConfig} from "./WebsitesConfigUtils";
 import {generateConfig} from "./generateConfig";
 
 const templateName = process.env.CONFIGURATION_TEMPLATE_NAME;
 
-export async function createVersionHandler(state, formData: FormData,) {
-    'use server'
-
+export async function createVersionHandler(formData: FormData): Promise<{ status: string, errors: any[] }> {
     const config = await generateConfig();
-    const version = formData.get('version');
+    const version = formData.get('create_version');
 
     const res = await createConfig(config, templateName, version);
     const status = _.get(res, 'data.createConfigurationTemplateVersion.status');
@@ -19,11 +15,9 @@ export async function createVersionHandler(state, formData: FormData,) {
     return {status, errors};
 }
 
-export async function updateVersionHandler(state, formData: FormData,) {
-    'use server'
-
+export async function updateVersionHandler(formData: FormData): Promise<{ status: string, errors: any[] }> {
     const config = await generateConfig();
-    const version = formData.get('version');
+    const version = formData.get('update_version');
 
     const res = await updateConfig(config, templateName, version);
     const status = _.get(res, 'data.updateConfigurationTemplateVersion.status');

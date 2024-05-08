@@ -1,0 +1,44 @@
+---
+const {formData} = Astro.props;
+import {updateVersionHandler} from "./actions";
+
+let errors = [];
+let version = '';
+var message = '';
+if (Astro.request.method === "POST") {
+    try {
+        const action = formData.get("action");
+        if(action === 'update') {
+            const res = await updateVersionHandler(formData);
+            errors = res.errors;
+            message = res.status;
+        }
+
+    } catch (error) {
+        if (error instanceof Error) {
+            errors.push(error.message);
+        }
+    }
+}
+
+---
+
+
+<form method="post">
+    <fieldset>
+        <legend>Update Version of configuration</legend>
+
+        <input type="text" name="update_version" required placeholder={'version'} value={version}/>
+
+        <button type="submit" name="action" value="update">Update</button>
+
+        <p className="status" role="status">
+            {message}
+        </p>
+        <p className="error">
+            {errors.map((error) => {
+                return <span>{error.message}</span>
+            })}
+        </p>
+    </fieldset>
+</form>

@@ -1,0 +1,42 @@
+---
+import CreateVersionForm from "./CreateVersionForm.astro";
+import UpdateVersionForm from "./UpdateVersionForm.astro";
+
+import {UtilsHelper_isDevelopmentMode} from "../../helpers/UtilsHelper";
+// import styles from "../../../styles/pages/HatAdmin.module.scss";
+
+import "../../../styles/pages/HatAdmin.scss";
+
+let toRender: boolean | JSX.Element | string = false;
+if (!UtilsHelper_isDevelopmentMode()) {
+    toRender = '<div>Not available in production mode</div>'
+}
+
+const templateName = process.env.CONFIGURATION_TEMPLATE_NAME;
+
+if (!templateName) {
+    toRender = `no CONFIGURATION_TEMPLATE_NAME env set, update hat cli and setup`;
+}
+
+let formData = null;
+if (!toRender && Astro.request.method === "POST") {
+    formData = await Astro.request.formData();
+}
+---
+
+{toRender ? <div set:html={toRender}/> :
+    <div className={[].join(' ')}>
+        <div className={'container'}>
+            <h1>HAT Admin</h1>
+            <section>
+                <h2>Websites Manager configuration management</h2>
+                <div className={'col'}>
+                    <CreateVersionForm formData={formData}/>
+                </div>
+                <div className={'col'}>
+                    <UpdateVersionForm formData={formData}/>
+                </div>
+            </section>
+        </div>
+    </div>
+    }
