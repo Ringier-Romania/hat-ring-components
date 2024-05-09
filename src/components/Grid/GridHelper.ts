@@ -1,10 +1,11 @@
-import {UtilsHelper_convertToInt} from "../../helpers/UtilsHelper";
-
+function convertToInt(input: string | number) {
+    return typeof input === "number" ? input : parseInt(input);
+}
 export function GridHelper_generateGridConfig(configKey, title, containerCount = 2): any {
 
     let indexes = Array.from({length: containerCount}, (value, index) => index);
     let sizes = Array.from({length: 12}, (value, index) => index + 1);
-    let keys = Array.from({length: containerCount}, (value, index) => configKey +  (UtilsHelper_convertToInt(index) + 1));
+    let keys = Array.from({length: containerCount}, (value, index) => configKey +  (convertToInt(index) + 1));
     const fields = [
         {
             name: 'container_html_tag',
@@ -281,11 +282,11 @@ export function GridHelper_generateGridConfig(configKey, title, containerCount =
 
     let groups = {};
     indexes.forEach((key, index) => {
-        groups['group' + (UtilsHelper_convertToInt(key) + 1)] = {
+        groups['group' + (convertToInt(key) + 1)] = {
             "type": "group",
-            "name": "Container " + (UtilsHelper_convertToInt(index) + 1),
+            "name": "Container " + (convertToInt(index) + 1),
             "fields": fields.map((field) => {
-                return configKey + (UtilsHelper_convertToInt(index) + 1) + '.' + field.name
+                return configKey + (convertToInt(index) + 1) + '.' + field.name
             })
         }
     });
@@ -297,7 +298,7 @@ export function GridHelper_generateGridConfig(configKey, title, containerCount =
         defaultParamsObj[field.name] = field.defaultParams;
     })
     indexes.forEach((key, index) => {
-        defaultParams[configKey + (UtilsHelper_convertToInt(key) + 1)] = defaultParamsObj
+        defaultParams[configKey + (convertToInt(key) + 1)] = defaultParamsObj
     });
 
 
@@ -307,7 +308,7 @@ export function GridHelper_generateGridConfig(configKey, title, containerCount =
         paramsDescriptionObj[field.name] = field.paramsDescription;
     })
     indexes.forEach((key, index) => {
-        paramsDescription[configKey + (UtilsHelper_convertToInt(key) + 1)] = paramsDescriptionObj
+        paramsDescription[configKey + (convertToInt(key) + 1)] = paramsDescriptionObj
     });
 
     let configObj = {
