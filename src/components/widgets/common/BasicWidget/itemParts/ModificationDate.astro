@@ -32,7 +32,7 @@ export const getFragment = () => {
     }
 }
 ---
-{toRender ? <div set:html={toRender}/> :
+{toRender ? <Fragment set:html={toRender}/> :
     <div className={['ModificationDate'].join(' ')}>
         <time dateTime={dateFromData}>
             {displayDate}

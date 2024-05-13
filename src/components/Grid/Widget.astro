@@ -1,8 +1,8 @@
 ---
+import {WidgetHelper_renderEmptyComponent, WidgetHelper_shouldHideWidget} from "../../helpers/WidgetHelper";
 const {widgetConfig, context} = Astro.props;
 
 
-import React from "react";
 import _ from "lodash";
 import {AbstractWidget, AbstractWidgetConfig, AppContext, WidgetParams} from "../../types/types";
 
@@ -10,12 +10,17 @@ interface GridWidgetParams {
     context: AppContext;
     widgetConfig: AbstractWidgetConfig,
 };
+let toRender: boolean | JSX.Element = false;
 const availableWidgets = context.customData.widgets;
 const widgetName = _.upperFirst(widgetConfig.widgetType)
 const Component = availableWidgets[widgetName] as AbstractWidget;
 
 
 const cssClasses: Array<string> = ['gridWidget']
+
+if(WidgetHelper_shouldHideWidget(widgetConfig, context)) {
+    toRender =  WidgetHelper_renderEmptyComponent(`gridWidget gridWidgetType${_.upperFirst(widgetConfig.widgetType)}`);
+}
 
 if (widgetConfig.widgetType) {
     cssClasses.push(`gridWidgetType${_.upperFirst(widgetConfig.widgetType)}`);
@@ -30,7 +35,8 @@ if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
 }
 ---
 
-<div className={cssClasses.join(' ')}>
-    {Component && <Component widgetConfig={widgetConfig} context={context}/>}
-</div>
-
+{toRender ? <Fragment set:html={toRender}/> :
+    <div className={cssClasses.join(' ')}>
+        {Component && <Component widgetConfig={widgetConfig} context={context}/>}
+    </div>
+    }

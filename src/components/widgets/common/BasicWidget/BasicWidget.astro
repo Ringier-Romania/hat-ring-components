@@ -140,7 +140,7 @@ async function getData(queryNodeFragment) {
 let cssModules = styles.BasicWidget;
 ---
 
-{toRender ? <div set:html={toRender}/> :
+{toRender ? <Fragment set:html={toRender}/> :
 <div className={WidgetHelper_getWidgetCssClasses('BasicWidget', widgetConfig, context, [cssModules])}>
     {widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];

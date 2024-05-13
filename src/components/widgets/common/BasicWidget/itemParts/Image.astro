@@ -70,7 +70,7 @@ const ringImageProps = toRender ? null : {
 };
 ---
 
-{toRender ? <div set:html={toRender}/> :
+{toRender ? <Fragment set:html={toRender}/> :
 <div className={['Image', isBig ? 'bigImage' : ''].join(' ')}>
     <RingImage {...ringImageProps}/>
 </div>
