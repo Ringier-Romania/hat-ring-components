@@ -2,8 +2,8 @@
 import _ from 'lodash';
 import {AppContext, SiteContentType} from "../types/types";
 
-export function UtilsHelper_convertToInt(input: string | number) {
-    return typeof input === "number" ? input : parseInt(input);
+export function UtilsHelper_convertToInt(input: string | number | undefined) {
+    return input ? typeof input === "number" ? input : parseInt(input) : 0;
 }
 
 export function UtilsHelper_getValueIfExists(value, defaultValue) {
