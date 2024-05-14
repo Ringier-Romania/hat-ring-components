@@ -14,7 +14,7 @@ export default function Lead(
         }) {
 
     if (!data.lead) {
-        return WidgetHelper_renderEmptyComponent('Lead');
+        return WidgetHelper_renderEmptyComponent('Lead', '',true);
     }
 
     return (

@@ -26,8 +26,9 @@ export function WidgetHelper_renderEmptyWidget(widgetConfig, text = '') {
     return (WidgetHelper_renderEmptyComponent(_.upperFirst(widgetConfig.widgetType), text));
 }
 
-export function WidgetHelper_renderEmptyComponent(componentClassName, text = '') {
-    return `<div class="${componentClassName}" style="display: none">${text}</div>`;
+export function WidgetHelper_renderEmptyComponent(componentClassName, text = '', isReact= false) {
+    const str = `<div class="${componentClassName}" style="display: none">${text}</div>`;
+    return isReact ? <div className={componentClassName} style={{display: 'none'}}>{text}</div> : str;
 }
 
 export function WidgetHelper_getWidgetCssClasses(componentName: string, widgetConfig: AbstractWidgetConfig, context: AppContext, additionalCssClasses: Array<string> = []): string {
