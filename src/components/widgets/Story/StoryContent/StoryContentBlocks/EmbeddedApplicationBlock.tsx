@@ -1,7 +1,4 @@
-'use client';
-
 import React, {useEffect} from "react";
-import Script from "next/script";
 import {WidgetParams} from "../../../../../types/types";
 
 export interface EmbeddedApplicationBlockParams extends WidgetParams {
@@ -23,7 +20,7 @@ export default function EmbeddedApplicationBlock({blockData, context}: EmbeddedA
     },[]);
 
     return <div className="EmbeddedApplicationBlock">
-        <Script id="pulseembed" src="https://pulsembed.eu/pulsembed.js" strategy="lazyOnload"/>
+        <script id="pulseembed" src="https://pulsembed.eu/pulsembed.js"/>
         <div dangerouslySetInnerHTML={{ __html: blockData.embed.html }}/>
     </div>
 }
