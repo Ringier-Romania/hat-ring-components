@@ -5,6 +5,7 @@ import {AppContext} from "../../../types/types";
 export async function SeoMetaTwitter(context: AppContext) {
     return {
         twitter: {
+            card: 'summary',
             title: await SeoHelper_currentTitle(context, 'twitter-title'),
             description: await SeoHelper_currentDescription(context, 'twitter-description'),
         }

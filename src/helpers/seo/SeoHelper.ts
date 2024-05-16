@@ -19,9 +19,7 @@ import {
 import _ from "lodash";
 import {SiteContentType} from "../../types/types";
 import {gql} from "graphql-tag";
-import {authorGqlFragment} from "../../components/widgets/Story/StoryAuthors/StoryAuthors";
 import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
-import {AuthorResponse} from "../../components/widgets/Author/Author/types";
 
 export async function SeoHelper_currentTitle(context, place: string) {
     const seoTitlesSettings = await ConfigHelper_getSeoTitlesAndDescriptionConfig(context);

@@ -53,7 +53,8 @@ export async function SeoMetaRobots(context: AppContext) {
     // }
 
     return {
-        robots
+        nofollow: !robots.follow,
+        noindex: !robots.index,
     };
 }
 

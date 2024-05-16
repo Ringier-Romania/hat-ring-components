@@ -17,9 +17,10 @@ type StoryDataResponse = {
         }
     }
 }
+
 export async function SeoMetaCustomMetaTags(context: AppContext) {
     const config = await ConfigHelper_getMetaDataConfig(context);
-    const other = {};
+    const other: any = [];
     const isHomePage = UtilsHelper_isHomepage(context);
     const actualPageType = context.siteContentType;
     const actualTopicUuid = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id', null);
@@ -28,7 +29,7 @@ export async function SeoMetaCustomMetaTags(context: AppContext) {
     const isDynamicTypeInCustomTags = config.customMetaTags.some((tagObject) => {
         return (_.split(_.get(tagObject, 'siteContentType', 'all'), ',') || []).some(type => !notDynamicTypes.includes(type));
     });
-    let topicsOfStory : Array<string> = [];
+    let topicsOfStory: Array<string> = [];
 
     if (actualPageType === SiteContentType.Story && isDynamicTypeInCustomTags) {
         const query = gql`
@@ -69,13 +70,15 @@ export async function SeoMetaCustomMetaTags(context: AppContext) {
             }
 
             if (isSupportedHomePage || isSupportedPageType || isSupportedTopicUuid || storyHasSupportedTaxonomy || isGlobal) {
-                other[tag] = value;
+                other.push({name: tag, content: value});
             }
         }
     });
 
     return {
-        other,
+        extend: {
+            meta: other
+        },
     };
 }
 

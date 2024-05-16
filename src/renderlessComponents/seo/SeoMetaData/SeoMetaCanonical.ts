@@ -47,8 +47,6 @@ export async function SeoMetaCanonical(context: AppContext) {
     }
 
     return {
-        alternates: {
-            canonical: canonicalToReturn,
-        }
+        canonical: canonicalToReturn,
     };
 }

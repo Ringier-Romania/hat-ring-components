@@ -18,7 +18,7 @@ export default function EmbeddedApplicationBlock({blockData, context}: EmbeddedA
             window.pulsembed();
         }
     },[]);
-
+//@TODO prevent multiple loadings
     return <div className="EmbeddedApplicationBlock">
         <script id="pulseembed" src="https://pulsembed.eu/pulsembed.js"/>
         <div dangerouslySetInnerHTML={{ __html: blockData.embed.html }}/>

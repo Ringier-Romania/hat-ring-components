@@ -7,7 +7,7 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 
 // Libraries
 import {gql} from "graphql-tag";
-import {get} from "lodash";
+import _ from "lodash";
 
 /**
  * Helper for handling titles according to the SEO requirements based on the placement of the usage
@@ -51,16 +51,16 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
         const storyResponse = await WebsiteApiProvider.call(storyQuery, {storyId: context.id,});
 
         return {
-            title: get(storyResponse, 'data.story.title', '') || '',
-            leads: get(storyResponse, 'data.story.leads', []) || [],
+            title: _.get(storyResponse, 'data.story.title', '') || '',
+            leads: _.get(storyResponse, 'data.story.leads', []) || [],
         }
     }
 
     async function prepareStoryTitle() {
         const storyTitles = await getStoryTitles();
-        const title = get(storyTitles, 'title', '');
-        const seoTitle = get(get(storyTitles, 'leads', []).find(lead => {return lead.role.name === 'seo'}), 'title'); // TODO: (1)
-        const socialMediaTitle = get(get(storyTitles, 'leads', []).find(lead => {return lead.role.name === 'social_media_teaser'}), 'title'); // TODO: (1)
+        const title = _.get(storyTitles, 'title', '');
+        const seoTitle = _.get(_.get(storyTitles, 'leads', []).find(lead => {return lead.role.name === 'seo'}), 'title'); // TODO: (1)
+        const socialMediaTitle = _.get(_.get(storyTitles, 'leads', []).find(lead => {return lead.role.name === 'social_media_teaser'}), 'title'); // TODO: (1)
 
         switch (place) {
             case 'default':
@@ -109,7 +109,7 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
             variant: context.websiteManagerVariant,
         });
 
-        return get(nodeResponse, 'data.site.data.node.category.data.name', '');
+        return _.get(nodeResponse, 'data.site.data.node.category.data.name', '');
     }
 
     async function prepareCategoryTitle() {

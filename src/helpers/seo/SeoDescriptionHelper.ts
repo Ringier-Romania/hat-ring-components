@@ -9,7 +9,7 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 // Libraries
 import {Story} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import {gql} from "graphql-tag";
-import {get} from "lodash";
+import _ from "lodash";
 
 /**
  * Helper for handling descriptions according to the SEO requirements based on the placement of the usage
@@ -63,16 +63,16 @@ export async function SeoDescriptionHelper_pageDescription(context, place: strin
 
         return {
             // @ts-ignore
-            description: get(StoryHelper_getLeadBlock(storyResponse.data.story as Story), 'text', '') || '',
-            leads: get(storyResponse, 'data.story.leads', []) || [],
+            description: _.get(StoryHelper_getLeadBlock(storyResponse.data.story as Story), 'text', '') || '',
+            leads: _.get(storyResponse, 'data.story.leads', []) || [],
         }
     }
 
     async function prepareStoryDescription() {
         const storyDescriptions = await getStoryDescriptions();
-        const description = get(storyDescriptions, 'description', '');
-        const seoDescription = get(get(storyDescriptions, 'leads', []).find(lead => {return lead.role.name === 'seo'}), 'text'); // TODO: (3)
-        const socialMediaDescription = get(get(storyDescriptions, 'leads', []).find(lead => {return lead.role.name === 'social_media_teaser'}), 'text'); // TODO: (3)
+        const description = _.get(storyDescriptions, 'description', '');
+        const seoDescription = _.get(_.get(storyDescriptions, 'leads', []).find(lead => {return lead.role.name === 'seo'}), 'text'); // TODO: (3)
+        const socialMediaDescription = _.get(_.get(storyDescriptions, 'leads', []).find(lead => {return lead.role.name === 'social_media_teaser'}), 'text'); // TODO: (3)
 
         switch (place) {
             case 'default':

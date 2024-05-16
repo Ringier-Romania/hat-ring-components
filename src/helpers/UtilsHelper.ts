@@ -30,7 +30,7 @@ export async function UtilsHelper_asyncSequentialForEach(array, callback) {
 }
 
 export async function UtilsHelper_asyncParallelForEach(arr, callback){
-    return await Promise.allSettled(arr.map(callback));
+    return await Promise.all(arr.map(callback));
 }
 
 export function UtilsHelper_isHomepage(context) {
