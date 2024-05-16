@@ -18,7 +18,7 @@ export default function Description(
     const descText = widgetConfig.description;
 
     if (!descText) {
-        return WidgetHelper_renderEmptyComponent('Description');
+        return WidgetHelper_renderEmptyComponent('Description', '', true);
     }
 
     return (

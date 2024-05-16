@@ -16,7 +16,7 @@ export default function Authors(
     const authorsObjs = data.authors?.map((name) => {return {name, image: {url: null, caption: null}}}) || data.originalContent?.authors?.map((obj) => obj.author);
 
     if (!authorsObjs || authorsObjs.length === 0) {
-        return WidgetHelper_renderEmptyComponent('Authors');
+        return WidgetHelper_renderEmptyComponent('Authors','', true);
     }
 
     return (

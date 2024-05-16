@@ -23,7 +23,7 @@ export function SingleImage(
     const urlLink = UtilsHelper_getValueIfExists(widgetConfig.linkUrl, false);
 
     if(!src) {
-        return WidgetHelper_renderEmptyComponent('SingleImage');
+        return WidgetHelper_renderEmptyComponent('SingleImage','',true);
     }
 
     const ringImageProps: RingImageProps = {

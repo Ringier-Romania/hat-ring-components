@@ -21,7 +21,7 @@ export function StoryAuthor({author, context, widgetConfig}: {
             const Component = Parts[_.upperFirst(showOption)];
             if (!Component) {
                 console.error(`No general show option name support ${showOption}`);
-                return WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet');
+                return WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet',true);
             }
             return <Component key={index} context={context} widgetConfig={widgetConfig} author={author}/>;
         })}

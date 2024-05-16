@@ -15,7 +15,7 @@ export default function Taxonomies(
         }) {
 
     if (!data?.topics) {
-        return WidgetHelper_renderEmptyComponent('Taxonomies');
+        return WidgetHelper_renderEmptyComponent('Taxonomies','',true);
     }
 
     return (

@@ -13,7 +13,7 @@ export default function Header(
     const headerText = widgetConfig.headerText;
 
     if (!headerText) {
-        return WidgetHelper_renderEmptyComponent('Header');
+        return WidgetHelper_renderEmptyComponent('Header','',true);
     }
 
     const HeaderTag = (widgetConfig.headerTag && widgetConfig.headerTag !== 'none' ? widgetConfig.headerTag : 'span' ) as keyof JSX.IntrinsicElements;

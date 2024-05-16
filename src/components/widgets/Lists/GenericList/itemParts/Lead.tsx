@@ -21,7 +21,7 @@ export default function Lead(
     const paragraphFound = StoryHelper_getLeadBlock(data as Story);
 
     if (!paragraphFound || !paragraphFound.text) {
-        return WidgetHelper_renderEmptyComponent('Lead');
+        return WidgetHelper_renderEmptyComponent('Lead','',true);
     }
 
     return (

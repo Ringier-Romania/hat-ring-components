@@ -14,7 +14,7 @@ export default function Title(
         }) {
 
     if (!data.title) {
-        return WidgetHelper_renderEmptyComponent('Title');
+        return WidgetHelper_renderEmptyComponent('Title','', true);
     }
 
     const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span' ) as keyof JSX.IntrinsicElements;

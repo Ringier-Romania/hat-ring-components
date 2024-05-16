@@ -49,7 +49,7 @@ nextUrl.searchParams.set('page', `${currentPage + 1}`);
 
 
 ---
-{toRender ||
+{toRender &&
 <head>
     {currentPage != 1 && <link slot={'head'} rel="prev" href={prevUrl.toString()}></link>}
     {currentPage < pages && <link slot={'head'} rel="next" href={nextUrl.toString()}></link>}

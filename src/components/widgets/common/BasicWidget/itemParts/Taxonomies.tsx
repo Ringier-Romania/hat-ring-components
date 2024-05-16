@@ -16,7 +16,7 @@ export default function Taxonomies(
     const topics = data.originalContent?.topics?.map((obj) => obj.topic) || [];
 
     if (!topics || topics.length === 0) {
-        return WidgetHelper_renderEmptyComponent('Taxonomies');
+        return WidgetHelper_renderEmptyComponent('Taxonomies','', true);
     }
 
     return (

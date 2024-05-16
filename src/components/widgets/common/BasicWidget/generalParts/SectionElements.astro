@@ -51,7 +51,7 @@ const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
 
                             if (!Component) {
                                 console.error(`No item part support ${showOption}`);
-                                return WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");
+                                return <Fragment set:html={WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet")}/>
                             }
 
                             return (

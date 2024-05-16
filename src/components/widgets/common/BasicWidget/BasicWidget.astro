@@ -145,7 +145,7 @@ let cssModules = styles.BasicWidget;
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component || !context) {
             console.error(`No general show option name support ${showOption}`);
-            return (WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet'));
+            return <Fragment set:html={WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet')}/>;
         }
 
         return (
