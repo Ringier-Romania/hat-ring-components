@@ -1,5 +1,5 @@
 ---
-const {context, widgetConfig} = Astro.props;
+const {context, widgetConfig, extendableAttributes} = Astro.props;
 import {BasicWidgetAdditionalOptions, BasicWidgetParams, BasicWidgetResponse, BasicWidgetResponseNode} from "./types";
 import {gql} from "graphql-tag";
 import * as GeneralParts from './generalParts';
@@ -15,14 +15,14 @@ import * as ItemParts from "./itemParts";
 let toRender: boolean | JSX.Element = false;
 
 if (!widgetConfig) {
-    toRender =  WidgetHelper_renderEmptyWidget(widgetConfig);
+    toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
     toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 }
-const allGeneralParts = GeneralParts;
+const allGeneralParts = (extendableAttributes ? extendableAttributes.generalParts : null) || GeneralParts;
 let response = null;
-if(!toRender) {
+if (!toRender) {
     let queryFragment = '';
 
     response = widgetConfig.section_name !== ''
@@ -52,8 +52,7 @@ async function getData(queryNodeFragment) {
     let dynamicFragmentsNames = '';
 
     const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
-        const allItemParts = ItemParts;
-
+        const allItemParts = (extendableAttributes ? extendableAttributes.itemParts : null) || ItemParts;
         const ItemPart = allItemParts[_.upperFirst(showOption)];
 
         if (ItemPart) {
@@ -139,19 +138,21 @@ async function getData(queryNodeFragment) {
 let cssModules = styles.BasicWidget;
 ---
 
-{toRender ? <Fragment set:html={toRender}/> :
+{toRender ?
+<Fragment set:html={toRender}/> :
 <div className={WidgetHelper_getWidgetCssClasses('BasicWidget', widgetConfig, context, [cssModules])}>
     {widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component || !context) {
             console.error(`No general show option name support ${showOption}`);
-            return <Fragment set:html={WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet')}/>;
+            return
+                    <Fragment set:html={WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet')}/>;
         }
 
         return (
                 <Component key={index} context={context} widgetConfig={widgetConfig} response={response}
-                           extendableAttributes={{}}/>
+                           extendableAttributes={extendableAttributes}/>
         )
     })}
 </div>
-}
+    }
