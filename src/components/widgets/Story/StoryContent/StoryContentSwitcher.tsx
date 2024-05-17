@@ -46,9 +46,6 @@ export function StoryContentSwitcher({
             return null;
         }
 
-        const clientContext = {...context};
-        clientContext.customData = {...context.customData}
-        clientContext.customData.widgets = [];
         const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
         let Block = BlocksTypes[blockType] ? BlocksTypes[blockType] : BlocksTypes['NotHandledBlock'];
         if (blockType === 'GroupBlock' && extendableAttributes?.customGroupBlocks && extendableAttributes?.customGroupBlocks[block.name]) {
@@ -56,7 +53,6 @@ export function StoryContentSwitcher({
             Block = extendableAttributes?.customGroupBlocks[block.name];
 
         }
-
         return Block ? <Block blockData={block} widgetConfig={widgetConfig}
                               context={context}/> : null;
     });
