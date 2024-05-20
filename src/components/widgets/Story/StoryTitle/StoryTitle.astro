@@ -27,7 +27,7 @@ if (!response) {
 
 const title = _.get(response, 'data.story.title');
 ---
-<div className={'StoryTitle'}>
+<div className={WidgetHelper_getWidgetCssClasses('StoryTitle', widgetConfig, context)}>
     <h1>{title}</h1>
 </div>
 
