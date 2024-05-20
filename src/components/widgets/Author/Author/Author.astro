@@ -10,7 +10,7 @@ import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/Imag
 import styles from "../../../../../styles/widgets/Story/StoryAuthors.module.scss";
 import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
 import {StoryAuthorsShowOptions} from "../../Story/StoryAuthors/types";
-import {StoryAuthor} from "../../Story/StoryAuthors/StoryAuthor";
+import {default as StoryAuthor} from "../../Story/StoryAuthors/StoryAuthor.astro";
 import {authorGqlFragment} from "../../Story/StoryAuthors/StoryAuthors.astro";
 
 const descriptionFragment = widgetConfig.showOptions?.includes(StoryAuthorsShowOptions.Description) ? `description { ${StoryHelper_getGqlContentFragment()} }` : '';

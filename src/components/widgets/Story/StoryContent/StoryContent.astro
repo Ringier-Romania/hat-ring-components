@@ -3,7 +3,7 @@ const {context, widgetConfig} = Astro.props;
 import React from 'react';
 import _ from 'lodash';
 import {gql} from 'graphql-tag';
-import {StoryContentSwitcher} from "./StoryContentSwitcher";
+import {default as StoryContentSwitcher} from "./StoryContentSwitcher.astro";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryContentParams} from "./types";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";

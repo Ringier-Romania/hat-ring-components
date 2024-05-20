@@ -6,7 +6,7 @@ export { default as OrderedListBlock } from './OrderedListBlock';
 //@TODO optimize to have only one request for pulseembed
 export { default as EmbeddedApplicationBlock } from './EmbeddedApplicationBlock';
 export { default as TableBlock } from './TableBlock';
-export { default as GroupBlock } from './GroupBlock';
+export { default as GroupBlock } from './GroupBlock.astro';
 export { default as PreformattedBlock } from './PreformattedBlock';
 export { default as NotHandledBlock } from './NotHandledBlock';
-export { default as SlotBlock } from './SlotBlock';
+export { default as SlotBlock } from './SlotBlock.astro';

@@ -1,0 +1,17 @@
+---
+const {context, widgetConfig, author} = Astro.props as {
+    context: AppContext,
+    widgetConfig: StoryAuthorsWidgetConfig,
+    author: Author
+};
+import {AppContext} from "../../../../../types/types";
+import {StoryAuthorsWidgetConfig} from "../types";
+import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import {default as StoryContentSwitcher} from "../../StoryContent/StoryContentSwitcher.astro";
+import _ from "lodash";
+
+const content = _.get(author,'description.content.0.blocks',[]);
+---
+<div className={['Description'].join(' ')}>
+    <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context}/>
+</div>

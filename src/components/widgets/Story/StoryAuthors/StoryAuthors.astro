@@ -8,7 +8,7 @@ import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
 import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {StoryAuthor} from "./StoryAuthor";
+import {default as StoryAuthor} from "./StoryAuthor.astro";
 import styles from "../../../../../styles/widgets/Story/StoryAuthors.module.scss";
 import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
 
@@ -60,7 +60,6 @@ if (!response) {
 const authors: Author[] = _.get(response, 'data.story.authors', []).map(author => author.author);
 
 let cssModules = styles.StoryAuthors;
-const sum = (a, b) => a + b;
 ---
 
 
