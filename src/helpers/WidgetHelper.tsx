@@ -26,7 +26,7 @@ export function WidgetHelper_renderEmptyWidget(widgetConfig, text = '') {
     return (WidgetHelper_renderEmptyComponent(_.upperFirst(widgetConfig.widgetType), text));
 }
 
-export function WidgetHelper_renderEmptyComponent(componentClassName, text = '', isReact= false) {
+export function WidgetHelper_renderEmptyComponent(componentClassName: any, text: string = '', isReact: boolean = false) {
     const str = `<div class="${componentClassName}" style="display: none">${text}</div>`;
     return isReact ? <div className={componentClassName} style={{display: 'none'}}>{text}</div> : str;
 }
