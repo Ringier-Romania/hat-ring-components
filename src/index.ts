@@ -6,7 +6,7 @@ export {default as StoryContent} from "./components/widgets/Story/StoryContent/S
 export * from "./components/widgets/common/HtmlInsert";
 export {default as BasicWidget} from "./components/widgets/common/BasicWidget/BasicWidget.astro";
 export {default as ExternalApplication} from "./components/widgets/common/ExternalApplication.astro";
- // export * from "./components/widgets/Story/StoryLiveBlog/StoryLiveBlog";
+export  {default as StoryLiveBlog} from "./components/widgets/Story/StoryLiveBlog/StoryLiveBlog.astro";
 export * from "./components/common/RingImage";
  export * from "./components/common/RingLink/RingLink";
 export {default as GenericList} from "./components/widgets/Lists/GenericList/GenericList.astro";

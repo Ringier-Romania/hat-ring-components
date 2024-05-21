@@ -1,10 +1,10 @@
-
-import React from 'react';
+---
+const {widgetConfig, context} = Astro.props as StoryLiveBlogParams;
 import _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "../../../../types/types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {ExternalApplication} from "../../common/ExternalApplication";
+import {default as ExternalApplication} from "../../common/ExternalApplication.astro";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 interface StoryLiveBlogParams extends WidgetParams {
@@ -18,8 +18,9 @@ interface StoryLiveBlogParamsConfig extends AbstractWidgetConfig {
     liveBlogLanguage: string
 }
 
-export async function StoryLiveBlog({widgetConfig, context}: StoryLiveBlogParams) {
-    const query = gql`
+let toRender: boolean | JSX.Element = false;
+
+const query = gql`
         query($storyId: UUID,$extType: String){
             story(id:$storyId){
                 extensions(type:$extType){
@@ -29,27 +30,33 @@ export async function StoryLiveBlog({widgetConfig, context}: StoryLiveBlogParams
         }
     `;
 
-    const variables = {
-        storyId: context.id,
-        extType: widgetConfig.extensionAppCodeName || 'liveblog',
-    };
+const variables = {
+    storyId: context.id,
+    extType: widgetConfig.extensionAppCodeName || 'liveblog',
+};
 
-    let liveblogUuid: boolean | string = false;
-    if (widgetConfig.liveBlogId) {
-        liveblogUuid = widgetConfig.liveBlogId;
-    } else {
-        const response = await WebsiteApiProvider.call(query, variables);
-        liveblogUuid = _.get(response, 'data.story.extensions[0].data.id', false);
-    }
+let liveblogUuid: boolean | string = false;
+if (widgetConfig.liveBlogId) {
+    liveblogUuid = widgetConfig.liveBlogId;
+} else {
+    const response = await WebsiteApiProvider.call(query, variables);
+    liveblogUuid = _.get(response, 'data.story.extensions[0].data.id', false);
+}
 
-    const liveBlogPlatformUrl = widgetConfig.liveBlogPlatformUrl || 'http://client.liveblog.dreamlab.pl';
+let liveBlogPlatformUrl = widgetConfig.liveBlogPlatformUrl || 'http://client.liveblog.dreamlab.pl';
 
-    if(!liveblogUuid){
-        return null;
-    }
-    let url = `${liveBlogPlatformUrl}/${liveblogUuid},${widgetConfig.liveBlogLanguage},${widgetConfig.liveBlogClientId},liveblog.html`;
+if (!liveblogUuid) {
+    toRender = null;
+}
+if(!liveBlogPlatformUrl.match('^http')){
+    liveBlogPlatformUrl = `http://${liveBlogPlatformUrl}`;
+}
+let url = `${liveBlogPlatformUrl}/${liveblogUuid},${widgetConfig.liveBlogLanguage},${widgetConfig.liveBlogClientId},liveblog.html`;
+---
+{toRender ?
+    <Fragment set:html={toRender}/> :
 
-    return <div className={WidgetHelper_getWidgetCssClasses('StoryLiveBlog', widgetConfig, context)}>
+    <div className={WidgetHelper_getWidgetCssClasses('StoryLiveBlog', widgetConfig, context)}>
         {/* @ts-expect-error Server Component */}
         <ExternalApplication widgetConfig={{controllerUrl: url, selector: '[name="block-html-head"]'}}
                              context={context}/>
@@ -57,5 +64,4 @@ export async function StoryLiveBlog({widgetConfig, context}: StoryLiveBlogParams
         <ExternalApplication widgetConfig={{controllerUrl: url, selector: '[name="block-body-section"]'}}
                              context={context}/>
     </div>
-}
-
+    }
