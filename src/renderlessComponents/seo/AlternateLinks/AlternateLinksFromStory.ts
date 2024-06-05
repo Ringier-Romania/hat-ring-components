@@ -9,6 +9,7 @@ import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 //Types
 import {AppContext} from "../../../types/types";
 import {AlternateLinksResponse} from "./types";
+import { AlternateLinksObject } from './AlternateLinks';
 
 /**
  * Alternate links from Story publication data/package
@@ -17,7 +18,7 @@ import {AlternateLinksResponse} from "./types";
  * @param alternateLinks
  * @constructor
  */
-export async function AlternateLinksFromStory(context: AppContext, seoConfig: object, alternateLinks: object = {}) {
+export async function AlternateLinksFromStory(context: AppContext, seoConfig: object, alternateLinks: Array<AlternateLinksObject> = []) {
     let xDefault: string | null = null;
     let alternateStories = [];
 
@@ -40,7 +41,7 @@ export async function AlternateLinksFromStory(context: AppContext, seoConfig: ob
     if (alternateStoriesLength > 0) {
         const supportedLanguages = (_.get(seoConfig, 'supportedLanguages', []) || []);
         const supportedLanguagesLength = supportedLanguages.length;
-        alternateLinks = {languages: {}};
+        alternateLinks = [];
 
         for (let i = 0; i < supportedLanguagesLength; i++) {
             const language = supportedLanguages[i]['Alternative role codename'];
@@ -49,7 +50,7 @@ export async function AlternateLinksFromStory(context: AppContext, seoConfig: ob
                 const linkRole = _.get(alternateStories[j], 'role.code');
 
                 if (alternateStories[j]['url'] && linkRole && linkRole === language) {
-                    alternateLinks["languages"][`${supportedLanguages[i]['Language code']}`] = alternateStories[j]['url'];
+                    alternateLinks.push({hrefLang: supportedLanguages[i]['Language code'], href: alternateStories[j]['url']})
 
                     if (supportedLanguages[i]['Default language'] === 'on') {
                         xDefault = alternateStories[j]['url'];
@@ -60,8 +61,9 @@ export async function AlternateLinksFromStory(context: AppContext, seoConfig: ob
     }
 
     if (xDefault) {
-        alternateLinks["languages"]['x-default'] = xDefault;
+        alternateLinks.push({hrefLang: 'x-default', href: xDefault});
     }
 
+    
     return alternateLinks;
 }

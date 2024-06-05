@@ -17,15 +17,21 @@ import {ConfigHelper_getSeoLanguagesConfig} from "../../../helpers/ConfigHelper"
  * @param context
  * @constructor
  */
+
+export type AlternateLinksObject = {
+    hrefLang: string,
+    href: string
+}
+
 export async function AlternateLinks(context: AppContext) {
     const seoConfig = await ConfigHelper_getSeoLanguagesConfig(context);
-    let alternateLinks: object = {};
+    let alternateLinks: Array<AlternateLinksObject> = [];
 
     if (context.siteContentType === "Story") {
         alternateLinks = await AlternateLinksFromStory(context, seoConfig, alternateLinks);
     } else {
         alternateLinks = await AlternateLinksFromNode(context, seoConfig, alternateLinks);
     }
-
+    
     return alternateLinks;
 }
