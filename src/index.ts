@@ -18,7 +18,7 @@ export {default as StoryDate} from "./components/widgets/Story/StoryDate/StoryDa
 export {default as TextReplacer} from "./components/common/TextReplacer.astro";
 export {default as TopicTitle} from "./components/widgets/Lists/TopicTitle/TopicTitle.astro";
 export * from "./components/widgets/common/SingleImage/SingleImage";
-// export * from "./components/widgets/analytics/Kropka/Kropka";
+export {default as Kropka} from "./components/widgets/analytics/Kropka/Kropka.astro";
 // export * from "./components/widgets/analytics/RingDataLayer/RingDataLayer";
 export * from "./renderlessComponents/seo/AlternateLinks/AlternateLinks";
  export * from "./helpers/UtilsHelper";

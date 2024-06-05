@@ -1,0 +1,30 @@
+---
+const {widgetConfig, context} = Astro.props as KropkaParams;
+import React from "react";
+import {KropkaParams} from "./types";
+import {UtilsHelper_isMobile} from "../../../../helpers/UtilsHelper";
+let dlApiObj: any = {
+    async: 1,
+    cookieInfo: '',
+    no_gemius: 1,
+    adsNoBanner: 1,
+    noDfp: 1,
+    mobile: `${UtilsHelper_isMobile(context)}`,
+    target: `${widgetConfig.target}`,
+    tid: `${widgetConfig.tid}`,
+    DV: `${widgetConfig.dv}`,
+    kropka: {
+        PU: context.id
+    }
+};
+---
+<script is:inline define:vars={{ dlApiObj }}>
+    if ("undefined" === typeof dlApi) {
+        window.dlApi = dlApiObj;
+    } else {
+        dlApi = Object.assign(dlApi, dlApiObj)
+    }
+</script>
+
+<script src="https://lib.onet.pl/s.csr/build/dlApi/dl.boot.min.js" async></script>
+
