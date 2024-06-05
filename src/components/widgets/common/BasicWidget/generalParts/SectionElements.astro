@@ -22,7 +22,7 @@ if (_.get(elementsToRender, 'length', 0) === 0) {
     toRender = WidgetHelper_renderEmptyComponent('SectionElements');
 }
 
-const allItemParts = extendableAttributes.itemParts || ItemParts;
+const allItemParts = extendableAttributes ? (extendableAttributes.itemParts || ItemParts) : ItemParts;
 const columnsCount = parseInt(widgetConfig.columns || '0');
 const bigElementsCount = Number(widgetConfig.countBig);
 const colNumber = Math.floor(12 / columnsCount);
