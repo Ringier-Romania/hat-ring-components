@@ -28,7 +28,7 @@ export default function ImageBlock({blockData, widgetConfig, context}: ImageBloc
         imageHeight = maxImageHeight;
     }
 
-    const img = <img src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight}
+    const img = <RingImage src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight}
                         />;
 
     return <div className={['ImageBlock', 'alignment-' + blockData.alignment].join(' ')}>
