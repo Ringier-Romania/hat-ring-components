@@ -23,21 +23,26 @@ export async function SeoMetaOpenGraph(context) {
 
     return {
         openGraph: {
-            title: await SeoHelper_currentTitle(context, 'og-title'),
-            description: await SeoHelper_currentDescription(context, 'og-description'),
-            url: await ConfigHelper_currentUrl(context),
-            siteName: await SeoHelper_currentSiteName(context),
-            locale: await SeoHelper_currentLocale(context),
-            images: [
-                {
-                    url: imageData && imageData.src !== undefined ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null,
-                    secure_url: imageData && imageData.src !== undefined && imageData.src.search('https://') ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null,
-                    width: imageData && imageData.src !== undefined ? imageData.width : defaultImageData !== null ? defaultImageData.width : null,
-                    height: imageData && imageData.src !== undefined ? imageData.height : defaultImageData !== null ? defaultImageData.height : null,
-                    caption: imageData ? imageData.caption : '',
-                    type: "image/png" // TODO: (1)
-                }
-            ]
+            basic: {
+                title: await SeoHelper_currentTitle(context, 'og-title'),
+                url: await ConfigHelper_currentUrl(context),
+                type: 'website',
+                image: imageData && imageData.src !== undefined ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null
+
+            },
+            optional: {
+                description: await SeoHelper_currentDescription(context, 'og-description'),
+                locale: await SeoHelper_currentLocale(context),
+                siteName: await SeoHelper_currentSiteName(context),
+            },
+            image: {
+                url: imageData && imageData.src !== undefined ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null,
+                secureUrl: imageData && imageData.src !== undefined && imageData.src.search('https://') ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null,
+                width: imageData && imageData.src !== undefined ? imageData.width : defaultImageData !== null ? defaultImageData.width : null,
+                height: imageData && imageData.src !== undefined ? imageData.height : defaultImageData !== null ? defaultImageData.height : null,
+                caption: imageData ? imageData.caption : '',
+                type: "image/png" // TODO: (1)
+            }
         }
     };
 }
