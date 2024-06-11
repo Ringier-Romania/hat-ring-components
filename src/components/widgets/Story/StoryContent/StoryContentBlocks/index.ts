@@ -1,4 +1,4 @@
-export { default as ImageBlock } from './ImageBlock';
+export { default as ImageBlock } from './ImageBlock.astro';
 export { default as ParagraphBlock } from './ParagraphBlock';
 export { default as HeadingBlock } from './HeadingBlock';
 export { default as UnorderedListBlock } from './UnorderedListBlock';

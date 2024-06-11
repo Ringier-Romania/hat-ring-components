@@ -12,6 +12,7 @@ export function AcceleratorImagesHelper_getUrl(src: string | any, width: number 
     // @ts-ignore
     const accImagesTransformationKey = import.meta.env.NEXT_PUBLIC_ACC_IMAGES_TRANSFORMATION_KEY! || process.env.NEXT_PUBLIC_ACC_IMAGES_TRANSFORMATION_KEY!;
 
+    var srcToReturn = src;
     width = Math.floor(width);
     height = Math.floor(height);
     if (accImagesEndpoint && accImagesTransformationKey) {
@@ -34,11 +35,11 @@ export function AcceleratorImagesHelper_getUrl(src: string | any, width: number 
                 image.imageFormat(format);
             }
 
-            src = image.getUrl();
+            srcToReturn = image.getUrl();
         } catch (e) {
             console.info('Unable to transform image ' + src);
         }
     }
 
-    return src;
+    return srcToReturn;
 }

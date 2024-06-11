@@ -1,0 +1,47 @@
+---
+const {blockData, widgetConfig, context} = Astro.props as ImageBlockParams;
+import React from "react";
+import {default as RingImage} from "../../../../common/RingImage.astro";
+import {RingLink} from "../../../../common/RingLink/RingLink";
+import {ImageBlockParams} from "../types";
+import {UtilsHelper_convertToInt, UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
+import {TransformType} from "../../../../../helpers/AcceleratorImagesHelper";
+const {title, alt, image, url, link} = blockData;
+let imageWidth = image.width;
+let imageHeight = image.height;
+
+let maxImageWidth = widgetConfig.standardImageWidth && UtilsHelper_convertToInt(widgetConfig.standardImageWidth);
+let maxImageHeight = widgetConfig.standardImageHeight && UtilsHelper_convertToInt(widgetConfig.standardImageHeight);
+
+if(UtilsHelper_isMobile(context)){
+    maxImageWidth = widgetConfig.mobileImageWidth && UtilsHelper_convertToInt(widgetConfig.mobileImageWidth);
+    maxImageHeight = widgetConfig.mobileImageHeight && UtilsHelper_convertToInt(widgetConfig.mobileImageHeight);
+}
+
+if (maxImageWidth && maxImageWidth < imageWidth) {
+    imageHeight = UtilsHelper_convertToInt(maxImageWidth * imageHeight / imageWidth);
+    imageWidth = maxImageWidth;
+}
+
+if (maxImageHeight && maxImageHeight < imageHeight) {
+    imageWidth = UtilsHelper_convertToInt(maxImageHeight * imageWidth / imageHeight);
+    imageHeight = maxImageHeight;
+}
+---
+
+
+<div className={['ImageBlock', 'alignment-' + blockData.alignment].join(' ')}>
+    {
+        link ?
+                <a href={link.url}>
+                    <RingImage src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight} transform={TransformType.ResizeCropAuto} />
+                </a> :
+                <RingImage src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight} transform={TransformType.ResizeCropAuto} />
+    }
+    <div className="imgMetaData">
+        {title && <span className="caption">{title}</span>}
+        {image.description && <span className="description">{image.description}</span>}
+        {/* TODO add translation */}
+        {image.sources?.length && <span className="copyright">{`${image.sources[0].source.name}`}</span>}
+    </div>
+</div>
