@@ -42,7 +42,7 @@ export function RingImage(props) {
 
     return <>
         <picture>
-            <img {...props}/>
+            <img {...props} className={['RingImage', styles.RingImage, props.className].join(' ')}/>
         </picture>
         {props.priority && <RingImagePreload src={src}/>}
     </>
