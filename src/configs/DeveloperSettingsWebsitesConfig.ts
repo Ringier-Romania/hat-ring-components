@@ -10,7 +10,8 @@ export let DeveloperSettingsWebsitesConfig
                     "fields": [
                         "devGeneral.textReplacers",
                         "devGeneral.globalCustomTeasers",
-                        "devGeneral.mainCategoryUuid"
+                        "devGeneral.mainCategoryUuid",
+                        "devGeneral.headWidgets",
                     ]
                 },
                 "dateFormat": {
@@ -38,7 +39,8 @@ export let DeveloperSettingsWebsitesConfig
         "devGeneral": {
             "textReplacers": [],
             "globalCustomTeasers": [],
-            "mainCategoryUuid": ""
+            "mainCategoryUuid": "",
+            "headWidgets": [],
         },
        "dateFormat": {
             "timeZone": "Europe/London",
@@ -100,6 +102,13 @@ export let DeveloperSettingsWebsitesConfig
                 "description": "",
                 "type": "textfield",
                 "required": true
+            },
+            "headWidgets": {
+                "type": "modules",
+                "ordered": true,
+                "editable": true,
+                "modules_list": "GULP-HEAD-MODULES-LIST",
+                "name": "Widgets in <head>"
             },
         },
         "dateFormat": {

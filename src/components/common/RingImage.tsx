@@ -42,7 +42,7 @@ export function RingImage(props) {
 
     return <>
         <picture>
-            <img src={src}/>
+            <img {...props}/>
         </picture>
         {props.priority && <RingImagePreload src={src}/>}
     </>
