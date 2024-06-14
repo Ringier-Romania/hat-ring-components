@@ -1,1 +1,0 @@
-export { default as Slider } from "./components/widgets/common/Slider/Slider.astro";
