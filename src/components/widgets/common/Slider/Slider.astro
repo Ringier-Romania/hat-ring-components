@@ -98,8 +98,8 @@ const swiperParams = {
 </div>
 
 <script is:inline src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
-<script  define:vars={{ swiperParams }}>
-    const swiperEl = document.querySelector('swiper-container');
+<script  define:vars={{className: styles.Slider, swiperParams }}>
+    const swiperEl = document.querySelector(`.${className} swiper-container`);
     Object.assign(swiperEl, swiperParams);
     swiperEl.initialize();
   </script>
