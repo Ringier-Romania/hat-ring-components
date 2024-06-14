@@ -1,6 +1,7 @@
 import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
 import React from "react";
 import {SwiperProps, SwiperSlideProps} from "swiper/react/swiper-react";
+import {AppContext} from "../../../../types/types";
 import {Swiper} from "swiper/types";
 
 export interface SliderElement {
@@ -66,7 +67,7 @@ declare global {
 }
 export interface SliderFrontParams extends WidgetParams {
     widgetConfig: SliderConfig,
-    slides: React.ReactNode,
-    extendableAttributes?: any
+    headerTagLevel: number,
+    context: AppContext,
 }
 

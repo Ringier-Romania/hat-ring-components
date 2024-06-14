@@ -13,7 +13,7 @@ export {default as GenericList} from "./components/widgets/Lists/GenericList/Gen
 export {default as StoryTaxonomyList} from "./components/widgets/Story/StoryTaxonomyList/StoryTaxonomyList.astro";
 export * from "./components/widgets/common/Menu/Menu";
 export * from "./components/widgets/common/Logo/Logo";
-// export * from "./components/widgets/common/Slider/Slider";
+export { default as Slider } from "./components/widgets/common/Slider/Slider.astro";
 export {default as StoryDate} from "./components/widgets/Story/StoryDate/StoryDate.astro";
 export {default as TextReplacer} from "./components/common/TextReplacer.astro";
 export {default as TopicTitle} from "./components/widgets/Lists/TopicTitle/TopicTitle.astro";
