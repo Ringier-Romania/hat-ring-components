@@ -75,7 +75,7 @@ export function UtilsHelper_ensureHttps(url: string): string {
 }
 
 export function UtilsHelper_getDomain(){
-    return process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
+    return UtilsHelper_isDevelopmentMode() ? 'http://localhost' : process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 }
 
 export function UtilsHelper_getCurrentNodeCategoryId(context: AppContext){

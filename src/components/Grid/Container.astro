@@ -16,24 +16,27 @@ interface GridContainerParams {
     context: AppContext;
 
 };
+let toRender: boolean | JSX.Element = false;
 if(!sectionConfig){
-    return null;
+    toRender = null;
 }
-const ContainerTag = `${sectionConfig.container_html_tag || 'main'}`;
+const ContainerTag = sectionConfig ? `${sectionConfig.container_html_tag || 'main'}` : 'main';
 ---
 
 
-
-<ContainerTag className={['gridContainer', sectionName, sectionConfig.container_classes, styles.gridContainer].join(' ')}>
-    {boxes.map((boxName, i) => {
-        return !!sectionConfig[boxName + '_hide'] ? null :
-                <Box
-                        context={context}
-                        boxName={boxName}
-                        widgets={sectionConfig[boxName]}
-                        size={sectionConfig[boxName + '_size'] || 12}
-                        tagName={sectionConfig[boxName + '_html_tag']}
-                        key={i}
-                />
-    })}
-</ContainerTag>
+{toRender === null ?
+    <Fragment set:html={toRender}/> :
+    <ContainerTag className={['gridContainer', sectionName, sectionConfig.container_classes, styles.gridContainer].join(' ')}>
+        {boxes.map((boxName, i) => {
+            return !!sectionConfig[boxName + '_hide'] ? null :
+                    <Box
+                            context={context}
+                            boxName={boxName}
+                            widgets={sectionConfig[boxName]}
+                            size={sectionConfig[boxName + '_size'] || 12}
+                            tagName={sectionConfig[boxName + '_html_tag']}
+                            key={i}
+                    />
+        })}
+    </ContainerTag>
+    }

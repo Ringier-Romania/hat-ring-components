@@ -6,9 +6,9 @@ export {default as StoryContent} from "./components/widgets/Story/StoryContent/S
 export * from "./components/widgets/common/HtmlInsert";
 export {default as BasicWidget} from "./components/widgets/common/BasicWidget/BasicWidget.astro";
 export {default as ExternalApplication} from "./components/widgets/common/ExternalApplication.astro";
-export  {default as StoryLiveBlog} from "./components/widgets/Story/StoryLiveBlog/StoryLiveBlog.astro";
+export {default as StoryLiveBlog} from "./components/widgets/Story/StoryLiveBlog/StoryLiveBlog.astro";
 export * from "./components/common/RingImage";
- export * from "./components/common/RingLink/RingLink";
+export * from "./components/common/RingLink/RingLink";
 export {default as GenericList} from "./components/widgets/Lists/GenericList/GenericList.astro";
 export {default as StoryTaxonomyList} from "./components/widgets/Story/StoryTaxonomyList/StoryTaxonomyList.astro";
 export * from "./components/widgets/common/Menu/Menu";
@@ -21,8 +21,8 @@ export * from "./components/widgets/common/SingleImage/SingleImage";
 export {default as Kropka} from "./components/widgets/analytics/Kropka/Kropka.astro";
 // export * from "./components/widgets/analytics/RingDataLayer/RingDataLayer";
 export * from "./renderlessComponents/seo/AlternateLinks/AlternateLinks";
- export * from "./helpers/UtilsHelper";
- export * from "./components/seo/SchemaOrg/SchemaOrg";
+export * from "./helpers/UtilsHelper";
+export {default as SchemaOrg} from "./components/seo/SchemaOrg/SchemaOrg.astro";
 export * from "./renderlessComponents/seo/RSS/RSS";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaTitle";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaDescription";
@@ -33,7 +33,8 @@ export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaRobots";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaCustomMetaTags";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaCanonical";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaBase";
+export * from "./renderlessComponents/seo/SeoMetaData/SeoListGridPrevNext";
 export {default as StoryAuthors} from "./components/widgets/Story/StoryAuthors/StoryAuthors.astro";
 export {default as Author} from "./components/widgets/Author/Author/Author.astro";
 export {default as StoryRelatedContent} from "./components/widgets/Story/StoryRelatedContent/StoryRelatedContent.astro";
-export {default as HatAdmin}  from "./pages/HatAdmin/HatAdmin.astro"
+export {default as HatAdmin} from "./pages/HatAdmin/HatAdmin.astro"

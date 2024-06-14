@@ -1,3 +1,5 @@
+---
+const {context} = Astro.props as { context: AppContext };
 import React from "react"
 import {BreadcrumbList, ListItem, NewsArticle, Organization, Thing, WithContext} from 'schema-dts';
 import {AppContext, SiteContentType} from "../../../types/types";
@@ -12,16 +14,9 @@ import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
 import {ConfigHelper_currentUrl, ConfigHelper_getHomepageUrl} from "../../../helpers/ConfigHelper";
 import {UtilsHelper_isHomepage} from "../../../helpers/UtilsHelper";
+const isHomePage = UtilsHelper_isHomepage(context);
+const isArticle = context.siteContentType === SiteContentType.Story;
 
-export async function SchemaOrg({context}: { context: AppContext }) {
-    const isHomePage = UtilsHelper_isHomepage(context);
-    const isArticle = context.siteContentType === SiteContentType.Story;
-    return <>
-        {isHomePage && JsonLd(await getOrganizationSchema(context))}
-        {!isHomePage && JsonLd(await getBreadcrumbListSchema(context))}
-        {isArticle && JsonLd(await getNewsArticleSchema(context))}
-    </>
-}
 
 export async function getOrganizationSchema(context): Promise<WithContext<Organization>> {
     return {
@@ -173,8 +168,12 @@ export async function getNewsArticleSchema(context: AppContext): Promise<WithCon
     }
 }
 
+const organizationSchema = isHomePage && await getOrganizationSchema(context);
+const breadcrumbListSchema = !isHomePage && await getBreadcrumbListSchema(context);
+const newsArticleSchema = isArticle && await getNewsArticleSchema(context);
+---
 
-export function JsonLd<T extends Thing>(json: WithContext<T>): JSX.Element {
-    return <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(json)}}/>;
-}
+{organizationSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />}
+{breadcrumbListSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbListSchema)} />}
+{newsArticleSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(newsArticleSchema)} />}
 
