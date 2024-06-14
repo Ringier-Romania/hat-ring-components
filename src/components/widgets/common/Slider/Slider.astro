@@ -1,0 +1,105 @@
+---
+import {
+    WidgetHelper_getWidgetCssClasses,
+} from '../../../../helpers/WidgetHelper';
+import { SliderFront } from './SliderFront';
+import styles from '../../../../../styles/widgets/common/Slider.module.scss';
+import _ from 'lodash';
+import { UtilsHelper_getValueIfExists } from '../../../../helpers/UtilsHelper';
+
+const { context, widgetConfig, extendableAttributes = {} } = Astro.props;
+
+const navigationClassNames = {
+    nextEl: '',
+    prevEl: ''
+};
+
+if (widgetConfig.navigationButtonsOutside) {
+    navigationClassNames.nextEl = _.get(
+        extendableAttributes,
+        'swiperOptions.navigation.nextEl',
+        '.customSwiperButtonNext'
+    );
+    navigationClassNames.prevEl = _.get(
+        extendableAttributes,
+        'swiperOptions.navigation.prevEl',
+        '.customSwiperButtonPrev'
+    );
+
+    _.set(
+        extendableAttributes,
+        'swiperOptions.navigation.nextEl',
+        navigationClassNames.nextEl
+    );
+    _.set(
+        extendableAttributes,
+        'swiperOptions.navigation.prevEl',
+        navigationClassNames.prevEl
+    );
+}
+
+const headerTag = (
+    widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none'
+        ? widgetConfig.headerSeoTag
+        : 'span'
+) as keyof JSX.IntrinsicElements;
+
+let headerTagLevel = 6;
+
+const itemsHeaderArr = headerTag.split('h');
+if (itemsHeaderArr.length === 2) {
+    headerTagLevel = _.clamp(Number(itemsHeaderArr[1]), 1, 6);
+    }
+    
+let HeaderTag = 'span' as keyof JSX.IntrinsicElements;
+
+if (headerTagLevel < 6) {
+    HeaderTag =
+        `h${_.clamp(headerTagLevel, 1, 6)}` as keyof JSX.IntrinsicElements;
+}
+
+const autoplayDelay = UtilsHelper_getValueIfExists(widgetConfig.autoplayDelay, 0);
+const isAutoplay = Number(autoplayDelay) !== 0;
+const autoplay = isAutoplay ? {delay: autoplayDelay} : false;
+const isLoop = UtilsHelper_getValueIfExists(widgetConfig.loop, false);
+const slidesPerView = UtilsHelper_getValueIfExists(widgetConfig.slidesPerView, 'auto');
+const navigation = UtilsHelper_getValueIfExists(widgetConfig.navigation, true);
+const pagination = UtilsHelper_getValueIfExists(widgetConfig.pagination, false);
+const centeredSlides = UtilsHelper_getValueIfExists(widgetConfig.centeredSlides, false);
+const configBreakpoints = UtilsHelper_getValueIfExists(widgetConfig.breakpoints, []);
+
+const breakpoints = {};
+    configBreakpoints.forEach(breakpoint => {
+        breakpoints[breakpoint["Minimal screen size"]] = {};
+        breakpoints[breakpoint["Minimal screen size"]].slidesPerView = breakpoint["Slides per view"];
+    });
+
+const swiperParams = {
+                autoplay,
+    loop: isLoop,
+    slidesPerView,
+    navigation,
+    pagination,
+    centeredSlides,
+    breakpoints,
+    spaceBetween: 24,
+    ...extendableAttributes.swiperOptions
+};
+
+---
+<div class={WidgetHelper_getWidgetCssClasses('Slider', widgetConfig, context, [styles.Slider])}>
+    {widgetConfig.headerText && <div class={"sliderTitle"}><HeaderTag>{widgetConfig.headerText}</HeaderTag></div>}
+    {widgetConfig.description && <div class={"sliderDescription"}><p>{widgetConfig.description}</p></div>}
+    {widgetConfig.navigationButtonsOutside && <div class={"navigationButtons"}>
+        <button class={navigationClassNames.nextEl.replace('.', '')}></button>
+        <button class={navigationClassNames.prevEl.replace('.', '')}></button>
+    </div>}
+    <SliderFront widgetConfig={widgetConfig} context={context} headerTagLevel={headerTagLevel}/>
+</div>
+
+<script is:inline src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
+<script  define:vars={{ swiperParams }}>
+    const swiperEl = document.querySelector('swiper-container');
+    Object.assign(swiperEl, swiperParams);
+    swiperEl.initialize();
+  </script>
