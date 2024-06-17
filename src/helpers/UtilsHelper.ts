@@ -29,7 +29,7 @@ export async function UtilsHelper_asyncSequentialForEach(array, callback) {
     }
 }
 
-export async function UtilsHelper_asyncParallelForEach(arr, callback){
+export async function UtilsHelper_asyncParallelForEach(arr, callback) {
     return await Promise.all(arr.map(callback));
 }
 
@@ -74,10 +74,10 @@ export function UtilsHelper_ensureHttps(url: string): string {
     return url.replace('http://', 'https://');
 }
 
-export function UtilsHelper_getDomain(){
-    return UtilsHelper_isDevelopmentMode() ? 'http://localhost' : process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
+export function UtilsHelper_getDomain(alwaysProduction = false) {
+    return alwaysProduction ? process.env.NEXT_PUBLIC_WEBSITE_DOMAIN : UtilsHelper_isDevelopmentMode() ? 'http://localhost' : process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 }
 
-export function UtilsHelper_getCurrentNodeCategoryId(context: AppContext){
+export function UtilsHelper_getCurrentNodeCategoryId(context: AppContext) {
     return _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.id', null);
 }
