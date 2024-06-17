@@ -1,65 +1,59 @@
-'use client'
-import React, {useEffect} from "react";
-import {UtilsHelper_getValueIfExists} from "../../../../helpers/UtilsHelper";
-import { useRef } from 'react';
-import { register } from 'swiper/element/bundle';
-import {SliderFrontParams, SwiperRef} from "./types";
+import React from "react";
+import {SliderElement, SliderFrontParams} from "./types";
+import { RingLink } from "../../../common/RingLink/RingLink";
+import { RingImage } from "../../../common/RingImage";
+import { ImageHelper_getImageDimensionsFromObject } from "../../../../helpers/ImageHelper";
+import _ from "lodash";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
 
 export function SliderFront(
-    {widgetConfig, context, slides, extendableAttributes}: SliderFrontParams
+    {widgetConfig, context, headerTagLevel}: SliderFrontParams
 ) {
-    extendableAttributes = extendableAttributes || {};
-    extendableAttributes.swiperOptions = extendableAttributes.swiperOptions || {}
-    register();
-    const swiperElRef = useRef<SwiperRef>(null);
+    let ItemsHeaderTag = 'span' as keyof JSX.IntrinsicElements;
 
-    const autoplayDelay = UtilsHelper_getValueIfExists(widgetConfig.autoplayDelay, 0);
-    const isAutoplay = Number(autoplayDelay) !== 0;
-    const isLoop = UtilsHelper_getValueIfExists(widgetConfig.loop, false);
-    const slidesPerView = UtilsHelper_getValueIfExists(widgetConfig.slidesPerView, 'auto');
-    const navigation = UtilsHelper_getValueIfExists(widgetConfig.navigation, true);
-    const pagination = UtilsHelper_getValueIfExists(widgetConfig.pagination, false);
-    const centeredSlides = UtilsHelper_getValueIfExists(widgetConfig.centeredSlides, false);
-    const configBreakpoints = UtilsHelper_getValueIfExists(widgetConfig.breakpoints, []);
+    function renderSlideContent(slide, dimensions, itemsHeaderTagLevel = 6, childLevel) {
+        if (itemsHeaderTagLevel < 6) {
+            ItemsHeaderTag = `h${_.clamp(itemsHeaderTagLevel, 2, 6)}` as keyof JSX.IntrinsicElements;
+        }
 
-    const breakpoints = {};
-    configBreakpoints.forEach(breakpoint => {
-        breakpoints[breakpoint["Minimal screen size"]] = {};
-        breakpoints[breakpoint["Minimal screen size"]].slidesPerView = breakpoint["Slides per view"];
+        return <div className={"item"}>
+            {slide['Link url'] &&
+                <div className={'linkOverlay'}>
+                    <RingLink href={slide['Link url']} title={slide.Title || slide.Text || slide.Description || ''}></RingLink>
+                </div>
+            }
+            {slide['Title'] && <div className={"title"}><ItemsHeaderTag>{slide['Title']}</ItemsHeaderTag></div>}
+            {slide['Description'] && <div className={"description"}><p>{slide['Description']}</p></div>}
+            {slide['Source url'] && slide['Source type'] === 'Image'
+                && <div className={"image"}>
+                    <RingImage src={slide['Source url']} alt={slide['Title'] || ''} width={dimensions.width} height={dimensions.height} transform={TransformType.ResizeCropAuto} />
+                </div>
+            }
+            {slide.children && slide.children.length > 0 &&
+                <div className={`children childrenLevel${childLevel}`}>
+                    {slide.children.map((slideChild) => renderSlideContent(slideChild, dimensions, itemsHeaderTagLevel + 1, childLevel + 1))}
+                </div>
+            }
+        </div>
+    }
+
+    const slides = widgetConfig.slides.map((slide: SliderElement) => {
+        const dimensions = ImageHelper_getImageDimensionsFromObject(slide, context, "Source desktop dimensions(eg. 600x300)", "Source mobile dimensions(eg. 600x300)", '600x300');
+
+        return (
+            // @ts-ignore in web-components class is valid
+            <swiper-slide class={slide['Custom CSS Class'] || ''} suppressHydrationWarning={true}>
+                {renderSlideContent(slide, dimensions, headerTagLevel, 1)}
+            </swiper-slide>
+        )
     });
 
-    const autoplay = isAutoplay ? {delay: autoplayDelay} : false;
-
-    let inited = false;
-    useEffect(() => {
-        if (swiperElRef.current && !inited) {
-            inited = true;
-            const swiperParams = {
-                autoplay,
-                loop: isLoop,
-                slidesPerView,
-                navigation,
-                pagination,
-                centeredSlides,
-                breakpoints,
-                ...extendableAttributes.swiperOptions
-            };
-
-            Object.assign(swiperElRef.current, swiperParams);
-            swiperElRef.current.initialize();
-            swiperElRef.current.setAttribute('id', swiperElRef.current.swiper.wrapperEl.id)
-        }
-    }, []);
-
-
-
     return <>
-        <swiper-container
-            init={false}
-            ref={swiperElRef}
-            suppressHydrationWarning={true}
-        >
-            {slides}
-        </swiper-container>
+            <swiper-container
+                init={false}
+                suppressHydrationWarning={true}
+                >
+                {slides}
+            </swiper-container>
     </>;
 }
