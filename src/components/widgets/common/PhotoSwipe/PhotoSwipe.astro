@@ -1,0 +1,30 @@
+---
+import {AppContext} from "../../../../types/types";
+const {widgetConfig, context} = Astro.props as {
+    widgetConfig: {
+        gallerySelector: string,
+        childrenSelector: string,
+    }, context: AppContext
+};
+---
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe-lightbox.umd.min.js"></script>
+<script define:vars={{
+    gallerySelector: widgetConfig.gallerySelector,
+    childrenSelector: widgetConfig.childrenSelector
+}}>
+
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        () => {
+            const lightbox = new PhotoSwipeLightbox({
+                pswpModule: PhotoSwipe,
+                children: childrenSelector,
+                gallery: gallerySelector,
+            })
+            if (lightbox) lightbox.init()
+        },
+    )
+</script>
