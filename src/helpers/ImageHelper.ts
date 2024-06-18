@@ -29,6 +29,7 @@ export async function ImageHelper_getDefaultImageData(context, width, height, tr
  */
 export function ImageHelper_getImageDimensionsFromObject(object, context: AppContext, desktopFieldName = 'standardImageSize', mobileFieldName = 'imageSizeMobile', defaultSizesString = '800x450'):
     { width: number | `${number}`, height: number | `${number}` } {
+    if(!object) return {width: 0, height: 0};
     let dimensionsString: string = '';
     if (UtilsHelper_isMobile(context)) {
         if (object[mobileFieldName]) {

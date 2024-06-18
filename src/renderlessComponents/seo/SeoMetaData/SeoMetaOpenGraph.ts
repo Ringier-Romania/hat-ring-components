@@ -24,10 +24,10 @@ export async function SeoMetaOpenGraph(context) {
     return {
         openGraph: {
             basic: {
-                title: await SeoHelper_currentTitle(context, 'og-title'),
+                title: await SeoHelper_currentTitle(context, 'og-title') || '',
                 url: await ConfigHelper_currentUrl(context),
                 type: 'website',
-                image: imageData && imageData.src !== undefined ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null
+                image: imageData && imageData.src !== undefined ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : ''
 
             },
             optional: {
