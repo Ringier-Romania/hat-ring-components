@@ -1,5 +1,5 @@
 ---
-const {context, widgetConfig} = Astro.props;
+const {context, widgetConfig, extendableAttributes} = Astro.props;
 import React from 'react';
 import _ from 'lodash';
 import {gql} from 'graphql-tag';
@@ -15,6 +15,7 @@ async function getData(queryStoryFragment) {
                 story(id:$storyId){
                     ${StoryHelper_getGqlContentFragment()}
                     ${queryStoryFragment}
+                    
                 }
             }
         `;
@@ -37,5 +38,5 @@ let cssModules = '';
 
 <div className={WidgetHelper_getWidgetCssClasses('StoryContent',widgetConfig, context)}>
     {/* @ts-expect-error Server Component */}
-    <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context} extendableAttributes={{}}/>
+    <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context} extendableAttributes={extendableAttributes}/>
 </div>

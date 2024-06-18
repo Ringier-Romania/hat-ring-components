@@ -178,8 +178,15 @@ export function StoryHelper_getGqlContentFragment(): any {
                     ... on EmbedBlock {
                         type
                         embed {
+                            id
+                            params
                             html
-                        }
+                            kind {
+                                code
+                               
+                                    
+                                }
+                            }
                     }
                     ... on TableBlock {
                         type
