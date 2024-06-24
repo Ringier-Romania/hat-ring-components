@@ -11,6 +11,22 @@ export function SliderFront(
 ) {
     let ItemsHeaderTag = 'span' as keyof JSX.IntrinsicElements;
 
+    function renderImage(slide, dimensions) {
+
+
+        return <div className={"image"}>
+            {widgetConfig.isUsedWithLightbox ?
+                <a href={slide['Source url']} target="_blank"  data-pswp-width={dimensions.width} data-pswp-height={dimensions.height} >
+                    <RingImage src={slide['Source url']} alt={slide['Title'] || ''} width={dimensions.width}
+                               height={dimensions.height} transform={TransformType.ResizeCropAuto}/>
+                </a>
+                :
+                <RingImage src={slide['Source url']} alt={slide['Title'] || ''} width={dimensions.width}
+                           height={dimensions.height} transform={TransformType.ResizeCropAuto}/>
+            }
+        </div>
+    }
+
     function renderSlideContent(slide, dimensions, itemsHeaderTagLevel = 6, childLevel) {
         if (itemsHeaderTagLevel < 6) {
             ItemsHeaderTag = `h${_.clamp(itemsHeaderTagLevel, 2, 6)}` as keyof JSX.IntrinsicElements;
@@ -25,9 +41,7 @@ export function SliderFront(
             {slide['Title'] && <div className={"title"}><ItemsHeaderTag>{slide['Title']}</ItemsHeaderTag></div>}
             {slide['Description'] && <div className={"description"}><p>{slide['Description']}</p></div>}
             {slide['Source url'] && slide['Source type'] === 'Image'
-                && <div className={"image"}>
-                    <RingImage src={slide['Source url']} alt={slide['Title'] || ''} width={dimensions.width} height={dimensions.height} transform={TransformType.ResizeCropAuto} />
-                </div>
+                && renderImage(slide, dimensions)
             }
             {slide.children && slide.children.length > 0 &&
                 <div className={`children childrenLevel${childLevel}`}>

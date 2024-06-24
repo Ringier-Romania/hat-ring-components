@@ -27,7 +27,8 @@ export interface SliderConfig extends AbstractWidgetConfig {
     pagination: boolean
     centeredSlides: boolean,
     breakpoints: Array<Breakpoint>
-    navigationButtonsOutside: boolean
+    navigationButtonsOutside: boolean,
+    isUsedWithLightbox: boolean
 }
 
 export interface Breakpoint {

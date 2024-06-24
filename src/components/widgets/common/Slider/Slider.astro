@@ -13,6 +13,7 @@ const navigationClassNames = {
     nextEl: '',
     prevEl: ''
 };
+console.log(widgetConfig);
 
 if (widgetConfig.navigationButtonsOutside) {
     navigationClassNames.nextEl = _.get(
@@ -50,7 +51,7 @@ const itemsHeaderArr = headerTag.split('h');
 if (itemsHeaderArr.length === 2) {
     headerTagLevel = _.clamp(Number(itemsHeaderArr[1]), 1, 6);
     }
-    
+
 let HeaderTag = 'span' as keyof JSX.IntrinsicElements;
 
 if (headerTagLevel < 6) {
