@@ -24,7 +24,55 @@ const {widgetConfig, context} = Astro.props as {
                 children: childrenSelector,
                 gallery: gallerySelector,
             })
-            if (lightbox) lightbox.init()
+            if (lightbox){
+                lightbox.on('uiRegister', function() {
+                    lightbox.pswp.ui.registerElement({
+                        name: 'caption',
+                        order: 9,
+                        isButton: false,
+                        appendTo: 'root',
+                        html: 'Caption',
+                        onInit: (el, pswp) => {
+                            lightbox.pswp.on('change', () => {
+                                const currSlideElement = lightbox.pswp.currSlide.data.element;
+                                let captionHTML = '';
+                                if (currSlideElement) {
+                                    const caption = currSlideElement.querySelector('.caption');
+                                    if (caption) {
+                                        // get caption from element with class hidden-caption-content
+                                        captionHTML = caption.innerHTML;
+                                    } else {
+                                        // get caption from alt attribute
+                                        captionHTML = currSlideElement.querySelector('img').getAttribute('alt');
+                                    }
+                                }
+                                el.innerHTML = captionHTML || '';
+                            });
+                        }
+                    });
+                });
+                lightbox.init();
+            }
         },
     )
 </script>
+
+<style is:global>
+    .pswp__caption {
+        background: rgba(20, 20, 20, 0.75);
+        font-size: 16px;
+        color: #fff;
+        width: calc(100% - 32px);
+        max-width: 400px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        position: absolute;
+        left: 50%;
+        bottom: 16px;
+        transform: translateX(-50%);
+    }
+    .pswp__caption a {
+        color: #fff;
+        text-decoration: underline;
+    }
+</style>

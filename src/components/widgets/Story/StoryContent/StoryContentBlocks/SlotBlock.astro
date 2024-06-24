@@ -2,16 +2,19 @@
 const {blockData, context} = Astro.props as SlotBlockParams;
 import {Term} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import _ from "lodash";
+import * as ringSlots from "../slots/index";
 
 let toRender: boolean | JSX.Element | string = false;
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
-const availableSlots = context.customData.slots;
+
+
+const availableSlots = Object.assign({}, ringSlots, context.customData.slots);
 if (!blockData.kind || !blockData.kind.code) {
     toRender = WidgetHelper_renderEmptyComponent('SlotBlock', 'SlotBlock: blockData.kind.code is missing', false);
 }
 const slotName = _.upperFirst(_.camelCase(blockData.kind.code));
 const Component = availableSlots[slotName];
-if(!Component) {
+if (!Component) {
     toRender = WidgetHelper_renderEmptyComponent('SlotBlock', `SlotBlock: ${slotName} is not available in the context`, false);
 }
 export interface SlotBlockParams {
@@ -23,12 +26,12 @@ export interface SlotBlockParams {
     },
     context: any
 }
-
 ---
 {toRender ?
-    <Fragment set:html={toRender}/>
+<Fragment set:html={toRender}/>
     :
-    <div className="SlotBlock">
-        {Component && <Component blockData={blockData} context={context}/>}
-    </div>
+<div className="SlotBlock">
+    {Component &&
+            <Component blockData={blockData} context={context}/>}
+</div>
     }
