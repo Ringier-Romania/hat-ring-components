@@ -1,0 +1,53 @@
+---
+import { AppContext } from "../../../../../types/types";
+import {BasicWidgetConfig} from "../types"
+import gql from "graphql-tag";
+import _ from "lodash";
+
+type Props = {
+    context: AppContext;
+    widgetConfig: BasicWidgetConfig & {
+        titleExtrasCodeNames: string;
+    },
+    data: {
+        originalContent: {
+            titles: {
+                role: {
+                    code: string
+                };
+                text: string
+            }[],
+        }
+
+    }
+};
+
+const { context, widgetConfig, data } = Astro.props as Props;
+const titleExtrasCodeNamesArr = _.without(widgetConfig.titleExtrasCodeNames.split(','), '');
+
+export const getFragment = () => {
+    return {
+        variables: {},
+        query: gql`
+            fragment TitleExtrasFragment on SectionItem {
+                originalContent {
+                    ... on Story {
+                        titles {
+                            role {
+                                code
+                            }
+                            text
+                        }
+                        
+                    }
+                }
+            }
+        `,
+    };
+};
+---
+
+{titleExtrasCodeNamesArr.map(codeName => {
+    const titleExtraToShow = _.get(_.find(data.originalContent.titles, ['role.code', codeName]), 'text', '');
+    return !!titleExtraToShow ? <span class={`title-extras code-${codeName}`}>{titleExtraToShow}</span> : null;
+})}
