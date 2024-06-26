@@ -9,3 +9,5 @@ export { getFragment as ModificationDate_getFragment } from './ModificationDate.
 export {default as Authors} from './Authors';
 export {default as AuthorsImages} from './AuthorsImages';
 export {default as Taxonomies} from './Taxonomies';
+export { default as TitleExtras } from "./TitleExtras.astro";
+export { getFragment as TitleExtras_getFragment } from "./TitleExtras.astro";

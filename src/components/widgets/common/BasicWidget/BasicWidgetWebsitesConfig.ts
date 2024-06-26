@@ -38,6 +38,7 @@ export let BasicWidgetWebsitesConfig = {
                 "listElementsImageSizeMobile": "600x330",
                 "preloadImagesCount": 0,
                 "mobilePreloadImagesCount": 0,
+                "titleExtrasCodeNames": "",
                 "widgetType": "basicWidget",
                 "customTeasers": []
             },
@@ -73,7 +74,8 @@ export let BasicWidgetWebsitesConfig = {
                         "modificationDate",
                         "authors",
                         "authorsImages",
-                        "taxonomies"
+                        "taxonomies",
+                        "titleExtras"
                     ]
                 },
                 "additionalOptions": {
@@ -284,6 +286,11 @@ export let BasicWidgetWebsitesConfig = {
                     "type": "numberfield",
                     "description": "The number should correspond to the number of pictures the user sees first after entering the page",
                     "required": false
+                },
+                "titleExtrasCodeNames": {
+                    "name": "Title extras code names to show",
+                    "description": "(comma separated code names)",
+                    "type": "textfield"
                 },
                 "customTeasers": {
                     "type": "treeobject",
