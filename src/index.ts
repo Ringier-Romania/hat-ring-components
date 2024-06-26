@@ -40,3 +40,4 @@ export {default as StoryRelatedContent} from "./components/widgets/Story/StoryRe
 export {default as HatAdmin} from "./pages/HatAdmin/HatAdmin.astro"
 export {default as Photoswipe} from "./components/widgets/common/PhotoSwipe/Photoswipe.astro";
 export * from "./providers/WebsiteApiProvider";
+export * from "./helpers/CacheHelper";
