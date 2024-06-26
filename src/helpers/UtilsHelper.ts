@@ -19,7 +19,7 @@ export function UtilsHelper_isMobile(context) {
 }
 
 export function UtilsHelper_getExtension(src: string): string | null {
-    const ext = src.split('.').pop();
+    const ext = src ? src.split('.').pop() : null;
     return ext ? ext.toLowerCase() : null;
 }
 
@@ -80,4 +80,8 @@ export function UtilsHelper_getDomain(alwaysProduction = false) {
 
 export function UtilsHelper_getCurrentNodeCategoryId(context: AppContext) {
     return _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.id', null);
+}
+
+export function UtilsHelper_generateRandomString(length = 8) {
+    return Math.random().toString(20).substr(2, length);
 }

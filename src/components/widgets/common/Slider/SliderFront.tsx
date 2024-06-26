@@ -13,15 +13,15 @@ export function SliderFront(
 
     function renderImage(slide, dimensions) {
 
-
+        const imgUrl = slide['Source url'];
         return <div className={"image"}>
             {widgetConfig.isUsedWithLightbox ?
-                <a href={slide['Source url']} target="_blank"  data-pswp-width={dimensions.width} data-pswp-height={dimensions.height} >
-                    <RingImage src={slide['Source url']} alt={slide['Title'] || ''} width={dimensions.width}
+                <a href={imgUrl} target="_blank"  data-pswp-width={dimensions.width} data-pswp-height={dimensions.height} >
+                    <RingImage src={imgUrl} alt={slide['Title'] || ''} width={dimensions.width}
                                height={dimensions.height} transform={TransformType.ResizeCropAuto}/>
                 </a>
                 :
-                <RingImage src={slide['Source url']} alt={slide['Title'] || ''} width={dimensions.width}
+                <RingImage src={imgUrl} alt={slide['Title'] || ''} width={dimensions.width}
                            height={dimensions.height} transform={TransformType.ResizeCropAuto}/>
             }
         </div>

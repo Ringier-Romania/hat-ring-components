@@ -5,7 +5,7 @@ import {
 import { SliderFront } from './SliderFront';
 import styles from '../../../../../styles/widgets/common/Slider.module.scss';
 import _ from 'lodash';
-import { UtilsHelper_getValueIfExists } from '../../../../helpers/UtilsHelper';
+import {UtilsHelper_generateRandomString, UtilsHelper_getValueIfExists} from '../../../../helpers/UtilsHelper';
 
 const { context, widgetConfig, extendableAttributes = {} } = Astro.props;
 
@@ -85,9 +85,9 @@ const swiperParams = {
     spaceBetween: 24,
     ...extendableAttributes.swiperOptions
 };
-
+const id = UtilsHelper_generateRandomString();
 ---
-<div class={WidgetHelper_getWidgetCssClasses('Slider', widgetConfig, context, [styles.Slider])}>
+<div id={id} class={WidgetHelper_getWidgetCssClasses('Slider', widgetConfig, context, [styles.Slider])}>
     {widgetConfig.headerText && <div class={"sliderTitle"}><HeaderTag>{widgetConfig.headerText}</HeaderTag></div>}
     {widgetConfig.description && <div class={"sliderDescription"}><p>{widgetConfig.description}</p></div>}
     {widgetConfig.navigationButtonsOutside && <div class={"navigationButtons"}>
@@ -98,8 +98,8 @@ const swiperParams = {
 </div>
 
 <script is:inline src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
-<script  define:vars={{className: styles.Slider, swiperParams }}>
-    const swiperEl = document.querySelector(`.${className} swiper-container`);
+<script  define:vars={{id: id, swiperParams }}>
+    const swiperEl = document.querySelector(`#${id} swiper-container`);
     Object.assign(swiperEl, swiperParams);
     swiperEl.initialize();
   </script>
