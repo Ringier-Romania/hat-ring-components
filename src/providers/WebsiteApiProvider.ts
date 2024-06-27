@@ -40,7 +40,7 @@ export class WebsiteApiProvider {
             CacheHelper_set(cacheKey, response);
             return response;
         } catch (e) {
-            console.error(query, variables, e);
+            console.error(query.loc?.source.body, variables, e);
             return null;
         }
 
