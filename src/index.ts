@@ -8,6 +8,7 @@ export {default as BasicWidget} from "./components/widgets/common/BasicWidget/Ba
 export {default as ExternalApplication} from "./components/widgets/common/ExternalApplication.astro";
 export {default as StoryLiveBlog} from "./components/widgets/Story/StoryLiveBlog/StoryLiveBlog.astro";
 export * from "./components/common/RingImage";
+export {default as RingImage} from "./components/common/RingImage.astro";
 export * from "./components/common/RingLink/RingLink";
 export {default as GenericList} from "./components/widgets/Lists/GenericList/GenericList.astro";
 export {default as StoryTaxonomyList} from "./components/widgets/Story/StoryTaxonomyList/StoryTaxonomyList.astro";
