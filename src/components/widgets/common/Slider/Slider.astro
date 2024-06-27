@@ -2,12 +2,12 @@
 import {
     WidgetHelper_getWidgetCssClasses,
 } from '../../../../helpers/WidgetHelper';
-import { SliderFront } from './SliderFront';
+import {SliderFront} from './SliderFront';
 import styles from '../../../../../styles/widgets/common/Slider.module.scss';
 import _ from 'lodash';
 import {UtilsHelper_generateRandomString, UtilsHelper_getValueIfExists} from '../../../../helpers/UtilsHelper';
 
-const { context, widgetConfig, extendableAttributes = {} } = Astro.props;
+const {context, widgetConfig, extendableAttributes = {}} = Astro.props;
 
 const navigationClassNames = {
     nextEl: '',
@@ -49,7 +49,7 @@ let headerTagLevel = 6;
 const itemsHeaderArr = headerTag.split('h');
 if (itemsHeaderArr.length === 2) {
     headerTagLevel = _.clamp(Number(itemsHeaderArr[1]), 1, 6);
-    }
+}
 
 let HeaderTag = 'span' as keyof JSX.IntrinsicElements;
 
@@ -69,13 +69,13 @@ const centeredSlides = UtilsHelper_getValueIfExists(widgetConfig.centeredSlides,
 const configBreakpoints = UtilsHelper_getValueIfExists(widgetConfig.breakpoints, []);
 
 const breakpoints = {};
-    configBreakpoints.forEach(breakpoint => {
-        breakpoints[breakpoint["Minimal screen size"]] = {};
-        breakpoints[breakpoint["Minimal screen size"]].slidesPerView = breakpoint["Slides per view"];
-    });
+configBreakpoints.forEach(breakpoint => {
+    breakpoints[breakpoint["Minimal screen size"]] = {};
+    breakpoints[breakpoint["Minimal screen size"]].slidesPerView = breakpoint["Slides per view"];
+});
 
 const swiperParams = {
-                autoplay,
+    autoplay,
     loop: isLoop,
     slidesPerView,
     navigation,
@@ -85,21 +85,30 @@ const swiperParams = {
     spaceBetween: 24,
     ...extendableAttributes.swiperOptions
 };
-const id = UtilsHelper_generateRandomString();
+const id = 'slider_'+UtilsHelper_generateRandomString();
 ---
 <div id={id} class={WidgetHelper_getWidgetCssClasses('Slider', widgetConfig, context, [styles.Slider])}>
-    {widgetConfig.headerText && <div class={"sliderTitle"}><HeaderTag>{widgetConfig.headerText}</HeaderTag></div>}
-    {widgetConfig.description && <div class={"sliderDescription"}><p>{widgetConfig.description}</p></div>}
-    {widgetConfig.navigationButtonsOutside && <div class={"navigationButtons"}>
-        <button class={navigationClassNames.nextEl.replace('.', '')}></button>
-        <button class={navigationClassNames.prevEl.replace('.', '')}></button>
-    </div>}
+    {widgetConfig.headerText &&
+            <div class={"sliderTitle"}>
+                <HeaderTag>{widgetConfig.headerText}</HeaderTag>
+            </div>}
+    {widgetConfig.description &&
+            <div class={"sliderDescription"}><p>{widgetConfig.description}</p></div>}
+    {widgetConfig.navigationButtonsOutside &&
+            <div class={"navigationButtons"}>
+                <button class={navigationClassNames.nextEl.replace('.', '')}></button>
+                <button class={navigationClassNames.prevEl.replace('.', '')}></button>
+            </div>}
     <SliderFront widgetConfig={widgetConfig} context={context} headerTagLevel={headerTagLevel}/>
 </div>
 
 <script is:inline src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
-<script  define:vars={{id: id, swiperParams }}>
-    const swiperEl = document.querySelector(`#${id} swiper-container`);
-    Object.assign(swiperEl, swiperParams);
-    swiperEl.initialize();
-  </script>
+<script define:vars={{id: id, swiperParams}}>
+    document.addEventListener(
+        'DOMContentLoaded',
+        () => {
+            const swiperEl = document.querySelector(`#${id} swiper-container`);
+            Object.assign(swiperEl, swiperParams);
+            swiperEl.initialize();
+        });
+</script>
