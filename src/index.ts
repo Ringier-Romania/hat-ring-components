@@ -38,6 +38,6 @@ export {default as StoryAuthors} from "./components/widgets/Story/StoryAuthors/S
 export {default as Author} from "./components/widgets/Author/Author/Author.astro";
 export {default as StoryRelatedContent} from "./components/widgets/Story/StoryRelatedContent/StoryRelatedContent.astro";
 export {default as HatAdmin} from "./pages/HatAdmin/HatAdmin.astro"
-export {default as PhotoSwipe} from "./components/widgets/common/PhotoSwipe/PhotoSwipe.astro";
+export {default as Photoswipe} from "./components/widgets/common/PhotoSwipe/PhotoSwipe.astro";
 export * from "./providers/WebsiteApiProvider";
 export * from "./helpers/CacheHelper";
