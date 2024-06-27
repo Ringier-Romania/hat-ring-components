@@ -24,15 +24,25 @@ export class WebsiteApiProvider {
         const cacheKey = {query: query.loc?.source.body, variables};
         let cachedResponse = CacheHelper_get(cacheKey);
 
-        if(cachedResponse) {
-            CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
-                CacheHelper_set(cacheKey, await global.websitesApiApolloClient.query({query, variables, fetchPolicy}));
-            });
-            return cachedResponse;
+        try {
+            if (cachedResponse) {
+                CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
+                    CacheHelper_set(cacheKey, await global.websitesApiApolloClient.query({
+                        query,
+                        variables,
+                        fetchPolicy
+                    }));
+                });
+                return cachedResponse;
+            }
+
+            const response = await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
+            CacheHelper_set(cacheKey, response);
+            return response;
+        } catch (e) {
+            console.error(query, variables, e);
+            return null;
         }
 
-        const response = await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
-        CacheHelper_set(cacheKey, response);
-        return response;
     }
 }
