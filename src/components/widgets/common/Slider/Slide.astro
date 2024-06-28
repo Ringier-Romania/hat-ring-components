@@ -1,0 +1,49 @@
+---
+import {SliderElement, SliderFrontParams} from "./types";
+import { RingLink } from "../../../common/RingLink/RingLink";
+import RingImage from "../../../common/RingImage.astro";
+import { ImageHelper_getImageDimensionsFromObject } from "../../../../helpers/ImageHelper";
+import _ from "lodash";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
+
+const {slide, isUsedWithLightbox, context, headerTagLevel, childLevel} = Astro.props as SliderFrontParams;
+
+let ItemsHeaderTag = 'span' as keyof JSX.IntrinsicElements;
+
+if (headerTagLevel < 6) {
+    ItemsHeaderTag = `h${_.clamp(headerTagLevel, 2, 6)}` as keyof JSX.IntrinsicElements;
+}
+
+const imgUrl = slide['Source url'];
+const dimensions = ImageHelper_getImageDimensionsFromObject(slide, context, "Source desktop dimensions(eg. 600x300)", "Source mobile dimensions(eg. 600x300)", '600x300');
+---
+<div class={"item"}>
+    {slide['Link url'] &&
+        <div class={'linkOverlay'}>
+            <RingLink href={slide['Link url']} title={slide.Title || slide.Text || slide.Description || ''}></RingLink>
+        </div>
+    }
+    {slide['Title'] && <div class={"title"}><ItemsHeaderTag>{slide['Title']}</ItemsHeaderTag></div>}
+    {slide['Description'] && <div class={"description"}><p>{slide['Description']}</p></div>}
+    {slide['Source url'] && slide['Source type'] === 'Image'
+        &&  <div class={"image"}>
+                {isUsedWithLightbox ?
+                    <a href={imgUrl} target="_blank"  data-pswp-width={dimensions.width} data-pswp-height={dimensions.height} >
+                        <RingImage src={imgUrl} alt={slide['Title'] || ''} width={dimensions.width}
+                                    height={dimensions.height} transform={TransformType.ResizeCropAuto}/>
+                    </a>
+                    :
+                    <RingImage src={imgUrl} alt={slide['Title'] || ''} width={dimensions.width}
+                                height={dimensions.height} transform={TransformType.ResizeCropAuto}/>
+                }
+            </div>
+    }
+    {slide.children && slide.children.length > 0 &&
+        <div class={`children childrenLevel${childLevel}`}>
+            {slide.children.map(slideChild => {
+                return <Astro.self slide={slideChild} isUsedWithLightbox={isUsedWithLightbox} context={context} headerTagLevel={headerTagLevel + 1} childLevel={childLevel + 1}/>
+            })}
+
+        </div>
+    }
+</div>

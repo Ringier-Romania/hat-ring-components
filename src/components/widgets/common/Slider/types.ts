@@ -6,13 +6,15 @@ import {Swiper} from "swiper/types";
 
 export interface SliderElement {
     "Title": string,
+    "Text": string,
     "Description": string,
     "Link url": string,
     "Source url": string,
     "Source type": "Image" | "",
     "Source desktop dimensions(eg. 600x300)": string,
     "Source mobile dimensions(eg. 600x300)": string,
-    "Custom CSS Class": string
+    "Custom CSS Class": string,
+    'children': Array<SliderElement>
 }
 
 export interface SliderConfig extends AbstractWidgetConfig {
@@ -68,7 +70,10 @@ declare global {
 }
 export interface SliderFrontParams extends WidgetParams {
     widgetConfig: SliderConfig,
+    slide: SliderElement,
+    isUsedWithLightbox: boolean,
     headerTagLevel: number,
+    childLevel: number,
     context: AppContext,
 }
 
