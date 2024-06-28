@@ -2,10 +2,10 @@
 import {
     WidgetHelper_getWidgetCssClasses,
 } from '../../../../helpers/WidgetHelper';
-import { SliderFront } from './SliderFront';
 import styles from '../../../../../styles/widgets/common/Slider.module.scss';
 import _ from 'lodash';
 import {UtilsHelper_generateRandomString, UtilsHelper_getValueIfExists} from '../../../../helpers/UtilsHelper';
+import Slide from './Slide.astro';
 
 const { context, widgetConfig, extendableAttributes = {} } = Astro.props;
 
@@ -75,7 +75,7 @@ const breakpoints = {};
     });
 
 const swiperParams = {
-                autoplay,
+    autoplay,
     loop: isLoop,
     slidesPerView,
     navigation,
@@ -94,11 +94,20 @@ const id = UtilsHelper_generateRandomString();
         <button class={navigationClassNames.nextEl.replace('.', '')}></button>
         <button class={navigationClassNames.prevEl.replace('.', '')}></button>
     </div>}
-    <SliderFront widgetConfig={widgetConfig} context={context} headerTagLevel={headerTagLevel}/>
+        <swiper-container
+        init={false}
+        suppressHydrationWarning={true}
+        >
+        {widgetConfig.slides.map((slide) => (
+            <swiper-slide class={slide['Custom CSS Class'] || ''} suppressHydrationWarning={true}>
+                <Slide slide={slide} isUsedWithLightbox={widgetConfig.isUsedWithLightbox} context={context} headerTagLevel={headerTagLevel} childLevel={1}/>
+            </swiper-slide>
+        ))}
+    </swiper-container>
 </div>
 
-<script is:inline src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
-<script  define:vars={{id: id, swiperParams }}>
+<script is:inline defer src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
+<script is:inline define:vars={{id: id, swiperParams }}>
     const swiperEl = document.querySelector(`#${id} swiper-container`);
     Object.assign(swiperEl, swiperParams);
     swiperEl.initialize();
