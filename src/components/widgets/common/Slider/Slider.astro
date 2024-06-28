@@ -107,7 +107,7 @@ const id = UtilsHelper_generateRandomString();
 </div>
 
 <script is:inline defer src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
-<script is:inline define:vars={{id: id, swiperParams }}>
+<script define:vars={{id: id, swiperParams }}>
     const swiperEl = document.querySelector(`#${id} swiper-container`);
     Object.assign(swiperEl, swiperParams);
     swiperEl.initialize();
