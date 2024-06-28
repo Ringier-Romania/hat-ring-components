@@ -1,4 +1,5 @@
 ---
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
 const {context, widgetConfig} = Astro.props;
 
 import React from 'react';
@@ -12,7 +13,7 @@ import {
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
-import {TransformType} from "../../../../helpers/OcdnHelper";
+
 
 const query = gql`
         query($storyId: UUID, $imageWidth:Int!, $imageHeight:Int!){
@@ -48,8 +49,12 @@ const caption = _.get(response, 'data.story.image.caption');
 
 <div className={WidgetHelper_getWidgetCssClasses('StoryMainImage', widgetConfig, context)}>
     {imgSrc ? <>
-        <img  src={imgSrc} alt={caption || ''}
-                   width={imageDimensions.width} height={imageDimensions.height}/>
+        <RingImage
+            src={imgSrc}
+            alt={caption}
+            transform={TransformType.ResizeCropAuto}
+            width={imageDimensions.width}
+            height={imageDimensions.height}/>
         {caption && <StoryMainImageCaption caption={caption}/>}
     </> : null}
 </div>

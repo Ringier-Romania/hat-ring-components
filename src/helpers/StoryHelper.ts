@@ -223,3 +223,23 @@ export function StoryHelper_getGqlContentFragment(): any {
                 }
             }`;
 }
+
+export function StoryHelper_getGroupContent(storyContentBlocks, groupType: string): any {
+    let blocks: any = [];
+    let started = false;
+    storyContentBlocks.forEach(block => {
+        if (block.name === groupType && block.type ==='groupEnd'){
+            started = false;
+            return false;
+        }
+        if (started) {
+            blocks.push(block);
+        }
+        if (block.name === groupType && block.type ==='groupStart'){
+            started = true;
+        }
+    });
+
+    return blocks;
+
+}

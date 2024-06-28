@@ -1,0 +1,14 @@
+---
+import {WidgetHelper_getWidgetCssClasses} from "../../helpers/WidgetHelper";
+import StoryContentSwitcher from "../widgets/Story/StoryContent/StoryContentSwitcher.astro";
+import {StoryHelper_getGroupContent} from "../../helpers/StoryHelper";
+const {context, groupName, contentBlocks} = Astro.props;
+
+const blocks = StoryHelper_getGroupContent(contentBlocks, groupName);
+
+---
+
+<div className={WidgetHelper_getWidgetCssClasses('StoryGroup',{}, context)}>
+    {/* @ts-expect-error Server Component */}
+    <StoryContentSwitcher content={blocks} widgetConfig={{}} context={context} extendableAttributes={{}}/>
+</div>

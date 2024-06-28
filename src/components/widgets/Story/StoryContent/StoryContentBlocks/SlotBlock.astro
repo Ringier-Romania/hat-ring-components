@@ -8,7 +8,7 @@ let toRender: boolean | JSX.Element | string = false;
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 
 
-const availableSlots = Object.assign({}, ringSlots, context.customData.slots);
+const availableSlots = Object.assign({}, ringSlots, context?.customData.slots);
 if (!blockData.kind || !blockData.kind.code) {
     toRender = WidgetHelper_renderEmptyComponent('SlotBlock', 'SlotBlock: blockData.kind.code is missing', false);
 }

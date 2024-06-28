@@ -8,6 +8,7 @@ export {default as BasicWidget} from "./components/widgets/common/BasicWidget/Ba
 export {default as ExternalApplication} from "./components/widgets/common/ExternalApplication.astro";
 export {default as StoryLiveBlog} from "./components/widgets/Story/StoryLiveBlog/StoryLiveBlog.astro";
 export * from "./components/common/RingImage";
+export {default as RingImage} from "./components/common/RingImage.astro";
 export * from "./components/common/RingLink/RingLink";
 export {default as GenericList} from "./components/widgets/Lists/GenericList/GenericList.astro";
 export {default as StoryTaxonomyList} from "./components/widgets/Story/StoryTaxonomyList/StoryTaxonomyList.astro";
@@ -38,6 +39,10 @@ export {default as StoryAuthors} from "./components/widgets/Story/StoryAuthors/S
 export {default as Author} from "./components/widgets/Author/Author/Author.astro";
 export {default as StoryRelatedContent} from "./components/widgets/Story/StoryRelatedContent/StoryRelatedContent.astro";
 export {default as HatAdmin} from "./pages/HatAdmin/HatAdmin.astro"
-export {default as Photoswipe} from "./components/widgets/common/PhotoSwipe/Photoswipe.astro";
+export {default as Photoswipe} from "./components/widgets/common/PhotoSwipe/PhotoSwipe.astro";
 export * from "./providers/WebsiteApiProvider";
 export * from "./helpers/CacheHelper";
+export * from "./helpers/ConfigHelper";
+export * from "./helpers/DateHelper";
+export * from "./helpers/StoryHelper";
+export {default as StoryGroup} from "./components/Story/StoryGroup.astro";

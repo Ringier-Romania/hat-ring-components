@@ -8,35 +8,18 @@ import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryContentParams} from "./types";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
+import {StoryContent_getData} from "./StoryContentGetData";
 
-async function getData(queryStoryFragment) {
-    const query = gql`
-            query($storyId: UUID){
-                story(id:$storyId){
-                    ${StoryHelper_getGqlContentFragment()}
-                    ${queryStoryFragment}
-                    
-                }
-            }
-        `;
-    const variables = {
-        storyId: context.id,
-    };
-
-    const response = await WebsiteApiProvider.call(query, variables);
-    return _.get(response, 'data.story.content[0].blocks');
-}
 
 let queryFragment = '';
-const content = await getData(queryFragment);
+const content = await StoryContent_getData(context, queryFragment);
 
 let cssModules = '';
-
 ---
 
 
-
-<div className={WidgetHelper_getWidgetCssClasses('StoryContent',widgetConfig, context)}>
+<div className={WidgetHelper_getWidgetCssClasses('StoryContent', widgetConfig, context)}>
     {/* @ts-expect-error Server Component */}
-    <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context} extendableAttributes={extendableAttributes}/>
+    <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context}
+                          extendableAttributes={extendableAttributes}/>
 </div>
