@@ -3,7 +3,7 @@ const {itemIndex, context, widgetConfig, data,} = Astro.props;
 import React, {ReactElement} from 'react';
 import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
-import {RingImage} from "../../../../common/RingImage";
+import {default as RingImage} from "../../../../common/RingImage.astro";
 import {
     WidgetHelper_getAppropriateTeaserImage,
     WidgetHelper_renderEmptyComponent,
