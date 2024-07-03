@@ -1,5 +1,7 @@
 ---
-const {context, widgetConfig} = Astro.props;
+import {StoryTitleWidgetConfig} from "./types";
+import {AppContext} from "../../../../types/types";
+const {context, widgetConfig} = Astro.props as {context: AppContext, widgetConfig: StoryTitleWidgetConfig};
 
 import React from 'react';
 import _ from 'lodash';
