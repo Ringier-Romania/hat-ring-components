@@ -3,11 +3,16 @@ import React from "react";
 import _ from "lodash";
 import { AppContext, SiteContentType } from "../../../../types/types";
 import { Breadcrumb, BreadcrumbEntry } from "./types";
+import { WidgetHelper_renderEmptyComponent } from "../../../../helpers/WidgetHelper";
 const { context } = Astro.props as {
   context: AppContext;
 };
+let toRender: boolean | JSX.Element = false;
+const gqlResponse = _.get(context, "hatControllerParams.gqlResponse");
 
-const gqlResponse = context.hatControllerParams.gqlResponse;
+if (!gqlResponse) {
+  toRender = WidgetHelper_renderEmptyComponent("Breadcrumbs");
+}
 const breadcrumbs: Breadcrumb[] = _.get(
   gqlResponse,
   "data.site.data.node.breadcrumbs"
@@ -30,16 +35,19 @@ const createBreadcrumb = (breadcrumbs: Breadcrumb[]): BreadcrumbEntry[] => {
       return breadcrumbEntries;
   }
 };
-const breadcrumbEntries = createBreadcrumb(breadcrumbs);
 ---
 
-<div>
-  {
-    breadcrumbEntries.map(({ href, text }, index) => (
-      <span key={index}>
-        {href ? <a href={href}>{text}</a> : <span>{text}</span>}
-        {index < breadcrumbEntries.length - 1 && <span>&nbsp;&gt;&nbsp;</span>}
-      </span>
-    ))
-  }
-</div>
+{
+  toRender ? (
+    <Fragment set:html={toRender} />
+  ) : (
+    <div>
+      {createBreadcrumb(breadcrumbs).map(({ href, text }, index, arr) => (
+        <span key={index}>
+          {href ? <a href={href}>{text}</a> : <span>{text}</span>}
+          {index < arr.length - 1 && <span>&nbsp;&gt;&nbsp;</span>}
+        </span>
+      ))}
+    </div>
+  )
+}
