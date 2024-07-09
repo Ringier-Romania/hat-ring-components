@@ -28,3 +28,4 @@ export * from "./components/widgets/analytics/RingDataLayer/RingDataLayerWebsite
 export * from "./components/widgets/Author/Author/AuthorWebsitesConfig";
 export * from "./components/widgets/Story/StoryRelatedContent/StoryRelatedContentWebsitesConfig";
 export * from "./components/widgets/common/PhotoSwipe/PhotoSwipeWebsitesConfig";
+export * from "./components/widgets/common/Breadcrumbs/BreadcrumbsWebsitesConfig";
