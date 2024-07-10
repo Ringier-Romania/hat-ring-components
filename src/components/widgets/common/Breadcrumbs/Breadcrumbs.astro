@@ -1,0 +1,67 @@
+---
+import React from "react";
+import _ from "lodash";
+import {
+  AbstractWidgetConfig,
+  AppContext,
+  SiteContentType,
+} from "../../../../types/types";
+import { Breadcrumb, BreadcrumbEntry } from "./types";
+import {
+  WidgetHelper_getWidgetCssClasses,
+  WidgetHelper_renderEmptyComponent,
+} from "../../../../helpers/WidgetHelper";
+const { context, widgetConfig } = Astro.props as {
+  context: AppContext;
+  widgetConfig: AbstractWidgetConfig;
+};
+let toRender: boolean | JSX.Element = false;
+const gqlResponse = _.get(context, "hatControllerParams.gqlResponse");
+
+if (!gqlResponse) {
+  toRender = WidgetHelper_renderEmptyComponent("Breadcrumbs");
+}
+const breadcrumbs: Breadcrumb[] = _.get(
+  gqlResponse,
+  "data.site.data.node.breadcrumbs"
+);
+
+const createBreadcrumb = (breadcrumbs: Breadcrumb[]): BreadcrumbEntry[] => {
+  const breadcrumbEntries = breadcrumbs.map((breadcrumb, index) => ({
+    href: index === 0 ? "/" : `/${breadcrumb.slug}`,
+    text: _.upperFirst(breadcrumb.slug),
+  }));
+
+  switch (context.siteContentType) {
+    case SiteContentType.Story:
+      const title: string = _.get(gqlResponse, "data.site.data.content.title");
+      return [...breadcrumbEntries, { text: title }];
+    case SiteContentType.Author:
+      const name: string = _.get(gqlResponse, "data.site.data.content.name");
+      return [...breadcrumbEntries, { text: name }];
+    default:
+      return breadcrumbEntries;
+  }
+};
+---
+
+{
+  toRender ? (
+    <Fragment set:html={toRender} />
+  ) : (
+    <div
+      className={WidgetHelper_getWidgetCssClasses(
+        "Breadcrumb",
+        widgetConfig,
+        context
+      )}
+    >
+      {createBreadcrumb(breadcrumbs).map(({ href, text }, index, arr) => (
+        <span key={index}>
+          {href ? <a href={href}>{text}</a> : <span>{text}</span>}
+          {index < arr.length - 1 && <span>&nbsp;&gt;&nbsp;</span>}
+        </span>
+      ))}
+    </div>
+  )
+}
