@@ -1,6 +1,6 @@
 ---
-import {WidgetHelper_renderEmptyComponent, WidgetHelper_shouldHideWidget} from "../../helpers/WidgetHelper";
-const {widgetConfig, context} = Astro.props;
+import {WidgetHelper_renderEmptyComponent, WidgetHelper_shouldHideWidget, WidgetHelper_buildWidgetLocation} from "../../helpers/WidgetHelper";
+const {widgetConfig, context, sectionName, boxName, index} = Astro.props;
 
 
 import _ from "lodash";
@@ -9,12 +9,15 @@ import {AbstractWidget, AbstractWidgetConfig, AppContext, WidgetParams} from "..
 interface GridWidgetParams {
     context: AppContext;
     widgetConfig: AbstractWidgetConfig,
+    sectionName: string,
+    boxName: string,
+    index: number,
 };
 let toRender: boolean | JSX.Element = false;
 const availableWidgets = context.customData.widgets;
 const widgetName = _.upperFirst(widgetConfig.widgetType)
 const Component = availableWidgets[widgetName] as AbstractWidget;
-
+widgetConfig.gridLocation = WidgetHelper_buildWidgetLocation(sectionName, boxName, index);
 
 const cssClasses: Array<string> = ['gridWidget']
 
@@ -36,7 +39,7 @@ if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
 ---
 
 {toRender ? <Fragment set:html={toRender}/> :
-    <div className={cssClasses.join(' ')}>
+    <div id={widgetConfig.gridLocation} className={cssClasses.join(' ')}>
         {Component && <Component widgetConfig={widgetConfig} context={context}/>}
     </div>
     }
