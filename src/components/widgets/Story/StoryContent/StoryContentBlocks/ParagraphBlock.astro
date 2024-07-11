@@ -1,6 +1,7 @@
 ---
 const { blockData }: ParagraphBlockParams = Astro.props as ParagraphBlockParams;
 import React from "react";
+import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
 
 export interface ParagraphBlockParams {
   blockData: {
@@ -8,8 +9,18 @@ export interface ParagraphBlockParams {
     text: string;
   };
 }
+let toRender: boolean | JSX.Element = false;
+if (!blockData) {
+  toRender = WidgetHelper_renderEmptyComponent("ParagraphBlock");
+}
 ---
 
-<div className="ParagraphBlock">
-  <p dangerouslySetInnerHTML={{ __html: blockData.text }}></p>
-</div>
+{
+  toRender ? (
+    <Fragment set:html={toRender} />
+  ) : (
+    <div className="ParagraphBlock">
+      <p set:html={blockData.text} />
+    </div>
+  )
+}

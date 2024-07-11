@@ -2,6 +2,7 @@
 const { blockData }: OrderedListBlockParams =
   Astro.props as OrderedListBlockParams;
 import React from "react";
+import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
 
 export interface OrderedListBlockParams {
   blockData: {
@@ -12,14 +13,22 @@ export interface OrderedListBlockParams {
     startValue: number;
   };
 }
+let toRender: boolean | JSX.Element = false;
+if (!blockData) {
+  toRender = WidgetHelper_renderEmptyComponent("OrderedListBlock");
+}
 ---
 
-<div className="OrderedListBlock">
-  <ol>
-    {
-      blockData.entries.map((entry, index) => (
-        <li key={index} dangerouslySetInnerHTML={{ __html: entry }} />
-      ))
-    }
-  </ol>
-</div>
+{
+  toRender ? (
+    <Fragment set:html={toRender} />
+  ) : (
+    <div className="OrderedListBlock">
+      <ol>
+        {blockData.entries.map((entry, index) => (
+          <li key={index} set:html={entry} />
+        ))}
+      </ol>
+    </div>
+  )
+}

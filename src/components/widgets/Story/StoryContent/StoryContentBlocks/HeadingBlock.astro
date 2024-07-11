@@ -1,6 +1,7 @@
 ---
 const { blockData }: HeadingBlockParams = Astro.props as HeadingBlockParams;
 import React from "react";
+import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
 
 export interface HeadingBlockParams {
   blockData: {
@@ -9,9 +10,20 @@ export interface HeadingBlockParams {
     level: number;
   };
 }
+let toRender: boolean | JSX.Element = false;
+
+if (!blockData) {
+  toRender = WidgetHelper_renderEmptyComponent("HeadingBlock");
+}
 const HeadingTag = "h" + blockData.level;
 ---
 
-<div className="HeadingBlock">
-  <HeadingTag>{blockData.text}</HeadingTag>
-</div>
+{
+  toRender ? (
+    <Fragment set:html={toRender} />
+  ) : (
+    <div className="HeadingBlock">
+      <HeadingTag set:html={blockData.text} />
+    </div>
+  )
+}

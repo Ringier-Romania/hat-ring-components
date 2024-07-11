@@ -3,6 +3,7 @@ const { blockData }: PreformattedBlockParams =
   Astro.props as PreformattedBlockParams;
 
 import React from "react";
+import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
 
 export interface PreformattedBlockParams {
   blockData: {
@@ -10,8 +11,18 @@ export interface PreformattedBlockParams {
     text: string;
   };
 }
+let toRender: boolean | JSX.Element = false;
+if (!blockData) {
+  toRender = WidgetHelper_renderEmptyComponent("PreformattedBlock");
+}
 ---
 
-<div className="PreformattedBlock">
-  <pre>{blockData.text}</pre>
-</div>
+{
+  toRender ? (
+    <Fragment set:html={toRender} />
+  ) : (
+    <div className="PreformattedBlock">
+      <pre set:html={blockData.text} />
+    </div>
+  )
+}

@@ -1,6 +1,7 @@
 ---
 const { blockData }: TableBlockParams = Astro.props as TableBlockParams;
 import React from "react";
+import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
 
 export interface TableBlockParams {
   blockData: {
@@ -24,46 +25,54 @@ export interface TableBlockParams {
     ];
   };
 }
+let toRender: boolean | JSX.Element = false;
+if (!blockData) {
+  toRender = WidgetHelper_renderEmptyComponent("TableBlock");
+}
 const { rows } = blockData;
 ---
 
-<table className="TableBlock">
-  <tbody>
-    {
-      rows.map((row) => (
-        <tr>
-          {row.cells.map((cell) => {
-            let allCellClasses = cell.alignment
-              ? `align${cell.alignment} `
-              : "";
-            cell.classes.forEach(
-              (cellClass) => allCellClasses + `${cellClass} `
-            );
+{
+  toRender ? (
+    <Fragment set:html={toRender} />
+  ) : (
+    <table className="TableBlock">
+      <tbody>
+        {rows.map((row) => (
+          <tr>
+            {row.cells.map((cell) => {
+              let allCellClasses = cell.alignment
+                ? `align${cell.alignment} `
+                : "";
+              cell.classes.forEach(
+                (cellClass) => allCellClasses + `${cellClass} `
+              );
 
-            return cell.isHeader ? (
-              <th className={allCellClasses}>
-                {cell.link ? (
-                  <a href={cell.link.url}>{cell.text}</a>
-                ) : (
-                  cell.text
-                )}
-              </th>
-            ) : (
-              <td
-                colSpan={cell.colspan ? cell.colspan : undefined}
-                rowSpan={cell.rowspan ? cell.rowspan : undefined}
-                className={allCellClasses}
-              >
-                {cell.link ? (
-                  <a href={cell.link.url}>{cell.text}</a>
-                ) : (
-                  cell.text
-                )}
-              </td>
-            );
-          })}
-        </tr>
-      ))
-    }
-  </tbody>
-</table>
+              return cell.isHeader ? (
+                <th className={allCellClasses}>
+                  {cell.link ? (
+                    <a href={cell.link.url}>{cell.text}</a>
+                  ) : (
+                    cell.text
+                  )}
+                </th>
+              ) : (
+                <td
+                  colSpan={cell.colspan ? cell.colspan : undefined}
+                  rowSpan={cell.rowspan ? cell.rowspan : undefined}
+                  className={allCellClasses}
+                >
+                  {cell.link ? (
+                    <a href={cell.link.url}>{cell.text}</a>
+                  ) : (
+                    cell.text
+                  )}
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
