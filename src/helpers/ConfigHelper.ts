@@ -100,6 +100,7 @@ export async function ConfigHelper_getDeveloperSettingsConfig(context): Promise<
         'Replacement'?: string,
     }>,
     mainCategoryUuid: string,
+    displayTitleCodeName?: string
 }> {
     return ConfigHelper_getConfig(context, 'devGeneral');
 }

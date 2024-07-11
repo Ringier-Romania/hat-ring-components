@@ -3,17 +3,25 @@ import {StoryTitleWidgetConfig} from "./types";
 import {AppContext} from "../../../../types/types";
 const {context, widgetConfig} = Astro.props as {context: AppContext, widgetConfig: StoryTitleWidgetConfig};
 
-import React from 'react';
 import _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {StoryTitleParams, StoryTitleResponse} from "./types";
+import {StoryTitleResponse} from "./types";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {ConfigHelper_getDeveloperSettingsConfig} from "../../../../helpers/ConfigHelper";
+
+const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(context);
 
 const query = gql`
         query($storyId: UUID){
             story(id:$storyId){
                 title
+                titles {
+                    role {
+                        code
+                    }
+                    text
+                }
             }
         }
     `;
@@ -27,9 +35,10 @@ if (!response) {
     response = await WebsiteApiProvider.call(query, variables) as StoryTitleResponse;
 }
 
-const title = _.get(response, 'data.story.title');
+const title = (displayTitleCodeName && displayTitleCodeName !== '') ? response?.data?.story?.titles?.find((title) => title?.role?.code === displayTitleCodeName)?.text || _.get(response, 'data.story.title') : _.get(response, 'data.story.title');
+
 ---
-<div className={WidgetHelper_getWidgetCssClasses('StoryTitle', widgetConfig, context)}>
+<div class={WidgetHelper_getWidgetCssClasses('StoryTitle', widgetConfig, context)}>
     <h1>{title}</h1>
 </div>
 

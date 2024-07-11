@@ -114,6 +114,12 @@ export interface BasicWidgetResponseNode {
                 }
             }
         }>,
+        titles?: Array<{
+            role?: {
+                code?: string
+            }
+            text?: string
+        }>,
     },
     image?: { url?: string, caption?: string, }
     leads?: Array<{

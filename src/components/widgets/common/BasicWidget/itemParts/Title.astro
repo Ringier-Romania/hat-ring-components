@@ -1,0 +1,61 @@
+---
+import {AppContext} from "../../../../../types/types";
+import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
+import _ from "lodash";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {ConfigHelper_getDeveloperSettingsConfig} from "../../../../../helpers/ConfigHelper";
+import gql from "graphql-tag";
+
+type Props = {
+    context: AppContext,
+    widgetConfig: BasicWidgetConfig,
+    data: BasicWidgetResponseNode,
+}
+
+const {context, widgetConfig, data} = Astro.props as Props;
+
+const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(context);
+
+const title = (displayTitleCodeName && displayTitleCodeName !=='') ?  data?.originalContent?.titles?.find((title) => title?.role?.code === displayTitleCodeName)?.text :  data.title;
+
+if (!title) {
+    return WidgetHelper_renderEmptyComponent('Title','', true);
+}
+
+const HeaderTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span' ) as keyof JSX.IntrinsicElements;
+let ItemHeaderTag = HeaderTag;
+
+const itemsHeaderArr = HeaderTag.split('h');
+if (itemsHeaderArr.length === 2) {
+    const tagLevel = Number(itemsHeaderArr[1]);
+    if (tagLevel >= 6) {
+        ItemHeaderTag = 'span';
+    } else {
+        ItemHeaderTag = `h${_.clamp(tagLevel + 1, 2, 6)}` as keyof JSX.IntrinsicElements;
+    }
+}
+
+export const getFragment = () => {
+    return {
+        variables: {},
+        query: gql`fragment TitleFragment on SectionItem {
+            title
+            originalContent {
+                    ... on Story {
+                        titles {
+                            role {
+                                code
+                            }
+                            text
+                        }
+                        
+                    }
+                }
+        }`
+    }
+}
+---
+<div class={['Title'].join(' ')}>
+    <ItemHeaderTag>{title}</ItemHeaderTag>
+</div>
+
