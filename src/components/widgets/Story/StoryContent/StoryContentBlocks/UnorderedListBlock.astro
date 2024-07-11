@@ -1,0 +1,34 @@
+---
+const { blockData }: UnorderedListBlockParams =
+  Astro.props as UnorderedListBlockParams;
+import React from "react";
+import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
+
+export interface UnorderedListBlockParams {
+  blockData: {
+    type: string;
+    entries: string[];
+    indentLevel: number;
+    styleType: string;
+  };
+}
+let toRender: boolean | JSX.Element = false;
+
+if (!blockData) {
+  toRender = WidgetHelper_renderEmptyComponent("UnorderedListBlock");
+}
+---
+
+{
+  toRender ? (
+    <Fragment set:html={toRender} />
+  ) : (
+    <div className="UnorderedListBlock">
+      <ul>
+        {blockData.entries.map((entry, index) => (
+          <li key={index} set:html={entry} />
+        ))}
+      </ul>
+    </div>
+  )
+}
