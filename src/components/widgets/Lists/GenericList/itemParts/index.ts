@@ -1,4 +1,5 @@
-export { default as Title } from './Title';
+export { default as Title } from './Title.astro';
+export { getFragment as Title_getFragment } from './Title.astro';
 export { default as Image } from './Image.astro';
 export { getFragment as Image_getFragment } from './Image.astro';
 export { default as Taxonomies } from './Taxonomies';
