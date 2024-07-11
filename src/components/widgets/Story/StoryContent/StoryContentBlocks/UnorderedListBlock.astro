@@ -1,0 +1,24 @@
+---
+const { blockData }: UnorderedListBlockParams =
+  Astro.props as UnorderedListBlockParams;
+import React from "react";
+
+export interface UnorderedListBlockParams {
+  blockData: {
+    type: string;
+    entries: string[];
+    indentLevel: number;
+    styleType: string;
+  };
+}
+---
+
+<div className="UnorderedListBlock">
+  <ul>
+    {
+      blockData.entries.map((entry, index) => (
+        <li key={index} dangerouslySetInnerHTML={{ __html: entry }} />
+      ))
+    }
+  </ul>
+</div>

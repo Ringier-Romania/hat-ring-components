@@ -1,0 +1,17 @@
+---
+const { blockData }: HeadingBlockParams = Astro.props as HeadingBlockParams;
+import React from "react";
+
+export interface HeadingBlockParams {
+  blockData: {
+    type: string;
+    text: string;
+    level: number;
+  };
+}
+const HeadingTag = "h" + blockData.level;
+---
+
+<div className="HeadingBlock">
+  <HeadingTag>{blockData.text}</HeadingTag>
+</div>

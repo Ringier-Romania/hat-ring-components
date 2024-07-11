@@ -1,0 +1,15 @@
+---
+const { blockData }: ParagraphBlockParams = Astro.props as ParagraphBlockParams;
+import React from "react";
+
+export interface ParagraphBlockParams {
+  blockData: {
+    type: string;
+    text: string;
+  };
+}
+---
+
+<div className="ParagraphBlock">
+  <p dangerouslySetInnerHTML={{ __html: blockData.text }}></p>
+</div>

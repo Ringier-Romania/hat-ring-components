@@ -1,0 +1,25 @@
+---
+const { blockData }: OrderedListBlockParams =
+  Astro.props as OrderedListBlockParams;
+import React from "react";
+
+export interface OrderedListBlockParams {
+  blockData: {
+    type: string;
+    entries: string[];
+    indentLevel: number;
+    styleType: string;
+    startValue: number;
+  };
+}
+---
+
+<div className="OrderedListBlock">
+  <ol>
+    {
+      blockData.entries.map((entry, index) => (
+        <li key={index} dangerouslySetInnerHTML={{ __html: entry }} />
+      ))
+    }
+  </ol>
+</div>

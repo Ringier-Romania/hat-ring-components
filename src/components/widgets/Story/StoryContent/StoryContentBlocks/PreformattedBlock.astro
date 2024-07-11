@@ -1,0 +1,17 @@
+---
+const { blockData }: PreformattedBlockParams =
+  Astro.props as PreformattedBlockParams;
+
+import React from "react";
+
+export interface PreformattedBlockParams {
+  blockData: {
+    type: string;
+    text: string;
+  };
+}
+---
+
+<div className="PreformattedBlock">
+  <pre>{blockData.text}</pre>
+</div>
