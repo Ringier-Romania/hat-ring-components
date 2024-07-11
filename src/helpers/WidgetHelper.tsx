@@ -1,6 +1,6 @@
 import React from "react";
 import {AbstractWidgetConfig, AppContext} from "../types/types";
-import {UtilsHelper_isDevelopmentMode, UtilsHelper_isMobile} from "./UtilsHelper";
+import {UtilsHelper_getQueryParam, UtilsHelper_isDevelopmentMode, UtilsHelper_isMobile} from "./UtilsHelper";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
 import _ from "lodash";
@@ -9,6 +9,10 @@ import {BasicWidgetConfig} from "../components/widgets/common/BasicWidget/types"
 import {GenericListWidgetConfig} from "../components/widgets/Lists/GenericList/types";
 
 export function WidgetHelper_shouldHideWidget(widgetConfig, context) {
+    const gridLocationParam = UtilsHelper_getQueryParam('gridLocation', context);
+    if (gridLocationParam !== null && gridLocationParam !== widgetConfig.gridLocation) {
+        return true;
+    }
 
     if (typeof context.hatControllerParams.isMobile === 'boolean'
         && typeof widgetConfig.platformDesktop === 'boolean'
@@ -140,4 +144,8 @@ export async function WidgetHelper_getAppropriateTeaserImage(widgetConfig: Basic
     }
 
     return customTeaserImageUrl;
+}
+
+export function WidgetHelper_buildWidgetLocation(sectionName: string, boxName: string, index: number) {
+    return [sectionName, boxName, index].join('--');
 }
