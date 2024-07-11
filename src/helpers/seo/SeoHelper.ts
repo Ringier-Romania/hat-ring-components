@@ -14,7 +14,7 @@ import {SeoDescriptionHelper_pageDescription} from "./SeoDescriptionHelper";
 import {
     UtilsHelper_asyncSequentialForEach,
     UtilsHelper_getCurrentNodeName,
-    UtilsHelper_getCurrentPageType
+    UtilsHelper_getCurrentPageType, UtilsHelper_getQueryParam
 } from "../UtilsHelper";
 import _ from "lodash";
 import {SiteContentType} from "../../types/types";
@@ -24,6 +24,7 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 export async function SeoHelper_currentTitle(context, place: string) {
     const seoTitlesSettings = await ConfigHelper_getSeoTitlesAndDescriptionConfig(context);
     const pageType = UtilsHelper_getCurrentPageType(context);
+    const withNumeration = !!UtilsHelper_getQueryParam('page', context);
     let pattern= null;
 
     switch (pageType) {
@@ -32,7 +33,7 @@ export async function SeoHelper_currentTitle(context, place: string) {
             break;
 
         case SiteContentType.SiteNode:
-            pattern = _.get(seoTitlesSettings, 'listPageTitle');
+            pattern = withNumeration ? _.get(seoTitlesSettings, 'listPageTitleWithNumeration') : _.get(seoTitlesSettings, 'listPageTitle');
             break;
 
         case 'Homepage':
@@ -40,7 +41,7 @@ export async function SeoHelper_currentTitle(context, place: string) {
             break;
 
         case SiteContentType.Topic:
-            pattern = _.get(seoTitlesSettings, 'topicPageTitle');
+            pattern = withNumeration ? _.get(seoTitlesSettings, 'topicPageTitleWithNumeration') : _.get(seoTitlesSettings, 'topicPageTitle');
             break;
 
         case SiteContentType.Author:
@@ -63,6 +64,7 @@ export async function SeoHelper_currentTitle(context, place: string) {
 export async function SeoHelper_currentDescription(context, place: string) {
     const seoDescriptionSettings = await ConfigHelper_getSeoTitlesAndDescriptionConfig(context);
     const pageType = UtilsHelper_getCurrentPageType(context);
+    const withNumeration = !!UtilsHelper_getQueryParam('page', context);
     let pattern= null;
 
     switch (pageType) {
@@ -71,7 +73,7 @@ export async function SeoHelper_currentDescription(context, place: string) {
             break;
 
         case SiteContentType.SiteNode:
-            pattern = _.get(seoDescriptionSettings, 'listPageDescription');
+            pattern = withNumeration ? _.get(seoDescriptionSettings, 'listPageDescriptionWithNumeration') : _.get(seoDescriptionSettings, 'listPageDescription');
             break;
 
         case 'Homepage':
@@ -79,7 +81,7 @@ export async function SeoHelper_currentDescription(context, place: string) {
             break;
 
         case SiteContentType.Topic:
-            pattern = _.get(seoDescriptionSettings, 'topicPageDescription');
+            pattern = withNumeration ? _.get(seoDescriptionSettings, 'topicPageDescriptionWithNumeration') : _.get(seoDescriptionSettings, 'topicPageDescription');
             break;
 
         case SiteContentType.Author:
@@ -183,7 +185,7 @@ async function mapPatternVariables(context, place: string, fieldToCheck: string 
     }
 
     if (fieldToCheck.includes('{{number}}')) {
-        dynamicPatternMap['{{number}}'] = 'number'; //TODO: Add support for page numbers
+        dynamicPatternMap['{{number}}'] = () => {return UtilsHelper_getQueryParam('page', context)}
     }
 
     if (fieldToCheck.includes('{{authorName}}')) {

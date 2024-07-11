@@ -50,7 +50,8 @@ export let GenericListWebsitesConfig
                         "items",
                         "header",
                         "pagination",
-                        "button"
+                        "button",
+                        ['infiniteScrollButton', "Infinite scroll button"]
                     ]
                 },
                 "showOptions": {

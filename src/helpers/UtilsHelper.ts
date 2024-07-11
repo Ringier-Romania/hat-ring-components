@@ -85,3 +85,6 @@ export function UtilsHelper_getCurrentNodeCategoryId(context: AppContext) {
 export function UtilsHelper_generateRandomString(length = 8) {
     return Math.random().toString(20).substr(2, length);
 }
+export function UtilsHelper_getQueryParam(param: string, context: AppContext) {
+    return _.get(context, ['hatControllerParams', 'urlWithParsedQuery', 'query', param], null);
+}
