@@ -9,7 +9,7 @@ const {
 
 const buttonId = 'infiniteScrollButton_' + UtilsHelper_generateRandomString();
 ---
-<button id={buttonId} type="button" class="infiniteScrollButton" title={widgetConfig.moreText}>asdas{widgetConfig.moreText}</button>
+<button id={buttonId} type="button" class="infiniteScrollButton" title={widgetConfig.moreText}>{widgetConfig.moreText}</button>
 
 <script define:vars={{buttonId, gridLocation: widgetConfig.gridLocation, isMainSeoList: widgetConfig.mainSeoList, widgetType: widgetConfig.widgetType}}>
     const button = document.getElementById(buttonId);
@@ -57,9 +57,9 @@ const buttonId = 'infiniteScrollButton_' + UtilsHelper_generateRandomString();
             const prevItemsWrappers = button.parentNode.querySelectorAll('.Items');
             prevItemsWrappers[prevItemsWrappers.length - 1].insertAdjacentElement('afterend', widgetDataEl);
 
-            const test = new URL(window.location.href);
-            test.searchParams.set('page', nextPage);
-            history.pushState('', '', test.href);
+            const nextPageUrl = new URL(window.location.href);
+            nextPageUrl.searchParams.set('page', nextPage);
+            history.pushState('', '', nextPageUrl.href);
         } catch (e) {
             console.error(e);
         }
@@ -75,7 +75,6 @@ const buttonId = 'infiniteScrollButton_' + UtilsHelper_generateRandomString();
         defaultItems.setAttribute('data-page-title', pageTitle?.textContent || '');
         defaultItems.setAttribute('data-page-description', padeDescription?.getAttribute('content') || '');
         seoObserver.observe(defaultItems);
-        // history.pushState('', '', currentUrl.href);
     }
 
 
@@ -85,8 +84,6 @@ const buttonId = 'infiniteScrollButton_' + UtilsHelper_generateRandomString();
         const prevPage = currentPage - 1;
         const nextPage = currentPage + 1;
         url.searchParams.set('page', currentPage);
-        // window.history.replaceState('', '', url.href);
-
 
         const canonicalTag = document.head.querySelector('link[rel="canonical"]');
         const pageMetaTag = document.head.querySelector('meta[name="robots"]');
