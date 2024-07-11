@@ -14,9 +14,9 @@ type Props = {
 
 const {context, widgetConfig, data} = Astro.props as Props;
 
-const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(context) || '';
+const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(context);
 
-const title = data?.titles?.find((title) => title?.role?.code === displayTitleCodeName)?.text || data.title;
+const title = (displayTitleCodeName && displayTitleCodeName !=='') ? data?.titles?.find((title) => title?.role?.code === displayTitleCodeName)?.text : data.title;
 
 if (!title) {
     return WidgetHelper_renderEmptyComponent('Title','',true);

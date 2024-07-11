@@ -10,7 +10,7 @@ import {StoryTitleResponse} from "./types";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {ConfigHelper_getDeveloperSettingsConfig} from "../../../../helpers/ConfigHelper";
 
-const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(context) || '';
+const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(context);
 
 const query = gql`
         query($storyId: UUID){
