@@ -1,9 +1,11 @@
 ---
-const { blockData }: TableBlockParams = Astro.props as TableBlockParams;
-import React from "react";
+const { context, blockData }: TableBlockParams = Astro.props as TableBlockParams;
 import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
+import {LinkReplacerHelper_replaceLinks} from '../../../../../helpers/LinkReplacerHelper';
+import { AppContext } from "../../../../../types/types";
 
 export interface TableBlockParams {
+  context: AppContext;
   blockData: {
     type: string;
     rows: [
@@ -22,13 +24,21 @@ export interface TableBlockParams {
           },
         ];
       },
-    ];
+    ] | [];
   };
 }
 let toRender: boolean | JSX.Element = false;
 if (!blockData) {
   toRender = WidgetHelper_renderEmptyComponent("TableBlock");
 }
+
+blockData.rows = await Promise.all(blockData.rows.map(async (row) => {
+  return Promise.all(row.cells.map(async (cell) => {
+    cell.text = await LinkReplacerHelper_replaceLinks(context, cell.text);
+    return cell;
+  }));
+}));
+
 const { rows } = blockData;
 ---
 
@@ -36,7 +46,7 @@ const { rows } = blockData;
   toRender ? (
     <Fragment set:html={toRender} />
   ) : (
-    <table className="TableBlock">
+    <table class="TableBlock">
       <tbody>
         {rows.map((row) => (
           <tr>
@@ -49,7 +59,7 @@ const { rows } = blockData;
               );
 
               return cell.isHeader ? (
-                <th className={allCellClasses}>
+                <th class={allCellClasses}>
                   {cell.link ? (
                     <a href={cell.link.url}>{cell.text}</a>
                   ) : (

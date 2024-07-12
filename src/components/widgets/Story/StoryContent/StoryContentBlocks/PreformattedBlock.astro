@@ -1,11 +1,12 @@
 ---
-const { blockData }: PreformattedBlockParams =
+const { context, blockData }: PreformattedBlockParams =
   Astro.props as PreformattedBlockParams;
-
-import React from "react";
 import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
+import {LinkReplacerHelper_replaceLinks} from '../../../../../helpers/LinkReplacerHelper';
+import { AppContext } from "../../../../../types/types";
 
 export interface PreformattedBlockParams {
+  context: AppContext;
   blockData: {
     type: string;
     text: string;
@@ -15,13 +16,15 @@ let toRender: boolean | JSX.Element = false;
 if (!blockData) {
   toRender = WidgetHelper_renderEmptyComponent("PreformattedBlock");
 }
+
+blockData.text = await LinkReplacerHelper_replaceLinks(context, blockData.text);
 ---
 
 {
   toRender ? (
     <Fragment set:html={toRender} />
   ) : (
-    <div className="PreformattedBlock">
+    <div class="PreformattedBlock">
       <pre set:html={blockData.text} />
     </div>
   )
