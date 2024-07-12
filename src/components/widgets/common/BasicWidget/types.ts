@@ -87,6 +87,12 @@ export interface BasicWidgetResponseNode {
     modificationTime?: string,
     authors?: Array<string>,
     topics?: Array<string>
+    titles?: Array<{
+        role?: {
+            code?: string
+        }
+        text?: string
+    }>,
     originalContent?: {
         image?: {
             url?: string,
