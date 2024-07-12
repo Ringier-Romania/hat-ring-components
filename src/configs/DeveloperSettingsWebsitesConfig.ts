@@ -12,6 +12,7 @@ export let DeveloperSettingsWebsitesConfig
                         "devGeneral.globalCustomTeasers",
                         "devGeneral.mainCategoryUuid",
                         "devGeneral.headWidgets",
+                        "devGeneral.displayTitleCodeName",
                     ]
                 },
                 "dateFormat": {
@@ -49,6 +50,7 @@ export let DeveloperSettingsWebsitesConfig
             "globalCustomTeasers": [],
             "mainCategoryUuid": "",
             "headWidgets": [],
+            "displayTitleCodeName": "display_title",
         },
        "dateFormat": {
             "timeZone": "Europe/London",
@@ -120,6 +122,11 @@ export let DeveloperSettingsWebsitesConfig
                 "editable": true,
                 "modules_list": "GULP-HEAD-MODULES-LIST",
                 "name": "Widgets in <head>"
+            },
+            "displayTitleCodeName": {
+                "name": "Display title (title addon code name)",
+                "description": "Display title (title addon code name)",
+                "type": "textfield"
             },
         },
         "dateFormat": {

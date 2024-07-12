@@ -1,8 +1,8 @@
 import { AppContext } from '../types/types';
-import {ConfigHelper_getDetail} from './ConfigHelper';
+import {getDeveloperSettingDetail} from './ConfigHelper';
 
 export async function LinkReplacerHelper_replaceLinks(context: AppContext, text: string) {
-    const { linksReplace } = await ConfigHelper_getDetail(context);
+    const { linksReplace } = await getDeveloperSettingDetail(context);
 
     if (!linksReplace) {
         return text;

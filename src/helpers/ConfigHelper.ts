@@ -123,7 +123,7 @@ export async function ConfigHelper_getDateFormatConfig(context) {
     }>;
 }
 
-export async function ConfigHelper_getDetail(context): Promise <{
+export async function getDeveloperSettingDetail(context): Promise <{
     linksReplace: Array<{
         'text': string,
         'role': string,
