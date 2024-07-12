@@ -123,6 +123,17 @@ export async function ConfigHelper_getDateFormatConfig(context) {
     }>;
 }
 
+export async function ConfigHelper_getDetail(context): Promise <{
+    linksReplace: Array<{
+        'text': string,
+        'role': string,
+        'replace': string,
+        'children'?: Array<{}>
+    }>
+}> {
+    return ConfigHelper_getConfig(context, 'devDetail');
+}
+
 export async function ConfigHelper_getSiteName(context) {
     const generalSettings = await ConfigHelper_getGeneralConfig(context);
     return generalSettings ? generalSettings.siteName : '';
