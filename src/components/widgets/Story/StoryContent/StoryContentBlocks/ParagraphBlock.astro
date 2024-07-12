@@ -1,29 +1,26 @@
 ---
-const { blockData }: HeadingBlockParams = Astro.props as HeadingBlockParams;
+const { blockData }: ParagraphBlockParams = Astro.props as ParagraphBlockParams;
 import React from "react";
 import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
 
-export interface HeadingBlockParams {
+export interface ParagraphBlockParams {
   blockData: {
     type: string;
     text: string;
-    level: number;
   };
 }
 let toRender: boolean | JSX.Element = false;
-
 if (!blockData) {
-  toRender = WidgetHelper_renderEmptyComponent("HeadingBlock");
+  toRender = WidgetHelper_renderEmptyComponent("ParagraphBlock");
 }
-const HeadingTag = "h" + blockData.level;
 ---
 
 {
   toRender ? (
     <Fragment set:html={toRender} />
   ) : (
-    <div className="HeadingBlock">
-      <HeadingTag set:html={blockData.text} />
+    <div className="ParagraphBlock">
+      <p set:html={blockData.text} />
     </div>
   )
 }

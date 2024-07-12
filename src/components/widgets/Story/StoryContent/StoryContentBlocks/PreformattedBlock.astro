@@ -1,29 +1,28 @@
 ---
-const { blockData }: HeadingBlockParams = Astro.props as HeadingBlockParams;
+const { blockData }: PreformattedBlockParams =
+  Astro.props as PreformattedBlockParams;
+
 import React from "react";
 import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
 
-export interface HeadingBlockParams {
+export interface PreformattedBlockParams {
   blockData: {
     type: string;
     text: string;
-    level: number;
   };
 }
 let toRender: boolean | JSX.Element = false;
-
 if (!blockData) {
-  toRender = WidgetHelper_renderEmptyComponent("HeadingBlock");
+  toRender = WidgetHelper_renderEmptyComponent("PreformattedBlock");
 }
-const HeadingTag = "h" + blockData.level;
 ---
 
 {
   toRender ? (
     <Fragment set:html={toRender} />
   ) : (
-    <div className="HeadingBlock">
-      <HeadingTag set:html={blockData.text} />
+    <div className="PreformattedBlock">
+      <pre set:html={blockData.text} />
     </div>
   )
 }
