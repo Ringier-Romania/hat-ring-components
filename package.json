@@ -23,7 +23,8 @@
 		"lodash": "^4.17.21",
 		"schema-dts": "^1.1.2",
 		"xml-js": "^1.6.11",
-		"astro": "^4.7.1"
+		"astro": "^4.7.1",
+		"node-cache": "^5.1.2"
 	},
 	"devDependencies": {
 		"@types/node": "^12.12.21",

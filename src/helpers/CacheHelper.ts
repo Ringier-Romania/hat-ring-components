@@ -1,56 +1,28 @@
 import {UtilsHelper_convertToInt} from "./UtilsHelper";
 
-export function CacheHelper_set(key: any, value: any) {
-    if (process.env.CACHE_TTL === '0') {
+import NodeCache from "node-cache";
+const stdTTL = process.env.CACHE_TTL ? UtilsHelper_convertToInt(process.env.CACHE_TTL) : 0;
+const myCache = new NodeCache({stdTTL: stdTTL, checkperiod: 120});
+
+export function CacheHelper_set(key: any, value: any, TTL: null | number | undefined = null) {
+    if (process.env.CACHE_TTL === '0' && !TTL) {
         return;
-    }
-    if(!global.HATcache){
-        global.HATcache = [];
-    }
+    }3
+
+    const ttl = TTL || process.env.CACHE_TTL;
     key = JSON.stringify(key);
-    global.HATcache[key] = value;
-    global.HATcache[`timeStamp_${key}`] = new Date().getTime();
+    myCache.set(key, value, ttl);
 }
 
-export function CacheHelper_get(key: any){
-    if (process.env.CACHE_TTL === '0') {
-        return null;
-    }
-    handleCleanCache();
+export function CacheHelper_get(key: any) {
     key = JSON.stringify(key);
-    if(global.HATcache && global.HATcache[key]){
-        return global.HATcache[key]
-    }
-
-    return null;
+    return myCache.get(key);
 }
 
-export function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback: Function){
-    if (process.env.CACHE_TTL === '0') {
-        return;
-    }
-    if(!global.HATcache){
-        global.HATcache = [];
-    }
+export function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback: Function) {
     key = JSON.stringify(key);
-    const timeStamp = global.HATcache[`timeStamp_${key}`];
-    const currentTime = new Date().getTime();
-    const TTL = process.env.CACHE_TTL ? UtilsHelper_convertToInt(process.env.CACHE_TTL) : 60;
-
-    if (timeStamp && (currentTime - timeStamp >= (TTL * 1000))) {
+     if(!myCache.get(key)) {
         callback();
-    }
+     }
 }
 
-function handleCleanCache(){
-    const currentTime = new Date().getTime();
-    if(!global.lastHATCacheClean){
-        global.lastHATCacheClean = currentTime;
-    }
-
-    const TTL = process.env.CACHE_CLEAN_INTERVAL ? UtilsHelper_convertToInt(process.env.CACHE_CLEAN_INTERVAL) : 60;
-    if(currentTime - global.lastHATCacheClean > (TTL * 1000)){
-        global.HATcache = [];
-        global.lastHATCacheClean = currentTime;
-    }
-}
