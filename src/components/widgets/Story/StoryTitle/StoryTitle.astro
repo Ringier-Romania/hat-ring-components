@@ -12,6 +12,8 @@ import {ConfigHelper_getDeveloperSettingsConfig} from "../../../../helpers/Confi
 
 let toRender: boolean | JSX.Element | string = false;
 
+let title: string | null | undefined = null;
+
 const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(context) || {displayTitleCodeName: ''};
 
 const query = gql`
@@ -37,7 +39,12 @@ if (!response) {
     response = await WebsiteApiProvider.call(query, variables) as StoryTitleResponse;
 }
 
-const title = (displayTitleCodeName && displayTitleCodeName !== '') ? response?.data?.story?.titles?.find((title) => title?.role?.code === displayTitleCodeName)?.text || _.get(response, 'data.story.title') : _.get(response, 'data.story.title');
+if (displayTitleCodeName && displayTitleCodeName !== '') {
+    const displayTitleFound = response?.data?.story?.titles?.find((title) => title?.role?.code === displayTitleCodeName);
+    title = displayTitleFound ? displayTitleFound.text : _.get(response, 'data.story.title');
+} else {
+    title = _.get(response, 'data.story.title');
+}
 
 if (!title) {
     toRender = WidgetHelper_renderEmptyComponent('Title','', true);

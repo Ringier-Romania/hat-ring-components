@@ -15,9 +15,16 @@ type Props = {
 const {context, widgetConfig, data} = Astro.props as Props;
 let toRender: boolean | JSX.Element | string = false;
 
+let title: string | null | undefined = null;
+
 const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(context) || {displayTitleCodeName: ''};
 
-const title = (displayTitleCodeName && displayTitleCodeName !=='') ? data?.titles?.find((title) => title?.role?.code === displayTitleCodeName)?.text : data.title;
+if (displayTitleCodeName && displayTitleCodeName !== '') {
+    const displayTitleFound = data?.titles?.find((title) => title?.role?.code === displayTitleCodeName);
+    title = displayTitleFound ? displayTitleFound.text : data.title;
+} else {
+    title = data.title;
+}
 
 if (!title) {
     toRender = WidgetHelper_renderEmptyComponent('Title','', true);
