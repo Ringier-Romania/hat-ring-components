@@ -16,7 +16,7 @@ const {context, widgetConfig, data} = Astro.props as Props;
 let title = null;
 const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(context);
 if (displayTitleCodeName) {
-    const displayTitleFound = data?.originalContent?.titles?.find((title) => title?.role?.code === displayTitleCodeName);
+    const displayTitleFound = data?.titles?.find((title) => title?.role?.code === displayTitleCodeName);
     title = displayTitleFound ? displayTitleFound.text : data.title;
 } else {
     title = data.title;
@@ -44,17 +44,12 @@ export const getFragment = () => {
         variables: {},
         query: gql`fragment TitleFragment on SectionItem {
             title
-            originalContent {
-                    ... on Story {
-                        titles {
-                            role {
-                                code
-                            }
-                            text
-                        }
-                        
-                    }
+            titles {
+                role {
+                    code
                 }
+                text
+            }
         }`
     }
 }
