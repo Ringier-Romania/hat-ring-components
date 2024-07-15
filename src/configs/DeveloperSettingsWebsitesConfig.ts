@@ -30,9 +30,17 @@ export let DeveloperSettingsWebsitesConfig
                     ]
                 }
             },
+            "devDetail": {
+                "type": "group",
+                "name": "Detail",
+                "fields": [
+                    "devDetail.linksReplace"
+                ]
+            },
             "keys": [
                 "devGeneral",
                 "dateFormat",
+                "devDetail",
             ]
         }
     ],
@@ -53,7 +61,10 @@ export let DeveloperSettingsWebsitesConfig
             "lastWeek": "[Last] dddd [at] h:mm A",
             "nextWeek": "dddd [at] h:mm A",
             "sameElse": "DD-MM-YYYY",
-        }
+        },
+        "devDetail": {
+            "linksReplace": [{"text":"sponsored","role":"sponsored","replace":"rel=\"sponsored\""},{"text":"Open in new tab","role":"open_in_new_tab","replace":"target=\"_blank\" rel=\"noopener noreferrer\""}]
+        },
     },
     "paramsDescription": {
         "devGeneral": {
@@ -160,7 +171,23 @@ export let DeveloperSettingsWebsitesConfig
                 "description": "Moment.js calendar function body string",
                 "type": "textfield"
             }
-        }
+        },
+        "devDetail":{
+            "linksReplace": {
+                "type": "treeobject",
+                "name": "Links replacer",
+                "properties": [
+                    {
+                        "name": "role",
+                        "type": "textfield"
+                    },
+                    {
+                        "name": "replace",
+                        "type": "textfield"
+                    }
+                ]
+            }
+        },
     },
     "modules": {}
 }
