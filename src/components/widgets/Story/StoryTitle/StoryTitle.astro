@@ -7,10 +7,12 @@ import _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTitleResponse} from "./types";
-import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper";
 import {ConfigHelper_getDeveloperSettingsConfig} from "../../../../helpers/ConfigHelper";
 
-const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(context);
+let toRender: boolean | JSX.Element | string = false;
+
+const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(context) || {displayTitleCodeName: ''};
 
 const query = gql`
         query($storyId: UUID){
@@ -37,9 +39,14 @@ if (!response) {
 
 const title = (displayTitleCodeName && displayTitleCodeName !== '') ? response?.data?.story?.titles?.find((title) => title?.role?.code === displayTitleCodeName)?.text || _.get(response, 'data.story.title') : _.get(response, 'data.story.title');
 
+if (!title) {
+    toRender = WidgetHelper_renderEmptyComponent('Title','', true);
+}
 ---
-<div class={WidgetHelper_getWidgetCssClasses('StoryTitle', widgetConfig, context)}>
-    <h1>{title}</h1>
-</div>
-
-
+{toRender ?
+    <Fragment set:html={toRender}/>
+    :
+    <div class={WidgetHelper_getWidgetCssClasses('StoryTitle', widgetConfig, context)}>
+        <h1>{title}</h1>
+    </div>
+}
