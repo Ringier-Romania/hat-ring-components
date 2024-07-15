@@ -9,7 +9,8 @@ export async function LinkReplacerHelper_replaceLinks(context: AppContext, text:
     }
 
     linksReplace.forEach((item) => {
-        text = text.replace(`data-link-role-code="${item.role}"`, item.replace);
+        const re = new RegExp(`data-link-role-code="${item.role}"`, 'g');
+        text = text.replace(re, item.replace);
     });
 
     return text;
