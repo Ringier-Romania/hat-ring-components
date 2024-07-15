@@ -7,7 +7,7 @@ import {
 
 export class WebsiteApiProvider {
 
-    static async call(query: DocumentNode, variables) {
+    static async call(query: DocumentNode, variables, cacheTtl: null | number = null) {
         const accessKey = process.env.WEBSITE_API_PUBLIC!;
         const secretKey = process.env.WEBSITE_API_SECRET!;
         const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
@@ -31,13 +31,14 @@ export class WebsiteApiProvider {
                         query,
                         variables,
                         fetchPolicy
-                    }));
+                    }), cacheTtl);
                 });
                 return cachedResponse;
             }
 
+            //console.log('call ', query.loc?.source.body, variables);
             const response = await global.websitesApiApolloClient.query({query, variables, fetchPolicy});
-            CacheHelper_set(cacheKey, response);
+            CacheHelper_set(cacheKey, response, cacheTtl);
             return response;
         } catch (e) {
             console.error(query.loc?.source.body, variables, e);

@@ -24,7 +24,8 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
         }
     `;
 
-    const response = await WebsiteApiProvider.call(query, variables);
+
+    const response = await WebsiteApiProvider.call(query, variables, 60);
     const sectionsConfig = _.get(response, 'data.node.config.config.0.data');
 
     return sectionsConfig;

@@ -2,7 +2,7 @@ import {UtilsHelper_convertToInt} from "./UtilsHelper";
 
 import NodeCache from "node-cache";
 const stdTTL = process.env.CACHE_TTL ? UtilsHelper_convertToInt(process.env.CACHE_TTL) : 0;
-const myCache = new NodeCache({stdTTL: stdTTL, checkperiod: 120});
+const myCache = new NodeCache({stdTTL: stdTTL, checkperiod: 0, deleteOnExpire: false});
 
 export function CacheHelper_set(key: any, value: any, TTL: null | number | undefined = null) {
     if (process.env.CACHE_TTL === '0' && !TTL) {
@@ -20,8 +20,12 @@ export function CacheHelper_get(key: any) {
 }
 
 export function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback: Function) {
+
+
     key = JSON.stringify(key);
-     if(!myCache.get(key)) {
+    const ttl = myCache.getTtl( key );
+    const expired = ttl ? ttl - new Date().getTime() < 0 : true;
+     if(expired) {
         callback();
      }
 }

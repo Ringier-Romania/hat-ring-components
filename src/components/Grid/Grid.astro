@@ -9,7 +9,7 @@ import _ from "lodash";
 import Container from "./Container.astro";
 import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 import {UtilsHelper_getDomain, UtilsHelper_isDevelopmentMode} from "../../helpers/UtilsHelper";
-import {CacheHelper_get} from "../../helpers/CacheHelper";
+import {CacheHelper_get, CacheHelper_set} from "../../helpers/CacheHelper";
 
 export interface GridParams extends ComponentParams {
     config: {
@@ -50,12 +50,14 @@ const query = gql`
         }
     `;
 
-let sectionsConfig = false;
-if (CacheHelper_get(cacheKey)) {
-    sectionsConfig = CacheHelper_get(cacheKey);
+let sectionsConfig: any = false;
+const cached = CacheHelper_get(cacheKey);
+if (cached) {
+    sectionsConfig = cached;
 } else {
     const response = await WebsiteApiProvider.call(query, variables);
     sectionsConfig = _.get(response, 'data.node.config');
+    CacheHelper_set(cacheKey, sectionsConfig, 5);
 }
 ---
 
