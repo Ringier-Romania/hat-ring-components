@@ -2,9 +2,9 @@ import { AppContext } from '../types/types';
 import {getDeveloperSettingDetail} from './ConfigHelper';
 
 export async function LinkReplacerHelper_replaceLinks(context: AppContext, text: string) {
-    const { linksReplace } = await getDeveloperSettingDetail(context);
+    const { linksReplace } = await getDeveloperSettingDetail(context) || {linksReplace: []};
 
-    if (!linksReplace) {
+    if (!linksReplace || !linksReplace.length) {
         return text;
     }
 
