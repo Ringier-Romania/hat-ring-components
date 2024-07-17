@@ -15,13 +15,12 @@ export function CacheHelper_set(key: any, value: any, TTL: null | number | undef
 }
 
 export function CacheHelper_get(key: any) {
+    handleCleanCache();
     key = JSON.stringify(key);
     return myCache.get(key);
 }
 
 export function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback: Function) {
-
-
     key = JSON.stringify(key);
     const ttl = myCache.getTtl( key );
     const expired = ttl ? ttl - new Date().getTime() < 0 : true;
@@ -30,3 +29,19 @@ export function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback:
      }
 }
 
+export function CacheHelper_flush() {
+    myCache.flushAll();
+}
+
+function handleCleanCache(){
+    const currentTime = new Date().getTime();
+    if(!global.lastHATCacheClean){
+        global.lastHATCacheClean = currentTime;
+    }
+
+    const TTL = process.env.CACHE_CLEAN_INTERVAL ? UtilsHelper_convertToInt(process.env.CACHE_CLEAN_INTERVAL) : 60;
+    if(currentTime - global.lastHATCacheClean > (TTL * 1000)){
+        CacheHelper_flush();
+        global.lastHATCacheClean = currentTime;
+    }
+}
