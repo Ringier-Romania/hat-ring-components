@@ -17,7 +17,13 @@ export function CacheHelper_set(key: any, value: any, TTL: null | number | undef
 export function CacheHelper_get(key: any) {
     handleCleanCache();
     key = JSON.stringify(key);
-    return myCache.get(key);
+    const value = myCache.get(key);
+    const ttl = myCache.getTtl( key );
+    const expired = ttl ? ttl - new Date().getTime() < 0 : true;
+    if(expired){
+        myCache.del(key);
+    }
+    return value;
 }
 
 export function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback: Function) {
