@@ -7,7 +7,7 @@ const myCache = new NodeCache({stdTTL: stdTTL, checkperiod: 0, deleteOnExpire: f
 export function CacheHelper_set(key: any, value: any, TTL: null | number | undefined = null) {
     if (process.env.CACHE_TTL === '0' && !TTL) {
         return;
-    }3
+    }
 
     const ttl = TTL || process.env.CACHE_TTL;
     key = JSON.stringify(key);
