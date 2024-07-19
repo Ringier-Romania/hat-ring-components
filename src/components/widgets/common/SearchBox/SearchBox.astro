@@ -1,24 +1,28 @@
 ---
-import React from "react";
-import _ from "lodash";
-import { WidgetHelper_getWidgetCssClasses } from "../../../../helpers/WidgetHelper";
-import { AppContext } from "../../../../types/types";
-import { SearchBoxWidgetConfig } from "./types";
 const { context, widgetConfig } = Astro.props as {
   context: AppContext;
   widgetConfig: SearchBoxWidgetConfig;
 };
+import _ from "lodash";
+import { WidgetHelper_getWidgetCssClasses } from "../../../../helpers/WidgetHelper";
+import { AppContext } from "../../../../types/types";
+import { SearchBoxWidgetConfig } from "./types";
+
+const { searchURLPhrase, searchParamPhrase, placeholder, buttonText } =
+  widgetConfig;
 ---
 
 <div
   class={WidgetHelper_getWidgetCssClasses("SearchBox", widgetConfig, context)}
 >
-  <form method="get" action={widgetConfig.searchURLPhrase}>
+  <form method="get" action={searchURLPhrase}>
     <input
       type="search"
-      name={widgetConfig.searchParamPhrase}
-      placeholder={widgetConfig.placeholder}
+      name={searchParamPhrase}
+      {...placeholder && { placeholder }}
+      required
     />
-    <button>Search</button>
+
+    <button>{buttonText}</button>
   </form>
 </div>
