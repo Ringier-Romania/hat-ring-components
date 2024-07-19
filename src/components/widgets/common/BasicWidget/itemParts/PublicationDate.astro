@@ -11,7 +11,7 @@ import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
 let toRender: boolean | JSX.Element = false;
 
 const dateFromData = data.creationTime || data.originalContent?.creationTime;
-3
+
 if (!dateFromData) {
     toRender = WidgetHelper_renderEmptyComponent('PublicationDate');
 }
@@ -35,10 +35,10 @@ export const getFragment = () => {
     }
 }
 ---
-{
-    <Fragment set:html={toRender}/> ||
-    <div className={['PublicationDate'].join(' ')}>
-        <time dateTime={dateFromData}>
+{ toRender ?
+    <Fragment set:html={toRender}/> :
+    <div class={['PublicationDate'].join(' ')}>
+        <time datetime={dateFromData}>
             {displayDate}
         </time>
     </div>
