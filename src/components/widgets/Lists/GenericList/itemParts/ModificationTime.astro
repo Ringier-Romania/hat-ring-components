@@ -1,21 +1,24 @@
 ---
-const {context, widgetConfig, data} = Astro.props;
-import React from 'react';
-import {AppContext} from "../../../../../types/types";
-import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
-import _ from "lodash";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
-import {RingLink} from "../../../../common/RingLink/RingLink";
 import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
+import {AppContext} from "../../../../../types/types";
+import { GenericListResponseNode, GenericListWidgetConfig } from "../types";
 
-let toRender: boolean | JSX.Element = false;
-if (!data?.date?.creationTime) {
+
+type Props = {
+    context: AppContext,
+    widgetConfig: GenericListWidgetConfig,
+    data: GenericListResponseNode,
+}
+const {context, widgetConfig, data} = Astro.props;
+
+let toRender: boolean | string | JSX.Element = false;
+if (!data?.date?.modificationTime) {
     toRender = WidgetHelper_renderEmptyComponent('ModificationTime');
 }
 
 const displayDate = await DateHelper_convertDate(context, data?.date?.modificationTime);
-
 
 export const getFragment = () => {
     return {
@@ -30,11 +33,6 @@ export const getFragment = () => {
 ---
 
 {toRender ? <Fragment set:html={toRender}/> :
-<div className={['ModificationTime'].join(' ')}>
+<div class={['ModificationTime'].join(' ')}>
     {displayDate}
 </div>}
-
-
-
-
-
