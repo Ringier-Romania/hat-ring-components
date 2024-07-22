@@ -42,7 +42,7 @@ const buttonId = 'infiniteScrollButton_' + UtilsHelper_generateRandomString();
             const nextPage = currentPage + 1;
             ajaxNextPageUrl.searchParams.set('page', nextPage);
             ajaxNextPageUrl.searchParams.set('gridLocation', gridLocation);
-            ajaxNextPageUrl.searchParams.set('type', widgetType);
+            ajaxNextPageUrl.searchParams.set('gridLocationWidgetType', widgetType);
             const fetchedData = await fetch(ajaxNextPageUrl.href);
             const html = await fetchedData.text();
             const parser = new DOMParser();
