@@ -20,6 +20,7 @@ export let StoryContentWebsitesConfig
                 "mobileImageHeight": "",
                 "displayFrom": "",
                 "displayTo": "",
+                "ignoredFrameBlocksNames": "",
                 "widgetType": "detailContent",
             },
             "paramsDescription": {
@@ -49,7 +50,11 @@ export let StoryContentWebsitesConfig
                     "description": "empty is to the end",
                     "type": "textfield"
                 },
-
+                "ignoredFrameBlocksNames": {
+                    "name": "Ignored Frame Block Names",
+                    "description": "Comma-separated block names to exclude from displaying, or leave empty to include all.",
+                    "type": "textfield"
+                }
             }
         }
     }

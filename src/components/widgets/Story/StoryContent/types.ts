@@ -7,6 +7,7 @@ export interface StoryContentWidgetConfig extends AbstractWidgetConfig {
     mobileImageHeight?: string | number,
     displayFrom?: string | number,
     displayTo?: string | number,
+    ignoredFrameBlocksNames?: string,
 }
 
 export interface StoryContentExtendableAttributes {
