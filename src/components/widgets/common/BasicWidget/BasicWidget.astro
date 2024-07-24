@@ -13,7 +13,6 @@ import {
     WidgetHelper_shouldHideWidget,
 } from "../../../../helpers/WidgetHelper";
 import * as ItemParts from "./itemParts";
-import {data} from "cheerio/lib/api/attributes";
 let toRender: boolean | JSX.Element | string = false;
 
 if (!widgetConfig) {
@@ -152,9 +151,6 @@ let cssModules = styles.BasicWidget;
                     if (!Component || !context) {
                         console.error(`No general show option name support ${showOption}`);
                         return;
-                    }
-                    {
-                        //  console.log(response.data.section?.items?.edges);
                     }
                     return (
                         <Component
