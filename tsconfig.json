@@ -1,33 +1,38 @@
 {
   "extends": "@ringieraxelspringer/tsconfig",
   "compilerOptions": {
-    "allowJs": true,
-    "jsx": "react",
-    "noEmit": true,
-    "rootDir": "./src",
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    // Additional configuration for migration process
-    "noImplicitAny": false,
-    "noImplicitReturns": false,
-    "noImplicitThis": false,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "strictPropertyInitialization": false,
-    "noUnusedParameters": false,
-    "noUnusedLocals": false,
-    "resolveJsonModule": true,
-    "module": "es2022",
+      "allowJs": true,
+      "jsx": "react",
+      "noEmit": true,
+      "rootDir": "../",
+      "typeRoots": ["./node_modules/@types"],
+      "baseUrl": ".",
+      "paths": {
+          "@hatRingHelpers/*": ["src/helpers/*"],
+          "@techstageHelpers/*": ["../techstage-hat/src/helpers/*"],
+          "@common/*": ["src/components/common/*"],
+          "@hatTypes/*": ["src/types/*"],
+      },
+      // Additional configuration for migration process
+      "noImplicitAny": false,
+      "noImplicitReturns": false,
+      "noImplicitThis": false,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "strictPropertyInitialization": false,
+      "noUnusedParameters": false,
+      "noUnusedLocals": false,
+      "resolveJsonModule": true,
+      "module": "es2022",
     "lib": [
       "dom",
       "es2022"
     ],
-    "plugins": [
-      {
-        "name": "@astrojs/ts-plugin"
-      }
-    ]
+      "plugins": [
+          {
+              "name": "@astrojs/ts-plugin"
+          }
+      ]
   },
   "include": [
     "declaration.d.ts",

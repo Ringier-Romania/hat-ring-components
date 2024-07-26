@@ -1,7 +1,7 @@
-import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
+import {AbstractWidgetConfig, WidgetParams} from "@hatTypes/types";
 import React from "react";
 import {SwiperProps, SwiperSlideProps} from "swiper/react/swiper-react";
-import {AppContext} from "../../../../types/types";
+import {AppContext} from "@hatTypes/types";
 import {Swiper} from "swiper/types";
 
 export interface SliderElement {

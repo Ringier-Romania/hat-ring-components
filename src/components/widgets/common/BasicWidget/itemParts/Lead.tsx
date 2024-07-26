@@ -1,8 +1,8 @@
 import React from 'react';
-import {AppContext} from "../../../../../types/types";
+import {AppContext} from "@hatTypes/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
 import _ from "lodash";
-import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent} from "@hatRingHelpers/WidgetHelper";
 import gql from "graphql-tag";
 
 export default function Lead(

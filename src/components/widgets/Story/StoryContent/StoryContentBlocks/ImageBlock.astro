@@ -1,11 +1,11 @@
 ---
 const {blockData, widgetConfig, context} = Astro.props as ImageBlockParams;
 import React from "react";
-import {default as RingImage} from "../../../../common/RingImage.astro";
-import {RingLink} from "../../../../common/RingLink/RingLink";
+import {default as RingImage} from "@common/RingImage.astro";
+import {RingLink} from "@common/RingLink/RingLink";
 import {ImageBlockParams} from "../types";
-import {UtilsHelper_convertToInt, UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
-import {TransformType} from "../../../../../helpers/AcceleratorImagesHelper";
+import {UtilsHelper_convertToInt, UtilsHelper_isMobile} from "@hatRingHelpers/UtilsHelper";
+import {TransformType} from "@hatRingHelpers/AcceleratorImagesHelper";
 const {title, alt, image, url, link} = blockData;
 let imageWidth = image.width;
 let imageHeight = image.height;

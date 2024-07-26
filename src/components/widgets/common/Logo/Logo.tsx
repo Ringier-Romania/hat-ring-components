@@ -1,10 +1,10 @@
 import React from "react";
-import {RingLink} from "../../../common/RingLink/RingLink";
-import {RingImage} from "../../../common/RingImage";
-import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {RingLink} from "@common/RingLink/RingLink";
+import {RingImage} from "@common/RingImage";
+import {WidgetHelper_getWidgetCssClasses} from "@hatRingHelpers/WidgetHelper";
 import {LogoParams} from "./types";
 import styles from '../../../../../styles/widgets/common/Logo.module.scss';
-import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
+import {TransformType} from "@hatRingHelpers/AcceleratorImagesHelper";
 
 
 export function Logo(

@@ -5,7 +5,7 @@ import _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {TopicTitleParams, TopicTitleResponse} from "./types";
-import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {WidgetHelper_getWidgetCssClasses} from "@hatRingHelpers/WidgetHelper";
 
 const query = gql`
         query($id: UUID){

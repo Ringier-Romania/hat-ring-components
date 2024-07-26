@@ -1,4 +1,4 @@
-import {AbstractWidgetConfig, AppContext, ComponentParams, WidgetParams} from "../../../../types/types";
+import {AbstractWidgetConfig, AppContext, ComponentParams, WidgetParams} from "@hatTypes/types";
 
 export interface StoryDateWidgetConfig extends AbstractWidgetConfig {
     dateFormat: string,

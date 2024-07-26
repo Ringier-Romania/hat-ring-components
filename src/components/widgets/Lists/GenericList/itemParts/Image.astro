@@ -3,17 +3,17 @@ import {Transform} from "node:stream";
 const {itemIndex, context, widgetConfig, data} = Astro.props;
 
 import React from 'react';
-import {AppContext} from "../../../../../types/types";
-import {default as RingImage} from "../../../../common/RingImage.astro";
+import {AppContext} from "@hatTypes/types";
+import {default as RingImage} from "@common/RingImage.astro";
 import {
     WidgetHelper_getAppropriateTeaserImage,
     WidgetHelper_renderEmptyComponent
-} from "../../../../../helpers/WidgetHelper";
+} from "@hatRingHelpers/WidgetHelper";
 import gql from "graphql-tag";
 import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
-import {ConfigHelper_getGeneralConfig} from "../../../../../helpers/ConfigHelper";
-import {UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
-import {TransformType} from "../../../../../helpers/AcceleratorImagesHelper";
+import {ConfigHelper_getGeneralConfig} from "@hatRingHelpers/ConfigHelper";
+import {UtilsHelper_isMobile} from "@hatRingHelpers/UtilsHelper";
+
 
 
 let image = data?.image;

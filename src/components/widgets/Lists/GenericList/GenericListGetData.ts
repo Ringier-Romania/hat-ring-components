@@ -1,8 +1,8 @@
 import * as ItemParts from "./itemParts";
 import {gql} from "graphql-tag";
-import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
+import {UtilsHelper_convertToInt} from "@hatRingHelpers/UtilsHelper";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {AppContext, SiteContentType} from "../../../../types/types";
+import {AppContext, SiteContentType} from "@hatTypes/types";
 import _ from "lodash";
 
 export async function GenericList_getData(context: AppContext, queryNodeFragment, widgetConfig, extendableAttributes, currentPage) {

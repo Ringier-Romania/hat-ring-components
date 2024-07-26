@@ -3,11 +3,11 @@ import {gql} from "graphql-tag";
 import _ from "lodash";
 
 // Helpers
-import {ConfigHelper_currentUrl,} from "../../../helpers/ConfigHelper";
-import {UtilsHelper_getCurrentPageType} from "../../../helpers/UtilsHelper";
+import {ConfigHelper_currentUrl,} from "@hatRingHelpers/ConfigHelper";
+import {UtilsHelper_getCurrentPageType} from "@hatRingHelpers/UtilsHelper";
 
 // Types
-import {AppContext, SiteContentType} from "../../../types/types";
+import {AppContext, SiteContentType} from "@hatTypes/types";
 
 // Providers
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";

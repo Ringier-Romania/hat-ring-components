@@ -5,12 +5,12 @@ import _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {StoryAuthorsParams, StoryAuthorsResponse, StoryAuthorsShowOptions} from "./types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
-import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
+import {WidgetHelper_getWidgetCssClasses} from "@hatRingHelpers/WidgetHelper";
+import {ImageHelper_getImageDimensionsFromObject} from "@hatRingHelpers/ImageHelper";
 import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import {default as StoryAuthor} from "./StoryAuthor.astro";
 import styles from "../../../../../styles/widgets/Story/StoryAuthors.module.scss";
-import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
+import {StoryHelper_getGqlContentFragment} from "@hatRingHelpers/StoryHelper";
 
 export const authorGqlFragment = `publicationPoint {
                             url

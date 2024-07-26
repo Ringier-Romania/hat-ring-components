@@ -1,8 +1,7 @@
 ---
 const {text, context, tag, props = {}} = Astro.props;
-import {ConfigHelper_getDeveloperSettingsConfig} from "../../helpers/ConfigHelper";
-import React from 'react'
-import {AppContext} from "../../types/types";
+import {ConfigHelper_getDeveloperSettingsConfig} from "@hatRingHelpers/ConfigHelper";
+import {AppContext} from "@hatTypes/types";
 
 const devSettingsConfig = await ConfigHelper_getDeveloperSettingsConfig(context);
 let replacer = (text) => text;

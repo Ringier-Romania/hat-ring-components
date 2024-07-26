@@ -1,7 +1,7 @@
 import {
     AbstractWebsitesWidgetConfigDefaultParams,
     AbstractWebsitesWidgetConfigParamsDescription
-} from "../../../../types/abstracts";
+} from "@hatTypes/abstracts";
 import {GenericListWebsitesConfig} from "../../Lists/GenericList/GenericListWebsitesConfig";
 import _ from "lodash";
 

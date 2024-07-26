@@ -1,8 +1,8 @@
 import React from 'react';
-import {AppContext} from "../../../../../types/types";
+import {AppContext} from "@hatTypes/types";
 import {BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
-import {RingLink} from "../../../../common/RingLink/RingLink";
+import {RingLink} from "@common/RingLink/RingLink";
 
 export default function Button(
     {context, widgetConfig, response}:

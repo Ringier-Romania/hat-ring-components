@@ -1,6 +1,6 @@
 import React from 'react';
-import {AppContext} from "../../../../../types/types";
-import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {AppContext} from "@hatTypes/types";
+import {WidgetHelper_renderEmptyComponent} from "@hatRingHelpers/WidgetHelper";
 import {StoryAuthorsWidgetConfig} from "../types";
 import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 

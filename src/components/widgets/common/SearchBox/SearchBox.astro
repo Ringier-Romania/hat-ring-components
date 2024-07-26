@@ -4,8 +4,8 @@ const { context, widgetConfig } = Astro.props as {
   widgetConfig: SearchBoxWidgetConfig;
 };
 import _ from "lodash";
-import { WidgetHelper_getWidgetCssClasses } from "../../../../helpers/WidgetHelper";
-import { AppContext } from "../../../../types/types";
+import { WidgetHelper_getWidgetCssClasses } from "@hatRingHelpers/WidgetHelper";
+import { AppContext } from "@hatTypes/types";
 import { SearchBoxWidgetConfig } from "./types";
 
 const { searchURLPhrase, searchParamPhrase, placeholder, buttonText } =

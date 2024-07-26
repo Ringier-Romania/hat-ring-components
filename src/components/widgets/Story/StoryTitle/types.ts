@@ -1,4 +1,4 @@
-import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "../../../../types/types";
+import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "@hatTypes/types";
 
 export interface StoryTitleResponse {
     data: { 

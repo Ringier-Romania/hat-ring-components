@@ -1,10 +1,10 @@
 import React from "react";
-import {AppContext, SiteContentType} from "../../../types/types";
-import {ConfigHelper_getMetaDataConfig} from "../../../helpers/ConfigHelper";
+import {AppContext, SiteContentType} from "@hatTypes/types";
+import {ConfigHelper_getMetaDataConfig} from "@hatRingHelpers/ConfigHelper";
 import _ from "lodash"
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
-import {UtilsHelper_isHomepage} from "../../../helpers/UtilsHelper";
+import {UtilsHelper_isHomepage} from "@hatRingHelpers/UtilsHelper";
 
 type StoryDataResponse = {
     "data": {

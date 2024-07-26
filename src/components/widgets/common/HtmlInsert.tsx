@@ -1,6 +1,6 @@
 import React from "react";
-import {AbstractWidgetConfig, WidgetParams} from "../../../types/types";
-import {WidgetHelper_getWidgetCssClasses} from "../../../helpers/WidgetHelper";
+import {AbstractWidgetConfig, WidgetParams} from "@hatTypes/types";
+import {WidgetHelper_getWidgetCssClasses} from "@hatRingHelpers/WidgetHelper";
 
 
 interface HtmlInsertParams extends WidgetParams {

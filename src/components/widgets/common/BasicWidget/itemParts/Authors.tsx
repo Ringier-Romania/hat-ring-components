@@ -1,10 +1,10 @@
 import React from 'react';
-import {AppContext} from "../../../../../types/types";
+import {AppContext} from "@hatTypes/types";
 import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
-import {RingImage} from "../../../../common/RingImage";
-import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {RingImage} from "@common/RingImage";
+import {WidgetHelper_renderEmptyComponent} from "@hatRingHelpers/WidgetHelper";
 import gql from "graphql-tag";
-import {TransformType} from "../../../../../helpers/AcceleratorImagesHelper";
+import {TransformType} from "@hatRingHelpers/AcceleratorImagesHelper";
 
 export default function Authors(
     {context, widgetConfig, data}:

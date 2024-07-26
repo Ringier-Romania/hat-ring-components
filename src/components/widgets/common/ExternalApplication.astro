@@ -1,7 +1,7 @@
 ---
 const {widgetConfig, context} = Astro.props;
-import {AbstractWidgetConfig, WidgetParams} from "../../../types/types";
-import {WidgetHelper_getWidgetCssClasses} from "../../../helpers/WidgetHelper";
+import {AbstractWidgetConfig, WidgetParams} from "@hatTypes/types";
+import {WidgetHelper_getWidgetCssClasses} from "@hatRingHelpers/WidgetHelper";
 import cheerio from 'cheerio';
 
 interface ExternalApplicationParams extends WidgetParams {

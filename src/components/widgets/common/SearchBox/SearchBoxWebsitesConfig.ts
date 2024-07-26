@@ -1,7 +1,7 @@
 import {
   AbstractWebsitesWidgetConfigDefaultParams,
   AbstractWebsitesWidgetConfigParamsDescription,
-} from "../../../../types/abstracts";
+} from "@hatTypes/abstracts";
 
 export let SearchBoxWebsitesConfig = {
   sections: [],

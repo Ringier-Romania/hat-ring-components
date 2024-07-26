@@ -1,11 +1,11 @@
 ---
 const {context, widgetConfig, data} = Astro.props;
 
-import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent} from "@hatRingHelpers/WidgetHelper";
 import gql from "graphql-tag";
-import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
+import {DateHelper_convertDate} from "@hatRingHelpers/DateHelper";
 
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | JSX.Element | string = false;
 
 const dateFromData = data.modificationTime || data.originalContent?.modificationTime;
 
@@ -33,7 +33,7 @@ export const getFragment = () => {
 }
 ---
 {toRender ? <Fragment set:html={toRender}/> :
-    <div className={['ModificationDate'].join(' ')}>
+    <div class={['ModificationDate'].join(' ')}>
         <time dateTime={dateFromData}>
             {displayDate}
         </time>
