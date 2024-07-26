@@ -12,9 +12,9 @@ import {OpenGraphHelper_getMainStoryImageData} from "./OpenGraphHelper";
 import {SeoTitleHelper_pageTitle} from "./SeoTitleHelper";
 import {SeoDescriptionHelper_pageDescription} from "./SeoDescriptionHelper";
 import {
-    UtilsHelper_asyncSequentialForEach,
+    UtilsHelper_asyncSequentialForEach, UtilsHelper_stripHtmlTags,
     UtilsHelper_getCurrentNodeName,
-    UtilsHelper_getCurrentPageType, UtilsHelper_getQueryParam
+    UtilsHelper_getCurrentPageType, UtilsHelper_getQueryParam, UtilsHelper_getSearchQueryParamKey
 } from "../UtilsHelper";
 import _ from "lodash";
 import {SiteContentType} from "../../types/types";
@@ -36,7 +36,7 @@ export async function SeoHelper_currentTitle(context, place: string) {
             pattern = withNumeration ? _.get(seoTitlesSettings, 'listPageTitleWithNumeration') : _.get(seoTitlesSettings, 'listPageTitle');
             break;
 
-        case 'Homepage':
+        case SiteContentType.Homepage:
             pattern = _.get(seoTitlesSettings, 'homePageTitle');
             break;
 
@@ -46,6 +46,10 @@ export async function SeoHelper_currentTitle(context, place: string) {
 
         case SiteContentType.Author:
             pattern = _.get(seoTitlesSettings, 'authorPageTitle');
+            break;
+
+        case SiteContentType.Search:
+            pattern = _.get(seoTitlesSettings, 'searchPageTitle');
             break;
 
         default:
@@ -76,7 +80,7 @@ export async function SeoHelper_currentDescription(context, place: string) {
             pattern = withNumeration ? _.get(seoDescriptionSettings, 'listPageDescriptionWithNumeration') : _.get(seoDescriptionSettings, 'listPageDescription');
             break;
 
-        case 'Homepage':
+        case SiteContentType.Homepage:
             pattern = _.get(seoDescriptionSettings, 'homePageDescription');
             break;
 
@@ -86,6 +90,10 @@ export async function SeoHelper_currentDescription(context, place: string) {
 
         case SiteContentType.Author:
             pattern = _.get(seoDescriptionSettings, 'authorPageDescription');
+            break;
+
+        case SiteContentType.Search:
+            pattern = _.get(seoDescriptionSettings, 'searchPageDescription');
             break;
 
         default:
@@ -186,6 +194,11 @@ async function mapPatternVariables(context, place: string, fieldToCheck: string 
 
     if (fieldToCheck.includes('{{number}}')) {
         dynamicPatternMap['{{number}}'] = () => {return UtilsHelper_getQueryParam('page', context)}
+    }
+
+    if (fieldToCheck.includes('{{searchPhrase}}')) {
+        const searchPhrase = UtilsHelper_getQueryParam(UtilsHelper_getSearchQueryParamKey(), context)
+        dynamicPatternMap['{{searchPhrase}}'] = () => {return UtilsHelper_stripHtmlTags(searchPhrase || '')}
     }
 
     if (fieldToCheck.includes('{{authorName}}')) {
