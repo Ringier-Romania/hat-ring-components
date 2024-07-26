@@ -27,11 +27,6 @@ export let SearchBoxWebsitesConfig = {
           description: "",
           type: "textfield",
         },
-        searchParamPhrase: {
-          name: "Search-Param Phrase",
-          description: "",
-          type: "textfield",
-        },
         buttonText: {
           name: "Button text",
           description: "",
