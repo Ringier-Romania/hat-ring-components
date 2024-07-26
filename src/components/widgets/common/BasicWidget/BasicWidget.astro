@@ -2,17 +2,18 @@
 const {context, widgetConfig, extendableAttributes} = Astro.props;
 import {BasicWidgetAdditionalOptions, BasicWidgetParams, BasicWidgetResponse, BasicWidgetResponseNode} from "./types";
 import {gql} from "graphql-tag";
-import * as GeneralParts from './generalParts';
-import _ from 'lodash';
+import * as GeneralParts from "./generalParts";
+import _ from "lodash";
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {
-    WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent,
+    WidgetHelper_getWidgetCssClasses,
+    WidgetHelper_renderEmptyComponent,
     WidgetHelper_renderEmptyWidget,
-    WidgetHelper_shouldHideWidget
+    WidgetHelper_shouldHideWidget,
 } from "../../../../helpers/WidgetHelper";
 import * as ItemParts from "./itemParts";
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | JSX.Element | string = false;
 
 if (!widgetConfig) {
     toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
@@ -21,83 +22,86 @@ if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
     toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 const allGeneralParts = (extendableAttributes ? extendableAttributes.generalParts : null) || GeneralParts;
-let response = null;
+let response: BasicWidgetResponse;
 if (!toRender) {
-    let queryFragment = '';
+    let queryFragment = "";
 
-    response = widgetConfig.section_name !== ''
-        ? await getData(queryFragment) as BasicWidgetResponse
-        : {} as BasicWidgetResponse;
+    response =
+        widgetConfig.section_name !== ""
+            ? ((await getData(queryFragment)) as BasicWidgetResponse)
+            : ({} as BasicWidgetResponse);
 
-    let edges: Array<any> = [];
-
-    if (response?.data?.section?.items?.edges) {
-        edges = [...response?.data?.section?.items?.edges]
-    } else if (response?.data?.sectionGroup?.sections && response.data.sectionGroup.sections[0].items?.edges) {
-        edges = [...response.data.sectionGroup.sections[0].items?.edges]
-    }
+    let edges = _.get(response, "data.section.items.edges", []);
+    let groupSectionEdges = _.get(response, "data.sectionGroup.sections[0].items.edges", []);
+    let offset = Number(widgetConfig.offset);
 
     if (edges.length > 0) {
-        edges = edges.slice(Number(widgetConfig.offset));
+        _.set(response, "data.section.items.edges", edges.slice(offset));
+    } else if (response?.data?.sectionGroup?.sections && groupSectionEdges.length > 0) {
+        _.set(response, "data.sectionGroup.sections[0].items.edges", groupSectionEdges.slice(offset));
     }
 
-    const hideWhenNoItems = widgetConfig.additionalOptions && widgetConfig.additionalOptions.includes(BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
-    if (hideWhenNoItems && _.get(edges, 'length', 0) === 0) {
-        toRender = (WidgetHelper_renderEmptyWidget(widgetConfig));
+    const hideWhenNoItems =
+        widgetConfig.additionalOptions &&
+        widgetConfig.additionalOptions.includes(BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
+    if (hideWhenNoItems && edges.length === 0) {
+        toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
     }
 }
 async function getData(queryNodeFragment) {
-    let dynamicVariablesTypes = {}
-    let dynamicVariables = {}
-    let dynamicFragmentsNames = '';
+    let dynamicVariablesTypes = {};
+    let dynamicVariables = {};
+    let dynamicFragmentsNames = "";
 
-    const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
-        const allItemParts = (extendableAttributes ? extendableAttributes.itemParts : null) || ItemParts;
-        const ItemPart = allItemParts[_.upperFirst(showOption)];
+    const dynamicFragments = (widgetConfig.showOptions || [])
+        .map((showOption) => {
+            const allItemParts = (extendableAttributes ? extendableAttributes.itemParts : null) || ItemParts;
+            const ItemPart = allItemParts[_.upperFirst(showOption)];
 
-        if (ItemPart) {
-            let getFragment = ItemPart.getFragment;
-            if (!getFragment) {
-                const ItemPart = allItemParts[_.upperFirst(showOption) + '_getFragment'];
-                if (ItemPart) {
-                    getFragment = ItemPart;
+            if (ItemPart) {
+                let getFragment = ItemPart.getFragment;
+                if (!getFragment) {
+                    const ItemPart = allItemParts[_.upperFirst(showOption) + "_getFragment"];
+                    if (ItemPart) {
+                        getFragment = ItemPart;
+                    }
+                }
+                if (getFragment) {
+                    const fragment = getFragment(widgetConfig);
+                    if (fragment.variables) {
+                        dynamicVariables = {...dynamicVariables, ...fragment.variables};
+                    }
+
+                    if (fragment.variablesTypes) {
+                        dynamicVariablesTypes = {...dynamicVariablesTypes, ...fragment.variablesTypes};
+                    }
+
+                    if (fragment.query) {
+                        dynamicFragmentsNames += ` ...${fragment.query.definitions[0].name.value} \n`;
+                        return `${fragment.query.loc?.source.body}`;
+                    }
                 }
             }
-            if (getFragment) {
-                const fragment = getFragment(widgetConfig);
-                if (fragment.variables) {
-                    dynamicVariables = {...dynamicVariables, ...fragment.variables}
-                }
+        })
+        .join("\n");
 
-                if (fragment.variablesTypes) {
-                    dynamicVariablesTypes = {...dynamicVariablesTypes, ...fragment.variablesTypes}
-                }
+    const mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes)
+        .map((key) => {
+            return `, ${key}: ${dynamicVariablesTypes[key]}`;
+        })
+        .join(" ");
 
-                if (fragment.query) {
-                    dynamicFragmentsNames += ` ...${fragment.query.definitions[0].name.value} \n`;
-                    return `${fragment.query.loc?.source.body}`
-                }
-            }
-        }
-    }).join('\n');
+    const sectionGroup = widgetConfig.sectionGroup || "";
+    const querySectionVariablesTypes =
+        sectionGroup !== "" ? "$codeName:  ID!, $sectionGroupCodeName: ID!" : "$codeName:  ID!";
 
-    const mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
-        return `, ${key}: ${dynamicVariablesTypes[key]}`;
-    }).join(' ')
-
-    const sectionGroup = widgetConfig.sectionGroup || '';
-    const querySectionVariablesTypes = sectionGroup !== ''
-        ? '$codeName:  ID!, $sectionGroupCodeName: ID!'
-        : '$codeName:  ID!';
-
-    const querySection = sectionGroup !== ''
-        ? `sectionGroup(codeName: $sectionGroupCodeName, nodeId: $nodeId) {
+    const querySection =
+        sectionGroup !== ""
+            ? `sectionGroup(codeName: $sectionGroupCodeName, nodeId: $nodeId) {
                     sections(codeName: $codeName)`
-        : 'section(codeName: $codeName, nodeId: $nodeId)';
+            : "section(codeName: $codeName, nodeId: $nodeId)";
 
-    const querySectionClose = sectionGroup !== ''
-        ? '}'
-        : '';
+    const querySectionClose = sectionGroup !== "" ? "}" : "";
 
     const query = gql`
             query($nodeId:  ID!, $first: Int ${mappedDynamicVariablesTypes}, ${querySectionVariablesTypes}){
@@ -117,42 +121,47 @@ async function getData(queryNodeFragment) {
             ${dynamicFragments}
         `;
 
-
     const variables = {
         ...dynamicVariables,
         codeName: widgetConfig.section_name,
         nodeId: context.hatControllerParams.gqlResponse.data.site.data.node.id,
         // there is no offset for sections so:
         // we have to sum offset + count and delete offset items from response object
-        first: (Number(widgetConfig.offset) + Number(widgetConfig.count)) || null
+        first: Number(widgetConfig.offset) + Number(widgetConfig.count) || null,
     };
 
-    if (sectionGroup !== '') {
-        Object.assign(variables, {sectionGroupCodeName: sectionGroup})
+    if (sectionGroup !== "") {
+        Object.assign(variables, {sectionGroupCodeName: sectionGroup});
     }
 
     return await WebsiteApiProvider.call(query, variables);
 }
 
-
 let cssModules = styles.BasicWidget;
 ---
 
-{toRender ?
-<Fragment set:html={toRender}/> :
-<div className={WidgetHelper_getWidgetCssClasses('BasicWidget', widgetConfig, context, [cssModules])}>
-    {widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
-        const Component = allGeneralParts[_.upperFirst(showOption)];
-        if (!Component || !context) {
-            console.error(`No general show option name support ${showOption}`);
-            return
-                    <Fragment set:html={WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet')}/>;
-        }
-
-        return (
-                <Component key={index} context={context} widgetConfig={widgetConfig} response={response}
-                           extendableAttributes={extendableAttributes}/>
-        )
-    })}
-</div>
-    }
+{
+    toRender ? (
+        <Fragment set:html={toRender} />
+    ) : (
+        <div class={WidgetHelper_getWidgetCssClasses("BasicWidget", widgetConfig, context, [cssModules])}>
+            {widgetConfig.generalShowOptions &&
+                widgetConfig.generalShowOptions.map((showOption, index) => {
+                    const Component = allGeneralParts[_.upperFirst(showOption)];
+                    if (!Component || !context) {
+                        console.error(`No general show option name support ${showOption}`);
+                        return;
+                    }
+                    return (
+                        <Component
+                            key={index}
+                            context={context}
+                            widgetConfig={widgetConfig}
+                            response={response}
+                            extendableAttributes={extendableAttributes}
+                        />
+                    );
+                })}
+        </div>
+    )
+}
