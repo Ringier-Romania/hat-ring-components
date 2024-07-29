@@ -47,10 +47,10 @@ export async function SeoMetaRobots(context: AppContext) {
         robots.follow = true;
     }
 
-    // @TODO: search support
-    // if (actualPageType === 'search') {
-    //     return 'noindex,follow';
-    // }
+    if (actualPageType === SiteContentType.Search) {
+        robots.index = false;
+        robots.follow = true;
+    }
 
     return {
         nofollow: !robots.follow,

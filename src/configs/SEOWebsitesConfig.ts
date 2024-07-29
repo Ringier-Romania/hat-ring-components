@@ -26,6 +26,8 @@ export let SEOWebsitesConfig
                         "seoTitlesAndDescription.topicPageDescription",
                         "seoTitlesAndDescription.topicPageTitleWithNumeration",
                         "seoTitlesAndDescription.topicPageDescriptionWithNumeration",
+                        "seoTitlesAndDescription.searchPageTitle",
+                        "seoTitlesAndDescription.searchPageDescription",
                         "seoTitlesAndDescription.otherPageTitle",
                         "seoTitlesAndDescription.otherPageDescription",
                         "seoTitlesAndDescription.authorPageTitle",
@@ -92,6 +94,8 @@ export let SEOWebsitesConfig
             "topicPageDescription": "Read the latest updates on exclusive videos, photos and more.",
             "topicPageTitleWithNumeration": "Page {{number}} for {{siteName}}",
             "topicPageDescriptionWithNumeration": "Page {{number}} for {{topicName}}. {{currentDescription}}",
+            "searchPageTitle": "{{searchPhrase}} - search results | {{siteName}}",
+            "searchPageDescription": "Read the latest articles about {{searchPhrase}}.",
             "otherPageTitle": "{{pageTypeName}} | {{siteName}}",
             "otherPageDescription": "{{currentDescription}}",
             "authorPageTitle": "{{authorName}} | {{siteName}}",
@@ -177,6 +181,16 @@ export let SEOWebsitesConfig
             "topicPageDescriptionWithNumeration": {
                 "name": "Tag (topic) page/s description (with numeration)",
                 "description": "Variables available to use: {{siteName}} {{siteDescription}} {{currentTitle}} {{currentDescription}} {{nodeName}} {{number}} {{pageTypeName}}",
+                "type": "textfield",
+            },
+            "searchPageTitle": {
+                "name": "Search page title",
+                "description": "Variables available to use: {{searchPhrase}} {{siteName}} {{siteDescription}} {{currentTitle}} {{currentDescription}} {{nodeName}} {{number}} {{pageTypeName}}",
+                "type": "textfield",
+            },
+            "searchPageDescription": {
+                "name": "Search page description",
+                "description": "Variables available to use: {{searchPhrase}} {{siteName}} {{siteDescription}} {{currentTitle}} {{currentDescription}} {{nodeName}} {{number}} {{pageTypeName}}",
                 "type": "textfield",
             },
             "otherPageTitle": {

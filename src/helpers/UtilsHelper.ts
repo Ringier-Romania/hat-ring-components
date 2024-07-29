@@ -39,7 +39,7 @@ export function UtilsHelper_isHomepage(context) {
 
 export function UtilsHelper_getCurrentPageType(context) {
     const isHomePage = UtilsHelper_isHomepage(context);
-    return isHomePage ? 'Homepage' : (context.siteContentType || null);
+    return isHomePage ? SiteContentType.Homepage : (context.siteContentType || null);
 }
 
 export function UtilsHelper_getCurrentNodeName(context) {
@@ -85,6 +85,14 @@ export function UtilsHelper_getCurrentNodeCategoryId(context: AppContext) {
 export function UtilsHelper_generateRandomString(length = 8) {
     return Math.random().toString(20).substr(2, length);
 }
-export function UtilsHelper_getQueryParam(param: string, context: AppContext) {
+export function UtilsHelper_getQueryParam(param: string, context: AppContext): string | null {
     return _.get(context, ['hatControllerParams', 'urlWithParsedQuery', 'query', param], null);
+}
+
+export function UtilsHelper_getSearchQueryParamKey(): string {
+    return _.get(global, 'searchQueryParamKey', 'q');
+}
+
+export function UtilsHelper_stripHtmlTags(userInput: string): string {
+    return userInput.replace(/(<([^>]+)>)/gi, "");
 }

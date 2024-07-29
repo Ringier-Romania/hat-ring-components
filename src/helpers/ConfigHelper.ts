@@ -73,6 +73,8 @@ export interface SeoTitlesAndDescription {
     topicPageDescription: string,
     topicPageTitleWithNumeration: string,
     topicPageDescriptionWithNumeration: string,
+    searchPageTitle: string,
+    searchPageDescription: string,
     otherPageTitle: string,
     otherPageDescription: string,
     detailPageTitle: string,
