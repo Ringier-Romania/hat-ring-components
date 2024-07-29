@@ -1,144 +1,159 @@
 ---
-import {UtilsHelper_generateRandomString} from "@hatRingHelpers/UtilsHelper";
+import {AppContext} from "../../../../../types/types";
+import {GenericListResponse, GenericListWidgetConfig} from "../types";
+import {UtilsHelper_generateRandomString} from "../../../../../helpers/UtilsHelper";
 const {
     context,
     widgetConfig,
     response,
     extendableAttributes
+}: {
+    context: AppContext,
+    widgetConfig: GenericListWidgetConfig,
+    response: GenericListResponse
+    extendableAttributes: any
 } = Astro.props;
 
 const buttonId = 'infiniteScrollButton_' + UtilsHelper_generateRandomString();
+const noMoreItems = (response?.data?.stories?.edges?.length || 0) <= 0 || (response?.data?.stories?.total < widgetConfig.paginationElements);
+
 ---
-<button id={buttonId} type="button" class="infiniteScrollButton" title={widgetConfig.moreText}>{widgetConfig.moreText}</button>
+{noMoreItems ? '' : (
+    <button id={buttonId} type="button" class="infiniteScrollButton" title={widgetConfig.moreText}>{widgetConfig.moreText}</button>
 
-<script define:vars={{buttonId, gridLocation: widgetConfig.gridLocation, isMainSeoList: widgetConfig.mainSeoList, widgetType: widgetConfig.widgetType}}>
-    const button = document.getElementById(buttonId);
-    button.addEventListener('click', loadMore);
+    <script define:vars={{buttonId, gridLocation: widgetConfig.gridLocation, isMainSeoList: widgetConfig.mainSeoList, widgetType: widgetConfig.widgetType}}>
+        const button = document.getElementById(buttonId);
+        button.addEventListener('click', loadMore);
 
-    const seoObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                if (isMainSeoList) {
-                    const currentUrl = new URL(window.location.href);
-                    const itemsDataPage = Number(entry.target.getAttribute('data-page')) || 1;
-                    const itemsDataPageTitle = entry.target.getAttribute('data-page-title');
-                    const itemsDataPageDescription = entry.target.getAttribute('data-page-description');
-                    updateMetaAndLinkTags(itemsDataPage, itemsDataPageTitle, itemsDataPageDescription);
-                    if (itemsDataPage > 1) {
-                        currentUrl.searchParams.set('page', itemsDataPage);
-                    } else {
-                        currentUrl.searchParams.delete('page');
+        const seoObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (isMainSeoList) {
+                        const currentUrl = new URL(window.location.href);
+                        const itemsDataPage = Number(entry.target.getAttribute('data-page')) || 1;
+                        const itemsDataPageTitle = entry.target.getAttribute('data-page-title');
+                        const itemsDataPageDescription = entry.target.getAttribute('data-page-description');
+                        updateMetaAndLinkTags(itemsDataPage, itemsDataPageTitle, itemsDataPageDescription);
+                        if (itemsDataPage > 1) {
+                            currentUrl.searchParams.set('page', itemsDataPage);
+                        } else {
+                            currentUrl.searchParams.delete('page');
+                        }
+                        window.history.replaceState('', '', currentUrl.href);
                     }
-                    window.history.replaceState('', '', currentUrl.href);
                 }
+            });
+        }, { root: null, rootMargin: '-50% 0% -50% 0%', threshold: [0], });
+
+        async function loadMore() {
+            try {
+                const ajaxNextPageUrl = new URL(window.location.href);
+                const currentPage = Number(ajaxNextPageUrl.searchParams.get('page')) || 1;
+                const nextPage = currentPage + 1;
+                ajaxNextPageUrl.searchParams.set('page', nextPage);
+                ajaxNextPageUrl.searchParams.set('gridLocation', gridLocation);
+                ajaxNextPageUrl.searchParams.set('gridLocationWidgetType', widgetType);
+                const fetchedData = await fetch(ajaxNextPageUrl.href);
+                const html = await fetchedData.text();
+                const parser = new DOMParser();
+                const parsedDocument = parser.parseFromString(html, "text/html");
+                const widgetDataEl = parsedDocument.querySelector(`#${gridLocation} .Items`);
+                if (widgetDataEl.children.length > 0) {
+                    const pageTitle = parsedDocument.querySelector(`title`);
+                    const padeDescription = parsedDocument.querySelector(`meta[name="description"]`);
+                    widgetDataEl.setAttribute('data-page', nextPage);
+                    widgetDataEl.setAttribute('data-page-title', pageTitle?.textContent || '');
+                    widgetDataEl.setAttribute('data-page-description', padeDescription?.getAttribute('content') || '');
+                    seoObserver.observe(widgetDataEl)
+                    const prevItemsWrappers = button.parentNode.querySelectorAll('.Items');
+                    prevItemsWrappers[prevItemsWrappers.length - 1].insertAdjacentElement('afterend', widgetDataEl);
+
+                    const nextPageUrl = new URL(window.location.href);
+                    nextPageUrl.searchParams.set('page', nextPage);
+                    history.pushState('', '', nextPageUrl.href);
+                } else {
+                    button.style.display = 'none';
+                }
+            } catch (e) {
+                console.error(e);
             }
-        });
-    }, { root: null, rootMargin: '-50% 0% -50% 0%', threshold: [0], });
-
-    async function loadMore() {
-        try {
-            const ajaxNextPageUrl = new URL(window.location.href);
-            const currentPage = Number(ajaxNextPageUrl.searchParams.get('page')) || 1;
-            const nextPage = currentPage + 1;
-            ajaxNextPageUrl.searchParams.set('page', nextPage);
-            ajaxNextPageUrl.searchParams.set('gridLocation', gridLocation);
-            ajaxNextPageUrl.searchParams.set('gridLocationWidgetType', widgetType);
-            const fetchedData = await fetch(ajaxNextPageUrl.href);
-            const html = await fetchedData.text();
-            const parser = new DOMParser();
-            const parsedDocument = parser.parseFromString(html, "text/html");
-            const widgetDataEl = parsedDocument.querySelector(`#${gridLocation} .Items`);
-            const pageTitle = parsedDocument.querySelector(`title`);
-            const padeDescription = parsedDocument.querySelector(`meta[name="description"]`);
-            widgetDataEl.setAttribute('data-page', nextPage);
-            widgetDataEl.setAttribute('data-page-title', pageTitle?.textContent || '');
-            widgetDataEl.setAttribute('data-page-description', padeDescription?.getAttribute('content') || '');
-            seoObserver.observe(widgetDataEl)
-            const prevItemsWrappers = button.parentNode.querySelectorAll('.Items');
-            prevItemsWrappers[prevItemsWrappers.length - 1].insertAdjacentElement('afterend', widgetDataEl);
-
-            const nextPageUrl = new URL(window.location.href);
-            nextPageUrl.searchParams.set('page', nextPage);
-            history.pushState('', '', nextPageUrl.href);
-        } catch (e) {
-            console.error(e);
         }
-    }
 
-    function addDefaultDataPageAttributes() {
-        const currentUrl = new URL(window.location.href);
-        const currentPage = Number(currentUrl.searchParams.get('page')) || 1;
-        const defaultItems = document.querySelector(`#${gridLocation} .Items`);
-        const pageTitle = document.head.querySelector(`title`);
-        const padeDescription = document.head.querySelector(`meta[name="description"]`);
-        defaultItems.setAttribute('data-page', currentPage);
-        defaultItems.setAttribute('data-page-title', pageTitle?.textContent || '');
-        defaultItems.setAttribute('data-page-description', padeDescription?.getAttribute('content') || '');
-        seoObserver.observe(defaultItems);
-    }
+        function addDefaultDataPageAttributes() {
+            const currentUrl = new URL(window.location.href);
+            const currentPage = Number(currentUrl.searchParams.get('page')) || 1;
+            const defaultItems = document.querySelector(`#${gridLocation} .Items`);
+            const pageTitle = document.head.querySelector(`title`);
+            const padeDescription = document.head.querySelector(`meta[name="description"]`);
+            defaultItems.setAttribute('data-page', currentPage);
+            defaultItems.setAttribute('data-page-title', pageTitle?.textContent || '');
+            defaultItems.setAttribute('data-page-description', padeDescription?.getAttribute('content') || '');
+            seoObserver.observe(defaultItems);
+        }
 
 
-    function updateMetaAndLinkTags(page = 1, pageTitle, pageDescription) {
-        const url = new URL(window.location.href);
-        const currentPage = page;
-        const prevPage = currentPage - 1;
-        const nextPage = currentPage + 1;
-        url.searchParams.set('page', currentPage);
+        function updateMetaAndLinkTags(page = 1, pageTitle, pageDescription) {
+            const url = new URL(window.location.href);
+            const currentPage = page;
+            const prevPage = currentPage - 1;
+            const nextPage = currentPage + 1;
+            url.searchParams.set('page', currentPage);
 
-        const canonicalTag = document.head.querySelector('link[rel="canonical"]');
-        const pageMetaTag = document.head.querySelector('meta[name="robots"]');
-        const pageRelPrev = document.head.querySelector('link[rel="prev"]');
-        const pageRelNext = document.head.querySelector('link[rel="next"]');
-        const currentPageTitleElement = document.head.querySelector(`title`);
-        const currentPageDescriptionElement = document.head.querySelector(`meta[name="description"]`);
+            const canonicalTag = document.head.querySelector('link[rel="canonical"]');
+            const pageMetaTag = document.head.querySelector('meta[name="robots"]');
+            const pageRelPrev = document.head.querySelector('link[rel="prev"]');
+            const pageRelNext = document.head.querySelector('link[rel="next"]');
+            const currentPageTitleElement = document.head.querySelector(`title`);
+            const currentPageDescriptionElement = document.head.querySelector(`meta[name="description"]`);
 
-        currentPageTitleElement.textContent = pageTitle;
-        currentPageDescriptionElement.setAttribute('content', pageDescription);
+            currentPageTitleElement.textContent = pageTitle;
+            currentPageDescriptionElement.setAttribute('content', pageDescription);
 
-        if (canonicalTag) {
-            if (currentPage > 1) {
-                url.searchParams.set('page', currentPage);
+            if (canonicalTag) {
+                if (currentPage > 1) {
+                    url.searchParams.set('page', currentPage);
+                } else {
+                    url.searchParams.delete('page');
+                }
+                canonicalTag.setAttribute('href', url.href);
+            }
+
+            if (!pageMetaTag) {
+                const metaTag = document.createElement('meta');
+                metaTag.name = 'robots';
+                metaTag.content = 'index, follow';
+                document.head.appendChild(metaTag);
+            }
+
+            if (prevPage > 1) {
+                url.searchParams.set('page', prevPage);
             } else {
                 url.searchParams.delete('page');
             }
-            canonicalTag.setAttribute('href', url.href);
-        }
+            if (prevPage > 0) {
+                if (pageRelPrev) {
+                    pageRelPrev.href = url.href;
+                } else {
+                    let selectorLink = document.createElement('link');
+                    selectorLink.rel = 'prev';
+                    selectorLink.href = url.href;
+                    document.head.appendChild(selectorLink);
+                }
+            } else {
+                pageRelPrev && pageRelPrev.remove();
+            }
 
-        if (!pageMetaTag) {
-            const metaTag = document.createElement('meta');
-            metaTag.name = 'robots';
-            metaTag.content = 'index, follow';
-            document.head.appendChild(metaTag);
-        }
-
-        if (prevPage > 1) {
-            url.searchParams.set('page', prevPage);
-        } else {
-            url.searchParams.delete('page');
-        }
-        if (prevPage > 0) {
-            if (pageRelPrev) {
-                pageRelPrev.href = url.href;
+            url.searchParams.set('page', nextPage);
+            if (pageRelNext) {
+                pageRelNext.href = url.href;
             } else {
                 let selectorLink = document.createElement('link');
-                selectorLink.rel = 'prev';
+                selectorLink.rel = 'next';
                 selectorLink.href = url.href;
                 document.head.appendChild(selectorLink);
             }
-        } else {
-            pageRelPrev && pageRelPrev.remove();
-        }
 
-        url.searchParams.set('page', nextPage);
-        if (pageRelNext) {
-            pageRelNext.href = url.href;
-        } else {
-            let selectorLink = document.createElement('link');
-            selectorLink.rel = 'next';
-            selectorLink.href = url.href;
-            document.head.appendChild(selectorLink);
         }
-
-    }
-    addDefaultDataPageAttributes();
-</script>
+        addDefaultDataPageAttributes();
+    </script>
+)}

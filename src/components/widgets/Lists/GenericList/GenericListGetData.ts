@@ -1,11 +1,17 @@
 import * as ItemParts from "./itemParts";
 import {gql} from "graphql-tag";
-import {UtilsHelper_convertToInt} from "@hatRingHelpers/UtilsHelper";
+import {
+    UtilsHelper_convertToInt, UtilsHelper_stripHtmlTags,
+    UtilsHelper_getQueryParam,
+    UtilsHelper_getSearchQueryParamKey
+} from "@hatRingHelpers/UtilsHelper";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {AppContext, SiteContentType} from "@hatTypes/types";
 import _ from "lodash";
 
 export async function GenericList_getData(context: AppContext, queryNodeFragment, widgetConfig, extendableAttributes, currentPage) {
+    const searchPhrase = UtilsHelper_stripHtmlTags(UtilsHelper_getQueryParam(UtilsHelper_getSearchQueryParamKey(), context) || '');
+
     let dynamicVariablesTypes: any = {};
     let dynamicVariables: any = {};
     let dynamicFragmentsNames = '';
@@ -70,7 +76,11 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
             contentTypeFilter = 'category: {in: [$topicId]}';
             break;
     }
+    const searchPhraseFragment = searchPhrase ? `, phrase: $searchPhrase` : '';
 
+    if (searchPhrase) {
+        dynamicVariablesTypes.$searchPhrase = 'String!';
+    }
     let mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
         return `, ${key}: ${dynamicVariablesTypes[key]}`;
     }).join(' ');
@@ -89,10 +99,13 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
         excludedFlags: excludedFlags,
     };
 
+    if (searchPhrase) {
+        variables.searchPhrase = searchPhrase;
+    }
 
     const query = gql`
         query($topicId: UUID!, $limit: Int!, $excludedFlags: [String!], $offset: Int! ${mappedDynamicVariablesTypes}){
-            stories(filter:{${contentTypeFilter}, flag: {notIn:$excludedFlags}},limit: $limit, offset: $offset ){
+            stories(filter:{${contentTypeFilter}, flag: {notIn:$excludedFlags}},limit: $limit, offset: $offset ${searchPhraseFragment} ){
                 total
                 edges {
                     node {

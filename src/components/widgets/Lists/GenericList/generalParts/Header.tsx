@@ -2,6 +2,11 @@ import React from 'react';
 import {AppContext} from "@hatTypes/types";
 import {WidgetHelper_renderEmptyComponent} from "@hatRingHelpers/WidgetHelper";
 import {GenericListResponse, GenericListWidgetConfig} from "../types";
+import {
+    UtilsHelper_getQueryParam,
+    UtilsHelper_getSearchQueryParamKey,
+    UtilsHelper_stripHtmlTags
+} from "../../../../../helpers/UtilsHelper";
 
 export default function Header(
     {context, widgetConfig, response}:
@@ -10,11 +15,16 @@ export default function Header(
             widgetConfig: GenericListWidgetConfig,
             response: GenericListResponse
         }) {
-    const headerText = widgetConfig.headerText;
+    let headerText = widgetConfig.headerText;
 
     if (!headerText) {
         return WidgetHelper_renderEmptyComponent('Header','',true);
     }
+
+    const totalItemsString = `${response?.data?.stories?.total || '0'}`;
+    const searchValue = UtilsHelper_getQueryParam(UtilsHelper_getSearchQueryParamKey(), context);
+    headerText = headerText.replaceAll('{{totalItems}}', totalItemsString);
+    headerText = headerText.replaceAll('{{searchValue}}', UtilsHelper_stripHtmlTags(searchValue || ''));
 
     const HeaderTag = (widgetConfig.headerTag && widgetConfig.headerTag !== 'none' ? widgetConfig.headerTag : 'span' ) as keyof JSX.IntrinsicElements;
 

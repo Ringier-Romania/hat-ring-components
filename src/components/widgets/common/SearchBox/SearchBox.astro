@@ -1,4 +1,5 @@
 ---
+import {UtilsHelper_getSearchQueryParamKey} from "../../../../helpers/UtilsHelper";
 const { context, widgetConfig } = Astro.props as {
   context: AppContext;
   widgetConfig: SearchBoxWidgetConfig;
@@ -8,7 +9,7 @@ import { WidgetHelper_getWidgetCssClasses } from "@hatRingHelpers/WidgetHelper";
 import { AppContext } from "@hatTypes/types";
 import { SearchBoxWidgetConfig } from "./types";
 
-const { searchURLPhrase, searchParamPhrase, placeholder, buttonText } =
+const { searchURLPhrase, placeholder, buttonText } =
   widgetConfig;
 ---
 
@@ -18,7 +19,7 @@ const { searchURLPhrase, searchParamPhrase, placeholder, buttonText } =
   <form method="get" action={searchURLPhrase}>
     <input
       type="search"
-      name={searchParamPhrase}
+      name={UtilsHelper_getSearchQueryParamKey()}
       {...placeholder && { placeholder }}
       required
     />

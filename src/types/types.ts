@@ -1,12 +1,14 @@
 import React, {ComponentState} from "react";
 
 export enum SiteContentType {
+    Search = "Search",
+    Homepage = "Homepage",
+    SiteNode = "SiteNode",
+    Story = "Story",
     Author = "Author",
-    CustomAction = 'CustomAction',
-    SiteNode = 'SiteNode',
-    Source = 'Source',
-    Story = 'Story',
-    Topic = 'Topic',
+    CustomAction = "CustomAction",
+    Source = "Source",
+    Topic = "Topic",
 }
 
 export interface AppContext {
