@@ -1,16 +1,16 @@
-import {AppContext, SiteContentType} from "../../../types/types";
+import {AppContext, SiteContentType} from "@hatTypes/types";
 import {Feed} from "feed";
 import {
     ConfigHelper_getGeneralConfig, ConfigHelper_getSeoGeneralConfig,
     ConfigHelper_getSeoRssDefaultConfig
-} from "../../../helpers/ConfigHelper";
+} from "@hatRingHelpers/ConfigHelper";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
 import {Story, StoryEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {UtilsHelper_convertToInt} from "../../../helpers/UtilsHelper";
+import {UtilsHelper_convertToInt} from "@hatRingHelpers/UtilsHelper";
 import {Item} from "feed/src/typings";
 import {RSSGqlQuery} from "./RSSGqlQuery";
-import {StoryHelper_generateContentHtml, StoryHelper_getLeadBlock} from "../../../helpers/StoryHelper";
+import {StoryHelper_generateContentHtml, StoryHelper_getLeadBlock} from "@hatRingHelpers/StoryHelper";
 
 export async function RSS({context}: { context: AppContext }) {
     const seoRssConfig = await ConfigHelper_getSeoRssDefaultConfig(context);

@@ -1,15 +1,15 @@
 import React from "react";
 
 // Helpers
-import {OpenGraphHelper_getMainStoryImageData} from "../../../helpers/seo/OpenGraphHelper";
-import {ConfigHelper_currentUrl} from "../../../helpers/ConfigHelper";
+import {OpenGraphHelper_getMainStoryImageData} from "@hatRingHelpers/seo/OpenGraphHelper";
+import {ConfigHelper_currentUrl} from "@hatRingHelpers/ConfigHelper";
 import {
     SeoHelper_currentDefaultImageData,
     SeoHelper_currentDescription,
     SeoHelper_currentLocale,
     SeoHelper_currentSiteName,
     SeoHelper_currentTitle
-} from "../../../helpers/seo/SeoHelper";
+} from "@hatRingHelpers/seo/SeoHelper";
 
 /**
  * Method used to render opengraph elements

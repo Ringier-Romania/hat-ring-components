@@ -5,12 +5,12 @@ import {
   AbstractWidgetConfig,
   AppContext,
   SiteContentType,
-} from "../../../../types/types";
+} from "@hatTypes/types";
 import { Breadcrumb, BreadcrumbEntry } from "./types";
 import {
   WidgetHelper_getWidgetCssClasses,
   WidgetHelper_renderEmptyComponent,
-} from "../../../../helpers/WidgetHelper";
+} from "@hatRingHelpers/WidgetHelper";
 const { context, widgetConfig } = Astro.props as {
   context: AppContext;
   widgetConfig: AbstractWidgetConfig;

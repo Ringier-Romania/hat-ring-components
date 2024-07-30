@@ -2,18 +2,18 @@
 const {context} = Astro.props as { context: AppContext };
 import React from "react"
 import {BreadcrumbList, ListItem, NewsArticle, Organization, Thing, WithContext} from 'schema-dts';
-import {AppContext, SiteContentType} from "../../../types/types";
+import {AppContext, SiteContentType} from "@hatTypes/types";
 import {
     SeoHelper_getContactNumber,
     SeoHelper_currentDescription,
     SeoHelper_getServiceLogo,
     SeoHelper_currentSiteName
-} from "../../../helpers/seo/SeoHelper";
+} from "@hatRingHelpers/seo/SeoHelper";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
-import {ConfigHelper_currentUrl, ConfigHelper_getHomepageUrl} from "../../../helpers/ConfigHelper";
-import {UtilsHelper_isHomepage} from "../../../helpers/UtilsHelper";
+import {ConfigHelper_currentUrl, ConfigHelper_getHomepageUrl} from "@hatRingHelpers/ConfigHelper";
+import {UtilsHelper_isHomepage} from "@hatRingHelpers/UtilsHelper";
 const isHomePage = UtilsHelper_isHomepage(context);
 const isArticle = context.siteContentType === SiteContentType.Story;
 

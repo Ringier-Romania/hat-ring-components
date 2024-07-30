@@ -1,6 +1,6 @@
 import React from "react";
-import {AppContext, SiteContentType} from "../../../types/types";
-import {ConfigHelper_getMetaDataConfig} from "../../../helpers/ConfigHelper";
+import {AppContext, SiteContentType} from "@hatTypes/types";
+import {ConfigHelper_getMetaDataConfig} from "@hatRingHelpers/ConfigHelper";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 

@@ -1,14 +1,14 @@
 import React from "react";
-import {RingLink} from "../../../common/RingLink/RingLink";
-import {RingImage, RingImageProps} from "../../../common/RingImage";
+import {RingLink} from "@common/RingLink/RingLink";
+import {RingImage, RingImageProps} from "@common/RingImage";
 import {
     WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent
-} from "../../../../helpers/WidgetHelper";
+} from "@hatRingHelpers/WidgetHelper";
 import {ImageConfig, ImageParams} from "./types";
 import styles from '../../../../../styles/widgets/common/SingleImage.module.scss';
-import {UtilsHelper_getValueIfExists} from "../../../../helpers/UtilsHelper";
-import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
-import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
+import {UtilsHelper_getValueIfExists} from "@hatRingHelpers/UtilsHelper";
+import {ImageHelper_getImageDimensionsFromObject} from "@hatRingHelpers/ImageHelper";
+import {TransformType} from "@hatRingHelpers/AcceleratorImagesHelper";
 
 
 export function SingleImage(

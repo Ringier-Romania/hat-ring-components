@@ -1,4 +1,4 @@
-import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
+import {AbstractWidgetConfig, WidgetParams} from "@hatTypes/types";
 
 export enum BasicWidgetGeneralShowOptions {
     SectionElements = "sectionElements",

@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {WidgetParams} from "../../../../../types/types";
+import {WidgetParams} from "@hatTypes/types";
 
 export interface EmbeddedApplicationBlockParams extends WidgetParams {
     blockData: {

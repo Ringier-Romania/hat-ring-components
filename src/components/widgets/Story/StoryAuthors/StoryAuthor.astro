@@ -5,10 +5,10 @@ const {author, context, widgetConfig} = Astro.props as {
     widgetConfig: StoryAuthorsWidgetConfig
 };
 import {Author} from '@ringpublishing/graphql-api-client/lib/types/websites-api';
-import {AppContext} from "../../../../types/types";
+import {AppContext} from "@hatTypes/types";
 import {StoryAuthorsWidgetConfig} from "./types";
 import _ from "lodash";
-import {WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent} from "@hatRingHelpers/WidgetHelper";
 import * as Parts from "../StoryAuthors/parts";
 
 let toRender: boolean | JSX.Element = false;

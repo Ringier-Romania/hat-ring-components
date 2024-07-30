@@ -1,9 +1,9 @@
 import React from 'react';
-import {AppContext, SiteContentType} from "../../../../../types/types";
+import {AppContext, SiteContentType} from "@hatTypes/types";
 import {StoryAuthorsWidgetConfig} from "../types";
 import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {RingImage} from "../../../../common/RingImage";
-import {ImageHelper_getImageDimensionsFromObject} from "../../../../../helpers/ImageHelper";
+import {RingImage} from "@common/RingImage";
+import {ImageHelper_getImageDimensionsFromObject} from "@hatRingHelpers/ImageHelper";
 
 export default function Image(
     {context, widgetConfig, author}:

@@ -2,8 +2,8 @@ import React, {ImgHTMLAttributes} from "react";
 
 //@TODO AStro images import { Image } from 'astro:assets';
 import styles from "../../../styles/common/RingImage.module.scss";
-import {UtilsHelper_getExtension} from "../../helpers/UtilsHelper";
-import {AcceleratorImagesHelper_getUrl, TransformType} from "../../helpers/AcceleratorImagesHelper";
+import {UtilsHelper_getExtension} from "@hatRingHelpers/UtilsHelper";
+import {AcceleratorImagesHelper_getUrl, TransformType} from "@hatRingHelpers/AcceleratorImagesHelper";
 import {RingImagePreload} from "./RingImagePreload";
 
 export interface RingImageProps extends ImgHTMLAttributes<any> {

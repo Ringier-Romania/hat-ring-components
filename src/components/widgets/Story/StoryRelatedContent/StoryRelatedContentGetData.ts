@@ -1,13 +1,13 @@
 import * as ItemParts from "../../Lists/GenericList/itemParts";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {AppContext} from "../../../../types/types";
+import {AppContext} from "@hatTypes/types";
 import _ from "lodash";
 import {StoryRelatedContentAutocompleteFromEnum, StoryRelatedContentWidgetConfig} from "./types";
 import {GenericListResponse} from "../../Lists/GenericList/types";
 import {Story, StoryEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {UtilsHelper_convertToInt, UtilsHelper_getCurrentNodeCategoryId} from "../../../../helpers/UtilsHelper";
-import {ConfigHelper_getMainCategoryUuid} from "../../../../helpers/ConfigHelper";
+import {UtilsHelper_convertToInt, UtilsHelper_getCurrentNodeCategoryId} from "@hatRingHelpers/UtilsHelper";
+import {ConfigHelper_getMainCategoryUuid} from "@hatRingHelpers/ConfigHelper";
 
 export async function StoryRelatedContent_getData(context: AppContext, widgetConfig: StoryRelatedContentWidgetConfig): Promise<GenericListResponse> {
     let dynamicVariablesTypes: any = {};

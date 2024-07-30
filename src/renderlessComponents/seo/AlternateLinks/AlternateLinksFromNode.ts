@@ -2,9 +2,9 @@
 import _ from "lodash";
 
 //Types
-import {AppContext} from "../../../types/types";
-import {UtilsHelper_getDomain} from "../../../helpers/UtilsHelper";
-import {ConfigHelper_getLanguage} from "../../../helpers/ConfigHelper";
+import {AppContext} from "@hatTypes/types";
+import {UtilsHelper_getDomain} from "@hatRingHelpers/UtilsHelper";
+import {ConfigHelper_getLanguage} from "@hatRingHelpers/ConfigHelper";
 import { AlternateLinksObject } from "./AlternateLinks";
 /**
  * Fill alternate links via custom links from the node/page configuration

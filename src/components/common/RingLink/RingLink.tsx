@@ -1,5 +1,5 @@
 import React from "react";
-import {UtilsHelper_isDevelopmentMode} from "../../../helpers/UtilsHelper";
+import {UtilsHelper_isDevelopmentMode} from "@hatRingHelpers/UtilsHelper";
 
 export function RingLink(props: { children?: React.ReactNode } & React.AnchorHTMLAttributes<HTMLAnchorElement>) {
 

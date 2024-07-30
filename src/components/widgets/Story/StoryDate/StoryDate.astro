@@ -5,8 +5,8 @@ import React from 'react';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryDateParams, StoryDateResponse} from "./types";
-import {DateHelper_convertDate} from "../../../../helpers/DateHelper";
-import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {DateHelper_convertDate} from "@hatRingHelpers/DateHelper";
+import {WidgetHelper_getWidgetCssClasses} from "@hatRingHelpers/WidgetHelper";
 const query = gql`
         query($storyId: UUID){
             story(id:$storyId){

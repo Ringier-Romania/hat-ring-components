@@ -1,6 +1,6 @@
-import {AppContext} from "../../../../types/types";
+import {AppContext} from "@hatTypes/types";
 import {gql} from "graphql-tag";
-import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
+import {StoryHelper_getGqlContentFragment} from "@hatRingHelpers/StoryHelper";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import _ from "lodash";
 

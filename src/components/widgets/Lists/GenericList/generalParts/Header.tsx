@@ -1,6 +1,6 @@
 import React from 'react';
-import {AppContext} from "../../../../../types/types";
-import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {AppContext} from "@hatTypes/types";
+import {WidgetHelper_renderEmptyComponent} from "@hatRingHelpers/WidgetHelper";
 import {GenericListResponse, GenericListWidgetConfig} from "../types";
 import {
     UtilsHelper_getQueryParam,
