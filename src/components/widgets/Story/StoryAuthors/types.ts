@@ -1,5 +1,5 @@
 import { AuthorEdge } from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "@hatTypes/types";
+import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "../../../../types/types";
 
 export interface StoryAuthorsResponse {
     "data": {

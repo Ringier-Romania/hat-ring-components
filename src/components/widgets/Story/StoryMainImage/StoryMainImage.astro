@@ -1,16 +1,18 @@
 ---
-import {TransformType} from "@hatRingHelpers/AcceleratorImagesHelper"
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
 const {context, widgetConfig} = Astro.props;
+
+import React from 'react';
 import _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {StoryMainImageParams, StoryMainImageResponse} from "./types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {RingImage} from "@common/RingImage";
+import {RingImage} from "../../../common/RingImage";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
 import {
     WidgetHelper_getWidgetCssClasses
-} from "@hatRingHelpers/WidgetHelper";
-import {ImageHelper_getImageDimensionsFromObject} from "@hatRingHelpers/ImageHelper";
+} from "../../../../helpers/WidgetHelper";
+import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
 
 
 const query = gql`
@@ -45,7 +47,7 @@ const caption = _.get(response, 'data.story.image.caption');
 
 ---
 
-<div class={WidgetHelper_getWidgetCssClasses('StoryMainImage', widgetConfig, context)}>
+<div className={WidgetHelper_getWidgetCssClasses('StoryMainImage', widgetConfig, context)}>
     {imgSrc ? <>
         <RingImage
             src={imgSrc}

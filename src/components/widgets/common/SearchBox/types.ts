@@ -1,4 +1,4 @@
-import { AbstractWidgetConfig } from "@hatTypes/types";
+import { AbstractWidgetConfig } from "../../../../types/types";
 
 export interface SearchBoxWidgetConfig extends AbstractWidgetConfig {
   placeholder: string;

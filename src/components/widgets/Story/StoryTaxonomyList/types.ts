@@ -1,4 +1,4 @@
-import {AbstractWidgetConfig, AppContext, ComponentParams, WidgetParams} from "@hatTypes/types";
+import {AbstractWidgetConfig, AppContext, ComponentParams, WidgetParams} from "../../../../types/types";
 import {Topic} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 
 export interface StoryTaxonomyListWidgetConfig extends AbstractWidgetConfig {

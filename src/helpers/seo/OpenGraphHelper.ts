@@ -3,7 +3,7 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 import _ from "lodash";
 import {ConfigHelper_getSeoOpenGraphConfig} from "../ConfigHelper";
 import {ImageHelper_getImageDimensionsFromObject} from "../ImageHelper";
-import {AppContext, SiteContentType} from "@hatTypes/types";
+import {AppContext, SiteContentType} from "../../types/types";
 
 export async function OpenGraphHelper_getMainStoryImageData(context:AppContext) {
     if(context.siteContentType !== SiteContentType.Story){

@@ -1,9 +1,9 @@
 ---
 const { context, blockData }: PreformattedBlockParams =
   Astro.props as PreformattedBlockParams;
-import { WidgetHelper_renderEmptyComponent } from "@hatRingHelpers/WidgetHelper";
-import {LinkReplacerHelper_replaceLinks} from '@hatRingHelpers/LinkReplacerHelper';
-import { AppContext } from "@hatTypes/types";
+import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
+import {LinkReplacerHelper_replaceLinks} from '../../../../../helpers/LinkReplacerHelper';
+import { AppContext } from "../../../../../types/types";
 
 export interface PreformattedBlockParams {
   context: AppContext;

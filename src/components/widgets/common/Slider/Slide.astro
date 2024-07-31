@@ -1,10 +1,10 @@
 ---
 import {SliderElement, SliderFrontParams} from "./types";
-import { RingLink } from "@common/RingLink/RingLink";
-import RingImage from "@common/RingImage.astro";
-import { ImageHelper_getImageDimensionsFromObject } from "@hatRingHelpers/ImageHelper";
+import { RingLink } from "../../../common/RingLink/RingLink";
+import RingImage from "../../../common/RingImage.astro";
+import { ImageHelper_getImageDimensionsFromObject } from "../../../../helpers/ImageHelper";
 import _ from "lodash";
-import {TransformType} from "@hatRingHelpers/AcceleratorImagesHelper";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
 
 const {slide, isUsedWithLightbox, context, headerTagLevel, childLevel} = Astro.props as SliderFrontParams;
 

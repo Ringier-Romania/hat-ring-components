@@ -3,7 +3,7 @@ import {DocumentNode} from "graphql/language/ast";
 import {
     CacheHelper_get,
     CacheHelper_set, CacheHelper_runCallbackIfTimeStampHasExpired
-} from "@hatRingHelpers/CacheHelper";
+} from "../helpers/CacheHelper";
 
 export class WebsiteApiProvider {
 

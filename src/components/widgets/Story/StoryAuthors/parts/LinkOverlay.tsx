@@ -1,9 +1,9 @@
 import React from 'react';
-import {AppContext} from "@hatTypes/types";
-import {WidgetHelper_renderEmptyComponent} from "@hatRingHelpers/WidgetHelper";
+import {AppContext} from "../../../../../types/types";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import {StoryAuthorsWidgetConfig} from "../types";
 import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {RingLink} from "@common/RingLink/RingLink";
+import {RingLink} from "../../../../common/RingLink/RingLink";
 
 export default function LinkOverlay(
     {context, widgetConfig, author}:

@@ -1,14 +1,14 @@
 ---
 import {StoryTitleWidgetConfig} from "./types";
-import {AppContext} from "@hatTypes/types";
+import {AppContext} from "../../../../types/types";
 const {context, widgetConfig} = Astro.props as {context: AppContext, widgetConfig: StoryTitleWidgetConfig};
 
 import _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTitleResponse} from "./types";
-import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "@hatRingHelpers/WidgetHelper";
-import {ConfigHelper_getDeveloperSettingsConfig} from "@hatRingHelpers/ConfigHelper";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper";
+import {ConfigHelper_getDeveloperSettingsConfig} from "../../../../helpers/ConfigHelper";
 
 let toRender: boolean | JSX.Element | string = false;
 

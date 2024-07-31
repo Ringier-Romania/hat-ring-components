@@ -1,10 +1,10 @@
 ---
 import {
     WidgetHelper_getWidgetCssClasses,
-} from '@hatRingHelpers/WidgetHelper';
+} from '../../../../helpers/WidgetHelper';
 import styles from '../../../../../styles/widgets/common/Slider.module.scss';
 import _ from 'lodash';
-import {UtilsHelper_generateRandomString, UtilsHelper_getValueIfExists} from '@hatRingHelpers/UtilsHelper';
+import {UtilsHelper_generateRandomString, UtilsHelper_getValueIfExists} from '../../../../helpers/UtilsHelper';
 import Slide from './Slide.astro';
 
 const {context, widgetConfig, extendableAttributes = {}} = Astro.props;

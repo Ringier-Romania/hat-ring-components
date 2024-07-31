@@ -1,10 +1,10 @@
 import React from 'react';
-import {AppContext} from "@hatTypes/types";
+import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
 import _ from "lodash";
-import {RingLink} from "@common/RingLink/RingLink";
-import {WidgetHelper_renderEmptyComponent} from "@hatRingHelpers/WidgetHelper";
+import {RingLink} from "../../../../common/RingLink/RingLink";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 
 export default function Description(
     {context, widgetConfig, response}:

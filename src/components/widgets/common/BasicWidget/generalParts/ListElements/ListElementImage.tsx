@@ -1,8 +1,8 @@
 import React from 'react';
-import {AppContext} from "@hatTypes/types";
+import {AppContext} from "../../../../../../types/types";
 import {BasicWidgetConfig, ListElementImageData} from "../../types";
-import {RingImage, RingImageProps} from "@common/RingImage";
-import {TransformType} from "@hatRingHelpers/AcceleratorImagesHelper";
+import {RingImage, RingImageProps} from "../../../../../common/RingImage";
+import {TransformType} from "../../../../../../helpers/AcceleratorImagesHelper";
 
 export default function ListElementImage(
     {context, widgetConfig, data}:

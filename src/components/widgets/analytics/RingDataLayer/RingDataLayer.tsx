@@ -1,5 +1,5 @@
 import React from "react";
-import {SiteContentType, WidgetParams} from "@hatTypes/types";
+import {SiteContentType, WidgetParams} from "../../../../types/types";
 
 export async function RingDataLayer(
     {widgetConfig, context}: WidgetParams

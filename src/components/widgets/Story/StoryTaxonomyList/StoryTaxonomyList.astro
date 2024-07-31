@@ -5,8 +5,8 @@ import React from 'react';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTaxonomyListParams, StoryTaxonomyListResponse} from "./types";
-import {RingLink} from "@common/RingLink/RingLink";
-import {WidgetHelper_getWidgetCssClasses} from "@hatRingHelpers/WidgetHelper";
+import {RingLink} from "../../../common/RingLink/RingLink";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 const query = gql`
         query($storyId: UUID){

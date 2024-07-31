@@ -1,4 +1,4 @@
-import {AcceleratorImagesHelper_getUrl, TransformType} from "@hatRingHelpers/AcceleratorImagesHelper";
+import {AcceleratorImagesHelper_getUrl, TransformType} from "../../helpers/AcceleratorImagesHelper";
 import {ImageFormat} from "@ringpublishing/accelerator-images";
 
 export function RingImageObject(src, width, height, transform?: TransformType, format?: ImageFormat[]) {

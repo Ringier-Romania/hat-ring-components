@@ -1,7 +1,7 @@
 import {UtilsHelper_isMobile} from "./UtilsHelper";
 import {ConfigHelper_getGeneralConfig} from "./ConfigHelper";
 import {AppContext} from "../types/types";
-import {TransformType} from "@hatRingHelpers/AcceleratorImagesHelper";
+import {TransformType} from "./AcceleratorImagesHelper";
 import {RingImageObject} from "../renderlessComponents/common/RingImageObject";
 import {ImageFormat} from "@ringpublishing/accelerator-images";
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import {AppContext} from "@hatTypes/types";
+import {AppContext} from "../../../../../types/types";
 import {GenericListResponse, GenericListWidgetConfig} from "../types";
-import {RingLink} from "@common/RingLink/RingLink";
+import {RingLink} from "../../../../common/RingLink/RingLink";
 import _ from 'lodash';
-import {UtilsHelper_convertToInt} from "@hatRingHelpers/UtilsHelper";
+import {UtilsHelper_convertToInt} from "../../../../../helpers/UtilsHelper";
 
 const MAX_OFFSET = 1000;
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import {AppContext} from "@hatTypes/types";
+import {AppContext} from "../../../../../types/types";
 import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
 import _ from "lodash";
-import {WidgetHelper_renderEmptyComponent} from "@hatRingHelpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
-import {RingLink} from "@common/RingLink/RingLink";
+import {RingLink} from "../../../../common/RingLink/RingLink";
 
 export default function Taxonomies(
     {context, widgetConfig, data}:

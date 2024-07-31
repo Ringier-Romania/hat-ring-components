@@ -1,4 +1,4 @@
-import {AbstractWidgetConfig, WidgetParams} from "@hatTypes/types";
+import {AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
 import {
     Content,
     PublicationPoint,

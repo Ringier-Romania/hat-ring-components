@@ -4,9 +4,9 @@ import {
     UtilsHelper_convertToInt, UtilsHelper_stripHtmlTags,
     UtilsHelper_getQueryParam,
     UtilsHelper_getSearchQueryParamKey
-} from "@hatRingHelpers/UtilsHelper";
+} from "../../../../helpers/UtilsHelper";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {AppContext, SiteContentType} from "@hatTypes/types";
+import {AppContext, SiteContentType} from "../../../../types/types";
 import _ from "lodash";
 
 export async function GenericList_getData(context: AppContext, queryNodeFragment, widgetConfig, extendableAttributes, currentPage) {

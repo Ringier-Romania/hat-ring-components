@@ -2,10 +2,10 @@
 const {widgetConfig, context} = Astro.props as StoryLiveBlogParams;
 import _ from 'lodash';
 import {gql} from 'graphql-tag';
-import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "@hatTypes/types";
+import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "../../../../types/types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {default as ExternalApplication} from "../../common/ExternalApplication.astro";
-import {WidgetHelper_getWidgetCssClasses} from "@hatRingHelpers/WidgetHelper";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
 interface StoryLiveBlogParams extends WidgetParams {
     widgetConfig: StoryLiveBlogParamsConfig

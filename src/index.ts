@@ -1,4 +1,4 @@
-export * from "@hatRingHelpers/WidgetHelper";
+export * from "./helpers/WidgetHelper";
 export * from "./types/types";
 export { default as StoryTitle } from "./components/widgets/Story/StoryTitle/StoryTitle.astro";
 export { default as StoryMainImage } from "./components/widgets/Story/StoryMainImage/StoryMainImage.astro";
@@ -22,8 +22,8 @@ export * from "./components/widgets/common/SingleImage/SingleImage";
 export { default as Kropka } from "./components/widgets/analytics/Kropka/Kropka.astro";
 // export * from "./components/widgets/analytics/RingDataLayer/RingDataLayer";
 export * from "./renderlessComponents/seo/AlternateLinks/AlternateLinks";
-export * from "@hatRingHelpers/UtilsHelper";
-export { default as SchemaOrg } from "./components/seo/SchemaOrg/SchemaOrg.astro"
+export * from "./helpers/UtilsHelper";
+export { default as SchemaOrg } from "./components/seo/SchemaOrg/SchemaOrg.astro";
 export * from "./renderlessComponents/seo/RSS/RSS";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaTitle";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaDescription";
@@ -41,10 +41,10 @@ export { default as StoryRelatedContent } from "./components/widgets/Story/Story
 export { default as HatAdmin } from "./pages/HatAdmin/HatAdmin.astro";
 export { default as Photoswipe } from "./components/widgets/common/PhotoSwipe/PhotoSwipe.astro";
 export * from "./providers/WebsiteApiProvider";
-export * from "@hatRingHelpers/CacheHelper";
-export * from "@hatRingHelpers/ConfigHelper";
-export * from "@hatRingHelpers/DateHelper";
-export * from "@hatRingHelpers/StoryHelper";
+export * from "./helpers/CacheHelper";
+export * from "./helpers/ConfigHelper";
+export * from "./helpers/DateHelper";
+export * from "./helpers/StoryHelper";
 export { default as StoryGroup } from "./components/Story/StoryGroup.astro";
 export { default as Breadcrumbs } from "./components/widgets/common/Breadcrumbs/Breadcrumbs.astro";
 export { default as SearchBox } from "./components/widgets/common/SearchBox/SearchBox.astro";

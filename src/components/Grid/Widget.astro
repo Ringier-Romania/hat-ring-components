@@ -1,10 +1,10 @@
 ---
-import {WidgetHelper_renderEmptyComponent, WidgetHelper_shouldHideWidget, WidgetHelper_buildWidgetLocation} from "@hatRingHelpers/WidgetHelper";
+import {WidgetHelper_renderEmptyComponent, WidgetHelper_shouldHideWidget, WidgetHelper_buildWidgetLocation} from "../../helpers/WidgetHelper";
 const {widgetConfig, context, sectionName, boxName, index} = Astro.props;
 
 
 import _ from "lodash";
-import {AbstractWidget, AbstractWidgetConfig, AppContext, WidgetParams} from "@hatTypes/types";
+import {AbstractWidget, AbstractWidgetConfig, AppContext, WidgetParams} from "../../types/types";
 
 interface GridWidgetParams {
     context: AppContext;

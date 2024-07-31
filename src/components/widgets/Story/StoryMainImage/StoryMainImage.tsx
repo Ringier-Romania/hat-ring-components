@@ -4,11 +4,13 @@ import * as _ from 'lodash';
 import {gql} from 'graphql-tag';
 import {StoryMainImageParams, StoryMainImageResponse} from "./types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {RingImage} from "@common/RingImage";
+import {RingImage} from "../../../common/RingImage";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
-import {WidgetHelper_getWidgetCssClasses} from "@hatRingHelpers/WidgetHelper";
-import {ImageHelper_getImageDimensionsFromObject} from "@hatRingHelpers/ImageHelper";
-import {TransformType} from "@hatRingHelpers/AcceleratorImagesHelper";
+import {
+    WidgetHelper_getWidgetCssClasses
+} from "../../../../helpers/WidgetHelper";
+import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
 
 
 export async function StoryMainImage({widgetConfig, context}: StoryMainImageParams) {

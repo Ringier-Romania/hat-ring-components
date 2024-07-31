@@ -1,4 +1,4 @@
-import {AbstractWidgetConfig, AppContext, ComponentParams, WidgetParams} from "@hatTypes/types";
+import {AbstractWidgetConfig, AppContext, ComponentParams, WidgetParams} from "../../../../types/types";
 
 export interface StoryContentWidgetConfig extends AbstractWidgetConfig {
     standardImageWidth?: string | number,

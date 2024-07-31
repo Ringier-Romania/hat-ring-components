@@ -7,7 +7,7 @@ import _ from "lodash";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 
 //Types
-import {AppContext} from "@hatTypes/types";
+import {AppContext} from "../../../types/types";
 import {AlternateLinksResponse} from "./types";
 import { AlternateLinksObject } from './AlternateLinks';
 

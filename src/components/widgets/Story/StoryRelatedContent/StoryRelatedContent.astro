@@ -2,14 +2,14 @@
 const {widgetConfig, context} = Astro.props;
 
 import {StoryRelatedContentParams} from "./types";
-import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget} from "@hatRingHelpers/WidgetHelper";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget} from "../../../../helpers/WidgetHelper";
 import {StoryRelatedContent_getData} from "./StoryRelatedContentGetData";
 import {Button, Header, Items} from "../../Lists/GenericList/generalParts";
 import {GenericListWidgetConfig} from "../../Lists/GenericList/types";
 import styles from "../../../../../styles/widgets/Lists/GenericList.module.scss";
 import _ from "lodash";
 
-let toRender: boolean | JSX.Element | string = false;
+let toRender: boolean | JSX.Element = false;
 
 
 const data = await StoryRelatedContent_getData(context, widgetConfig);
@@ -22,7 +22,7 @@ let cssModules = styles.GenericList;
 
 ---
 {toRender ? <Fragment set:html={toRender}/> :
-    <div class={WidgetHelper_getWidgetCssClasses('StoryRelatedContent', widgetConfig, context, [cssModules])}>
+    <div className={WidgetHelper_getWidgetCssClasses('StoryRelatedContent', widgetConfig, context, [cssModules])}>
         <Header widgetConfig={widgetConfig as GenericListWidgetConfig} context={context} response={data}/>
         {widgetConfig.moreText &&
                 <Button widgetConfig={widgetConfig as GenericListWidgetConfig} context={context} response={data}/>}

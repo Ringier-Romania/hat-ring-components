@@ -17,7 +17,7 @@ import {
     UtilsHelper_getCurrentPageType, UtilsHelper_getQueryParam, UtilsHelper_getSearchQueryParamKey
 } from "../UtilsHelper";
 import _ from "lodash";
-import {SiteContentType} from "@hatTypes/types";
+import {SiteContentType} from "../../types/types";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import {AppContext} from "@hatTypes/types";
+import {AppContext} from "../../../../../types/types";
 import * as ItemParts from "../itemParts";
 import _ from "lodash";
-import {RingLink} from "@common/RingLink/RingLink";
+import {RingLink} from "../../../../common/RingLink/RingLink";
 import {GenericListResponse, GenericListWidgetConfig} from "../types";
 
 export default function Button(

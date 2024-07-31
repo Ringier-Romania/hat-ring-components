@@ -1,11 +1,11 @@
 import React from "react";
-import {AppContext, SiteContentType} from "@hatTypes/types";
-import {ConfigHelper_getMetaDataConfig} from "@hatRingHelpers/ConfigHelper";
+import {AppContext, SiteContentType} from "../../../types/types";
+import {ConfigHelper_getMetaDataConfig} from "../../../helpers/ConfigHelper";
 import _ from "lodash"
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
-import {UtilsHelper_convertToInt, UtilsHelper_getDomain, UtilsHelper_isHomepage} from "@hatRingHelpers/UtilsHelper";
-import {WidgetHelper_findWidgetConfig} from "@hatRingHelpers/WidgetHelper";
+import {UtilsHelper_convertToInt, UtilsHelper_getDomain, UtilsHelper_isHomepage} from "../../../helpers/UtilsHelper";
+import {WidgetHelper_findWidgetConfig} from "../../../helpers/WidgetHelper";
 import {GenericList_getData} from "../../../components/widgets/Lists/GenericList/GenericListGetData";
 
 export async function SeoListGridPrevNext(context: AppContext) {
