@@ -9,7 +9,7 @@ export let StoryTitleAddonsWebsitesConfig
     "defaultParams": {},
     "paramsDescription": {},
     "modules": {
-        "storTitleAddons_wdg": {
+        "storyTitleAddons_wdg": {
             "name": "Story Title Addons",
             "description": "",
             "defaultParams": {
