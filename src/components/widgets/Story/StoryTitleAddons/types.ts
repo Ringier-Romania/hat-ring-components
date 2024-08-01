@@ -1,6 +1,6 @@
 import {AbstractWidgetConfig, ComponentParams, WidgetParams} from "../../../../types/types";
 
-export interface TitleAddonsResponse {
+export interface StoryTitleAddonsResponse {
     data: { 
         story: { 
             titles?: Array<{
@@ -11,7 +11,7 @@ export interface TitleAddonsResponse {
         } }
 }
 
-export interface TitleAddonsWidgetConfig extends AbstractWidgetConfig {
-    response?: TitleAddonsResponse,
+export interface StoryTitleAddonsWidgetConfig extends AbstractWidgetConfig {
+    response?: StoryTitleAddonsResponse,
     titleAddonsCodeNames?: string
 }

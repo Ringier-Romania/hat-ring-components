@@ -1,10 +1,10 @@
 ---
-const {context, widgetConfig} = Astro.props as {context: AppContext; widgetConfig: TitleAddonsWidgetConfig}
+const {context, widgetConfig} = Astro.props as {context: AppContext; widgetConfig: StoryTitleAddonsWidgetConfig}
 import _ from "lodash"
 import {gql} from "graphql-tag"
 import {AppContext} from "../../../../types/types"
-import {TitleAddonsWidgetConfig} from "./types"
-import {TitleAddonsResponse} from "./types"
+import {StoryTitleAddonsWidgetConfig} from "./types"
+import {StoryTitleAddonsResponse} from "./types"
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider"
 import {WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper"
 
@@ -30,7 +30,7 @@ const variables = {
 
 let response = widgetConfig?.response
 if (!response) {
-    response = (await WebsiteApiProvider.call(query, variables)) as TitleAddonsResponse
+    response = (await WebsiteApiProvider.call(query, variables)) as StoryTitleAddonsResponse
 }
 if (!titleAddonsCodeNamesArr || titleAddonsCodeNamesArr.length === 0) {
     toRender = WidgetHelper_renderEmptyComponent("TitleAddons")

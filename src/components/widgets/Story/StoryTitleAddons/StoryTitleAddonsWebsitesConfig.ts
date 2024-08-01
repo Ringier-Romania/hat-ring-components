@@ -9,17 +9,17 @@ export let TitleAddonsWebsitesConfig
     "defaultParams": {},
     "paramsDescription": {},
     "modules": {
-        "titleAddons_wdg": {
-            "name": "Title Addons",
+        "storTitleAddons_wdg": {
+            "name": "Story Title Addons",
             "description": "",
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
-                "widgetType": "titleAddons",
+                "widgetType": "storyTitleAddons",
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
                 "titleAddonsCodeNames": {
-                    "name": "Title addons code names to show",
+                    "name": "Story title addons code names to show",
                     "description": "(comma separated code names)",
                     "type": "textfield"
                 },
