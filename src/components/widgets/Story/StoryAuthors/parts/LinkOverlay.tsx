@@ -15,7 +15,7 @@ export default function LinkOverlay(
 
     return (
         <div className={['LinkOverlay'].join(' ')}>
-            {author.publicationPoint?.url ?
+            {author?.publicationPoint?.url ?
                 <RingLink href={author.publicationPoint?.url || '#'} title={author.name}>
 
                 </RingLink>

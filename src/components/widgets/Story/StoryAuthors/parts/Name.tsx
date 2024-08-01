@@ -14,7 +14,7 @@ export default function Name(
 
     return (
         <div className={['Name'].join(' ')}>
-            {author.name}
+            {author?.name}
         </div>
     )
 }
