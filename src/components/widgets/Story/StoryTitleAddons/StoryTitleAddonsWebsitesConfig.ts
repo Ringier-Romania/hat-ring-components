@@ -3,7 +3,7 @@ import {
     AbstractWebsitesWidgetConfigParamsDescription
 } from "../../../../types/abstracts";
 
-export let TitleAddonsWebsitesConfig
+export let StoryTitleAddonsWebsitesConfig
     = {
     "sections": [],
     "defaultParams": {},
