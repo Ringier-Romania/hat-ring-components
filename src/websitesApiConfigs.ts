@@ -31,4 +31,3 @@ export * from "./components/widgets/Story/StoryRelatedContent/StoryRelatedConten
 export * from "./components/widgets/common/PhotoSwipe/PhotoSwipeWebsitesConfig";
 export * from "./components/widgets/common/Breadcrumbs/BreadcrumbsWebsitesConfig";
 export * from "./components/widgets/common/SearchBox/SearchBoxWebsitesConfig";
-export * from "./components/widgets/Story/StoryTitleAddons/StoryTitleAddonsWebsitesConfig";
