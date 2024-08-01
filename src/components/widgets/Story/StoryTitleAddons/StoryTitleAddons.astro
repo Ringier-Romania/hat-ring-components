@@ -33,7 +33,7 @@ if (!response) {
     response = (await WebsiteApiProvider.call(query, variables)) as StoryTitleAddonsResponse
 }
 if (!titleAddonsCodeNamesArr || titleAddonsCodeNamesArr.length === 0) {
-    toRender = WidgetHelper_renderEmptyComponent("TitleAddons")
+    toRender = WidgetHelper_renderEmptyComponent("StoryTitleAddons")
 }
 ---
 
@@ -42,8 +42,8 @@ if (!titleAddonsCodeNamesArr || titleAddonsCodeNamesArr.length === 0) {
         <Fragment set:html={toRender} />
     ) : (
         titleAddonsCodeNamesArr.map((codeName: string) => {
-            const titleAddonsToShow = _.get(_.find(response?.data?.story.titles, ["role.code", codeName]), "text", "")
-            return <span class={`title-addons code-${codeName}`}>{titleAddonsToShow}</span>
+            const storyTitleAddonsToShow = _.get(_.find(response?.data?.story.titles, ["role.code", codeName]), "text", "")
+            return <span class={`title-addons code-${codeName}`}>{storyTitleAddonsToShow}</span>
         })
     )
 }
