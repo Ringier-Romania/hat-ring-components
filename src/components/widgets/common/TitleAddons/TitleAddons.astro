@@ -1,0 +1,49 @@
+---
+const {context, widgetConfig} = Astro.props as {context: AppContext; widgetConfig: TitleAddonsWidgetConfig}
+import _ from "lodash"
+import {gql} from "graphql-tag"
+import {AppContext} from "../../../../types/types"
+import {TitleAddonsWidgetConfig} from "./types"
+import {TitleAddonsResponse} from "./types"
+import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider"
+import {WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper"
+
+let toRender: boolean | JSX.Element | string = false
+const titleAddonsCodeNamesArr = _.without((widgetConfig.titleAddonsCodeNames ?? "").split(","), "")
+
+const query = gql`
+    query ($storyId: UUID) {
+        story(id: $storyId) {
+            titles {
+                role {
+                    code
+                }
+                text
+            }
+        }
+    }
+`
+
+const variables = {
+    storyId: context.id,
+}
+
+let response = widgetConfig?.response
+if (!response) {
+    response = (await WebsiteApiProvider.call(query, variables)) as TitleAddonsResponse
+}
+if (!titleAddonsCodeNamesArr || titleAddonsCodeNamesArr.length === 0) {
+    toRender = WidgetHelper_renderEmptyComponent("TitleAddons")
+}
+---
+
+{
+    toRender ? (
+        <Fragment set:html={toRender} />
+    ) : (
+        titleAddonsCodeNamesArr.map((codeName: string) => {
+            const titleAddonsToShow = _.get(_.find(response?.data?.story.titles, ["role.code", codeName]), "text", "")
+            return <span class={`title-addons code-${codeName}`}>{titleAddonsToShow}</span>
+        })
+    )
+}

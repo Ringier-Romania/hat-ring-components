@@ -48,3 +48,4 @@ export * from "./helpers/StoryHelper";
 export { default as StoryGroup } from "./components/Story/StoryGroup.astro";
 export { default as Breadcrumbs } from "./components/widgets/common/Breadcrumbs/Breadcrumbs.astro";
 export { default as SearchBox } from "./components/widgets/common/SearchBox/SearchBox.astro";
+export { default as TitleAddons } from "./components/widgets/common/TitleAddons/TitleAddons.astro";
