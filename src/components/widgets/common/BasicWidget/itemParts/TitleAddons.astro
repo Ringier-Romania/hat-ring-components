@@ -1,0 +1,51 @@
+---
+const {widgetConfig, data} = Astro.props
+import {BasicWidgetConfig} from "../types"
+import gql from "graphql-tag"
+import _ from "lodash"
+
+type Props = {
+    widgetConfig: BasicWidgetConfig & {
+        titleAddonsCodeNames: string
+    }
+    data: {
+        originalContent: {
+            titles: {
+                role: {
+                    code: string
+                }
+                text: string
+            }[]
+        }
+    }
+}
+
+const titleAddonsCodeNamesArr = _.without((widgetConfig.titleAddonsCodeNames ?? "").split(","), "")
+
+export const getFragment = () => {
+    return {
+        variables: {},
+        query: gql`
+            fragment TitleAddonsFragment on SectionItem {
+                originalContent {
+                    ... on Story {
+                        titles {
+                            role {
+                                code
+                            }
+                            text
+                        }
+                    }
+                }
+            }
+        `,
+    }
+}
+---
+
+{
+    titleAddonsCodeNamesArr.map((codeName: string) => {
+        const titleAddonsToShow = _.get(_.find(data.originalContent.titles, ["role.code", codeName]), "text", "")
+        return !!titleAddonsToShow ? <span class={`title-addons code-${codeName}`}>{titleAddonsToShow}</span> : null
+    })
+}
