@@ -9,7 +9,7 @@ export enum SiteContentType {
     CustomAction = "CustomAction",
     Source = "Source",
     Topic = "Topic",
-    Error = "Error",
+    Error404 = "Error404",
 }
 
 export interface AppContext {
