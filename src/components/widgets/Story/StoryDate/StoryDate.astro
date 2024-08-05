@@ -1,10 +1,9 @@
 ---
 const {context, widgetConfig} = Astro.props;
 
-import React from 'react';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {StoryDateParams, StoryDateResponse} from "./types";
+import {StoryDateResponse} from "./types";
 import {DateHelper_convertDate} from "../../../../helpers/DateHelper";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 const query = gql`
@@ -20,16 +19,16 @@ const query = gql`
 const variables = {
     storyId: context.id,
 };
-
+const dateFormat = widgetConfig.dateFormat;
 const response = await WebsiteApiProvider.call(query, variables) as StoryDateResponse;
 const date = widgetConfig.dateType == 'modificationTime' ? response.data.story.date.modificationTime || response.data.story.date.creationTime : response.data.story.date.creationTime;
+const displayDate = await DateHelper_convertDate(context, date, dateFormat);
 
-const displayDate = await DateHelper_convertDate(context, date);
 ---
 
 
-<div className={WidgetHelper_getWidgetCssClasses('StoryDate', widgetConfig, context)}>
-    <time dateTime={date}>{displayDate}</time>
+<div class={WidgetHelper_getWidgetCssClasses('StoryDate', widgetConfig, context)}>
+    <time datetime={date}>{displayDate}</time> 
 </div>
 
 
