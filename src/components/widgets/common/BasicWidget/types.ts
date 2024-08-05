@@ -17,7 +17,7 @@ export enum BasicWidgetShowOptions {
     // Flags = 'flags',
     Authors = 'authors',
     AuthorsImages = 'authorsImages',
-    // TitleExtras = 'titleExtras',
+    TitleAddons = 'titleAddons',
     // AlternativeTeasers = 'alternativeTeasers',
     // OrdinalNumber = 'ordinalNumber',
     Taxonomies = 'taxonomies',
@@ -54,7 +54,7 @@ export interface BasicWidgetConfig extends AbstractWidgetConfig {
     listElementsImageSizeMobile?: string,
     preloadImagesCount?: number,
     mobilePreloadImagesCount?: number,
-    titleExtrasCodeNames?: string,
+    titleAddonsCodeNames?: string,
     alternativeTeasersCodeNames?: string,
     classificationList?: string,
     additionalOptions?: Array<BasicWidgetAdditionalOptions>
