@@ -28,14 +28,14 @@ export let DeveloperSettingsWebsitesConfig
                         "dateFormat.nextWeek",
                         "dateFormat.sameElse"
                     ]
+                },
+                "devDetail": {
+                    "type": "group",
+                    "name": "Detail",
+                    "fields": [
+                        "devDetail.linksReplace"
+                    ]
                 }
-            },
-            "devDetail": {
-                "type": "group",
-                "name": "Detail",
-                "fields": [
-                    "devDetail.linksReplace"
-                ]
             },
             "keys": [
                 "devGeneral",
