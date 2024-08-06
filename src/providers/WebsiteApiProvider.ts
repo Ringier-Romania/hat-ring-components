@@ -59,7 +59,7 @@ export class WebsiteApiProvider {
             fetchPolicy
         });
         const timeDifference = new Date().getTime() - currentTime;
-        MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApi',timeDifference);
+        MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime',timeDifference);
         return response;
 
     }
