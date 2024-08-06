@@ -124,7 +124,7 @@ async function getData(queryNodeFragment) {
     const variables = {
         ...dynamicVariables,
         codeName: widgetConfig.section_name,
-        nodeId: context.hatControllerParams.gqlResponse.data.site.data.node.id,
+        nodeId: context.siteNodeId,
         // there is no offset for sections so:
         // we have to sum offset + count and delete offset items from response object
         first: Number(widgetConfig.offset) + Number(widgetConfig.count) || null,

@@ -1,5 +1,4 @@
 ---
-import {Transform} from "node:stream";
 const {itemIndex, context, widgetConfig, data} = Astro.props;
 
 import React from 'react';
@@ -15,7 +14,7 @@ import {ConfigHelper_getGeneralConfig} from "../../../../../helpers/ConfigHelper
 import {UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
 import {TransformType} from "../../../../../helpers/AcceleratorImagesHelper";
 
-
+let toRender: JSX.Element | string | null = null;
 let image = data?.image;
 let customTeaserImageUrl: string | null = null;
 
@@ -27,7 +26,7 @@ if (!image || !image.url) {
             url: generalConfig.defaultImage as string
         }
     } else {
-        return WidgetHelper_renderEmptyComponent('Image');
+        toRender = WidgetHelper_renderEmptyComponent('Image');
     }
 }
 
@@ -79,7 +78,9 @@ export const getFragment = (widgetConfig) => {
 }
 ---
 
-<div class={['Image'].join(' ')}>
-    <RingImage {...ringImageProps} transform={TransformType.ResizeCropAuto}/>
-</div>
+{toRender ? <Fragment set:html={toRender}/> :
+    <div class={['Image'].join(' ')}>
+        <RingImage {...ringImageProps} transform={TransformType.ResizeCropAuto}/>
+    </div>
+}
 
