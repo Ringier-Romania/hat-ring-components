@@ -30,7 +30,6 @@ export class WebsiteApiProvider {
             const response = await this._call(query, variables);
             CacheHelper_set(cacheKey, response, cacheTtl);
 
-            MonitoringProvider.flush();
             return response;
         } catch (e) {
             console.error(query.loc?.source.body, variables, e);
@@ -53,14 +52,14 @@ export class WebsiteApiProvider {
             }).buildApolloClient();
         }
 
-        //const currentTime = new Date().getTime();
+        const currentTime = new Date().getTime();
         const response = await global.websitesApiApolloClient.query({
             query,
             variables,
             fetchPolicy
         });
-        //const timeDifference = new Date().getTime() - currentTime;
-        //console.log(timeDifference);
+        const timeDifference = new Date().getTime() - currentTime;
+        MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApi',timeDifference);
         return response;
 
     }
