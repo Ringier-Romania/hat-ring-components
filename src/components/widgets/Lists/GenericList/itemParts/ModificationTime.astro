@@ -1,4 +1,6 @@
 ---
+const {context, widgetConfig, data} = Astro.props;
+
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
 import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
@@ -11,7 +13,6 @@ type Props = {
     widgetConfig: GenericListWidgetConfig,
     data: GenericListResponseNode,
 }
-const {context, widgetConfig, data} = Astro.props;
 
 let toRender: boolean | string | JSX.Element = false;
 if (!data?.date?.modificationTime) {
