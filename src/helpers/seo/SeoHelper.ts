@@ -217,3 +217,25 @@ export async function SeoHelper_replaceBracketVariables(mapToReplace, homePatter
 
     return replacedText;
 }
+export async function SeoHelper_storyIsHiddenFlag(context) {
+    const query = gql`
+        query ($storyId: UUID) {
+            story(id: $storyId) {
+                flags {
+                    code
+                }
+            }
+        }
+    `
+
+    const variables = {
+        storyId: context.id,
+    }
+    const response = await WebsiteApiProvider.call(query, variables)
+
+    let isHiddenFlag =
+        response.data?.story?.flags?.some((flag: {code: string}) => {
+            return flag.code === "hidden"
+        }) || false
+    return isHiddenFlag
+}
