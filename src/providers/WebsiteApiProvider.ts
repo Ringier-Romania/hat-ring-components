@@ -60,6 +60,9 @@ export class WebsiteApiProvider {
             fetchPolicy
         });
         const timeDifference = new Date().getTime() - currentTime;
+        if(timeDifference > 4000){
+            console.log('Websites Api long query ', query.loc?.source.body, variables);
+        }
         MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime',timeDifference);
         return response;
 
