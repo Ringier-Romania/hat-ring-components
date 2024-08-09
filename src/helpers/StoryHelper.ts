@@ -2,6 +2,8 @@ import {ContentBlock, Story} from "@ringpublishing/graphql-api-client/lib/types/
 import * as convert from "xml-js";
 import _ from "lodash";
 import {UtilsHelper_ensureHttps} from "./UtilsHelper";
+import { WebsiteApiProvider } from "../providers/WebsiteApiProvider";
+import { gql } from "@ringpublishing/graphql-api-client";
 
 export function StoryHelper_generateContentHtml(story: Story): string {
     let base: any = {}
@@ -242,4 +244,26 @@ export function StoryHelper_getGroupContent(storyContentBlocks, groupType: strin
 
     return blocks;
 
+}
+export async function SeoHelper_checkStoryHiddenFlag(context) {
+    const query = gql`
+        query ($storyId: UUID) {
+            story(id: $storyId) {
+                flags {
+                    code
+                }
+            }
+        }
+    `
+
+    const variables = {
+        storyId: context.id,
+    }
+    const response = await WebsiteApiProvider.call(query, variables)
+
+    let isHiddenFlag =
+        response.data?.story?.flags?.some((flag: {code: string}) => {
+            return flag.code === "hidden"
+        }) || false
+    return isHiddenFlag
 }
