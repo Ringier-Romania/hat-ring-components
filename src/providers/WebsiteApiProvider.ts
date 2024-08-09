@@ -32,6 +32,7 @@ export class WebsiteApiProvider {
 
             return response;
         } catch (e) {
+            MonitoringProvider.counter('error.WebsitesApiProvider.call.catch');
             console.error(query.loc?.source.body, variables, e);
             return null;
         }
