@@ -2,7 +2,7 @@ import {UtilsHelper_convertToInt} from "./UtilsHelper";
 
 import NodeCache from "node-cache";
 const stdTTL = process.env.CACHE_TTL ? UtilsHelper_convertToInt(process.env.CACHE_TTL) : 60;
-const myCache = new NodeCache({stdTTL: stdTTL, checkperiod: 0, deleteOnExpire: false});
+const myCache = new NodeCache({stdTTL: stdTTL, checkperiod: 0, deleteOnExpire: false, useClones: false});
 
 export function CacheHelper_set(key: any, value: any, TTL: null | number | undefined = null) {
     if (process.env.CACHE_TTL === '0' && !TTL) {
