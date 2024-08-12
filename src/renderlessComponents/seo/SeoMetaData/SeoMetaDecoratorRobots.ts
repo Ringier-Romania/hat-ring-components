@@ -10,41 +10,28 @@ export async function SeoMetaDecoratorRobots(context: AppContext, generatedMetaT
     if (!generatedMetaTags) {
         return generatedMetaTags
     }
-
     const customMetaRobotsTags = generatedMetaTags.extend?.meta
         ?.find((tag: {name: string}) => tag.name === "robots")
         ?.content?.split(",")
 
-    if (customMetaRobotsTags) {
+    if (customMetaRobotsTags && customMetaRobotsTags.length > 0) {
         const isHiddenFlag = await SeoHelper_checkStoryHiddenFlag(context)
         if (isHiddenFlag) {
+            generatedMetaTags.nofollow = true
+            generatedMetaTags.noindex = true
             generatedMetaTags.extend.meta = removeRobotsTag(generatedMetaTags.extend.meta)
             return generatedMetaTags
         }
-    }
 
-    const customSettings = {
-        nofollow: customMetaRobotsTags.includes("nofollow")
-            ? true
-            : customMetaRobotsTags.includes("follow")
-              ? false
-              : null,
-        noindex: customMetaRobotsTags.includes("noindex")
-            ? true
-            : customMetaRobotsTags.includes("index")
-              ? false
-              : null,
-    }
+        const customSettings = {
+            nofollow: customMetaRobotsTags.includes("nofollow"),
+            noindex: customMetaRobotsTags.includes("noindex"),
+        }
 
-    generatedMetaTags.nofollow = customSettings.nofollow ?? generatedMetaTags.nofollow
-    generatedMetaTags.noindex = customSettings.noindex ?? generatedMetaTags.noindex
+        generatedMetaTags.nofollow = customSettings.nofollow
+        generatedMetaTags.noindex = customSettings.noindex
 
-    if (
-        generatedMetaTags.nofollow === customSettings.nofollow &&
-        generatedMetaTags.noindex === customSettings.noindex
-    ) {
         generatedMetaTags.extend.meta = removeRobotsTag(generatedMetaTags.extend.meta)
     }
-
     return generatedMetaTags
 }
