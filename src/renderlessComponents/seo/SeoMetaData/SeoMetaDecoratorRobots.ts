@@ -12,7 +12,7 @@ export async function SeoMetaDecoratorRobots(context: AppContext, generatedMetaT
     }
     const customMetaRobotsTags = generatedMetaTags.extend?.meta
         ?.find((tag: {name: string}) => tag.name === "robots")
-        ?.content?.split(",")
+        ?.content?.trim().split(",")
 
     if (customMetaRobotsTags && customMetaRobotsTags.length > 0) {
         const isHiddenFlag = await SeoHelper_checkStoryHiddenFlag(context)
