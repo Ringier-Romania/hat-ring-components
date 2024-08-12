@@ -1,4 +1,5 @@
 ---
+import {SectionItemEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 const {
     context,
     widgetConfig,
@@ -17,7 +18,7 @@ import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHe
 import {UtilsHelper_getValueIfExists} from "../../../../../helpers/UtilsHelper";
 let toRender: boolean | JSX.Element = false;
 
-const elementsToRender = _.get(response, 'data.section.items.edges', _.get(response, 'data.sectionGroup.sections[0].items.edges', []));
+const elementsToRender = _.get(response, 'data.section.items.edges', _.get(response, 'data.sectionGroup.sections[0].items.edges', [])) as SectionItemEdge[];
 if (_.get(elementsToRender, 'length', 0) === 0) {
     toRender = WidgetHelper_renderEmptyComponent('SectionElements');
 }
@@ -42,7 +43,7 @@ const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
             return (
                     <div className={['Item', colClass, bigElementClass].join(' ')} key={itemIndex}>
                         <div className={'linkOverlay'}>
-                            <RingLink href={edge.node?.url || '#'} title={edge.node?.title || ''}>
+                            <RingLink href={edge.node?.externalUrl || edge.node?.url || '#'} title={edge.node?.title || ''}>
                                 {widgetConfig.linkLabel}
                             </RingLink>
                         </div>
