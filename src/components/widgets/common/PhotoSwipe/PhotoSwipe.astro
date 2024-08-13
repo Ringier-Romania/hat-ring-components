@@ -7,54 +7,83 @@ const {widgetConfig, context} = Astro.props as {
     }, context: AppContext
 };
 ---
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe-lightbox.umd.min.js"></script>
 <script define:vars={{
     gallerySelector: widgetConfig.gallerySelector,
     childrenSelector: widgetConfig.childrenSelector
 }}>
+    if (document.querySelector(gallerySelector)) {
+        if (!window.PhotoSwipe) {
+            loadScripts();
+        } else {
+            init();
+        }
+    }
 
+    function loadScripts() {
+        let loaded = 0;
+        let stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.href = 'https://ocdn.eu/customerpoc/hat-ring-components/photoswipe_5.4.4.min.css';
+        document.head.appendChild(stylesheet);
 
-    document.addEventListener(
-        'DOMContentLoaded',
-        () => {
-            const lightbox = new PhotoSwipeLightbox({
-                pswpModule: PhotoSwipe,
-                children: childrenSelector,
-                gallery: gallerySelector,
-            })
-            if (lightbox){
-                lightbox.on('uiRegister', function() {
-                    lightbox.pswp.ui.registerElement({
-                        name: 'caption',
-                        order: 9,
-                        isButton: false,
-                        appendTo: 'root',
-                        html: 'Caption',
-                        onInit: (el, pswp) => {
-                            lightbox.pswp.on('change', () => {
-                                const currSlideElement = lightbox.pswp.currSlide.data.element;
-                                let captionHTML = '';
-                                if (currSlideElement) {
-                                    const caption = currSlideElement.querySelector('.caption');
-                                    if (caption) {
-                                        // get caption from element with class hidden-caption-content
-                                        captionHTML = caption.innerHTML;
-                                    } else {
-                                        // get caption from alt attribute
-                                        captionHTML = currSlideElement.querySelector('img').getAttribute('alt');
-                                    }
-                                }
-                                el.innerHTML = captionHTML || '';
-                            });
-                        }
-                    });
-                });
-                lightbox.init();
+        let photoswipeScript = document.createElement('script');
+        photoswipeScript.src = 'https://ocdn.eu/customerpoc/hat-ring-components/photoswipe_5.4.4.umd.min.js';
+        photoswipeScript.async = true;
+        photoswipeScript.fetchpriority = "low";
+        photoswipeScript.onload = onload;
+        document.head.appendChild(photoswipeScript);
+
+        let lightboxScript = document.createElement('script');
+        lightboxScript.src = 'https://ocdn.eu/customerpoc/hat-ring-components/photoswipe-lightbox_5.4.4.umd.min.js';
+        lightboxScript.async = true;
+        lightboxScript.fetchpriority = "low";
+        lightboxScript.onload = onload;
+        document.head.appendChild(lightboxScript);
+
+        function onload() {
+            loaded += 1;
+            if (loaded >= 2) {
+                init();
             }
-        },
-    )
+        }
+    }
+
+    function init() {
+        const lightbox = new PhotoSwipeLightbox({
+            pswpModule: PhotoSwipe,
+            children: childrenSelector,
+            gallery: gallerySelector,
+        })
+        if (lightbox) {
+            lightbox.on('uiRegister', function () {
+                lightbox.pswp.ui.registerElement({
+                    name: 'caption',
+                    order: 9,
+                    isButton: false,
+                    appendTo: 'root',
+                    html: 'Caption',
+                    onInit: (el, pswp) => {
+                        lightbox.pswp.on('change', () => {
+                            const currSlideElement = lightbox.pswp.currSlide.data.element;
+                            let captionHTML = '';
+                            if (currSlideElement) {
+                                const caption = currSlideElement.querySelector('.caption');
+                                if (caption) {
+                                    // get caption from element with class hidden-caption-content
+                                    captionHTML = caption.innerHTML;
+                                } else {
+                                    // get caption from alt attribute
+                                    captionHTML = currSlideElement.querySelector('img').getAttribute('alt');
+                                }
+                            }
+                            el.innerHTML = captionHTML || '';
+                        });
+                    }
+                });
+            });
+            lightbox.init();
+        }
+    }
 </script>
 
 <style is:global>
