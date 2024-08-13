@@ -10,7 +10,6 @@ export class MonitoringProvider {
 
     static async counter(metric: string) {
         if(global['monitoringProvider'] && global['monitoringProvider'].counter) {
-            console.log('counter', metric);
             global['monitoringProvider'].counter(metric);
         }
     }

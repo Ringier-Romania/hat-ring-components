@@ -32,6 +32,7 @@ export class WebsiteApiProvider {
 
             return response;
         } catch (e) {
+            MonitoringProvider.counter('error.WebsitesApiProvider.call.catch');
             console.error(query.loc?.source.body, variables, e);
             return null;
         }
@@ -59,6 +60,9 @@ export class WebsiteApiProvider {
             fetchPolicy
         });
         const timeDifference = new Date().getTime() - currentTime;
+        if(timeDifference > 4000){
+            console.log('Websites Api long query ', query.loc?.source.body, variables);
+        }
         MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime',timeDifference);
         return response;
 
