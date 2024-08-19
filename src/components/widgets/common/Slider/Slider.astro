@@ -88,27 +88,72 @@ const swiperParams = {
 const id = 'slider_'+UtilsHelper_generateRandomString();
 ---
 <div id={id} class={WidgetHelper_getWidgetCssClasses('Slider', widgetConfig, context, [styles.Slider])}>
-    {widgetConfig.headerText && <div class={"sliderTitle"}><HeaderTag>{widgetConfig.headerText}</HeaderTag></div>}
-    {widgetConfig.description && <div class={"sliderDescription"}><p>{widgetConfig.description}</p></div>}
-    {widgetConfig.navigationButtonsOutside && <div class={"navigationButtons"}>
+    {widgetConfig.headerText &&
+        <div class={"sliderTitle"}>
+            <HeaderTag>{widgetConfig.headerText}</HeaderTag>
+        </div>}
+    {widgetConfig.description &&
+        <div class={"sliderDescription"}><p>{widgetConfig.description}</p></div>}
+    {widgetConfig.navigationButtonsOutside &&
+        <div class={"navigationButtons"}>
         <button class={navigationClassNames.nextEl.replace('.', '')}></button>
         <button class={navigationClassNames.prevEl.replace('.', '')}></button>
     </div>}
-        <swiper-container
+    <swiper-container
         init={false}
-        suppressHydrationWarning={true}
-        >
+    >
         {widgetConfig.slides.map((slide) => (
-            <swiper-slide class={slide['Custom CSS Class'] || ''} suppressHydrationWarning={true}>
-                <Slide slide={slide} isUsedWithLightbox={widgetConfig.isUsedWithLightbox} context={context} headerTagLevel={headerTagLevel} childLevel={1}/>
+            <swiper-slide class={slide['Custom CSS Class'] || ''}>
+                <Slide slide={slide} isUsedWithLightbox={widgetConfig.isUsedWithLightbox} context={context}
+                       headerTagLevel={headerTagLevel} childLevel={1}/>
             </swiper-slide>
         ))}
     </swiper-container>
 </div>
 
-<script is:inline defer src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-element-bundle.min.js"></script>
-<script define:vars={{id: id, swiperParams }}>
-    const swiperEl = document.querySelector(`#${id} swiper-container`);
-    Object.assign(swiperEl, swiperParams);
-    swiperEl.initialize();
-  </script>
+<script is:inline define:vars={{id: id, swiperParams}}>
+    const swiperContainer = document.querySelector(`#${id} swiper-container`);
+    Object.assign(swiperContainer, swiperParams);
+
+    if (!window.swiperLoaded) {
+        window.swiperLoaded = true;
+        loadSwiperScript();
+    } else {
+        document.addEventListener('DOMContentLoaded', () => init(swiperContainer));
+    }
+
+    function loadSwiperScript() {
+        let swiperScript = document.createElement('script');
+        swiperScript.src = 'https://ocdn.eu/customerpoc/hat-ring-components/swiper-element-bundle_9.4.1.min.js';
+        swiperScript.async = true;
+        swiperScript.fetchpriority = "low";
+        swiperScript.onload = init;
+        document.head.appendChild(swiperScript);
+    }
+    function init(swiperEl) {
+        const config = {
+            rootMargin: '280px 0px 280px 0px',
+            threshold: [1]
+        };
+
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        initSwiper(swiperEl, io);
+                    }
+                });
+            }, config);
+            io.observe(swiperEl);
+        } else {
+            initSwiper(swiperEl);
+        }
+    }
+
+    function initSwiper(swiperEl, io) {
+        if (io) {
+            io.unobserve(swiperEl);
+        }
+        swiperEl.initialize();
+    }
+</script>

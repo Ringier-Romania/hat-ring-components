@@ -1,6 +1,7 @@
 import React from "react"
-import {AppContext} from "../../../types/types"
+import {AppContext, SiteContentType} from "../../../types/types"
 import {SeoHelper_checkStoryHiddenFlag} from "../../../helpers/StoryHelper"
+import {UtilsHelper_getCurrentPageType} from "../../../helpers/UtilsHelper";
 
 const removeNoIndexNoFollow = (metaTags) => {
     return metaTags.filter((tag) => {
@@ -30,12 +31,14 @@ export async function SeoMetaDecoratorRobots(context: AppContext, generatedMetaT
         generatedMetaTags.extend?.meta.find((tag) => tag.name === "robots")?.content?.split(",") || []
 
     if (customMetaRobotsTags.length > 0) {
-        const isHiddenFlag = await SeoHelper_checkStoryHiddenFlag(context)
-        if (isHiddenFlag) {
-            generatedMetaTags.nofollow = true
-            generatedMetaTags.noindex = true
-            generatedMetaTags.extend.meta = removeNoIndexNoFollow(generatedMetaTags.extend.meta)
-            return generatedMetaTags
+        if (UtilsHelper_getCurrentPageType(context) === SiteContentType.Story) {
+            const isHiddenFlag = await SeoHelper_checkStoryHiddenFlag(context)
+            if (isHiddenFlag) {
+                generatedMetaTags.nofollow = true
+                generatedMetaTags.noindex = true
+                generatedMetaTags.extend.meta = removeNoIndexNoFollow(generatedMetaTags.extend.meta)
+                return generatedMetaTags
+            }
         }
 
         const customSettings = customRobotSettings(customMetaRobotsTags)
