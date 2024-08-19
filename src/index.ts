@@ -35,6 +35,7 @@ export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaCustomMetaTags";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaCanonical";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaBase";
 export * from "./renderlessComponents/seo/SeoMetaData/SeoListGridPrevNext";
+export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaDecoratorRobots";
 export { default as StoryAuthors } from "./components/widgets/Story/StoryAuthors/StoryAuthors.astro";
 export { default as Author } from "./components/widgets/Author/Author/Author.astro";
 export { default as StoryRelatedContent } from "./components/widgets/Story/StoryRelatedContent/StoryRelatedContent.astro";

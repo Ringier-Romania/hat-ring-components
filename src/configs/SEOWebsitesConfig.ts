@@ -313,6 +313,7 @@ export let SEOWebsitesConfig
                    },
                    {
                        "name": "tagValue",
+                       "description": "Tag values separated by commas",
                        "type": "textfield"
                    }
                ]
