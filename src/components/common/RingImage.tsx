@@ -23,16 +23,14 @@ function getPlaceholderData(width, height) {
 // TODO: checkout if they fixed bug with backend rendering https://github.com/vercel/next.js/issues/41924
 export function RingImage(props) {
     let src = props.src;
-    let unoptimized = props.unoptimized;
-    let blurDataURL = props.blurDataURL;
-    let placeholder = props.placeholder;
     let transform = props.transform || TransformType.None;
+    let loading = 'lazy';
+    let fetchpriority: string = '';
 
-    if (!props.fill && !props.priority) {
-        blurDataURL = getPlaceholderData(props.width, props.height);
-        placeholder = 'blur';
+    if (props.priority) {
+        loading = 'eager';
+        fetchpriority = 'high';
     }
-    unoptimized = true;
     const ext = UtilsHelper_getExtension(src as string)
     const isResizeable = ext != 'svg';
 
@@ -42,8 +40,8 @@ export function RingImage(props) {
 
     return <>
         <picture>
-            <img {...props} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}/>
+            <img {...props} loading={loading} fetchpriority={fetchpriority} className={['RingImage', styles.RingImage, props.className].join(' ')} src={src}/>
         </picture>
-        {props.priority && <RingImagePreload src={src}/>}
+        {loading === 'eager' && <RingImagePreload src={src}/>}
     </>
 }

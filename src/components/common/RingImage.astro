@@ -24,24 +24,24 @@ function getPlaceholderData(width, height) {
 }
 
 var src = props.src;
-let unoptimized = props.unoptimized;
-let blurDataURL = props.blurDataURL;
-let placeholder = props.placeholder;
 let transform = props.transform || TransformType.None;
 
-if (!props.fill && !props.priority) {
-    blurDataURL = getPlaceholderData(props.width, props.height);
-    placeholder = 'blur';
+let loading = 'lazy';
+let fetchpriority: string = '';
+
+if (props.priority) {
+    loading = 'eager';
+    fetchpriority = 'high';
 }
-unoptimized = true;
 const ext = UtilsHelper_getExtension(src as string);
 const isResizeable = ext != 'svg';
 
 if (isResizeable && transform !== TransformType.None) {
     src = AcceleratorImagesHelper_getUrl(src, props.width, props.height, props.transform);
 }
+
 ---
 <picture>
-    <Image {...props} loading="lazy" src={src} className={['RingImage', styles.RingImage, props.className].join(' ')}/>
+    <Image {...props} loading={loading} fetchpriority={fetchpriority} src={src} className={['RingImage', styles.RingImage, props.className].join(' ')}/>
 </picture>
-{props.priority && <RingImagePreload src={src}/>}
+{loading === 'eager' && <RingImagePreload src={src}/>}
