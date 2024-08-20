@@ -4,7 +4,7 @@ import {getDeveloperSettingDetail} from './ConfigHelper';
 export async function LinkReplacerHelper_replaceLinks(context: AppContext, text: string) {
     const { linksReplace } = await getDeveloperSettingDetail(context) || {linksReplace: []};
 
-    if (!linksReplace || !linksReplace.length) {
+    if (!text || !linksReplace || !linksReplace.length) {
         return text;
     }
 
