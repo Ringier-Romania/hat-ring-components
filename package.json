@@ -1,6 +1,6 @@
 {
 	"name": "hat-ring-components",
-	"version": "2.6.8",
+	"version": "2.6.10",
 	"description": "Head App Template - RING components",
 	"license": "MIT",
 	"repository": {},
@@ -17,7 +17,7 @@
 		"@ringieraxelspringer/tsconfig": "^4.0.0",
 		"@ringpublishing/graphql-api-client": "^3.3.0",
 		"@types/node": "*",
-		"cheerio": "^1.0.0-rc.12",
+		"cheerio": "^1.0.0",
 		"dayjs": "^1.11.8",
 		"feed": "^4.2.2",
 		"lodash": "^4.17.21",

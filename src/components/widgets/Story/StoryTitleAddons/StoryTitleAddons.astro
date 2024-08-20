@@ -41,9 +41,9 @@ if (!titleAddonsCodeNamesArr || titleAddonsCodeNamesArr.length === 0) {
     toRender ? (
         <Fragment set:html={toRender} />
     ) : (
-        titleAddonsCodeNamesArr.map((codeName: string) => {
+        titleAddonsCodeNamesArr?.map((codeName: string) => {
             const storyTitleAddonsToShow = _.get(_.find(response?.data?.story.titles, ["role.code", codeName]), "text", "")
-            return <span class={`title-addons code-${codeName}`}>{storyTitleAddonsToShow}</span>
+            return <span class={`titleAddons code-${codeName}`}>{storyTitleAddonsToShow}</span>
         })
     )
 }

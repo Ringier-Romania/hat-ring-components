@@ -262,7 +262,7 @@ export async function SeoHelper_checkStoryHiddenFlag(context) {
     const response = await WebsiteApiProvider.call(query, variables)
 
     let isHiddenFlag =
-        response.data?.story?.flags?.some((flag: {code: string}) => {
+        response?.data?.story?.flags?.some((flag: {code: string}) => {
             return flag.code === "hidden"
         }) || false
     return isHiddenFlag

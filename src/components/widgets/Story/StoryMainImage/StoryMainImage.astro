@@ -50,6 +50,7 @@ const caption = _.get(response, 'data.story.image.caption');
 <div className={WidgetHelper_getWidgetCssClasses('StoryMainImage', widgetConfig, context)}>
     {imgSrc ? <>
         <RingImage
+            priority={true}
             src={imgSrc}
             alt={caption}
             transform={TransformType.ResizeCropAuto}
