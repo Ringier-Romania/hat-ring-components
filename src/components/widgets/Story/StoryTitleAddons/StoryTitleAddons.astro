@@ -6,7 +6,7 @@ import {AppContext} from "../../../../types/types"
 import {StoryTitleAddonsWidgetConfig} from "./types"
 import {StoryTitleAddonsResponse} from "./types"
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider"
-import {WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper"
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper"
 
 let toRender: boolean | JSX.Element | string = false
 const titleAddonsCodeNamesArr = _.without((widgetConfig.titleAddonsCodeNames ?? "").split(","), "")
@@ -29,11 +29,10 @@ const variables = {
 }
 
 let response = widgetConfig?.response
-if (!response) {
-    response = (await WebsiteApiProvider.call(query, variables)) as StoryTitleAddonsResponse
-}
 if (!titleAddonsCodeNamesArr || titleAddonsCodeNamesArr.length === 0) {
     toRender = WidgetHelper_renderEmptyComponent("StoryTitleAddons")
+} else {
+    response = (await WebsiteApiProvider.call(query, variables)) as StoryTitleAddonsResponse
 }
 ---
 
@@ -42,8 +41,16 @@ if (!titleAddonsCodeNamesArr || titleAddonsCodeNamesArr.length === 0) {
         <Fragment set:html={toRender} />
     ) : (
         titleAddonsCodeNamesArr?.map((codeName: string) => {
-            const storyTitleAddonsToShow = _.get(_.find(response?.data?.story.titles, ["role.code", codeName]), "text", "")
-            return <span class={`titleAddons code-${codeName}`}>{storyTitleAddonsToShow}</span>
+            const storyTitleAddonsToShow = _.get(
+                _.find(response?.data?.story?.titles, ["role.code", codeName]),
+                "text",
+                ""
+            )
+            return (
+                <div class={WidgetHelper_getWidgetCssClasses("StoryTitleAddons", widgetConfig, context)}>
+                    <span class={`titleAddons code-${codeName}`}>{storyTitleAddonsToShow}</span>
+                </div>
+            )
         })
     )
 }
