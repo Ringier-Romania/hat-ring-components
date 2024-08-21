@@ -102,7 +102,7 @@ const id = 'slider_'+UtilsHelper_generateRandomString();
     <swiper-container
         init={false}
     >
-        {widgetConfig.slides.map((slide) => (
+        {widgetConfig.slides && widgetConfig.slides.map((slide) => (
             <swiper-slide class={slide['Custom CSS Class'] || ''}>
                 <Slide slide={slide} isUsedWithLightbox={widgetConfig.isUsedWithLightbox} context={context}
                        headerTagLevel={headerTagLevel} childLevel={1}/>
