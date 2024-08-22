@@ -14,7 +14,6 @@ export class CacheProvider {
     }
 
     static get(key: any) {
-        console.log(key)
         return CacheHelper_get(key);
     }
 
