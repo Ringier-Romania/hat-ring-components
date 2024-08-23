@@ -15,7 +15,7 @@ import {UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
 
 export const getFragment = (widgetConfig) => {
     return {
-        query: gql`fragment ImageSectionFragment on SectionItem {
+        query: gql`fragment BasicWidgetImageSectionFragment on SectionItem {
             image {
                 url,
                 caption

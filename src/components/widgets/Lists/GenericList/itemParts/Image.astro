@@ -60,7 +60,7 @@ export const getFragment = (widgetConfig) => {
             $mainImageWidth: 'Int!',
             $mainImageHeight: 'Int!',
         },
-        query: gql`fragment ImageStoryFragment on Story {
+        query: gql`fragment GenericListImageStoryFragment on Story {
             leads {
                 role {
                     code
