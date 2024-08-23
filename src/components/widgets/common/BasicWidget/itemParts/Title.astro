@@ -42,7 +42,7 @@ if (itemsHeaderArr.length === 2) {
 export const getFragment = () => {
     return {
         variables: {},
-        query: gql`fragment TitleFragment on SectionItem {
+        query: gql`fragment BasicWidgetTitleSectionFragment on SectionItem {
             title
             titles {
                 role {
