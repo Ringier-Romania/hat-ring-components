@@ -26,7 +26,7 @@ const allItemParts = ItemParts;
 const columnsCount = UtilsHelper_convertToInt(widgetConfig.columns) || 1;
 const colNumber = Math.floor(12 / columnsCount);
 ---
-<div className={['Items'].join(' ')}>
+<div class={['Items'].join(' ')}>
     {(response.data?.stories?.edges.map((edge, itemIndex) => {
         if (!edge.node) return;
         const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
@@ -40,8 +40,8 @@ const colNumber = Math.floor(12 / columnsCount);
                        data={edge.node}/>;
         });
         const colClass = `col${colNumber}`;
-        return <div className={['Item', colClass].join(' ')}>
-            <div className={'linkOverlay'}>
+        return <div class={['Item', colClass].join(' ')}>
+            <div class={'linkOverlay'}>
                 <RingLink href={edge.node?.mainPublicationPoint?.url || '#'} title={edge.node?.title}>
                     {widgetConfig.linkLabel}
                 </RingLink>

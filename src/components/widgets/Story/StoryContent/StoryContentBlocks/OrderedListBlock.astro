@@ -29,7 +29,7 @@ blockData.entries = await Promise.all(blockData.entries.map(async (entry) => {
   toRender ? (
     <Fragment set:html={toRender} />
   ) : (
-    <div className="OrderedListBlock">
+    <div class="OrderedListBlock">
       <ol>
         {blockData.entries.map((entry, index) => (
           <li key={index} set:html={entry} />

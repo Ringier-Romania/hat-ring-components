@@ -26,7 +26,7 @@ const ContainerTag = sectionConfig ? `${sectionConfig.container_html_tag || 'mai
 
 {toRender === null ?
     <Fragment set:html={toRender}/> :
-    <ContainerTag className={['gridContainer', sectionName, sectionConfig.container_classes, styles.gridContainer].join(' ')}>
+    <ContainerTag class={['gridContainer', sectionName, sectionConfig.container_classes, styles.gridContainer].join(' ')}>
         {boxes.map((boxName, i) => {
             return !!sectionConfig[boxName + '_hide'] ? null :
                     <Box

@@ -25,15 +25,15 @@ if (!toRender && Astro.request.method === "POST") {
 ---
 
 {toRender ? <Fragment set:html={toRender}/> :
-    <div className={[].join(' ')}>
-        <div className={'container'}>
+    <div class={[].join(' ')}>
+        <div class={'container'}>
             <h1>HAT Admin</h1>
             <section>
                 <h2>Websites Manager configuration management</h2>
-                <div className={'col'}>
+                <div class={'col'}>
                     <CreateVersionForm formData={formData}/>
                 </div>
-                <div className={'col'}>
+                <div class={'col'}>
                     <UpdateVersionForm formData={formData}/>
                 </div>
             </section>

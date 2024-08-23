@@ -46,7 +46,7 @@ let cssModules = styles.StoryAuthors;
 
 
 
-<div className={WidgetHelper_getWidgetCssClasses('Author', widgetConfig, context,[cssModules])}>
+<div class={WidgetHelper_getWidgetCssClasses('Author', widgetConfig, context,[cssModules])}>
     {/* @ts-expect-error Server Component */}
     <StoryAuthor author={response.data.author} context={context} widgetConfig={widgetConfig}/>
 </div>
