@@ -46,7 +46,7 @@ if (itemsHeaderArr.length === 2) {
 export const getFragment = () => {
     return {
         variables: {},
-        query: gql`fragment TitleFragment on Story {
+        query: gql`fragment TitleStoryFragment on Story {
             title
             titles {
                 role {

@@ -34,7 +34,7 @@ export default function Lead(
 Lead.getFragment = () => {
     return {
         variables: {},
-        query: gql`fragment LeadFragment on Story {
+        query: gql`fragment LeadStoryFragment on Story {
             content{
                 blocks {
                     ...on ParagraphBlock{

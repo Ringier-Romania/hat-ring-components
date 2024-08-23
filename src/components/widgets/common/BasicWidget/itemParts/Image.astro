@@ -15,7 +15,7 @@ import {UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
 
 export const getFragment = (widgetConfig) => {
     return {
-        query: gql`fragment ImageFragment on SectionItem {
+        query: gql`fragment ImageSectionFragment on SectionItem {
             image {
                 url,
                 caption
@@ -39,7 +39,7 @@ export const getFragment = (widgetConfig) => {
         }`
     }
 }
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | string | JSX.Element = false;
 
 const image = data.image || data.originalContent?.image;
 let customTeaserImageUrl: string | null = null;
@@ -71,7 +71,7 @@ const ringImageProps = toRender ? null : {
 ---
 
 {toRender ? <Fragment set:html={toRender}/> :
-<div className={['Image', isBig ? 'bigImage' : ''].join(' ')}>
+<div class={['Image', isBig ? 'bigImage' : ''].join(' ')}>
     <RingImage {...ringImageProps}/>
 </div>
     }

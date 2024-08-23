@@ -38,7 +38,7 @@ export default function Taxonomies(
 Taxonomies.getFragment = () => {
     return {
         variables: {},
-        query: gql`fragment TopicsFragment on SectionItem {
+        query: gql`fragment TopicsSectionFragment on SectionItem {
             originalContent {
                 ... on Story {
                     topics {

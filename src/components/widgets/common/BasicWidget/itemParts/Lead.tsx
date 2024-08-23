@@ -27,7 +27,7 @@ export default function Lead(
 Lead.getFragment = () => {
     return {
         variables: {},
-        query: gql`fragment LeadFragment on SectionItem {
+        query: gql`fragment LeadSectionFragment on SectionItem {
             lead
         }`
     }
