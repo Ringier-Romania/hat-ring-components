@@ -39,7 +39,7 @@ if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
 ---
 
 {toRender ? <Fragment set:html={toRender}/> :
-    <div id={widgetConfig.gridLocation} className={cssClasses.join(' ')}>
+    <div id={widgetConfig.gridLocation} class={cssClasses.join(' ')}>
         {Component && <Component widgetConfig={widgetConfig} context={context}/>}
     </div>
     }

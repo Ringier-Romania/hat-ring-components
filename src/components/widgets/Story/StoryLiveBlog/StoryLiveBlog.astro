@@ -56,7 +56,7 @@ let url = `${liveBlogPlatformUrl}/${liveblogUuid},${widgetConfig.liveBlogLanguag
 {toRender ?
     <Fragment set:html={toRender}/> :
 
-    <div className={WidgetHelper_getWidgetCssClasses('StoryLiveBlog', widgetConfig, context)}>
+    <div class={WidgetHelper_getWidgetCssClasses('StoryLiveBlog', widgetConfig, context)}>
         {/* @ts-expect-error Server Component */}
         <ExternalApplication widgetConfig={{controllerUrl: url, selector: '[name="block-html-head"]'}}
                              context={context}/>

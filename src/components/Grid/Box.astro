@@ -21,7 +21,7 @@ const BoxTag = `${tagName || 'div'}`;
 
 ---
 
-<BoxTag className={['gridBox', boxName, 'gridCol' + size, styles.box].join(' ')}>
+<BoxTag class={['gridBox', boxName, 'gridCol' + size, styles.box].join(' ')}>
     {widgets && widgets.map((widgetConfig, i) => {
         return <>
             {Widget && _.get(widgetConfig, 'enabled', true) && <Widget widgetConfig={widgetConfig} context={context} key={i} index={i} boxName={boxName} sectionName={sectionName} />}

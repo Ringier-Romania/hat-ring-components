@@ -9,18 +9,18 @@ import Slide from './Slide.astro';
 
 const {context, widgetConfig, extendableAttributes = {}} = Astro.props;
 
-const navigationClassNames = {
+const navigationclasss = {
     nextEl: '',
     prevEl: ''
 };
 
 if (widgetConfig.navigationButtonsOutside) {
-    navigationClassNames.nextEl = _.get(
+    navigationclasss.nextEl = _.get(
         extendableAttributes,
         'swiperOptions.navigation.nextEl',
         '.customSwiperButtonNext'
     );
-    navigationClassNames.prevEl = _.get(
+    navigationclasss.prevEl = _.get(
         extendableAttributes,
         'swiperOptions.navigation.prevEl',
         '.customSwiperButtonPrev'
@@ -29,12 +29,12 @@ if (widgetConfig.navigationButtonsOutside) {
     _.set(
         extendableAttributes,
         'swiperOptions.navigation.nextEl',
-        navigationClassNames.nextEl
+        navigationclasss.nextEl
     );
     _.set(
         extendableAttributes,
         'swiperOptions.navigation.prevEl',
-        navigationClassNames.prevEl
+        navigationclasss.prevEl
     );
 }
 
@@ -96,8 +96,8 @@ const id = 'slider_'+UtilsHelper_generateRandomString();
         <div class={"sliderDescription"}><p>{widgetConfig.description}</p></div>}
     {widgetConfig.navigationButtonsOutside &&
         <div class={"navigationButtons"}>
-        <button class={navigationClassNames.nextEl.replace('.', '')}></button>
-        <button class={navigationClassNames.prevEl.replace('.', '')}></button>
+        <button class={navigationclasss.nextEl.replace('.', '')}></button>
+        <button class={navigationclasss.prevEl.replace('.', '')}></button>
     </div>}
     <swiper-container
         init={false}
