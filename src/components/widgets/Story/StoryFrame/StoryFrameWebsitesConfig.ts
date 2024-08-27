@@ -15,10 +15,6 @@ export let StoryFrameWebsitesConfig
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "widgetType": "storyFrame",
-                "dateFormat": "",
-                "dateTypes": [
-                    "modificationTimeOrCreationTime"
-                ],
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
