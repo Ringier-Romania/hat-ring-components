@@ -31,10 +31,10 @@ if (Astro.request.method === "POST") {
 
         <button type="submit" name="action" value="create">Create</button>
 
-        <p className="status" role="status">
+        <p class="status" role="status">
             {message}
         </p>
-        <p className="error">
+        <p class="error">
             {errors.map((error) => {
                 return <span>{error.message}</span>
             })}

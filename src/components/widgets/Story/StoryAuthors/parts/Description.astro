@@ -12,6 +12,6 @@ import _ from "lodash";
 
 const content = _.get(author,'description.content.0.blocks',[]);
 ---
-<div className={['Description'].join(' ')}>
+<div class={['Description'].join(' ')}>
     <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context}/>
 </div>

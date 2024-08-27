@@ -41,8 +41,8 @@ const response = await WebsiteApiProvider.call(query, variables) as StoryTaxonom
 ---
 
 
-<div className={WidgetHelper_getWidgetCssClasses('StoryTaxonomyList', widgetConfig, context)}>
-    {widgetConfig.listPrefix && <span className={'listPrefix'}>{widgetConfig.listPrefix}</span>}
+<div class={WidgetHelper_getWidgetCssClasses('StoryTaxonomyList', widgetConfig, context)}>
+    {widgetConfig.listPrefix && <span class={'listPrefix'}>{widgetConfig.listPrefix}</span>}
 
     {response.data.story?.topics?.map((topic, index) => {
             if (widgetConfig.taxonomyKind && topic.topic.kind.code != widgetConfig.taxonomyKind) {
@@ -58,8 +58,8 @@ const response = await WebsiteApiProvider.call(query, variables) as StoryTaxonom
             let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
             return url && widgetConfig.links ?
                     <RingLink key={index} href={url}>
-                        <span className={'topic'}>{topic.topic.name}</span>
-                    </RingLink> : <span key={index} className={'topic'}>{topic.topic.name}</span>
+                        <span class={'topic'}>{topic.topic.name}</span>
+                    </RingLink> : <span key={index} class={'topic'}>{topic.topic.name}</span>
         }
     )}
 

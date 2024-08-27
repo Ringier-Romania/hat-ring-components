@@ -29,7 +29,7 @@ let cssModules = styles.GenericList;
 ---
 
 
-<div className={WidgetHelper_getWidgetCssClasses('GenericList', widgetConfig, context, [cssModules])}>
+<div class={WidgetHelper_getWidgetCssClasses('GenericList', widgetConfig, context, [cssModules])}>
     {widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
         const Component = allGeneralParts[_.upperFirst(showOption)];
         if (!Component) {

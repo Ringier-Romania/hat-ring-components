@@ -31,7 +31,7 @@ const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}`
 const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
 ---
 {toRender ? <Fragment set:html={toRender}/> :
-    <div className={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
+    <div class={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
         {elementsToRender.map((edge, itemIndex) => {
             if (widgetConfig.count && itemIndex >= widgetConfig.count) {
                 return null;
@@ -41,8 +41,8 @@ const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
             const colClass = isBig ? `col12` : `col${colNumber}`;
             const bigElementClass = isBig ? `bigElement` : '';
             return (
-                    <div className={['Item', colClass, bigElementClass].join(' ')} key={itemIndex}>
-                        <div className={'linkOverlay'}>
+                    <div class={['Item', colClass, bigElementClass].join(' ')} key={itemIndex}>
+                        <div class={'linkOverlay'}>
                             <RingLink href={edge.node?.externalUrl || edge.node?.url || '#'} title={edge.node?.title || ''}>
                                 {widgetConfig.linkLabel}
                             </RingLink>
