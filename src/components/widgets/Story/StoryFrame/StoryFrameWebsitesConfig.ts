@@ -15,6 +15,7 @@ export let StoryFrameWebsitesConfig
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "widgetType": "storyFrame",
+                "frameCodeName": ""
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
