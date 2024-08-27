@@ -3,9 +3,9 @@ import CreateVersionForm from "./CreateVersionForm.astro";
 import UpdateVersionForm from "./UpdateVersionForm.astro";
 
 import {UtilsHelper_isDevelopmentMode} from "../../helpers/UtilsHelper";
-// import styles from "../../../styles/pages/HatAdmin.module.scss";
+import styles from "../../../styles/pages/HatAdmin.module.scss";
 
-import "../../../styles/pages/HatAdmin.scss";
+// import "../../../styles/pages/HatAdmin.scss";
 
 let toRender: boolean | JSX.Element | string = false;
 if (!UtilsHelper_isDevelopmentMode()) {
@@ -26,14 +26,14 @@ if (!toRender && Astro.request.method === "POST") {
 
 {toRender ? <Fragment set:html={toRender}/> :
     <div class={[].join(' ')}>
-        <div class={'container'}>
+        <div class={styles.container}>
             <h1>HAT Admin</h1>
             <section>
                 <h2>Websites Manager configuration management</h2>
-                <div class={'col'}>
+                <div class={styles.col}>
                     <CreateVersionForm formData={formData}/>
                 </div>
-                <div class={'col'}>
+                <div class={styles.col}>
                     <UpdateVersionForm formData={formData}/>
                 </div>
             </section>
