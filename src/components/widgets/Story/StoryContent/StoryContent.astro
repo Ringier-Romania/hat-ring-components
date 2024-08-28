@@ -11,14 +11,13 @@ import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper
 import {StoryContent_getData} from "./StoryContentGetData";
 
 
-let queryFragment = '';
-const content = await StoryContent_getData(context, queryFragment);
+const content = await StoryContent_getData(context);
 
 let cssModules = '';
 ---
 
 
-<div className={WidgetHelper_getWidgetCssClasses('StoryContent', widgetConfig, context)}>
+<div class={WidgetHelper_getWidgetCssClasses('StoryContent', widgetConfig, context)}>
     {/* @ts-expect-error Server Component */}
     <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context}
                           extendableAttributes={extendableAttributes}/>

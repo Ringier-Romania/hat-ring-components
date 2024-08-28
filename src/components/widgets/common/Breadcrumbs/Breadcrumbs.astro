@@ -50,7 +50,7 @@ const createBreadcrumb = (breadcrumbs: Breadcrumb[]): BreadcrumbEntry[] => {
     <Fragment set:html={toRender} />
   ) : (
     <div
-      className={WidgetHelper_getWidgetCssClasses(
+      class={WidgetHelper_getWidgetCssClasses(
         "Breadcrumb",
         widgetConfig,
         context

@@ -38,24 +38,24 @@ import {ImageHelper_getImageDimensionsFromObject} from "../../../../../../helper
 
 ---
 
-<div className={['ListElementContent', `listElementLevel${childLevel}`, customCssClass].join(' ')}>
+<div class={['ListElementContent', `listElementLevel${childLevel}`, customCssClass].join(' ')}>
     {
         data['Link url'] &&
-            <div className={'linkOverlay'}>
+            <div class={'linkOverlay'}>
                 <RingLink href={data['Link url']} title={data.Title || ''}></RingLink>
             </div>
     }
     {data['Image src'] && <ListElementImage context={context} widgetConfig={widgetConfig} data={imageProps}/>}
 
-    {data.Title && <TextReplacer props={{className: 'title'}} context={context} config={{}} tag={ItemHeaderTag} text={data.Title}/>}
+    {data.Title && <TextReplacer props={{class: 'title'}} context={context} config={{}} tag={ItemHeaderTag} text={data.Title}/>}
     {/* @ts-expect-error Server Component */}
-    {data.Description && <TextReplacer props={{className: 'description'}} context={context} config={{}} tag={'p'} text={data.Description}/>}
+    {data.Description && <TextReplacer props={{class: 'description'}} context={context} config={{}} tag={'p'} text={data.Description}/>}
     {/* @ts-expect-error Server Component */}
-    {data.Text && <TextReplacer props={{className: 'text'}} context={context} config={{}} tag={'div'}  text={data.Text}/>}
+    {data.Text && <TextReplacer props={{class: 'text'}} context={context} config={{}} tag={'div'}  text={data.Text}/>}
 
-    {(data.children && data.children.length > 0) && <div className={['listElementChildren'].join(' ')}>
+    {(data.children && data.children.length > 0) && <div class={['listElementChildren'].join(' ')}>
         {data.children.map((element, index) => {
-            return (<div className={['listElementChild'].join(' ')}>
+            return (<div class={['listElementChild'].join(' ')}>
                 <Astro.self context={context} widgetConfig={widgetConfig} data={element} childLevel={childLevel + 1} headerTagLevel={headerTagLevel + 1} itemIndex={itemIndex} key={index}/>
             </div>)
         })}

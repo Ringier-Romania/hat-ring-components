@@ -21,7 +21,7 @@ const headerUrl = widgetConfig.labelLink;
 ---
 
 {toRender ? <Fragment set:html={toRender}/> :
-<div className={['Header'].join(' ')}>
+<div class={['Header'].join(' ')}>
 
     {headerUrl ? <RingLink href={headerUrl}>
         <TextReplacer context={context} config={{}} text={headerText} tag={HeaderTag}/>

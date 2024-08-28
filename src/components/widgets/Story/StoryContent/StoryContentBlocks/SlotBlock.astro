@@ -30,7 +30,7 @@ export interface SlotBlockParams {
 {toRender ?
 <Fragment set:html={toRender}/>
     :
-<div className="SlotBlock">
+<div class="SlotBlock">
     {Component &&
             <Component blockData={blockData} context={context}/>}
 </div>

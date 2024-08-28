@@ -63,7 +63,7 @@ let cssModules = styles.StoryAuthors;
 ---
 
 
-<div className={WidgetHelper_getWidgetCssClasses('StoryAuthors', widgetConfig, context, [cssModules])}>
+<div class={WidgetHelper_getWidgetCssClasses('StoryAuthors', widgetConfig, context, [cssModules])}>
     {authors.map(author => {
         return (
             <StoryAuthor author={author} context={context} widgetConfig={widgetConfig}/>

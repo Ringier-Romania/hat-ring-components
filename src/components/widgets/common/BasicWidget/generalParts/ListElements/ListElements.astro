@@ -18,11 +18,11 @@ if (itemsHeaderArr.length === 2) {
 const colClass = Math.floor(12 / parseInt(widgetConfig.columns || '0'));
 ---
 
-<div className={['ListElements'].join(' ')}>
+<div class={['ListElements'].join(' ')}>
     {widgetConfig.listElements && widgetConfig.listElements.map((element, itemIndex) => {
 
         return (
-                <div className={['Item', 'col' + colClass].join(' ')}>
+                <div class={['Item', 'col' + colClass].join(' ')}>
                     <ListElementContent context={context} widgetConfig={widgetConfig} data={element}
                                         headerTagLevel={headerTagLevel} childLevel={1} itemIndex={itemIndex}
                                         key={itemIndex}/>
