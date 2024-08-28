@@ -36,6 +36,7 @@ export let GenericListWebsitesConfig
                 "customTeasers": [],
                 "moreText": "",
                 "moreUrl": "",
+                "titleAddonsCodeNames": "",
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -67,6 +68,7 @@ export let GenericListWebsitesConfig
                         "modificationTime",
                         "creationTime",
                         "lead",
+                        "titleAddons"
                     ],
                     "required": false
                 },
@@ -189,7 +191,12 @@ export let GenericListWebsitesConfig
                     "type": "textfield",
                     "description": "",
                     "required": false
-                }
+                },
+                "titleAddonsCodeNames": {
+                    "name": "Title addons code names to show",
+                    "description": "(comma separated code names)",
+                    "type": "textfield"
+                },
 
             }
         }

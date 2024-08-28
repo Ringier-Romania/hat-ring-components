@@ -8,3 +8,5 @@ export { default as CreationTime } from './CreationTime.astro';
 export { getFragment as CreationTime_getFragment } from './CreationTime.astro';
 export { getFragment as ModificationTime_getFragment } from './ModificationTime.astro';
 export { default as Lead } from './Lead';
+export { default as TitleAddons } from './TitleAddons.astro';
+export { getFragment as TitleAddons_getFragment } from './TitleAddons.astro';
