@@ -114,23 +114,23 @@ const id = 'slider_'+UtilsHelper_generateRandomString();
 <script is:inline define:vars={{id: id, swiperParams}}>
     const swiperContainer = document.querySelector(`#${id} swiper-container`);
     Object.assign(swiperContainer, swiperParams);
+    addIntersectionObserver();
 
-    if (!window.swiperLoaded) {
-        window.swiperLoaded = true;
-        loadSwiperScript();
-    } else {
-        document.addEventListener('DOMContentLoaded', () => init(swiperContainer));
+    function loadSwiperScript(swiperContainer, io) {
+        if (!window.swiperLoaded) {
+            window.swiperLoaded = true;
+            let swiperScript = document.createElement('script');
+            swiperScript.src = 'https://ocdn.eu/customerpoc/hat-ring-components/swiper-element-bundle_9.4.1.min.js';
+            swiperScript.async = true;
+            swiperScript.fetchpriority = "low";
+            swiperScript.onload = () => initSwiper(swiperContainer, io);
+            document.head.appendChild(swiperScript);
+        } else {
+            initSwiper(swiperContainer, io);
+        }
     }
 
-    function loadSwiperScript() {
-        let swiperScript = document.createElement('script');
-        swiperScript.src = 'https://ocdn.eu/customerpoc/hat-ring-components/swiper-element-bundle_9.4.1.min.js';
-        swiperScript.async = true;
-        swiperScript.fetchpriority = "low";
-        swiperScript.onload = init;
-        document.head.appendChild(swiperScript);
-    }
-    function init(swiperEl) {
+    function addIntersectionObserver() {
         const config = {
             rootMargin: '280px 0px 280px 0px',
             threshold: [1]
@@ -140,13 +140,13 @@ const id = 'slider_'+UtilsHelper_generateRandomString();
             const io = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        initSwiper(swiperEl, io);
+                        loadSwiperScript(swiperContainer, io);
                     }
                 });
             }, config);
-            io.observe(swiperEl);
+            io.observe(swiperContainer);
         } else {
-            initSwiper(swiperEl);
+            loadSwiperScript(swiperContainer);
         }
     }
 

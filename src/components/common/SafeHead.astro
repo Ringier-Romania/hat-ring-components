@@ -1,0 +1,15 @@
+---
+let toRender = '';
+try {
+    const html = await Astro.slots.render('default');
+    const allowedTags = ['meta', 'link', 'style', 'script'].join('|');
+    const regex = new RegExp(`<\\/?(?!${allowedTags})\\w+[^>]*>`, 'gi');
+    toRender = html.replace(regex, '');
+} catch (e) {
+    console.error(`SafeHead:`,e);
+}
+---
+
+<!-- SAFE HEAD START -->
+<Fragment set:html={toRender} />
+<!-- SAFE HEAD END -->
