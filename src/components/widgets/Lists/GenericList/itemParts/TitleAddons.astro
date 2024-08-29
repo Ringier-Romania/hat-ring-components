@@ -3,7 +3,7 @@ const {widgetConfig, data} = Astro.props
 import {GenericListResponseNode,GenericListWidgetConfig} from "../types"
 import gql from "graphql-tag"
 import _ from "lodash"
-import { WidgetHelper_renderEmptyWidget } from "../../../../../helpers/WidgetHelper"
+import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper"
 
 type Props = {
     widgetConfig: GenericListWidgetConfig & {
@@ -16,8 +16,9 @@ let toRender: boolean | JSX.Element | string = false;
 
 
 const titleAddonsCodeNamesArr = _.without((widgetConfig.titleAddonsCodeNames ?? "").split(","), "")
+
 if (!titleAddonsCodeNamesArr || titleAddonsCodeNamesArr.length === 0) {
-    toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
+    toRender = WidgetHelper_renderEmptyComponent("TitleAddons")
 }
 
 export const getFragment = () => {
@@ -36,10 +37,17 @@ export const getFragment = () => {
 }
 ---
 
-{ toRender ? ( <Fragment set:html={toRender} /> ) : (
-    titleAddonsCodeNamesArr.map((codeName: string) => {
-        const titleAddonsToShow = _.get(_.find(data.titles, ["role.code", codeName]), "text", "")
-        return !!titleAddonsToShow ? <span class={`title-addons code-${codeName}`}>{titleAddonsToShow}</span> : null
-    })
+{
+    toRender ? (
+        <Fragment set:html={toRender} />
+    ) : (
+        <div class="TitleAddons">
+            {titleAddonsCodeNamesArr.map((codeName: string) => {
+                const titleAddonsToShow = _.get(_.find(data.titles, ["role.code", codeName]), "text", "");  
+                return !!titleAddonsToShow ? (
+                    <span class={`title-addons code-${codeName}`}>{titleAddonsToShow}</span>
+                ) : null;
+            })}
+        </div>
     )
 }
