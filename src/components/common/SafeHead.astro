@@ -6,6 +6,7 @@ try {
     const regex = new RegExp(`<\\/?(?!${allowedTags})\\w+[^>]*>`, 'gi');
     toRender = html.replace(regex, '');
 } catch (e) {
+    toRender = await Astro.slots.render('default');
     console.error(`SafeHead:`,e);
 }
 ---
