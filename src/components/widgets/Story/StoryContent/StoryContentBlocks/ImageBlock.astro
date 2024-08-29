@@ -32,9 +32,9 @@ if (maxImageHeight && maxImageHeight < imageHeight) {
 
 <div class={['ImageBlock', 'alignment-' + blockData.alignment].join(' ')}>
     {
-                <a href={link ? link.url : url} target="_blank" data-pswp-src={url}  data-pswp-width={imageWidth * 3} data-pswp-height={imageHeight * 3} >
-                    <RingImage src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight} transform={TransformType.ResizeCropAuto}  />
-                </a>
+        <a href={link ? link.url : url} target="_blank" data-pswp-src={url}  data-pswp-width={image.width} data-pswp-height={image.height} >
+            <RingImage src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight} transform={TransformType.ResizeCropAuto}  />
+        </a>
     }
     <div class="imgMetaData">
         {title && <span class="caption">{title}</span>}

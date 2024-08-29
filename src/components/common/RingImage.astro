@@ -27,7 +27,7 @@ var src = props.src;
 let transform = props.transform || TransformType.None;
 
 let loading = 'lazy';
-let fetchpriority: string = '';
+let fetchpriority: string | null = null;
 
 if (props.priority) {
     loading = 'eager';
