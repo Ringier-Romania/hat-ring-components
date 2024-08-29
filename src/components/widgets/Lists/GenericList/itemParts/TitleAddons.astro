@@ -1,9 +1,9 @@
 ---
-const {widgetConfig, data, context} = Astro.props
+const {widgetConfig, data} = Astro.props
 import {GenericListResponseNode,GenericListWidgetConfig} from "../types"
 import gql from "graphql-tag"
 import _ from "lodash"
-import { WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper"
+import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper"
 import { AppContext } from "../../../../../types/types"
 
 type Props = {
@@ -43,9 +43,9 @@ export const getFragment = () => {
     toRender ? (
         <Fragment set:html={toRender} />
     ) : (
-        <div class={WidgetHelper_getWidgetCssClasses("TitleAddons", widgetConfig, context)}>
+        <div class="TitleAddons">
             {titleAddonsCodeNamesArr.map((codeName: string) => {
-                const titleAddonsToShow = _.get(_.find(data.titles, ["role.code", codeName]), "text", "");                
+                const titleAddonsToShow = _.get(_.find(data.titles, ["role.code", codeName]), "text", "");  
                 return !!titleAddonsToShow ? (
                     <span class={`title-addons code-${codeName}`}>{titleAddonsToShow}</span>
                 ) : null;
