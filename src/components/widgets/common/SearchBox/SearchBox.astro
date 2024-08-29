@@ -18,12 +18,13 @@ const { searchURLPhrase, placeholder, buttonText } =
 >
   <form method="get" action={searchURLPhrase}>
     <input
+      aria-label="Search input"
       type="search"
       name={UtilsHelper_getSearchQueryParamKey()}
       {...placeholder && { placeholder }}
       required
     />
 
-    <button>{buttonText}</button>
+    <button aria-label="Search">{buttonText}</button>
   </form>
 </div>

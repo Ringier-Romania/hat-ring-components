@@ -28,7 +28,7 @@ const dimensions = ImageHelper_getImageDimensionsFromObject(slide, context, "Sou
     {slide['Source url'] && slide['Source type'] === 'Image'
         &&  <div class={"image"}>
                 {isUsedWithLightbox ?
-                    <a href={imgUrl} target="_blank"  data-pswp-width={dimensions.width} data-pswp-height={dimensions.height} >
+                    <a href={imgUrl} target="_blank"  data-pswp-width={_.get(slide, 'originalImageDimensions.width', dimensions.width * 3)} data-pswp-height={_.get(slide, 'originalImageDimensions.height', dimensions.height * 3)} >
                         <RingImage src={imgUrl} alt={slide['Title'] || ''} width={dimensions.width}
                                     height={dimensions.height} transform={TransformType.ResizeCropAuto}/>
                     </a>
