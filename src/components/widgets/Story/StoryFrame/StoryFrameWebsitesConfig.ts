@@ -1,38 +1,41 @@
 import {
     AbstractWebsitesWidgetConfigDefaultParams,
-    AbstractWebsitesWidgetConfigParamsDescription
+    AbstractWebsitesWidgetConfigParamsDescription,
 } from "../../../../types/abstracts";
 
-export let StoryFrameWebsitesConfig
-    = {
-    "sections": [],
-    "defaultParams": {},
-    "paramsDescription": {},
-    "modules": {
-        "storyFrame_wdg": {
-            "name": "Story Frame",
-            "description": "",
-            "defaultParams": {
+export let StoryFrameWebsitesConfig = {
+    sections: [],
+    defaultParams: {},
+    paramsDescription: {},
+    modules: {
+        storyFrame_wdg: {
+            name: "Story Frame",
+            description: "",
+            defaultParams: {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
-                "widgetType": "storyFrame",
-                "frameCodeName": ""
+                frameCodeName: "",
+                storyFrameHeadding: "",
+                widgetType: "storyFrame",
             },
-            "paramsDescription": {
+            paramsDescription: {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
-                "widgetType": {
-                    "name": "widgetType",
-                    "description": "widget type",
-                    "type": "textfield",
-                    "required": true
+                widgetType: {
+                    name: "widgetType",
+                    description: "widget type",
+                    type: "textfield",
+                    required: true,
                 },
-                "frameCodeName": {
-                    "name": "Frame code name",
-                    "type": "textfield",
-                    "description": "Frame code name"
+                frameCodeName: {
+                    name: "Frame code name",
+                    type: "textfield",
+                    description: "Frame code name",
                 },
-            }
-        }
-    }
-}
-
-
+                storyFrameHeadding: {
+                    name: "Frame Headding",
+                    type: "textfield",
+                    description: "Frame Headding",
+                },
+            },
+        },
+    },
+};
