@@ -4,14 +4,12 @@ import {GenericListResponseNode,GenericListWidgetConfig} from "../types"
 import gql from "graphql-tag"
 import _ from "lodash"
 import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper"
-import { AppContext } from "../../../../../types/types"
 
 type Props = {
     widgetConfig: GenericListWidgetConfig & {
         titleAddonsCodeNames: string
     }
     data: GenericListResponseNode
-    context: AppContext
 }
 
 let toRender: boolean | JSX.Element | string = false;

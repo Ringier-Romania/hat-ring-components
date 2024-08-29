@@ -3,7 +3,6 @@ const {widgetConfig, data} = Astro.props
 import {BasicWidgetConfig} from "../types"
 import gql from "graphql-tag"
 import _ from "lodash"
-import { AppContext } from "../../../../../types/types"
 import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper"
 
 type Props = {
@@ -20,7 +19,6 @@ type Props = {
             }[]
         }
     }
-    context: AppContext
 }
 let toRender: boolean | JSX.Element | string = false;
 
