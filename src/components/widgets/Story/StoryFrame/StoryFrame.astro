@@ -1,5 +1,8 @@
 ---
-const {context, widgetConfig} = Astro.props as {context: AppContext; widgetConfig: AbstractWidgetConfig & {frameCodeName : string}};
+const {context, widgetConfig} = Astro.props as {
+    context: AppContext;
+    widgetConfig: AbstractWidgetConfig & {frameCodeName: string; storyFrameHeadding: string};
+};
 import {AppContext} from "../../../../types/types";
 import {AbstractWidgetConfig} from "../../../../types/types";
 import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget} from "../../../../helpers/WidgetHelper";
@@ -7,17 +10,24 @@ import {StoryContent_getData} from "../StoryContent/StoryContentGetData";
 import StoryGroup from "../../../Story/StoryGroup.astro";
 let toRender: boolean | string | JSX.Element = false;
 const contentBlocks = await StoryContent_getData(context);
+const frameCodeName = widgetConfig.frameCodeName;
+const storyFrameHeadding = widgetConfig.storyFrameHeadding;
 
-if (!contentBlocks || !widgetConfig.frameCodeName) {
-    toRender = WidgetHelper_renderEmptyWidget(widgetConfig);    
+if (!contentBlocks || !frameCodeName || !storyFrameHeadding) {
+    toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 ---
+
 {
     toRender ? (
         <Fragment set:html={toRender} />
     ) : (
         <div class={WidgetHelper_getWidgetCssClasses("StoryFrame", widgetConfig, context)}>
-            <StoryGroup context={context} contentBlocks={contentBlocks}  groupName={widgetConfig.frameCodeName}/>
+            <div class={`storyFrameHeadding`} data-frame-code-name={frameCodeName}>
+                {storyFrameHeadding}
+            </div>
+
+            <StoryGroup context={context} contentBlocks={contentBlocks} groupName={frameCodeName} />
         </div>
     )
 }
