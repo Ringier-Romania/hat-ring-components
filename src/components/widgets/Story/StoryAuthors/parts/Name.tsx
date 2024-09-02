@@ -1,8 +1,8 @@
 import React from 'react';
-import {AppContext} from "../../../../../types/types";
-import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {AppContext, SiteContentType} from "../../../../../types/types";
 import {StoryAuthorsWidgetConfig} from "../types";
 import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import {UtilsHelper_getCurrentPageType} from "../../../../../helpers/UtilsHelper";
 
 export default function Name(
     {context, widgetConfig, author}:
@@ -12,10 +12,11 @@ export default function Name(
             author: Author
         }) {
 
+    const Tag = UtilsHelper_getCurrentPageType(context) === SiteContentType.Author ? 'h1' : 'div';
     return (
-        <div className={['Name'].join(' ')}>
+        <Tag className={['Name'].join(' ')}>
             {author?.name}
-        </div>
+        </Tag>
     )
 }
 
