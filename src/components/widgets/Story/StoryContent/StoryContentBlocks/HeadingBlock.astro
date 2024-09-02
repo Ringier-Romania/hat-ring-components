@@ -3,6 +3,7 @@ const { context, blockData }: HeadingBlockParams = Astro.props as HeadingBlockPa
 import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
 import {LinkReplacerHelper_replaceLinks} from '../../../../../helpers/LinkReplacerHelper';
 import { AppContext } from "../../../../../types/types";
+import _ from "lodash";
 
 export interface HeadingBlockParams {
   context: AppContext;
@@ -17,7 +18,7 @@ let toRender: boolean | JSX.Element = false;
 if (!blockData) {
   toRender = WidgetHelper_renderEmptyComponent("HeadingBlock");
 }
-const HeadingTag = "h" + blockData.level;
+const HeadingTag = "h" + _.clamp(blockData.level, 2, 6);
 
 blockData.text = await LinkReplacerHelper_replaceLinks(context, blockData.text);
 ---
