@@ -13,7 +13,7 @@ const contentBlocks = await StoryContent_getData(context);
 const frameCodeName = widgetConfig.frameCodeName;
 const storyFrameHeadding = widgetConfig.storyFrameHeadding;
 
-if (!contentBlocks || !frameCodeName || !storyFrameHeadding) {
+if (!contentBlocks.find(block => block.name === frameCodeName)) {
     toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 ---
