@@ -13,7 +13,7 @@ const contentBlocks = await StoryContent_getData(context);
 const frameCodeName = widgetConfig.frameCodeName;
 const storyFrameHeadding = widgetConfig.storyFrameHeadding;
 
-if (!contentBlocks.find(block => block.name === frameCodeName)) {
+if (!contentBlocks.find((block) => block.name === frameCodeName)) {
     toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 ---
@@ -23,11 +23,12 @@ if (!contentBlocks.find(block => block.name === frameCodeName)) {
         <Fragment set:html={toRender} />
     ) : (
         <div class={WidgetHelper_getWidgetCssClasses("StoryFrame", widgetConfig, context)}>
-            <div class={`storyFrameHeadding`} data-frame-code-name={frameCodeName}>
-                {storyFrameHeadding}
-            </div>
-
-            <StoryGroup context={context} contentBlocks={contentBlocks} groupName={frameCodeName} />
+                <div class={`storyFrameHeadding`} data-frame-code-name={frameCodeName}>
+                    {storyFrameHeadding}
+                </div>
+                <div class="storyFrameText">
+                    <StoryGroup context={context} contentBlocks={contentBlocks} groupName={frameCodeName} />
+                </div>
         </div>
     )
 }
