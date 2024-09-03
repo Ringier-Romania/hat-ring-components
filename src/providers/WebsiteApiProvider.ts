@@ -1,5 +1,5 @@
 import {WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
-import { WebsitesApiClient } from '@ringpublishing/graphql-api-client-got';
+import {WebsitesApiClient} from '@ringpublishing/graphql-api-client-got';
 import {DocumentNode} from "graphql/language/ast";
 import {
     CacheHelper_get,
@@ -58,19 +58,18 @@ export class WebsiteApiProvider {
             global.websitesApiGotClient = new WebsitesApiClient({
                 accessKey,
                 secretKey,
-                spaceUuid
+                spaceUuid,
+                timeout: 10000
             });
         }
 
         const currentTime = new Date().getTime();
-        const response = await global.websitesApiGotClient.query(query,
-            variables, 20000
-        );
+        const response = await global.websitesApiGotClient.query(query, variables);
         const timeDifference = new Date().getTime() - currentTime;
-        if(timeDifference > 4000){
+        if (timeDifference > 4000) {
             console.log('Websites Api long query ', query.loc?.source.body, variables);
         }
-        MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime',timeDifference);
+        MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime', timeDifference);
         return response;
 
     }
