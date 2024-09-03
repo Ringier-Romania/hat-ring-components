@@ -1,6 +1,6 @@
 {
 	"name": "hat-ring-components",
-	"version": "2.6.26",
+	"version": "2.7.0",
 	"description": "Head App Template - RING components",
 	"license": "MIT",
 	"repository": {},
@@ -24,7 +24,7 @@
 		"lodash": "^4.17.21",
 		"schema-dts": "^1.1.2",
 		"xml-js": "^1.6.11",
-		"astro": "^4.7.1",
+		"astro": "^4.15.2",
 		"node-cache": "^5.1.2"
 	},
 	"devDependencies": {
