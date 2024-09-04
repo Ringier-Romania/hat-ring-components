@@ -18,7 +18,7 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
 
 
     const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
-        const allItemParts = ItemParts;
+        const allItemParts = (extendableAttributes ? extendableAttributes.itemParts : null) || ItemParts;
 
         const ItemPart = allItemParts[_.upperFirst(showOption)];
 
