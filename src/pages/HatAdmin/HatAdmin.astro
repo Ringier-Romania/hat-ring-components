@@ -24,7 +24,7 @@ if (!toRender && Astro.request.method === "POST") {
 ---
 
 {toRender ? <Fragment set:html={toRender}/> :
-    <div class={[].join(' ')}>
+    <div class={styles.hatAdmin}>
         <div class={styles.container}>
             <h1>HAT Admin</h1>
             <section>
