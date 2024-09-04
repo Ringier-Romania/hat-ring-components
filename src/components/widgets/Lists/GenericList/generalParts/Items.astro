@@ -22,15 +22,15 @@ import {RingLink} from "../../../../common/RingLink/RingLink";
 import {UtilsHelper_convertToInt} from "../../../../../helpers/UtilsHelper";
 
 
-const allItemParts = ItemParts;
+const allItemParts = (extendableAttributes ? extendableAttributes.itemParts : null) || ItemParts;
 const columnsCount = UtilsHelper_convertToInt(widgetConfig.columns) || 1;
 const colNumber = Math.floor(12 / columnsCount);
 ---
 <div class={['Items'].join(' ')}>
     {(response.data?.stories?.edges.map((edge, itemIndex) => {
         if (!edge.node) return;
-        const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
-            const Component = allItemParts[_.upperFirst(showOption)];
+        const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {            
+            const Component = allItemParts[_.upperFirst(showOption)];                      
             if (!Component) {
                 console.error(`No item part support ${showOption}`);
                 return WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet");

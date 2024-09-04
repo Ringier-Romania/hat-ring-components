@@ -1,5 +1,5 @@
 ---
-const {context, widgetConfig} = Astro.props;
+const {context, widgetConfig, extendableAttributes} = Astro.props;
 
 import React from 'react';
 import _ from 'lodash';
@@ -22,7 +22,7 @@ import {GenericListMetaTags} from "./GenericListMetaTags";
 const currentPage = parseInt(UtilsHelper_getQueryParam('page', context) || 1);
 const allGeneralParts =  GeneralParts;
 let queryFragment =  '';
-const response = await GenericList_getData(context, queryFragment, widgetConfig, {}, currentPage) as GenericListResponse;
+const response = await GenericList_getData(context, queryFragment, widgetConfig, extendableAttributes, currentPage) as GenericListResponse;
 
 
 let cssModules = styles.GenericList;
@@ -42,6 +42,7 @@ let cssModules = styles.GenericList;
                            widgetConfig={widgetConfig}
                            response={response}
                            currentPage={currentPage}
+                           extendableAttributes={extendableAttributes}
                 />)
     })}
 </div>
