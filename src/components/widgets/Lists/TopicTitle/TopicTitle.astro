@@ -1,15 +1,39 @@
 ---
 const {widgetConfig, context} = Astro.props as {
-    widgetConfig: AbstractWidgetConfig;
+    widgetConfig: TopicTitleWidgetConfig;
     context: AppContext;
 };
 import _ from "lodash";
 import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper";
-import {AbstractWidgetConfig, AppContext} from "../../../../types/types";
-
+import {TopicTitleWidgetConfig, TopicTitleResponse} from "./types";
+import {gql} from "graphql-tag";
+import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
+import {AppContext} from "../../../../types/types";
 let toRender: boolean | JSX.Element | string = false;
-const breadcrumbs = _.get(context, "hatControllerParams.gqlResponse.data.site.data.node.breadcrumbs");
-const title = _.last(breadcrumbs).name;
+
+const query = gql`
+    query ($id: UUID) {
+        topic(id: $id) {
+            name
+        }
+    }
+`;
+
+const categoryId =
+    _.get(context, "hatControllerParams.gqlResponse.data.site.data.content.category.id") ||
+    _.get(context, "hatControllerParams.gqlResponse.data.site.data.content.id");
+
+const variables = {
+    id: categoryId,
+};
+
+let response = widgetConfig?.response;
+if (!response) {
+    response = (await WebsiteApiProvider.call(query, variables)) as TopicTitleResponse;
+}
+const title =
+    _.get(response, "data.topic.name", null) ??
+    _.last(_.get(context, "hatControllerParams.gqlResponse.data.site.data.node.breadcrumbs"))?.name;
 
 if (!title) {
     toRender = WidgetHelper_renderEmptyComponent("TopicTitle");
