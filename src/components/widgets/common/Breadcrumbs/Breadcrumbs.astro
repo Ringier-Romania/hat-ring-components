@@ -1,5 +1,4 @@
 ---
-import React from "react";
 import _ from "lodash";
 import {
   AbstractWidgetConfig,
@@ -15,7 +14,7 @@ const { context, widgetConfig } = Astro.props as {
   context: AppContext;
   widgetConfig: AbstractWidgetConfig;
 };
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | JSX.Element | string = false;
 const gqlResponse = _.get(context, "hatControllerParams.gqlResponse");
 
 if (!gqlResponse) {
@@ -28,8 +27,8 @@ const breadcrumbs: Breadcrumb[] = _.get(
 
 const createBreadcrumb = (breadcrumbs: Breadcrumb[]): BreadcrumbEntry[] => {
   const breadcrumbEntries = breadcrumbs.map((breadcrumb, index) => ({
-    href: index === 0 ? "/" : `/${breadcrumb.slug}`,
-    text: _.upperFirst(breadcrumb.slug),
+    href: index === 0 ? "/" : `${breadcrumb.url}`,
+    text: breadcrumb?.name,
   }));
 
   switch (context.siteContentType) {
