@@ -27,7 +27,7 @@ const breadcrumbs: Breadcrumb[] = _.get(
 
 const createBreadcrumb = (breadcrumbs: Breadcrumb[]): BreadcrumbEntry[] => {
   const breadcrumbEntries = breadcrumbs.map((breadcrumb, index) => ({
-    href: index === 0 ? "/" : `/${_.lowerFirst(breadcrumb.name)}`,
+    href: index === 0 ? "/" : `/${breadcrumb.slug}`,
     text: breadcrumb?.name,
   }));
 
