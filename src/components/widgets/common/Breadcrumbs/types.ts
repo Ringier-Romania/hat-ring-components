@@ -1,5 +1,5 @@
 export interface Breadcrumb {
-    slug: string;
+    name: string;
     href?: string;
 }
 export interface BreadcrumbEntry {
