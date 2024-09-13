@@ -9,6 +9,10 @@ export function CacheHelper_set(key: any, value: any, TTL: null | number | undef
         return;
     }
 
+    if(TTL === 0){
+        return;
+    }
+
     const ttl = TTL || stdTTL;
     key = JSON.stringify(key);
     myCache.set(key, value, ttl);
