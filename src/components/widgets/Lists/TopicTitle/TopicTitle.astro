@@ -1,21 +1,27 @@
 ---
-const {widgetConfig, context} = Astro.props;
-import React from 'react';
-import _ from 'lodash';
-import {gql} from 'graphql-tag';
+const {widgetConfig, context} = Astro.props as {
+    widgetConfig: TopicTitleWidgetConfig;
+    context: AppContext;
+};
+import _ from "lodash";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper";
+import {TopicTitleWidgetConfig, TopicTitleResponse} from "./types";
+import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {TopicTitleParams, TopicTitleResponse} from "./types";
-import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {AppContext} from "../../../../types/types";
+let toRender: boolean | JSX.Element | string = false;
 
 const query = gql`
-        query($id: UUID){
-            topic(id: $id){
-                name
-            }
+    query ($id: UUID) {
+        topic(id: $id) {
+            name
         }
-    `;
+    }
+`;
 
-const categoryId = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id')|| _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.id');
+const categoryId =
+    _.get(context, "hatControllerParams.gqlResponse.data.site.data.content.category.id") ||
+    _.get(context, "hatControllerParams.gqlResponse.data.site.data.content.id");
 
 const variables = {
     id: categoryId,
@@ -23,14 +29,23 @@ const variables = {
 
 let response = widgetConfig?.response;
 if (!response) {
-    response = await WebsiteApiProvider.call(query, variables) as TopicTitleResponse;
+    response = (await WebsiteApiProvider.call(query, variables)) as TopicTitleResponse;
 }
-const title = _.get(response, 'data.topic.name');
+const title =
+    _.get(response, "data.topic.name", null) ??
+    _.last(_.get(context, "hatControllerParams.gqlResponse.data.site.data.node.breadcrumbs"))?.name;
 
+if (!title) {
+    toRender = WidgetHelper_renderEmptyComponent("TopicTitle");
+}
 ---
 
-
-
-<div class={WidgetHelper_getWidgetCssClasses('TopicTitle', widgetConfig, context)}>
-    <h1>{title}</h1>
-</div>
+{
+    toRender ? (
+        <Fragment set:html={toRender} />
+    ) : (
+        <div class={WidgetHelper_getWidgetCssClasses("TopicTitle", widgetConfig, context)}>
+            <h1>{title}</h1>
+        </div>
+    )
+}

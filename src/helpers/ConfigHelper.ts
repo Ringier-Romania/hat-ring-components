@@ -1,4 +1,4 @@
-import {UtilsHelper_getDomain, UtilsHelper_isDevelopmentMode} from "./UtilsHelper";
+import {UtilsHelper_convertToInt, UtilsHelper_getDomain, UtilsHelper_isDevelopmentMode} from "./UtilsHelper";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
 import _ from "lodash";
@@ -25,7 +25,7 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
     `;
 
 
-    const response = await WebsiteApiProvider.call(query, variables, 60);
+    const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 60 * 5);
     const sectionsConfig = _.get(response, 'data.node.config.config.0.data');
 
     return sectionsConfig;

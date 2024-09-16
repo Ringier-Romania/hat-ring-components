@@ -54,11 +54,17 @@ export class WebsiteApiProvider {
         }
 
         const currentTime = new Date().getTime();
+        const timer = MonitoringProvider.timer(
+            `info.WebsitesApiProvider.call.hitApiTimer`
+        );
         const response = await global.websitesApiApolloClient.query({
             query,
             variables,
             fetchPolicy
         });
+        if (timer) {
+            timer.done();
+        }
         const timeDifference = new Date().getTime() - currentTime;
         if (timeDifference > 4000) {
             console.log('Websites Api long query ', query.loc?.source.body, variables);
