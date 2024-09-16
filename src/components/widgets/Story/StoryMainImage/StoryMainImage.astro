@@ -1,12 +1,10 @@
 ---
 import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
 const {context, widgetConfig} = Astro.props;
-
+import {StoryMainImage_getData} from "./StoryMainImageGetData";
 import React from 'react';
 import _ from 'lodash';
-import {gql} from 'graphql-tag';
 import {StoryMainImageParams, StoryMainImageResponse} from "./types";
-import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {RingImage} from "../../../common/RingImage";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
 import {
@@ -14,37 +12,11 @@ import {
 } from "../../../../helpers/WidgetHelper";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
 
-
-const query = gql`
-        query($storyId: UUID, $imageWidth:Int!, $imageHeight:Int!){
-            story(id:$storyId){
-                image{
-                    url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}}),
-                    caption
-                }
-            }
-        }
-    `;
-
+const response = await StoryMainImage_getData({widgetConfig, context});
 const imageDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, context);
-
-const variables = {
-    storyId: context.id,
-    imageWidth: imageDimensions.width,
-    imageHeight: imageDimensions.height,
-};
-
-let response = widgetConfig?.response;
-if (!response) {
-    response = await WebsiteApiProvider.call(query, variables) as StoryMainImageResponse;
-}
-
-
 
 const imgSrc = _.get(response, 'data.story.image.url');
 const caption = _.get(response, 'data.story.image.caption');
-
-
 ---
 
 <div class={WidgetHelper_getWidgetCssClasses('StoryMainImage', widgetConfig, context)}>

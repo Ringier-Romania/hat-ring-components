@@ -32,7 +32,6 @@ export async function SeoListGridPrevNext(context: AppContext) {
 
     const paginationElements = UtilsHelper_convertToInt(foundGenericList.paginationElements);
     const pages = Math.ceil(totalItems / paginationElements);
-    3
 
     const currentUrlPath = _.get(context, 'hatControllerParams.urlWithParsedQuery.path');
     const prevUrl = new URL(UtilsHelper_getDomain() + currentUrlPath);
