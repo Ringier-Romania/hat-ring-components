@@ -4,6 +4,10 @@ interface MonitoringService {
     gauge(metric: string, value: number): void;
 }
 
+interface MonitoringProviderTimer {
+    done(): number;
+}
+
 export class MonitoringProvider {
 
     monitoringProvider = global['monitoringProvider'] as MonitoringService;
@@ -29,4 +33,11 @@ export class MonitoringProvider {
     static getMonitoringProvider() {
         return global['monitoringProvider'];
     }
+
+
+    static timer(metric: string | string[], timeout?: number, buckets?: number[]){
+        if(global['monitoringProvider'] && global['monitoringProvider'].timer) {
+            return global['monitoringProvider'].timer(metric, timeout, buckets);
+        }
+    };
 }
