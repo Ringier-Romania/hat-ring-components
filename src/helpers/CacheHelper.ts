@@ -40,6 +40,16 @@ export function CacheHelper_flush() {
     myCache.flushAll();
 }
 
+export function CacheHelper_clearByPartialKey(partialKey: any) {
+    const keys = myCache.keys();
+    keys.forEach((key) => {
+        if (key.includes(partialKey)) {
+            myCache.del(key);
+        }
+    });
+    handleCleanCache()
+}
+
 function handleCleanCache(){
     const currentTime = new Date().getTime();
     if(!global.lastHATCacheClean){
