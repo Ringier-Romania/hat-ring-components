@@ -44,7 +44,7 @@ export function CacheHelper_flush() {
     myCache.flushAll();
 }
 
-export function CacheHelper_clearByPartialKey(partialKey: any, res = '') {
+export function CacheHelper_clearByPartialKey(partialKey: any, searchInValue  = '0') {
     const keys = myCache.keys();
     
     keys.forEach((key) => {
@@ -53,7 +53,7 @@ export function CacheHelper_clearByPartialKey(partialKey: any, res = '') {
         }  
     });
 
-    if (res === '1') {
+    if (searchInValue  === '1') {
         const values = myCache.mget(keys);
         keys.forEach((key) => {
             const value = JSON.stringify(values[key]);
