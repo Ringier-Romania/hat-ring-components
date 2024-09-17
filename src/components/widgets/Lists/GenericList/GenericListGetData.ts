@@ -123,6 +123,6 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
 
 
     //console.log(query.loc?.source.body, JSON.stringify(variables));
-    const result = await WebsiteApiProvider.call(query, variables);
+    const result = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL);
     return result;
 }

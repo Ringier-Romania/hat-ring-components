@@ -310,7 +310,12 @@ export let BasicWidgetWebsitesConfig = {
                             "type": "checkbox",
                         }
                     ]
-                }
+                },
+                "cacheTTL": {
+                    "name": "Cache TTL",
+                    "description": "BasicWidget cache TTL in seconds",
+                    "type": "textfield"
+                },
             }
         }
     }
