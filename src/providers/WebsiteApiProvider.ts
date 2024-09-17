@@ -15,21 +15,25 @@ export class WebsiteApiProvider {
 
         try {
             if (cachedResponse) {
+                //console.log('cachedResponse');
                 MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
                 CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
                     MonitoringProvider.counter('info.WebsitesApiProvider.call.hitApi');
                     CacheHelper_set(cacheKey, this._call(query, variables), cacheTtl);
                 });
+                if(cachedResponse && typeof cachedResponse === 'object'){
+                    cachedResponse["isCachedByHat"] = true;
+                }
+
                 return cachedResponse;
             }
 
-            //console.log('call ', query.loc?.source.body, variables);
             MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
-            MonitoringProvider.counter('info.WebsitesApiProvider.call.hitApi');
-
             const response = await this._call(query, variables);
             CacheHelper_set(cacheKey, response, cacheTtl);
-
+            if(response && typeof response === 'object'){
+                response["isCachedByHat"] = false;
+            }
             return response;
         } catch (e) {
             MonitoringProvider.counter('error.WebsitesApiProvider.call.catch');
@@ -41,6 +45,7 @@ export class WebsiteApiProvider {
 
 
     static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache'): Promise<any> {
+        //console.log('call', query.loc?.source.body, variables);
         const accessKey = process.env.WEBSITE_API_PUBLIC!;
         const secretKey = process.env.WEBSITE_API_SECRET!;
         const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
