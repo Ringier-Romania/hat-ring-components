@@ -46,10 +46,14 @@ export function CacheHelper_flush() {
 
 export function CacheHelper_clearByPartialKey(partialKey: any, searchInValue  = false) {
     const keys = myCache.keys();
-    
+    const deleteCount = {
+        keys: 0,
+        responses: 0,
+    }
     keys.forEach((key) => {
         if (key.includes(partialKey)) {
             myCache.del(key);
+            deleteCount.keys++;
         }  
     });
 
@@ -58,11 +62,13 @@ export function CacheHelper_clearByPartialKey(partialKey: any, searchInValue  = 
         keys.forEach((key) => {
             const value = JSON.stringify(values[key]);            
             if (value?.includes(partialKey)) {                
-                myCache.del(key);                
+                myCache.del(key); 
+                deleteCount.responses++;
             }    
         })
     }
     handleCleanCache()
+    return deleteCount;
 }
 
 function handleCleanCache(){
