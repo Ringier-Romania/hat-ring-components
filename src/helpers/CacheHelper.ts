@@ -9,6 +9,10 @@ export function CacheHelper_set(key: any, value: any, TTL: null | number | undef
         return;
     }
 
+    if(TTL === 0){
+        return;
+    }
+
     const ttl = TTL || stdTTL;
     key = JSON.stringify(key);
     myCache.set(key, value, ttl);
@@ -38,6 +42,33 @@ export function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback:
 
 export function CacheHelper_flush() {
     myCache.flushAll();
+}
+
+export function CacheHelper_clearByPartialKey(partialKey: any, searchInValue  = false) {
+    const keys = myCache.keys();
+    const deleteCount = {
+        keys: 0,
+        responses: 0,
+    }
+    keys.forEach((key) => {
+        if (key.includes(partialKey)) {
+            myCache.del(key);
+            deleteCount.keys++;
+        }  
+    });
+
+    if (searchInValue) {
+        const values = myCache.mget(keys);
+        keys.forEach((key) => {
+            const value = JSON.stringify(values[key]);            
+            if (value?.includes(partialKey)) {                
+                myCache.del(key); 
+                deleteCount.responses++;
+            }    
+        })
+    }
+    handleCleanCache()
+    return deleteCount;
 }
 
 function handleCleanCache(){
