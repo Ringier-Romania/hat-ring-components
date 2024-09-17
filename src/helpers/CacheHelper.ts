@@ -46,7 +46,7 @@ export function CacheHelper_flush() {
 
 export function CacheHelper_clearByPartialKey(partialKey: any, searchInValue  = false) {
     const keys = myCache.keys();
-    let deleteCount = {
+    const deleteCount = {
         keys: 0,
         responses: 0,
     }
