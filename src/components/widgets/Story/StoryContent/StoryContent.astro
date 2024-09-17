@@ -1,19 +1,11 @@
 ---
 const {context, widgetConfig, extendableAttributes} = Astro.props;
-import React from 'react';
-import _ from 'lodash';
-import {gql} from 'graphql-tag';
 import {default as StoryContentSwitcher} from "./StoryContentSwitcher.astro";
-import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {StoryContentParams} from "./types";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
-import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
 import {StoryContent_getData} from "./StoryContentGetData";
 
 
 const content = await StoryContent_getData(context);
-
-let cssModules = '';
 ---
 
 
