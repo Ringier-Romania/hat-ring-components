@@ -62,9 +62,11 @@ export async function BasicWidget_getData(context: AppContext, queryNodeFragment
     const query = gql`
             query($nodeId:  ID!, $first: Int ${mappedDynamicVariablesTypes}, ${querySectionVariablesTypes}){
                 ${querySection} {
+                    basicWidgetCodeName: codeName
                     items(first: $first) {
                         edges {
                             node {
+                                id
                                 url
                                 ${dynamicFragmentsNames}
                                 ${queryNodeFragment}
