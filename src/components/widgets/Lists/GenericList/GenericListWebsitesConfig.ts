@@ -197,7 +197,11 @@ export let GenericListWebsitesConfig
                     "description": "(comma separated code names)",
                     "type": "textfield"
                 },
-
+                "cacheTTL": {
+                    "name": "Cache TTL",
+                    "description": "GenericList cache TTL in seconds",
+                    "type": "textfield"
+                },
             }
         }
     }

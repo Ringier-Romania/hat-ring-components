@@ -107,8 +107,11 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
         query($topicId: UUID!, $limit: Int!, $excludedFlags: [String!], $offset: Int! ${mappedDynamicVariablesTypes}){
             stories(filter:{${contentTypeFilter}, flag: {notIn:$excludedFlags}},limit: $limit, offset: $offset ${searchPhraseFragment} ){
                 total
+                genericListReqTotal: total
                 edges {
                     node {
+                        
+                        id
                         mainPublicationPoint {
                             url
                         }
@@ -123,6 +126,6 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
 
 
     //console.log(query.loc?.source.body, JSON.stringify(variables));
-    const result = await WebsiteApiProvider.call(query, variables);
+    const result = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL);
     return result;
 }
