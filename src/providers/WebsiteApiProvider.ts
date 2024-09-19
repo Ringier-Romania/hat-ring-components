@@ -25,7 +25,7 @@ export class WebsiteApiProvider {
                     }
                     if (global.HATCacheInCallInProgress[cacheKeyString]) {
                         // console.log('during calling api') ;
-                        return cachedResponse;
+                        return false;
                     }
                     global.HATCacheInCallInProgress[cacheKeyString] = 1;
                     const response = await this._call(query, variables);
