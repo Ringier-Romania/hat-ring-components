@@ -8,6 +8,7 @@ import {GenericListResponse} from "../../Lists/GenericList/types";
 import {Story, StoryEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import {UtilsHelper_convertToInt, UtilsHelper_getCurrentNodeCategoryId} from "../../../../helpers/UtilsHelper";
 import {ConfigHelper_getMainCategoryUuid} from "../../../../helpers/ConfigHelper";
+import {CacheHelper_createParentChildRelation} from "../../../../helpers/CacheHelper";
 
 export async function StoryRelatedContent_getData(context: AppContext, widgetConfig: StoryRelatedContentWidgetConfig): Promise<GenericListResponse> {
     let dynamicVariablesTypes: any = {};
@@ -94,6 +95,8 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
     res.data.stories.edges = res.data.stories.edges.concat(_.get(result, 'data.story.stories', []).map(story => {
         return {node: story.story}
     }));
+
+    CacheHelper_createParentChildRelation(context.id, res.data.stories.edges.map((edge) => edge.node.id));
 
     if (widgetConfig.autocomplete && (widgetConfig.paginationElements || 0) > res.data.stories.edges.length) {
         switch (widgetConfig.autocompleteFrom) {

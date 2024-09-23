@@ -1,4 +1,8 @@
-import {CacheHelper_get, CacheHelper_runCallbackIfTimeStampHasExpired, CacheHelper_set} from "../helpers/CacheHelper";
+import {
+    CacheHelper_get,
+    CacheHelper_runCallbackIfTimeStampHasExpired,
+    CacheHelper_set
+} from "../helpers/CacheHelper";
 import {UtilsHelper_convertToInt} from "../helpers/UtilsHelper";
 
 interface CacheService {
