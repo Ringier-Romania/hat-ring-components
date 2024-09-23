@@ -92,5 +92,5 @@ export async function BasicWidget_getData(context: AppContext, queryNodeFragment
         Object.assign(variables, {sectionGroupCodeName: sectionGroup});
     }
 
-    return await WebsiteApiProvider.call(query, variables);
+    return await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL);
 }
