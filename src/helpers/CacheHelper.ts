@@ -60,33 +60,66 @@ export async function CacheHelper_flush() {
     await cacheAdapter.flushAll();
 }
 
-export async function CacheHelper_clearByPartialKey(partialKey: any, searchInValue = false) {
-    const keys = await cacheAdapter.keys();
+export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false) {
+    const keys = await myCache.keys();
+    let values: any = [];
+
+    if (searchInValue) {
+        values = myCache.mget(keys);
+    }
+
     const deleteCount = {
         keys: 0,
         responses: 0,
     }
+
     keys.forEach((key) => {
-        if (key.includes(partialKey)) {
-            //console.log('deleting key', key);
-            cacheAdapter.del(key);
-            deleteCount.keys++;
+        let deleted = false;
+        if (partialKey.every((partKey) => key.includes(partKey))) {
+            if (notInPartialKey.length > 0) {
+                if (!notInPartialKey.every((partKey) => key.includes(partKey))) {
+                    myCache.del(key);
+                    deleteCount.keys++;
+                    deleted = true;
+                }
+            } else {
+                myCache.del(key);
+                deleteCount.keys++;
+                deleted = true;
+            }
+        }
+
+        if (searchInValue && !deleted) {
+            const value = JSON.stringify(values[key]);
+            if (partialKey.every((partKey) => value.includes(partKey))) {
+                if (notInPartialKey.length > 0) {
+                    if (!notInPartialKey.every((partKey) => value.includes(partKey))) {
+                        myCache.del(key);
+                        deleteCount.responses++;
+                    }
+                } else {
+                    myCache.del(key);
+                    deleteCount.responses++;
+                }
+            }
         }
     });
-
-    if (searchInValue) {
-        const values = await cacheAdapter.mget(keys);
-        keys.forEach((key) => {
-            const value = JSON.stringify(values[key]);
-            if (value?.includes(partialKey)) {
-                // console.log('deleting key for response', key);
-                cacheAdapter.del(key);
-                deleteCount.responses++;
-            }
-        })
-    }
     handleCleanCache()
     return deleteCount;
+}
+
+export function CacheHelper_del(keys: any) {
+    return myCache.del(keys);
+}
+
+export function CacheHelper_keys() {
+    return myCache.keys();
+}
+
+export function CacheHelper_createParentChildRelation(parentId, childrenIds) {
+    childrenIds.forEach((childrenId) => {
+        CacheHelper_set(`parent_${parentId}_child_${childrenId}`, '');
+    })
 }
 
 function handleCleanCache() {
