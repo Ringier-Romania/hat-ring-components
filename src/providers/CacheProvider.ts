@@ -1,5 +1,4 @@
 import {
-    CacheHelper_clearByPartialKey,
     CacheHelper_get,
     CacheHelper_runCallbackIfTimeStampHasExpired,
     CacheHelper_set
