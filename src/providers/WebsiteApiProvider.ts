@@ -12,12 +12,12 @@ export class WebsiteApiProvider {
 
         const cacheKey = {query: query.loc?.source.body, variables};
         const cacheKeyString = JSON.stringify(cacheKey);
-        let cachedResponse = CacheHelper_get(cacheKey);
+        let cachedResponse = await CacheHelper_get(cacheKey);
         try {
             if (cachedResponse) {
                 //console.log('cachedResponse');
                 MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
-                CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
+                await CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
                     //console.log('Cache expired, calling api');
                     if (!global.HATCacheInCallInProgress) {
                         global.HATCacheInCallInProgress = {};

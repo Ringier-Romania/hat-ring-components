@@ -1,0 +1,51 @@
+import React from 'react';
+import {AppContext} from "../../../../types/types";
+import _ from "lodash";
+import {UtilsHelper_convertToInt, UtilsHelper_getDomain} from "../../../../helpers/UtilsHelper";
+import {GenericListWidgetConfig} from "./types";
+
+const MAX_OFFSET = 1000;
+
+
+export function GenericListMetaTags({
+                                        currentPage,
+                                        totalItems,
+                                        context,
+                                        widgetConfig
+                                    }: { currentPage: number, totalItems: number, context: AppContext, widgetConfig: GenericListWidgetConfig }) {
+
+   if(!widgetConfig.mainSeoList){
+       return null;
+   }
+    // const containers = context.customData.gridContainers ? context.customData.gridContainers : ["ListExtendedWidgets1", "ListExtendedWidgets2"];
+    // const foundGenericList = await WidgetHelper_findWidgetConfig(context, {module: "genericList_wdg"}, containers);
+    // if (!foundGenericList) {
+    //     return {};
+    // }
+    // const currentPage = parseInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
+    // const data = await GenericList_getData(context, '', foundGenericList, {itemParts: []}, currentPage);
+    // const total = _.get(data, 'data.stories.total', false);
+    // console.log(total);
+
+    totalItems = UtilsHelper_convertToInt(totalItems);
+    //FTS limit is 1000
+    if (totalItems > 1000) {
+        totalItems = 1000;
+    }
+
+    const paginationElements = UtilsHelper_convertToInt(widgetConfig.paginationElements);
+    const pages = Math.ceil(totalItems / paginationElements);
+
+    const currentUrlPath = _.get(context, 'hatControllerParams.urlWithParsedQuery.path');
+    const prevUrl = new URL(UtilsHelper_getDomain() + currentUrlPath);
+    prevUrl.searchParams.set('page', `${currentPage - 1}`);
+
+    const nextUrl = new URL(UtilsHelper_getDomain() + currentUrlPath);
+    nextUrl.searchParams.set('page', `${currentPage + 1}`);
+
+    return <>
+        {currentPage != 1 && <link rel="prev" href={prevUrl.toString()}></link>}
+        {currentPage < pages && <link rel="next" href={nextUrl.toString()}></link>}
+    </>
+}
+

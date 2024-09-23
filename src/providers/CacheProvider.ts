@@ -9,16 +9,16 @@ interface CacheService {
 }
 
 export class CacheProvider {
-    static set(key: any, value: any, TTL: null | number | undefined = null) {
-        return CacheHelper_set(key, value, TTL);
+    static async set(key: any, value: any, TTL: null | number | undefined = null) {
+        return await CacheHelper_set(key, value, TTL);
     }
 
-    static get(key: any) {
-        return CacheHelper_get(key);
+    static async get(key: any) {
+        return await CacheHelper_get(key);
     }
 
-    static runCallbackIfTimeStampHasExpired(key: any, callback: Function) {
-        return CacheHelper_runCallbackIfTimeStampHasExpired(key, callback);
+    static async runCallbackIfTimeStampHasExpired(key: any, callback: Function) {
+        return await CacheHelper_runCallbackIfTimeStampHasExpired(key, callback);
     }
 
     static getTTL(key: any) {

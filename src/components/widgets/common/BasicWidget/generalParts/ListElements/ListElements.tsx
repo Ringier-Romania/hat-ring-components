@@ -1,0 +1,47 @@
+import React from 'react';
+import {AppContext} from "../../../../../../types/types";
+import {BasicWidgetConfig, BasicWidgetResponse} from "../../types";
+import {RingLink} from "../../../../../common/RingLink/RingLink";
+import ListElementContent from "./ListElementContent";
+import _ from "lodash";
+
+export default function ListElements(
+    params) {
+
+
+
+    try{
+        const {context, widgetConfig, response} = params;
+        const headerTag = (widgetConfig.headerSeoTag && widgetConfig.headerSeoTag !== 'none' ? widgetConfig.headerSeoTag : 'span') as keyof JSX.IntrinsicElements;
+        let headerTagLevel = 6;
+
+        const itemsHeaderArr = headerTag.split('h');
+        if (itemsHeaderArr.length === 2) {
+            headerTagLevel = _.clamp(Number(itemsHeaderArr[1]), 2, 6);
+        }
+
+        const colClass = Math.floor(12 / parseInt(widgetConfig.columns || '0'));
+
+        return (
+            <div className={['ListElements'].join(' ')}>
+                {widgetConfig.listElements && widgetConfig.listElements.map((element, itemIndex) => {
+
+                    return (
+                        <div className={['Item', 'col' + colClass].join(' ')}>
+                            <ListElementContent context={context} widgetConfig={widgetConfig} data={element}
+                                                headerTagLevel={headerTagLevel} childLevel={1} itemIndex={itemIndex}
+                                                key={itemIndex}/>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+
+    }catch(e){
+        console.log('ListElements', e);
+
+    }
+
+
+
+}
