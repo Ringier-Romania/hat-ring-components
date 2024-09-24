@@ -12,12 +12,12 @@ export class WebsiteApiProvider {
 
         const cacheKey = {query: query.loc?.source.body, variables};
         const cacheKeyString = JSON.stringify(cacheKey);
-        let cachedResponse = CacheHelper_get(cacheKey);
+        let cachedResponse = await CacheHelper_get(cacheKey);
         try {
             if (cachedResponse) {
                 //console.log('cachedResponse');
                 MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
-                CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
+                await CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
                     //console.log('Cache expired, calling api');
                     if (!global.HATCacheInCallInProgress) {
                         global.HATCacheInCallInProgress = {};
@@ -48,7 +48,10 @@ export class WebsiteApiProvider {
             }
             return response;
         } catch (e) {
-            delete global.HATCacheInCallInProgress[cacheKeyString];
+            if(global.HATCacheInCallInProgress){
+                delete global.HATCacheInCallInProgress[cacheKeyString];
+            }
+
             MonitoringProvider.counter('error.WebsitesApiProvider.call.catch');
             console.error(query.loc?.source.body, variables, e);
             return null;
@@ -59,6 +62,7 @@ export class WebsiteApiProvider {
 
     static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache'): Promise<any> {
         //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
+       // console.log('call');
         const accessKey = process.env.WEBSITE_API_PUBLIC!;
         const secretKey = process.env.WEBSITE_API_SECRET!;
         const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;

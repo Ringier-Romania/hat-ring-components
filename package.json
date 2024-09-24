@@ -24,7 +24,13 @@
 		"schema-dts": "^1.1.2",
 		"xml-js": "^1.6.11",
 		"astro": "^4.15.2",
-		"node-cache": "^5.1.2"
+		"node-cache": "^5.1.2",
+		"redis": "4.7.0",
+		"@aws-sdk/signature-v4": "3.374.0",
+		"@aws-sdk/credential-providers": "3.645.0",
+		"@aws-sdk/hash-node": "3.374.0",
+		"@aws-sdk/protocol-http": "3.374.0",
+		"@aws-sdk/util-format-url": "3.609.0"
 	},
 	"devDependencies": {
 		"@types/node": "^12.12.21",

@@ -1,11 +1,17 @@
 import {UtilsHelper_convertToInt} from "./UtilsHelper";
 
-import NodeCache from "node-cache";
+import {RedisCacheAdapter} from "../adapters/cache/RedisCacheAdapter";
+import {CacheAdapterInterface} from "../adapters/cache/types";
+import {NodeCacheAdapter} from "../adapters/cache/NodeCacheAdapter";
 
 const stdTTL = process.env.CACHE_TTL ? UtilsHelper_convertToInt(process.env.CACHE_TTL) : 60;
-const myCache = new NodeCache({stdTTL: stdTTL, checkperiod: 0, deleteOnExpire: false, useClones: false});
 
-export function CacheHelper_set(key: any, value: any, TTL: null | number | undefined = null) {
+let cacheAdapter: CacheAdapterInterface = new NodeCacheAdapter();
+if (process.env.USE_REDIS == '1') {
+    cacheAdapter = new RedisCacheAdapter();
+}
+
+export async function CacheHelper_set(key: any, value: any, TTL: null | number | undefined = null) {
     if (process.env.CACHE_TTL === '0' && !TTL) {
         return;
     }
@@ -16,63 +22,104 @@ export function CacheHelper_set(key: any, value: any, TTL: null | number | undef
 
     const ttl = TTL || stdTTL;
     key = JSON.stringify(key);
-    myCache.set(key, value, ttl);
+    await cacheAdapter.set(key, value, ttl);
 }
 
-export function CacheHelper_get(key: any, removeOnExpire = false) {
+export async function CacheHelper_get(key: any, removeOnExpire = false) {
     key = JSON.stringify(key);
-    const value = myCache.get(key);
+    const value = await cacheAdapter.get(key);
     if (removeOnExpire) {
-        const ttl = myCache.getTtl(key);
+        const ttl = await cacheAdapter.getTtl(key);
+        if (!ttl) {
+            return value;
+        }
+        // @ts-ignore
         const expired = ttl ? ttl - new Date().getTime() < 0 : true;
         if (expired) {
-            myCache.del(key);
+            await cacheAdapter.del(key);
         }
     }
     handleCleanCache();
     return value;
 }
 
-export function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback: Function) {
+export async function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback: Function) {
     key = JSON.stringify(key);
-    const ttl = myCache.getTtl(key);
+    const ttl = await cacheAdapter.getTtl(key);
+    if (!ttl) {
+        callback();
+        return;
+    }
     const expired = ttl ? ttl - new Date().getTime() < 0 : true;
     if (expired) {
         callback();
     }
 }
 
-export function CacheHelper_flush() {
-    myCache.flushAll();
+export async function CacheHelper_flush() {
+    return await cacheAdapter.flushAll();
 }
 
-export function CacheHelper_clearByPartialKey(partialKey: any, searchInValue = false) {
-    const keys = myCache.keys();
+export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false) {
+    const keys = await cacheAdapter.keys();
+    let values: any = {};
+
+    if (searchInValue) {
+        values = await cacheAdapter.mget(keys);
+    }
+
     const deleteCount = {
         keys: 0,
         responses: 0,
     }
+
     keys.forEach((key) => {
-        if (key.includes(partialKey)) {
-            //console.log('deleting key', key);
-            myCache.del(key);
-            deleteCount.keys++;
+        let deleted = false;
+        if (partialKey.every((partKey) => key.includes(partKey))) {
+            if (notInPartialKey.length > 0) {
+                if (!notInPartialKey.every((partKey) => key.includes(partKey))) {
+                    cacheAdapter.del(key);
+                    deleteCount.keys++;
+                    deleted = true;
+                }
+            } else {
+                cacheAdapter.del(key);
+                deleteCount.keys++;
+                deleted = true;
+            }
+        }
+
+        if (searchInValue && !deleted) {
+            const value = JSON.stringify(values[key]);
+            if (partialKey.every((partKey) => value.includes(partKey))) {
+                if (notInPartialKey.length > 0) {
+                    if (!notInPartialKey.every((partKey) => value.includes(partKey))) {
+                        cacheAdapter.del(key);
+                        deleteCount.responses++;
+                    }
+                } else {
+                    cacheAdapter.del(key);
+                    deleteCount.responses++;
+                }
+            }
         }
     });
-
-    if (searchInValue) {
-        const values = myCache.mget(keys);
-        keys.forEach((key) => {
-            const value = JSON.stringify(values[key]);
-            if (value?.includes(partialKey)) {
-               // console.log('deleting key for response', key);
-                myCache.del(key);
-                deleteCount.responses++;
-            }
-        })
-    }
     handleCleanCache()
     return deleteCount;
+}
+
+export function CacheHelper_del(keys: any) {
+    return cacheAdapter.del(keys);
+}
+
+export function CacheHelper_keys() {
+    return cacheAdapter.keys();
+}
+
+export function CacheHelper_createParentChildRelation(parentId, childrenIds) {
+    childrenIds.forEach((childrenId) => {
+        CacheHelper_set(`parent_${parentId}_child_${childrenId}`, '');
+    })
 }
 
 function handleCleanCache() {

@@ -8,6 +8,7 @@ export async function StoryContent_getData(context: AppContext, queryStoryFragme
     const query = gql`
         query($storyId: UUID){
             story(id:$storyId){
+                StoryContent: id,
                 ${StoryHelper_getGqlContentFragment()}
                 ${queryStoryFragment}
 

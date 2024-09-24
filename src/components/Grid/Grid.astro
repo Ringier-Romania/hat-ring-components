@@ -51,7 +51,7 @@ const query = gql`
     `;
 
 let sectionsConfig: any = false;
-const cached = CacheHelper_get(cacheKey);
+const cached = await CacheHelper_get(cacheKey);
 if (cached) {
     sectionsConfig = cached;
 } else {
