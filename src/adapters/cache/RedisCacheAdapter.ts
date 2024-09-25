@@ -13,20 +13,17 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
 
 
     async set(key: any, value: any, TTL: number | null | undefined): Promise<void> {
-        if (TTL) {
-            this.redisProvider.set({key, value, ttl: TTL});
-            return;
-        } else {
-            this.redisProvider.set({key, value});
-        }
+        await this.redisProvider.set({key, value, ttl: TTL});
     }
 
     async get(key: any): Promise<any> {
-        this.redisProvider.get({key});
+        const data = await this.redisProvider.get({key});
+        return data;
+
     }
 
     async flushAll(): Promise<void> {
-        this.redisProvider.flushAll();
+        const res = await this.redisProvider.flushAll();
     }
 
     async keys(): Promise<string[]> {
@@ -34,7 +31,7 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
     }
 
     async mget(keys: string[]): Promise<{ [p: string]: unknown }> {
-        return []
+        return await this.redisProvider.mget(keys);
     }
 
     async del(key: any): Promise<number> {
@@ -42,7 +39,8 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
     }
 
     async getTtl(key: any): Promise<number | undefined> {
-        return await this.redisProvider.ttl(key);
+        const data = await this.redisProvider.getTtl(key);
+        return data;
     }
 
 

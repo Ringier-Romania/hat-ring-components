@@ -57,15 +57,15 @@ export async function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, cal
 }
 
 export async function CacheHelper_flush() {
-    await cacheAdapter.flushAll();
+    return await cacheAdapter.flushAll();
 }
 
 export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false) {
-    const keys = await myCache.keys();
-    let values: any = [];
+    const keys = await cacheAdapter.keys();
+    let values: any = {};
 
     if (searchInValue) {
-        values = myCache.mget(keys);
+        values = await cacheAdapter.mget(keys);
     }
 
     const deleteCount = {
@@ -78,12 +78,12 @@ export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notI
         if (partialKey.every((partKey) => key.includes(partKey))) {
             if (notInPartialKey.length > 0) {
                 if (!notInPartialKey.every((partKey) => key.includes(partKey))) {
-                    myCache.del(key);
+                    cacheAdapter.del(key);
                     deleteCount.keys++;
                     deleted = true;
                 }
             } else {
-                myCache.del(key);
+                cacheAdapter.del(key);
                 deleteCount.keys++;
                 deleted = true;
             }
@@ -94,11 +94,11 @@ export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notI
             if (partialKey.every((partKey) => value.includes(partKey))) {
                 if (notInPartialKey.length > 0) {
                     if (!notInPartialKey.every((partKey) => value.includes(partKey))) {
-                        myCache.del(key);
+                        cacheAdapter.del(key);
                         deleteCount.responses++;
                     }
                 } else {
-                    myCache.del(key);
+                    cacheAdapter.del(key);
                     deleteCount.responses++;
                 }
             }
@@ -109,11 +109,11 @@ export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notI
 }
 
 export function CacheHelper_del(keys: any) {
-    return myCache.del(keys);
+    return cacheAdapter.del(keys);
 }
 
 export function CacheHelper_keys() {
-    return myCache.keys();
+    return cacheAdapter.keys();
 }
 
 export function CacheHelper_createParentChildRelation(parentId, childrenIds) {

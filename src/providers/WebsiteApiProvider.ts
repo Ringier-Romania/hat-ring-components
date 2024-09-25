@@ -48,7 +48,10 @@ export class WebsiteApiProvider {
             }
             return response;
         } catch (e) {
-            delete global.HATCacheInCallInProgress[cacheKeyString];
+            if(global.HATCacheInCallInProgress){
+                delete global.HATCacheInCallInProgress[cacheKeyString];
+            }
+
             MonitoringProvider.counter('error.WebsitesApiProvider.call.catch');
             console.error(query.loc?.source.body, variables, e);
             return null;
@@ -59,6 +62,7 @@ export class WebsiteApiProvider {
 
     static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache'): Promise<any> {
         //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
+       // console.log('call');
         const accessKey = process.env.WEBSITE_API_PUBLIC!;
         const secretKey = process.env.WEBSITE_API_SECRET!;
         const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;

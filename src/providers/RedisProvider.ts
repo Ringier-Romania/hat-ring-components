@@ -4,7 +4,13 @@ import {fromNodeProviderChain} from '@aws-sdk/credential-providers';
 import {Hash} from '@aws-sdk/hash-node';
 import {HttpRequest} from '@aws-sdk/protocol-http';
 import {formatUrl} from "@aws-sdk/util-format-url";
+import {MonitoringProvider} from "./MonitoringProvider";
 
+
+interface RedisCacheValue {
+    data: string;
+    ttl: number | undefined;
+}
 
 export class RedisProvider {
     client: RedisClientType;
@@ -20,6 +26,24 @@ export class RedisProvider {
         this.username = 'iam-user';
         this.region = 'eu-central-1';
         this.service = 'elasticache';
+
+        setInterval(async () => {
+            if (!this.client) {
+                return;
+            }
+            const token = await this.getToken();
+            if (!token) {
+                MonitoringProvider.counter('error.redis.token.refresh');
+                return;
+            }
+
+            await this.client.auth({
+                username: 'iam-user',
+                password: token,
+            });
+
+
+        }, 10 * 1000);
     }
 
     async initialize() {
@@ -72,19 +96,19 @@ export class RedisProvider {
                   value,
               }: {
         key: string;
-        ttl?: number;
+        ttl?: number | null | undefined;
         value: string;
     }): Promise<void> {
         if (!this.client) {
             await this.initialize();
         }
+
+        var expirationTimestamp: null | number = null;
         if (ttl) {
-            await this.client.set(key, value, {
-                EX: ttl,
-            });
-        } else {
-            await this.client.set(key, value);
+            expirationTimestamp = Date.now() + ttl * 1000;
         }
+        const setValue = JSON.stringify({data: value, ttl: expirationTimestamp} as RedisCacheValue);
+        await this.client.set(key, setValue);
     }
 
     async get({key}: {
@@ -95,35 +119,83 @@ export class RedisProvider {
         }
 
         const data = await this.client.get(key);
-        return data;
+        if(!data){
+            return null;
+        }
+        const parsedData = this._parseResponse(data);
+        return parsedData.data;
     }
 
     async del(key: string): Promise<number> {
         if (!this.client) {
             await this.initialize();
         }
-        return this.client.del(key);
+        return await this.client.del(key);
     }
 
-    async flushAll(): Promise<void> {
+    async flushAll(): Promise<any> {
         if (!this.client) {
             await this.initialize();
         }
-        return this.client.flushall();
+        return this.client.flushAll();
     }
 
     async keys(): Promise<string[]> {
         if (!this.client) {
             await this.initialize();
         }
-        return this.client.keys('*');
+        const keys = await this.client.keys('*');
+        return keys;
     }
 
-    async ttl(key: string): Promise<number | undefined> {
+    async getTtl(key: string): Promise<number | undefined> {
         if (!this.client) {
             await this.initialize();
         }
-        return this.client.ttl(key);
+        const data = await this.client.get(key);
+        const parsedData = this._parseResponse(data);
+
+        return parsedData.ttl;
+
+    }
+
+    _parseResponse(data: any): RedisCacheValue {
+        var parsedData = data;
+        try {
+            if (typeof data === 'string') {
+                parsedData = JSON.parse(data);
+            }
+            return parsedData.ttl && parsedData.data ? parsedData : {
+                data: parsedData,
+                ttl: undefined,
+            };
+        } catch (e) {
+            console.error('Redis Error parsing data', data);
+            return {
+                data: data,
+                ttl: undefined,
+            }
+        }
+    }
+
+
+    async stats() {
+        if (!this.client) {
+            await this.initialize();
+        }
+        return this.client.info();
+    }
+
+    async mget(keys: string[]): Promise<{ [p: string]: unknown }> {
+        if (!this.client) {
+            await this.initialize();
+        }
+        const values = await this.client.mGet(keys);
+        const result = {};
+        keys.forEach((key, index) => {
+            result[key] = values[index];
+        });
+        return result;
     }
 
 
