@@ -17,7 +17,7 @@ export class WebsiteApiProvider {
             if (cachedResponse) {
                 //console.log('cachedResponse');
                 MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
-                await CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
+                CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
                     //console.log('Cache expired, calling api');
                     if (!global.HATCacheInCallInProgress) {
                         global.HATCacheInCallInProgress = {};
