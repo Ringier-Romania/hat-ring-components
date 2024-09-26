@@ -23,10 +23,10 @@ export class WebsiteApiProvider {
                         global.HATCacheInCallInProgress = {};
                         //console.log('global.HATCacheInCallInProgress initialized');
                     }
-                    // if (global.HATCacheInCallInProgress[cacheKeyString]) {
-                    //     // console.log('during calling api') ;
-                    //     return false;
-                    // }
+                    if (global.HATCacheInCallInProgress[cacheKeyString]) {
+                        // console.log('during calling api') ;
+                        return false;
+                    }
                     global.HATCacheInCallInProgress[cacheKeyString] = 1;
                     const response = await this._call(query, variables);
                     CacheHelper_set(cacheKey, response, cacheTtl);
