@@ -1,6 +1,10 @@
 {
 	"name": "hat-ring-components",
+<<<<<<< HEAD
 	"version": "2.10.2",
+=======
+	"version": "2.10.3",
+>>>>>>> 1ff111dc8f4168d34ccead10943822bdd52b0866
 	"description": "Head App Template - RING components",
 	"license": "MIT",
 	"repository": {},
