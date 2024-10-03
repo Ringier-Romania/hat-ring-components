@@ -3,6 +3,7 @@ import {AbstractWidgetConfig, AppContext, ComponentParams, WidgetParams} from ".
 export interface StoryDateWidgetConfig extends AbstractWidgetConfig {
     dateFormat: string,
     dateType: 'modificationTime' | 'creationTime',
+    cacheTTL?: number,
 }
 
 export interface StoryDateParams extends WidgetParams {
