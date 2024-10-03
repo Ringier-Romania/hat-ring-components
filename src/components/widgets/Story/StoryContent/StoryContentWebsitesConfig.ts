@@ -54,6 +54,11 @@ export let StoryContentWebsitesConfig
                     "name": "Ignored Frame Block Names",
                     "description": "Comma-separated block names to exclude from displaying, or leave empty to include all.",
                     "type": "textfield"
+                },
+                "cacheTTL": {
+                    "name": "Cache TTL",
+                    "description": "Cache TTL in seconds",
+                    "type": "textfield"
                 }
             }
         }

@@ -13,7 +13,8 @@ export interface StoryTitleResponse {
 }
 
 export interface StoryTitleWidgetConfig extends AbstractWidgetConfig {
-    response?: StoryTitleResponse
+    response?: StoryTitleResponse,
+    cacheTTL?: number,
 }
 
 export interface StoryTitleParams extends WidgetParams {

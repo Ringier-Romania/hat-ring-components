@@ -26,6 +26,7 @@ export interface StoryRelatedContentWidgetConfig extends AbstractWidgetConfig {
     moreUrl?: string,
     autocomplete?: boolean,
     autocompleteFrom?: StoryRelatedContentAutocompleteFromEnum,
+    cacheTTL?: number,
 }
 
 export interface StoryRelatedContentParams extends WidgetParams {

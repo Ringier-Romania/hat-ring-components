@@ -13,5 +13,6 @@ export interface StoryTitleAddonsResponse {
 
 export interface StoryTitleAddonsWidgetConfig extends AbstractWidgetConfig {
     response?: StoryTitleAddonsResponse,
-    titleAddonsCodeNames?: string
+    titleAddonsCodeNames?: string,
+    cacheTTL?: number,
 }

@@ -43,6 +43,11 @@ export let StoryTaxonomyListWebsitesConfig
                     "type": "textfield",
                     "description": "comma separated list"
                 },
+                "cacheTTL": {
+                    "name": "Cache TTL",
+                    "description": "Cache TTL in seconds",
+                    "type": "textfield"
+                },
             }
         }
     }

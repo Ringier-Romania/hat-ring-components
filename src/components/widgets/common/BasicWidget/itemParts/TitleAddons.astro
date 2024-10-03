@@ -53,8 +53,8 @@ export const getFragment = () => {
         <Fragment set:html={toRender} />
     ) : (
         <div class="TitleAddons">
-            {titleAddonsCodeNamesArr.map((codeName: string) => {
-                const titleAddonsToShow = _.get(_.find(data.originalContent.titles, ["role.code", codeName]), "text", "");                
+            {titleAddonsCodeNamesArr?.map((codeName: string) => {
+                const titleAddonsToShow = _.get(_.find(data?.originalContent?.titles, ["role.code", codeName]), "text", "");                
                 return !!titleAddonsToShow ? (
                     <span class={`title-addons code-${codeName}`}>{titleAddonsToShow}</span>
                 ) : null;

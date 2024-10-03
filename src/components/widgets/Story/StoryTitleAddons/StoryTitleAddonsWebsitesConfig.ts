@@ -23,6 +23,11 @@ export let StoryTitleAddonsWebsitesConfig
                     "description": "(comma separated code names)",
                     "type": "textfield"
                 },
+                "cacheTTL": {
+                    "name": "Cache TTL",
+                    "description": "BasicWidget cache TTL in seconds",
+                    "type": "textfield"
+                },
             }
         }
     }

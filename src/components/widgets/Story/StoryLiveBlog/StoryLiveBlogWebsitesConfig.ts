@@ -50,7 +50,11 @@ export let StoryLiveBlogWebsitesConfig
                     "type": "textfield",
                     "required": true
                 },
-
+                "cacheTTL": {
+                    "name": "Cache TTL",
+                    "description": "Cache TTL in seconds",
+                    "type": "textfield"
+                },
             }
         }
     }

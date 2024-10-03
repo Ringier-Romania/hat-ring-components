@@ -30,6 +30,11 @@ export let StoryMainImageWebsitesConfig
                     "type": "textfield",
                     "description": "Mobile image resolution (empty = original), example: 450x253"
                 },
+                "cacheTTL": {
+                    "name": "Cache TTL",
+                    "description": "Cache TTL in seconds",
+                    "type": "textfield"
+                }
             }
         }
     }

@@ -15,6 +15,7 @@ export interface  StoryMainImageWidgetConfig extends AbstractWidgetConfig {
     response?: StoryMainImageResponse,
     standardImageSize?: string,
     imageSizeMobile?: string,
+    cacheTTL?: number,
 }
 
 export interface StoryMainImageParams extends WidgetParams {

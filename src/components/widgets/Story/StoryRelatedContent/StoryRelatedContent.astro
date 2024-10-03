@@ -9,7 +9,7 @@ import {GenericListWidgetConfig} from "../../Lists/GenericList/types";
 import styles from "../../../../../styles/widgets/Lists/GenericList.module.scss";
 import _ from "lodash";
 
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | string | JSX.Element = false;
 
 
 const data = await StoryRelatedContent_getData(context, widgetConfig);
