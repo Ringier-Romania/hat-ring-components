@@ -25,7 +25,7 @@ export async function StoryMainImage_getData({widgetConfig, context}: StoryMainI
 
     let response = widgetConfig?.response;
     if (!response) {
-        response = await WebsiteApiProvider.call(query, variables) as StoryMainImageResponse;
+        response = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL) as StoryMainImageResponse;
     }
 
     return response;

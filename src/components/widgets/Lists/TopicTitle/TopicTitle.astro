@@ -29,7 +29,7 @@ const variables = {
 
 let response = widgetConfig?.response;
 if (!response) {
-    response = (await WebsiteApiProvider.call(query, variables)) as TopicTitleResponse;
+    response = (await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL)) as TopicTitleResponse;
 }
 const title =
     _.get(response, "data.topic.name", null) ??
