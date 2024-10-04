@@ -18,6 +18,11 @@ export let BreadCrumbpsWebsitesConfig
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
+                "disable1stLevel": {
+                    "name": "Disable 1st level",
+                    "description": "breadcrumbs",
+                    "type": "checkbox"
+                },
             }
         }
     }
