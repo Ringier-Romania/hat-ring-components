@@ -29,36 +29,24 @@ const variables = {
     variant: variant,
 };
 
-const cacheKey = {variables, boxes, containers: config.containers};
 
-
-let variablesQuery = '';
 let configQuery = '';
 config.containers.forEach(section => {
     configQuery += section + ':config(codeName: "' + section + '"){ data } ';
 })
 
-const antycache = 'antycacheStatusCode';
 const query = gql`
         query($nodeID: ID!, $variant:ID!){
             node(id: $nodeID){
                 config(variantId: $variant){
-                    ${antycache}:__typename
                     ${configQuery}
                 }
             }
         }
     `;
 
-let sectionsConfig: any = false;
-const cached = await CacheHelper_get(cacheKey);
-if (cached) {
-    sectionsConfig = cached;
-} else {
-    const response = await WebsiteApiProvider.call(query, variables);
-    sectionsConfig = _.get(response, 'data.node.config');
-    CacheHelper_set(cacheKey, sectionsConfig, 5);
-}
+const response = await WebsiteApiProvider.call(query, variables);
+const sectionsConfig = _.get(response, 'data.node.config');
 ---
 
 {
