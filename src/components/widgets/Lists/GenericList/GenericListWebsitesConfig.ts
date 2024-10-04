@@ -200,7 +200,7 @@ export let GenericListWebsitesConfig
                 "cacheTTL": {
                     "name": "Cache TTL",
                     "description": "GenericList cache TTL in seconds",
-                    "type": "textfield"
+                    "type": "numberfield"
                 },
             }
         }
