@@ -18,6 +18,11 @@ export let TopicTitleWebsitesConfig
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
+                "cacheTTL": {
+                    "name": "Cache TTL",
+                    "description": "Cache TTL in seconds",
+                    "type": "numberfield"
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ export interface StoryTaxonomyListWidgetConfig extends AbstractWidgetConfig {
     listPrefix: string,
     links: boolean,
     excludedUuids: string,
+    cacheTTL?: number,
 }
 
 export interface StoryTaxonomyListParams extends WidgetParams {

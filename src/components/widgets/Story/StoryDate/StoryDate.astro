@@ -20,7 +20,7 @@ const variables = {
     storyId: context.id,
 };
 const dateFormat = widgetConfig.dateFormat;
-const response = await WebsiteApiProvider.call(query, variables) as StoryDateResponse;
+const response = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL) as StoryDateResponse;
 const date = widgetConfig.dateType == 'modificationTime' ? response.data.story.date.modificationTime || response.data.story.date.creationTime : response.data.story.date.creationTime;
 const displayDate = await DateHelper_convertDate(context, date, dateFormat);
 

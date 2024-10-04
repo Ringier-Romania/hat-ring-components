@@ -5,7 +5,8 @@ export interface TopicTitleResponse {
 }
 
 export interface TopicTitleWidgetConfig extends AbstractWidgetConfig {
-    response?: TopicTitleResponse
+    response?: TopicTitleResponse,
+    cacheTTL?: number,
 }
 
 export interface TopicTitleParams extends WidgetParams {

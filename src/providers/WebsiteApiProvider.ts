@@ -9,11 +9,10 @@ import {MonitoringProvider} from "./MonitoringProvider";
 export class WebsiteApiProvider {
 
     static async call(query: DocumentNode, variables, cacheTtl: null | number = null) {
-
         const cacheKey = {query: query.loc?.source.body, variables};
         const cacheKeyString = JSON.stringify(cacheKey);
-        let cachedResponse = await CacheHelper_get(cacheKey);
-        try {
+        let cachedResponse = await CacheHelper_get(cacheKey);        
+        try {            
             if (cachedResponse) {
                 //console.log('cachedResponse');
                 MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
@@ -56,7 +55,7 @@ export class WebsiteApiProvider {
             console.error(query.loc?.source.body, variables, e);
             return null;
         }
-
+        
     }
 
 

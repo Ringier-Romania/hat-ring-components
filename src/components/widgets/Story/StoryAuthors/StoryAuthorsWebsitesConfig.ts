@@ -50,6 +50,11 @@ export let StoryAuthorsWebsitesConfig
                     ],
                     "required": false
                 },
+                "cacheTTL": {
+                    "name": "Cache TTL",
+                    "description": "Cache TTL in seconds",
+                    "type": "numberfield"
+                }
             }
         }
     }

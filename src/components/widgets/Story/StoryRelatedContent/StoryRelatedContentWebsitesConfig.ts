@@ -69,6 +69,11 @@ export let StoryRelatedContentWebsitesConfig
                     "items": [['firstStoryTag', 'First story\'s tag ']],
                     "required": true
                 },
+                "cacheTTL": {
+                    "name": "Cache TTL",
+                    "description": "Cache TTL in seconds",
+                    "type": "numberfield"
+                },
             }
         }
     }

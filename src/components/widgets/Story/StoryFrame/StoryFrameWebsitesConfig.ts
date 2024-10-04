@@ -35,6 +35,11 @@ export let StoryFrameWebsitesConfig = {
                     type: "textfield",
                     description: "Frame Headding",
                 },
+                cacheTTL: {
+                    name: "Cache TTL",
+                    description: "Cache TTL in seconds",
+                    type: "numberfield"
+                }
             },
         },
     },

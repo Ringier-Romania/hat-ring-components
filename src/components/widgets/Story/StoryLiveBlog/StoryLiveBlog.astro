@@ -15,10 +15,11 @@ interface StoryLiveBlogParamsConfig extends AbstractWidgetConfig {
     extensionAppCodeName?: string,
     liveBlogPlatformUrl?: string,
     liveBlogClientId: string,
-    liveBlogLanguage: string
+    liveBlogLanguage: string,
+    cacheTTL: number
 }
 
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | null | JSX.Element = false;
 
 const query = gql`
         query($storyId: UUID,$extType: String){
@@ -39,7 +40,7 @@ let liveblogUuid: boolean | string = false;
 if (widgetConfig.liveBlogId) {
     liveblogUuid = widgetConfig.liveBlogId;
 } else {
-    const response = await WebsiteApiProvider.call(query, variables);
+    const response = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL);
     liveblogUuid = _.get(response, 'data.story.extensions[0].data.id', false);
 }
 

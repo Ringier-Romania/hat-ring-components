@@ -32,7 +32,7 @@ let response = widgetConfig?.response
 if (!titleAddonsCodeNamesArr || titleAddonsCodeNamesArr.length === 0) {
     toRender = WidgetHelper_renderEmptyComponent("StoryTitleAddons")
 } else {
-    response = (await WebsiteApiProvider.call(query, variables)) as StoryTitleAddonsResponse
+    response = (await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL)) as StoryTitleAddonsResponse
 }
 ---
 
