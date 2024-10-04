@@ -26,7 +26,7 @@ export let StoryTitleAddonsWebsitesConfig
                 "cacheTTL": {
                     "name": "Cache TTL",
                     "description": "BasicWidget cache TTL in seconds",
-                    "type": "textfield"
+                    "type": "numberfield"
                 },
             }
         }
