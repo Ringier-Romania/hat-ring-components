@@ -36,7 +36,7 @@ const variables = {
 
 let response = widgetConfig?.response;
 if (!response) {
-    response = await WebsiteApiProvider.call(query, variables) as AuthorResponse;
+    response = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL) as AuthorResponse;
 }
 
 let cssModules = styles.StoryAuthors;
