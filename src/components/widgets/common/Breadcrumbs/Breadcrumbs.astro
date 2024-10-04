@@ -12,7 +12,7 @@ import {
 } from "../../../../helpers/WidgetHelper";
 const { context, widgetConfig } = Astro.props as {
   context: AppContext;
-  widgetConfig: AbstractWidgetConfig & { disable1stLevel: boolean }
+  widgetConfig: AbstractWidgetConfig & { disable1stLevel: boolean };
 };
 let toRender: boolean | JSX.Element | string = false;
 const gqlResponse = _.get(context, "hatControllerParams.gqlResponse");
