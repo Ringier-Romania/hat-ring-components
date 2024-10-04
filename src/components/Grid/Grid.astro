@@ -29,10 +29,7 @@ const variables = {
     variant: variant,
 };
 
-const cacheKey = {variables, boxes, containers: config.containers};
 
-
-let variablesQuery = '';
 let configQuery = '';
 config.containers.forEach(section => {
     configQuery += section + ':config(codeName: "' + section + '"){ data } ';
