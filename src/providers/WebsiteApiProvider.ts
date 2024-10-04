@@ -9,7 +9,6 @@ import {MonitoringProvider} from "./MonitoringProvider";
 export class WebsiteApiProvider {
 
     static async call(query: DocumentNode, variables, cacheTtl: null | number = null) {
-        cacheTtl = Number(cacheTtl);        
         const cacheKey = {query: query.loc?.source.body, variables};
         const cacheKeyString = JSON.stringify(cacheKey);
         let cachedResponse = await CacheHelper_get(cacheKey);        

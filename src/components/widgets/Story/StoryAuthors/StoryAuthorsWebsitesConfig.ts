@@ -53,7 +53,7 @@ export let StoryAuthorsWebsitesConfig
                 "cacheTTL": {
                     "name": "Cache TTL",
                     "description": "Cache TTL in seconds",
-                    "type": "textfield"
+                    "type": "numberfield"
                 }
             }
         }

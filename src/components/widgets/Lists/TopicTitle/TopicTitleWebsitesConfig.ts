@@ -21,7 +21,7 @@ export let TopicTitleWebsitesConfig
                 "cacheTTL": {
                     "name": "Cache TTL",
                     "description": "Cache TTL in seconds",
-                    "type": "textfield"
+                    "type": "numberfield"
                 }
             }
         }
