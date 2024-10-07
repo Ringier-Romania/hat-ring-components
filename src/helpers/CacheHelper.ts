@@ -117,8 +117,10 @@ export function CacheHelper_keys() {
 }
 
 export function CacheHelper_createParentChildRelation(parentId, childrenIds) {
-    childrenIds.forEach((childrenId) => {
-        CacheHelper_set(`parent_${parentId}_child_${childrenId}`, '');
+    childrenIds.forEach((childrenId) => {  
+        if (childrenId) {
+            CacheHelper_set(`parent_${parentId}_child_${childrenId}`, '');
+        }    
     })
 }
 
