@@ -41,7 +41,8 @@ if (isResizeable && transform !== TransformType.None) {
 }
 
 ---
+{src &&
 <picture>
     <Image {...props} loading={loading} fetchpriority={fetchpriority} src={src} class={['RingImage', styles.RingImage, props.class].join(' ')}/>
-</picture>
+</picture>}
 {loading === 'eager' && <RingImagePreload src={src}/>}
