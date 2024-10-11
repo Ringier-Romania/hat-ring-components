@@ -30,7 +30,7 @@ const createBreadcrumb = (breadcrumbs: Breadcrumb[]): BreadcrumbEntry[] => {
     breadcrumbs.shift();
   }
   const breadcrumbEntries = breadcrumbs.map((breadcrumb, index) => ({
-    href: index === 0 ? "/" : `${breadcrumb.url}`,
+    href: breadcrumb.url,
     text: breadcrumb?.name,
   }));
 
