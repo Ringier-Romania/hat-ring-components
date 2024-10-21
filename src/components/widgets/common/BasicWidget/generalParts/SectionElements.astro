@@ -16,7 +16,7 @@ import _ from "lodash";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import {UtilsHelper_getValueIfExists} from "../../../../../helpers/UtilsHelper";
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | JSX.Element | string= false;
 
 const elementsToRender = _.get(response, 'data.section.items.edges', _.get(response, 'data.sectionGroup.sections[0].items.edges', [])) as SectionItemEdge[];
 if (_.get(elementsToRender, 'length', 0) === 0) {
@@ -30,17 +30,27 @@ const colNumber = Math.floor(12 / columnsCount);
 const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
 const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
 ---
-{toRender ? <Fragment set:html={toRender}/> :
-    <div class={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
-        {elementsToRender.map((edge, itemIndex) => {
-            if (widgetConfig.count && itemIndex >= widgetConfig.count) {
-                return null;
-            }
 
-            const isBig = itemIndex < bigElementsCount;
-            const colClass = isBig ? `col12` : `col${colNumber}`;
-            const bigElementClass = isBig ? `bigElement` : '';
-            return (
+{
+    toRender ? (
+        <Fragment set:html={toRender} />
+    ) : (
+        <div class={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
+            {elementsToRender.map((edge, itemIndex) => {
+                if (widgetConfig.count && itemIndex >= widgetConfig.count) {
+                    return null;
+                }
+                const AdditionalComponent = edge?.additionalComponent;
+                let config;
+                if (AdditionalComponent) {
+                    config = edge?.config;                    
+                    widgetConfig.count++;
+                }
+
+                const isBig = itemIndex < bigElementsCount;
+                const colClass = isBig ? `col12` : `col${colNumber}`;
+                const bigElementClass = isBig ? `bigElement` : '';
+                return !AdditionalComponent ? (
                     <div class={['Item', colClass, bigElementClass].join(' ')} key={itemIndex}>
                         <div class={'linkOverlay'}>
                             <RingLink href={edge.node?.externalUrl || edge.node?.url || '#'} title={edge.node?.title || ''}>
@@ -48,19 +58,28 @@ const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
                             </RingLink>
                         </div>
                         {widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
-                            const Component = allItemParts[_.upperFirst(showOption)];
+                                const Component = allItemParts[_.upperFirst(showOption)];
 
-                            if (!Component) {
-                                console.error(`No item part support ${showOption}`);
+                                if (!Component) {
+                                    console.error(`No item part support ${showOption}`);
                                 return <Fragment set:html={WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet")}/>
-                            }
+                                }
 
-                            return (
+                                return (
                                     <Component key={'aa' + itemIndex + index} itemIndex={itemIndex} context={context}
-                                               widgetConfig={widgetConfig}
+                                        widgetConfig={widgetConfig}
                                                data={edge.node}/>)
-                        })}
-                    </div>)
-        })}
-    </div>
-    }
+                            })}
+                    </div>
+                ) : (
+                    <div
+                        key={itemIndex}
+                        class={["AdditionalComponent", "Item", colClass, bigElementClass, config.widgetType].join(" ")}
+                    >
+                        <AdditionalComponent widgetConfig={config} context={context}/>
+                    </div>
+                );
+            })}
+        </div>
+    )
+}

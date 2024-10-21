@@ -316,6 +316,26 @@ export let BasicWidgetWebsitesConfig = {
                     "description": "BasicWidget cache TTL in seconds",
                     "type": "numberfield"
                 },
+                "additionalComponents": {
+                    "type": "treeobject",
+                    "name": "Additional Components",
+                    "description": "List of additional components",
+                    "required": false,
+                    "properties": [
+                        {
+                            "name": "widget",
+                            "type": "textfield"
+                        },
+                        {
+                            "name": "config",
+                            "type": "code"
+                        },
+                        {
+                            "name": "pattern",
+                            "type": "textfield"
+                        },
+                    ]
+                },
             }
         }
     }

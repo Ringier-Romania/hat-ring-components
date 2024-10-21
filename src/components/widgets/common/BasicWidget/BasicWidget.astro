@@ -1,7 +1,7 @@
 ---
-import {BasicWidget_getData} from "./BasicWidgetGetData";
-const {context, widgetConfig, extendableAttributes} = Astro.props;
-import {BasicWidgetAdditionalOptions, BasicWidgetResponse} from "./types";
+import { BasicWidget_getData } from "./BasicWidgetGetData";
+const { context, widgetConfig, extendableAttributes } = Astro.props;
+import { BasicWidgetAdditionalOptions, BasicWidgetResponse } from "./types";
 import * as GeneralParts from "./generalParts";
 import _ from "lodash";
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
@@ -43,6 +43,28 @@ if (!toRender) {
         widgetConfig.additionalOptions.includes(BasicWidgetAdditionalOptions.HideWhenNoSectionItems);
     if (hideWhenNoItems && edges.length === 0) {
         toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
+    }
+
+    const additionalComponents = widgetConfig.additionalComponents;
+
+    if (additionalComponents && additionalComponents.length > 0) {
+        additionalComponents.forEach((component, index) => {
+            let pattern = widgetConfig.additionalComponents[index].pattern;
+            const match = pattern?.match(/(\d*)n\+?(\d+)?/);
+            const multiplier = match && match[1] ? Number(match[1]) : 1;
+            const integerOffset = match && match[2] ? Number(match[2]) : 0;
+
+            const widgetName = _.upperFirst(component.widget.trim());
+            const config = JSON.parse(component.config);
+            const additionalComponent = context.customData.widgets[widgetName];
+            for (let i = 1; i <= edges.length - widgetConfig.count; i++) {
+                if (i >= integerOffset && (i - integerOffset) % multiplier === 0) {
+                    edges.splice(i - 1, 0, { additionalComponent, config });
+                    i++;
+                }
+            }
+            _.set(response, "data.section.items.edges", edges);
+        });
     }
 }
 
