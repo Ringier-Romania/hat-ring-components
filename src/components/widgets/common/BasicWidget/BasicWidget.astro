@@ -10,7 +10,6 @@ import {
     WidgetHelper_renderEmptyWidget,
     WidgetHelper_shouldHideWidget,
 } from "../../../../helpers/WidgetHelper";
-import { intersection } from "astro:schema";
 let toRender: boolean | JSX.Element | string = false;
 
 if (!widgetConfig) {
@@ -49,7 +48,6 @@ if (!toRender) {
     const additionalComponents = widgetConfig.additionalComponents;
 
     if (additionalComponents && additionalComponents.length > 0) {
-        
         additionalComponents.forEach((component, index) => {
             const pattern = widgetConfig.additionalComponents[index].pattern;
             const patternParts = pattern.replace(/ /g,'').split('n');
