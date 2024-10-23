@@ -10,6 +10,7 @@ import {
     WidgetHelper_renderEmptyWidget,
     WidgetHelper_shouldHideWidget,
 } from "../../../../helpers/WidgetHelper";
+import { intersection } from "astro:schema";
 let toRender: boolean | JSX.Element | string = false;
 
 if (!widgetConfig) {
@@ -48,12 +49,12 @@ if (!toRender) {
     const additionalComponents = widgetConfig.additionalComponents;
 
     if (additionalComponents && additionalComponents.length > 0) {
+        
         additionalComponents.forEach((component, index) => {
-            let pattern = widgetConfig.additionalComponents[index].pattern;
-            const match = pattern?.match(/(\d*)n\+?(\d+)?/);
-            const multiplier = match && match[1] ? Number(match[1]) : 1;
-            const integerOffset = match && match[2] ? Number(match[2]) : 0;
-
+            const pattern = widgetConfig.additionalComponents[index].pattern;
+            const patternParts = pattern.replace(/ /g,'').split('n');
+            const multiplier = patternParts && patternParts[0] ? Number(patternParts[0]) : 1;
+            const integerOffset = patternParts && patternParts[1] ? Number(patternParts[1]) : 0;
             const widgetName = _.upperFirst(component.widget.trim());
             const config = JSON.parse(component.config);
             const additionalComponent = context.customData.widgets[widgetName];

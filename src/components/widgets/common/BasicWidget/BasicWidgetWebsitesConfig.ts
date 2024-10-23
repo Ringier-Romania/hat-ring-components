@@ -328,11 +328,13 @@ export let BasicWidgetWebsitesConfig = {
                         },
                         {
                             "name": "config",
-                            "type": "code"
+                            "type": "code",
+                            "mode": "json"
                         },
                         {
                             "name": "pattern",
-                            "type": "textfield"
+                            "type": "textfield",
+                            "description": "exmaple paterns: 2n, 3n+1, 5n-2"
                         },
                     ]
                 },
