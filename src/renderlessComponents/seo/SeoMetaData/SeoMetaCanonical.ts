@@ -37,7 +37,7 @@ export async function SeoMetaCanonical(context: AppContext) {
 
         const canonicalResponse = await WebsiteApiProvider.call(canonicalQuery, {storyId: context.id,});
         const mainPublicationPointUrl = _.get(canonicalResponse, 'data.story.mainPublicationPoint.url', '');
-        const canonicalUrl = _.get(canonicalResponse, 'data.story.canonical', '');
+        const canonicalUrl = _.get(canonicalResponse, 'data.story.canonical.url', '');
 
         if (canonicalUrl && canonicalUrl !== '') {
             canonicalToReturn = canonicalUrl;
