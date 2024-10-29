@@ -45,26 +45,6 @@ if (!toRender) {
         toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
     }
 
-    const additionalComponents = widgetConfig.additionalComponents;
-
-    if (additionalComponents && additionalComponents.length > 0) {
-        additionalComponents.forEach((component, index) => {
-            const pattern = widgetConfig.additionalComponents[index].pattern;
-            const patternParts = pattern.replace(/ /g,'').split('n');
-            const multiplier = patternParts && patternParts[0] ? Number(patternParts[0]) : 1;
-            const integerOffset = patternParts && patternParts[1] ? Number(patternParts[1]) : 0;
-            const widgetName = _.upperFirst(component.widget.trim());
-            const config = JSON.parse(component.config);
-            const additionalComponent = context.customData.widgets[widgetName];
-            for (let i = 1; i <= edges.length - widgetConfig.count; i++) {
-                if (i >= integerOffset && (i - integerOffset) % multiplier === 0) {
-                    edges.splice(i - 1, 0, { additionalComponent, config });
-                    i++;
-                }
-            }
-            _.set(response, "data.section.items.edges", edges);
-        });
-    }
 }
 
 let cssModules = styles.BasicWidget;
