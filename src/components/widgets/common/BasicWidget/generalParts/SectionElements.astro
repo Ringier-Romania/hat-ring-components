@@ -42,13 +42,13 @@ const isMobile = context?.hatControllerParams?.isMobile;
 
 if (additionalComponents && additionalComponents.length > 0) {
     additionalComponents.forEach((component: { widget: string; config: string }, index: number) => {    
-        const widgetName = _.upperFirst(component?.widget.trim());
+        const widgetName = _.upperFirst(component?.widget?.trim());
         const AdditionalComponent = context?.customData?.widgets[widgetName];
         const { platformMobile: mobile, platformDesktop: desktop, pattern } = widgetConfig?.additionalComponents[index] || {};
-        if (AdditionalComponent && ((isMobile && mobile) || (!isMobile && desktop))) {
-            const [multiplier = 1, integerOffset = 0]: number[] = pattern.replace(/ /g, "").split("n").map(Number);
+        if (AdditionalComponent && pattern && ((isMobile && mobile) || (!isMobile && desktop))) {
+            const [multiplier = 1, integerOffset = 0]: number[] = pattern.replace(/ /g, "").split("n")?.map(Number);
             try {
-                const config = component.config ? JSON.parse(component.config) : "";
+                const config = component?.config ? JSON.parse(component?.config) : "";
                 for (let i = 1; i <= elementsToRender.length; i++) {
                     if (i >= integerOffset && (i - integerOffset) % multiplier === 0) {
                         elementsToRender.splice(i - 1, 0, { AdditionalComponent, config } as AdditionalComponent);
