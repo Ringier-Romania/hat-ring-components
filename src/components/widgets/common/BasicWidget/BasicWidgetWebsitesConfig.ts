@@ -316,6 +316,39 @@ export let BasicWidgetWebsitesConfig = {
                     "description": "BasicWidget cache TTL in seconds",
                     "type": "numberfield"
                 },
+                "additionalComponents": {
+                    "type": "treeobject",
+                    "name": "Additional Components",
+                    "description": "List of additional components",
+                    "required": false,
+                    "properties": [
+                        {
+                            "name": "widget",
+                            "type": "textfield",
+                            "description": "widget to insert e.g htmlInsert"
+                        },
+                        {
+                            "name": "platformDesktop",
+                            "description": "Desktop",
+                            "type": "checkbox"
+                        },
+                        {
+                            "name": "platformMobile",
+                            "description": "Mobile",
+                            "type": "checkbox"
+                        },
+                        {
+                            "name": "pattern",
+                            "type": "textfield",
+                            "description": "exmaple paterns: 2n, 3n+1, 5n-2"
+                        },
+                        {
+                            "name": "config",
+                            "type": "code",
+                            "mode": "json"
+                        },
+                    ]
+                },
             }
         }
     }

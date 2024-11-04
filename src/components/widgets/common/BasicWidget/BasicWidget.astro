@@ -1,7 +1,7 @@
 ---
-import {BasicWidget_getData} from "./BasicWidgetGetData";
-const {context, widgetConfig, extendableAttributes} = Astro.props;
-import {BasicWidgetAdditionalOptions, BasicWidgetResponse} from "./types";
+import { BasicWidget_getData } from "./BasicWidgetGetData";
+const { context, widgetConfig, extendableAttributes } = Astro.props;
+import { BasicWidgetAdditionalOptions, BasicWidgetResponse } from "./types";
 import * as GeneralParts from "./generalParts";
 import _ from "lodash";
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
@@ -44,6 +44,7 @@ if (!toRender) {
     if (hideWhenNoItems && edges.length === 0) {
         toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
     }
+
 }
 
 let cssModules = styles.BasicWidget;
