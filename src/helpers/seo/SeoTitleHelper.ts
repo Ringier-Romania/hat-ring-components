@@ -1,6 +1,5 @@
 // Helpers
 import {ConfigHelper_getSiteName} from "../ConfigHelper";
-import {UtilsHelper_getCurrentPageType} from "../UtilsHelper";
 
 // Providers
 import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
@@ -8,6 +7,7 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 // Libraries
 import {gql} from "graphql-tag";
 import _ from "lodash";
+import {SeoHelper_getSeoCurrentPageType} from "./SeoHelper";
 
 /**
  * Helper for handling titles according to the SEO requirements based on the placement of the usage
@@ -19,7 +19,7 @@ import _ from "lodash";
  */
 export async function SeoTitleHelper_pageTitle(context, place: string) {
     const defaultPageTitle = await ConfigHelper_getSiteName(context);
-    const pageType = UtilsHelper_getCurrentPageType(context);
+    const pageType = await SeoHelper_getSeoCurrentPageType(context);
 
     switch (pageType) {
         case 'Story':

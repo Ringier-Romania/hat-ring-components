@@ -7,14 +7,13 @@ import {
     SeoHelper_getContactNumber,
     SeoHelper_currentDescription,
     SeoHelper_getServiceLogo,
-    SeoHelper_currentSiteName
+    SeoHelper_currentSiteName, SeoHelper_isSeoHomepage
 } from "../../../helpers/seo/SeoHelper";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
 import {ConfigHelper_currentUrl, ConfigHelper_getHomepageUrl} from "../../../helpers/ConfigHelper";
-import {UtilsHelper_isHomepage} from "../../../helpers/UtilsHelper";
-const isHomePage = UtilsHelper_isHomepage(context);
+const isHomePage = SeoHelper_isSeoHomepage(context);
 const isArticle = context.siteContentType === SiteContentType.Story;
 
 

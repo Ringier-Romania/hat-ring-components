@@ -10,6 +10,7 @@ export let SEOWebsitesConfig
                     "fields": [
                         "seoSettings.defaultArticleAuthor",
                         "seoSettings.defaultArticleAuthorEmail",
+                        "seoSettings.homepageNodeIds",
                     ]
                 },
                 "seoTitlesAndDescription": {
@@ -82,6 +83,7 @@ export let SEOWebsitesConfig
         "seoSettings": {
             "defaultArticleAuthor": "",
             "defaultArticleAuthorEmail": "",
+            "homepageNodeIds": "",
         },
         "seoTitlesAndDescription": {
             "homePageTitle": "{{siteName}}",
@@ -129,6 +131,11 @@ export let SEOWebsitesConfig
             "defaultArticleAuthorEmail": {
                 "name": "Default author e-mail address (used when article author is missing)",
                 "description": "",
+                "type": "textfield"
+            },
+            "homepageNodeIds": {
+                "name": "Homepage node IDs for SEO purposes - separated by commas",
+                "description": "In cases where the homepage is not the root node of the site, you can specify the node IDs here. This is useful when a child node should be treated as the homepage for SEO purposes.",
                 "type": "textfield"
             },
         },

@@ -1,0 +1,38 @@
+---
+export interface EmbeddedApplicationBlockParams {
+    blockData: {
+        type: string;
+        embed: {
+            html: string;
+        }
+    }
+}
+
+const {blockData} = Astro.props as EmbeddedApplicationBlockParams;
+---
+<div class="EmbeddedApplicationBlock">
+    <div class="pulseembed" set:html={blockData.embed.html}></div>
+</div>
+
+<script>
+    declare global {
+        interface Window {
+            pulsembedScript: undefined | boolean;
+            pulsembed: undefined | (() => void);
+        }
+    }
+
+    if (!window.pulsembedScript && document.querySelector('.pulseembed')) {
+        window.pulsembedScript = true;
+        const pulsembedScript = document.createElement('script');
+        pulsembedScript.src = 'https://pulsembed.eu/pulsembed.js';
+        pulsembedScript.id = 'pulseembed';
+        pulsembedScript.defer = true;
+        pulsembedScript.onload = function () {
+            if (window.pulsembed) {
+                window.pulsembed();
+            }
+        };
+        document.head.appendChild(pulsembedScript);
+    }
+</script>

@@ -4,7 +4,7 @@ import {ConfigHelper_getMetaDataConfig} from "../../../helpers/ConfigHelper";
 import _ from "lodash"
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
-import {UtilsHelper_isHomepage} from "../../../helpers/UtilsHelper";
+import {SeoHelper_isSeoHomepage} from "../../../helpers/seo/SeoHelper";
 
 type StoryDataResponse = {
     "data": {
@@ -22,7 +22,7 @@ export async function SeoMetaCustomMetaTags(context: AppContext) {
     const config = await ConfigHelper_getMetaDataConfig(context);
     if(!config) return {};
     const other: any = [];
-    const isHomePage = UtilsHelper_isHomepage(context);
+    const isHomePage = SeoHelper_isSeoHomepage(context);
     const actualPageType = context.siteContentType;
     const actualTopicUuid = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id', null);
     const notDynamicTypes = ['all', 'homepage', ...Object.keys(SiteContentType)];
