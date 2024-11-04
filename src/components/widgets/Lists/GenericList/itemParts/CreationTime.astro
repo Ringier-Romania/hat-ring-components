@@ -9,9 +9,23 @@ import gql from "graphql-tag";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
 
-let toRender: boolean | JSX.Element = false;
-if (!data?.date?.creationTime) {
-    toRender = WidgetHelper_renderEmptyComponent('CreationTime');
+export default async function CreationTime(
+    {context, widgetConfig, data}:
+        {
+            context: AppContext,
+            widgetConfig: GenericListWidgetConfig,
+            data: GenericListResponseNode,
+        }) {
+
+    if (!data?.date?.creationTime) {
+        return WidgetHelper_renderEmptyComponent('CreationTime');
+    }
+
+    return (
+        <div className={['CreationTime'].join(' ')}>
+            {await DateHelper_convertDate(context,data.date.creationTime)}
+        </div>
+    )
 }
 
 const displayDate = await DateHelper_convertDate(context, data?.date?.creationTime);
