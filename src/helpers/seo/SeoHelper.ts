@@ -1,5 +1,6 @@
 import {
-    ConfigHelper_getLanguage,
+    ConfigHelper_getGeneralConfig,
+    ConfigHelper_getLanguage, ConfigHelper_getSeoGeneralConfig,
     ConfigHelper_getSeoOpenGraphConfig,
     ConfigHelper_getSeoTitlesAndDescriptionConfig,
     ConfigHelper_getSiteContactNumber,
@@ -12,9 +13,12 @@ import {OpenGraphHelper_getMainStoryImageData} from "./OpenGraphHelper";
 import {SeoTitleHelper_pageTitle} from "./SeoTitleHelper";
 import {SeoDescriptionHelper_pageDescription} from "./SeoDescriptionHelper";
 import {
-    UtilsHelper_asyncSequentialForEach, UtilsHelper_stripHtmlTags,
+    UtilsHelper_asyncSequentialForEach,
+    UtilsHelper_stripHtmlTags,
     UtilsHelper_getCurrentNodeName,
-    UtilsHelper_getCurrentPageType, UtilsHelper_getQueryParam, UtilsHelper_getSearchQueryParamKey
+    UtilsHelper_getQueryParam,
+    UtilsHelper_getSearchQueryParamKey,
+    UtilsHelper_isHomepage
 } from "../UtilsHelper";
 import _ from "lodash";
 import {SiteContentType} from "../../types/types";
@@ -23,7 +27,7 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 
 export async function SeoHelper_currentTitle(context, place: string) {
     const seoTitlesSettings = await ConfigHelper_getSeoTitlesAndDescriptionConfig(context);
-    const pageType = UtilsHelper_getCurrentPageType(context);
+    const pageType = await SeoHelper_getSeoCurrentPageType(context);
     const withNumeration = !!UtilsHelper_getQueryParam('page', context);
     let pattern= null;
 
@@ -67,7 +71,7 @@ export async function SeoHelper_currentTitle(context, place: string) {
 
 export async function SeoHelper_currentDescription(context, place: string) {
     const seoDescriptionSettings = await ConfigHelper_getSeoTitlesAndDescriptionConfig(context);
-    const pageType = UtilsHelper_getCurrentPageType(context);
+    const pageType = await SeoHelper_getSeoCurrentPageType(context);
     const withNumeration = !!UtilsHelper_getQueryParam('page', context);
     let pattern= null;
 
@@ -129,6 +133,24 @@ export async function SeoHelper_currentMainStoryImageData(context) {
     return OpenGraphHelper_getMainStoryImageData(context);
 }
 
+export async function SeoHelper_isSeoHomepage(context) {
+    const seoGeneralConfig = await ConfigHelper_getSeoGeneralConfig(context);
+    const homepageNodeIds = _.get(seoGeneralConfig, 'homepageNodeIds', '');
+    if (homepageNodeIds !== '') {
+        const nodeIds = homepageNodeIds.split(',').map(id => id.trim());
+        if (nodeIds.includes(context.id)) {
+            return true;
+        }
+    }
+    return UtilsHelper_isHomepage(context);
+}
+
+export async function SeoHelper_getSeoCurrentPageType(context) {
+    const isHomePage = await SeoHelper_isSeoHomepage(context);
+    return isHomePage ? SiteContentType.Homepage : (context.siteContentType || null);
+}
+
+
 export async function SeoHelper_authorName(context) {
     const query = gql`
         query($uuid: UUID){
@@ -189,7 +211,7 @@ async function mapPatternVariables(context, place: string, fieldToCheck: string 
     }
 
     if (fieldToCheck.includes('{{pageTypeName}}')) {
-        dynamicPatternMap['{{pageTypeName}}'] = () => {return UtilsHelper_getCurrentPageType(context)};
+        dynamicPatternMap['{{pageTypeName}}'] = async() => {return await SeoHelper_getSeoCurrentPageType(context)};
     }
 
     if (fieldToCheck.includes('{{number}}')) {

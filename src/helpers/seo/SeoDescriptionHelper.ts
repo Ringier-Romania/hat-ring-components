@@ -1,6 +1,5 @@
 // Helpers
 import {ConfigHelper_getSiteDescription} from "../ConfigHelper";
-import {UtilsHelper_getCurrentPageType} from "../UtilsHelper";
 import {StoryHelper_getLeadBlock} from "../StoryHelper";
 
 // Providers
@@ -10,6 +9,7 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 import {Story} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import {gql} from "graphql-tag";
 import _ from "lodash";
+import {SeoHelper_getSeoCurrentPageType} from "./SeoHelper";
 
 /**
  * Helper for handling descriptions according to the SEO requirements based on the placement of the usage
@@ -23,7 +23,7 @@ import _ from "lodash";
  */
 export async function SeoDescriptionHelper_pageDescription(context, place: string) {
     const defaultPageDescription = await ConfigHelper_getSiteDescription(context);
-    const pageType = UtilsHelper_getCurrentPageType(context);
+    const pageType = await SeoHelper_getSeoCurrentPageType(context);
 
     switch (pageType) {
         case 'Story':
