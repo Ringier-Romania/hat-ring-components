@@ -47,6 +47,7 @@ export async function ConfigHelper_getGeneralConfig(context) :Promise<{
 export async function ConfigHelper_getSeoGeneralConfig(context) :Promise<{
     defaultArticleAuthor: string,
     defaultArticleAuthorEmail: string,
+    homepageNodeIds: string,
 }> {
     return ConfigHelper_getConfig(context, 'seoSettings');
 }
