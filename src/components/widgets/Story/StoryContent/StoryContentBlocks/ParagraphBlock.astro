@@ -11,12 +11,12 @@ export interface ParagraphBlockParams {
     text: string;
   };
 }
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | JSX.Element | string = false;
 if (!blockData) {
   toRender = WidgetHelper_renderEmptyComponent("ParagraphBlock");
 }
 
-blockData.text = await LinkReplacerHelper_replaceLinks(context, blockData.text);
+const paragraphText = await LinkReplacerHelper_replaceLinks(context, blockData.text);
 ---
 
 {
@@ -24,7 +24,7 @@ blockData.text = await LinkReplacerHelper_replaceLinks(context, blockData.text);
     <Fragment set:html={toRender} />
   ) : (
     <div class="ParagraphBlock">
-      <p set:html={blockData.text} />
+      <p set:html={paragraphText} />
     </div>
   )
 }
