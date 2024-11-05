@@ -11,7 +11,7 @@ export interface ParagraphBlockParams {
     text: string;
   };
 }
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | JSX.Element | string = false;
 if (!blockData) {
   toRender = WidgetHelper_renderEmptyComponent("ParagraphBlock");
 }
