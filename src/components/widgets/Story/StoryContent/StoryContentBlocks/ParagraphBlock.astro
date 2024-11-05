@@ -16,7 +16,8 @@ if (!blockData) {
   toRender = WidgetHelper_renderEmptyComponent("ParagraphBlock");
 }
 
-const paragraphText = await LinkReplacerHelper_replaceLinks(context, blockData.text);
+blockData.text = await LinkReplacerHelper_replaceLinks(context, blockData.text);
+
 ---
 
 {
@@ -24,7 +25,7 @@ const paragraphText = await LinkReplacerHelper_replaceLinks(context, blockData.t
     <Fragment set:html={toRender} />
   ) : (
     <div class="ParagraphBlock">
-      <p set:html={paragraphText} />
+      <p set:html={blockData.text} />
     </div>
   )
 }

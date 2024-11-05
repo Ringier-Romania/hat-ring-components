@@ -19,7 +19,7 @@ export default function Lead(
 
     return (
         <div className={['Lead'].join(' ')}>
-                <span>{data.lead}</span>
+            <span dangerouslySetInnerHTML={{ __html: data?.lead }}></span>
         </div>
     )
 }
