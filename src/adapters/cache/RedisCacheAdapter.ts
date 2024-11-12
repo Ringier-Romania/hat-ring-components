@@ -26,8 +26,8 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
         const res = await this.redisProvider.flushAll();
     }
 
-    async keys(): Promise<string[]> {
-        return await this.redisProvider.keys();
+    async keys(keys: string[]): Promise<string[]> {
+        return await this.redisProvider.keys(keys);
     }
 
     async mget(keys: string[]): Promise<{ [p: string]: unknown }> {

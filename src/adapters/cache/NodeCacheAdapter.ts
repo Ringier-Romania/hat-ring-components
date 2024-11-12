@@ -25,7 +25,7 @@ export class NodeCacheAdapter implements CacheAdapterInterface {
         this.cache.flushAll();
     }
 
-    async keys(): Promise<string[]> {
+    async keys(keys: string[]): Promise<string[]> {
         return this.cache.keys();
     }
 

@@ -140,12 +140,14 @@ export class RedisProvider {
         return this.client.flushAll();
     }
 
-    async keys(): Promise<string[]> {
+    async keys(keys: string[]): Promise<string[]> {
         if (!this.client) {
             await this.initialize();
         }
-        const keys = await this.client.keys('*');
-        return keys;
+
+        const stringKey = keys.length > 0 ? keys.join('*') : "*";
+        const keysFromRedis = await this.client.keys(stringKey);
+        return keysFromRedis;
     }
 
     async getTtl(key: string): Promise<number | undefined> {

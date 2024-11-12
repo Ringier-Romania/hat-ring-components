@@ -4,6 +4,6 @@ export interface CacheAdapterInterface {
     del(key: any): Promise<number>;
     getTtl(key: any): Promise<number|undefined>;
     flushAll(): Promise<any>;
-    keys(): Promise<string[]>;
+    keys(keys?: string[]): Promise<string[]>;
     mget(keys: string[]): Promise<{ [p: string]: unknown }>;
 }

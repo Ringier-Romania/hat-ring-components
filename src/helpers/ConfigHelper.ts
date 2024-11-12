@@ -4,6 +4,8 @@ import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
 import _ from "lodash";
 import {CacheHelper_get, CacheHelper_runCallbackIfTimeStampHasExpired, CacheHelper_set} from "./CacheHelper";
 import {AppContext} from "../types/types";
+import * as crypto from "crypto";
+import { APIContext } from 'astro';
 
 export async function ConfigHelper_getConfig(context: AppContext, configKey) {
     const variant = context.websiteManagerVariant;
@@ -24,11 +26,20 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
         }
     `;
 
+    const cacheKey = {query: query.loc?.source.body, variables};
+    const cacheKeyString = JSON.stringify(cacheKey);
+    const cacheKeyString1 = crypto.hash('sha1', cacheKeyString);
+    // problem jak kielka naraz pyta to pierwszy req jeszcze nie przyszedl i nie ma danych - taki sam case jak marcin rozwiazywal
+    // APIContext.
 
-    const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 60 * 5);
-    const sectionsConfig = _.get(response, 'data.node.config.config.0.data');
-
-    return sectionsConfig;
+    if (!global._cache[cacheKeyString1]) {
+        global._cache.num = global._cache.num ? global._cache.num + 1 : 1;
+        console.log(cacheKeyString1, global._cache.num)
+        const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 60 * 5);
+        global._cache[cacheKeyString1] = response;
+        return _.get(response, 'data.node.config.config.0.data');
+    }
+    return  _.get(global._cache[cacheKeyString1], 'data.node.config.config.0.data');
 }
 
 export async function ConfigHelper_getGeneralConfig(context) :Promise<{
