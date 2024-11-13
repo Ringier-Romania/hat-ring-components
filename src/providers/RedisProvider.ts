@@ -140,12 +140,12 @@ export class RedisProvider {
         return this.client.flushAll();
     }
 
-    async keys(keys: string[]): Promise<string[]> {
+    async keys(keys?: string[]): Promise<string[]> {
         if (!this.client) {
             await this.initialize();
         }
 
-        const stringKey = keys.length > 0 ? keys.join('*') : "*";
+        const stringKey = keys && keys.length > 0 ? keys.join('*') : "*";
         const keysFromRedis = await this.client.keys(stringKey);
         return keysFromRedis;
     }
