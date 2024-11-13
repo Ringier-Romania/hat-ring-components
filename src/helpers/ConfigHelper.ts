@@ -2,10 +2,8 @@ import {UtilsHelper_convertToInt, UtilsHelper_getDomain, UtilsHelper_isDevelopme
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
 import _ from "lodash";
-import {CacheHelper_get, CacheHelper_runCallbackIfTimeStampHasExpired, CacheHelper_set} from "./CacheHelper";
 import {AppContext} from "../types/types";
-import * as crypto from "crypto";
-import { APIContext } from 'astro';
+import {MonitoringProvider} from "../providers/MonitoringProvider";
 
 export async function ConfigHelper_getConfig(context: AppContext, configKey) {
     const variant = context.websiteManagerVariant;
@@ -26,20 +24,46 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
         }
     `;
 
-    const cacheKey = {query: query.loc?.source.body, variables};
-    const cacheKeyString = JSON.stringify(cacheKey);
-    const cacheKeyString1 = crypto.hash('sha1', cacheKeyString);
-    // problem jak kielka naraz pyta to pierwszy req jeszcze nie przyszedl i nie ma danych - taki sam case jak marcin rozwiazywal
-    // APIContext.
+    if (process.env.MEM_CACHE_FOR_CONFIG_MODE && process.env.MEM_CACHE_FOR_CONFIG_MODE !== 'none') {
+        const cacheKey = {query: query.loc?.source.body, variables};
+        const cacheKeyString = JSON.stringify(cacheKey);
+        context.customData._cache = context.customData._cache || {};
+        let cachedElement = context.customData._cache;
+        context.customData._cacheNum = context.customData._cacheNum || 0;
 
-    if (!global._cache[cacheKeyString1]) {
-        global._cache.num = global._cache.num ? global._cache.num + 1 : 1;
-        console.log(cacheKeyString1, global._cache.num)
-        const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 60 * 5);
-        global._cache[cacheKeyString1] = response;
-        return _.get(response, 'data.node.config.config.0.data');
+        if (process.env.MEM_CACHE_FOR_CONFIG_MODE === 'request') {
+            if (!cachedElement[cacheKeyString]) {
+                context.customData._cacheNum++;
+                console.log('request', context.customData._cacheNum);
+                const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 1);
+                cachedElement[cacheKeyString] = response;
+                MonitoringProvider.counter('info.ConfigHelper_getConfig.cached');
+                return _.get(response, 'data.node.config.config.0.data');
+            }
+            MonitoringProvider.counter('info.ConfigHelper_getConfig.nonCached');
+            return _.get(cachedElement[cacheKeyString], 'data.node.config.config.0.data');
+        } else {
+            global._cache = global._cache || {};
+            if (!cachedElement[cacheKeyString] || !global._cacheTimeStamp[cacheKeyString] || (new Date().getTime() - global._cacheTimeStamp[cacheKeyString]) > (UtilsHelper_convertToInt(process.env.MEM_CACHE_FOR_CONFIG_TTL_MS || 1000))) {
+                context.customData._cacheNum++;
+                console.log('time', context.customData._cacheNum);
+                const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 1);
+                cachedElement[cacheKeyString] = response;
+                global._cacheTimeStamp = global._cacheTimeStamp || {};
+                global._cacheTimeStamp[cacheKeyString] = new Date().getTime();
+                MonitoringProvider.counter('info.ConfigHelper_getConfig.cached');
+                return _.get(response, 'data.node.config.config.0.data');
+            }
+            MonitoringProvider.counter('info.ConfigHelper_getConfig.nonCached');
+            return _.get(cachedElement[cacheKeyString], 'data.node.config.config.0.data');
+        }
+    } else {
+        console.log('old');
+        const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 1);
+        const sectionsConfig = _.get(response, 'data.node.config.config.0.data');
+
+        return sectionsConfig;
     }
-    return  _.get(global._cache[cacheKeyString1], 'data.node.config.config.0.data');
 }
 
 export async function ConfigHelper_getGeneralConfig(context) :Promise<{
