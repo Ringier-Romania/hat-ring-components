@@ -144,8 +144,18 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
-        const keys = await this.client.keys('*');
-        return keys;
+
+        const keysFromRedis = await this.client.keys("*");
+        return keysFromRedis;
+    }
+
+    async keysByGlob(globKey: string): Promise<string[]> {
+        if (!this.client) {
+            await this.initialize();
+        }
+
+        const keysFromRedis = await this.client.keys(globKey);
+        return keysFromRedis;
     }
 
     async getTtl(key: string): Promise<number | undefined> {

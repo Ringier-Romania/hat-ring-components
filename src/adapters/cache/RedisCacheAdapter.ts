@@ -43,5 +43,8 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
         return data;
     }
 
+    async keysByGlob(globKey: string): Promise<string[]> {
+        return await this.redisProvider.keysByGlob(globKey);
+    }
 
 }

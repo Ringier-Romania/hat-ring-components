@@ -116,6 +116,13 @@ export function CacheHelper_keys() {
     return cacheAdapter.keys();
 }
 
+export function CacheHelper_keysByGlob(globKey) {
+    if (cacheAdapter.keysByGlob) {
+        return cacheAdapter.keysByGlob(globKey);
+    }
+    return cacheAdapter.keys();
+}
+
 export function CacheHelper_createParentChildRelation(parentId, childrenIds) {
     childrenIds.forEach((childrenId) => {  
         if (childrenId) {
