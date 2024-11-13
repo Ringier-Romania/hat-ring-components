@@ -13,15 +13,24 @@ interface ExternalApplicationConfig extends AbstractWidgetConfig {
     selector?: string
 };
 let {selector} = widgetConfig;
-const res = await fetch(widgetConfig.controllerUrl);
-let html = await res.text();
 
-if (widgetConfig.blockName) {
-    selector = `[name="${widgetConfig.blockName}"]`;
-}
-if (selector) {
-    const $ = cheerio.load(html);
-    html = $(selector).html();
+let html: string | null = '';
+
+try {
+    const res = await fetch(widgetConfig.controllerUrl);
+    html = await res.text();
+
+
+    if (widgetConfig.blockName) {
+        selector = `[name="${widgetConfig.blockName}"]`;
+    }
+    if (selector && html) {
+        const $ = cheerio.load(html);
+        html = $(selector).html();
+    }
+
+} catch (e) {
+    console.error(e);
 }
 
 ---
