@@ -61,7 +61,7 @@ export async function CacheHelper_flush() {
 }
 
 export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false) {
-    const keys = await cacheAdapter.keys(partialKey);
+    const keys = await cacheAdapter.keys();
     let values: any = {};
 
     if (searchInValue) {
@@ -112,8 +112,15 @@ export function CacheHelper_del(keys: any) {
     return cacheAdapter.del(keys);
 }
 
-export function CacheHelper_keys(keys: string[] = []) {
-    return cacheAdapter.keys(keys);
+export function CacheHelper_keys() {
+    return cacheAdapter.keys();
+}
+
+export function CacheHelper_keysByGlob(globKey) {
+    if (cacheAdapter.keysByGlob) {
+        return cacheAdapter.keysByGlob(globKey);
+    }
+    return cacheAdapter.keys();
 }
 
 export function CacheHelper_createParentChildRelation(parentId, childrenIds) {

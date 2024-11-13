@@ -26,8 +26,8 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
         const res = await this.redisProvider.flushAll();
     }
 
-    async keys(keys: string[] = []): Promise<string[]> {
-        return await this.redisProvider.keys(keys);
+    async keys(): Promise<string[]> {
+        return await this.redisProvider.keys();
     }
 
     async mget(keys: string[]): Promise<{ [p: string]: unknown }> {
@@ -43,5 +43,8 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
         return data;
     }
 
+    async keysByGlob(globKey: string): Promise<string[]> {
+        return await this.redisProvider.keysByGlob(globKey);
+    }
 
 }
