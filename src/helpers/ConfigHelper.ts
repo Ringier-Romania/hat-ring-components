@@ -29,12 +29,9 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
         const cacheKeyString = JSON.stringify(cacheKey);
         context.customData._cache = context.customData._cache || {};
         let cachedElement = context.customData._cache;
-        context.customData._cacheNum = context.customData._cacheNum || 0;
 
         if (process.env.MEM_CACHE_FOR_CONFIG_MODE === 'request') {
             if (!cachedElement[cacheKeyString]) {
-                context.customData._cacheNum++;
-                console.log('request', context.customData._cacheNum);
                 const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 1);
                 cachedElement[cacheKeyString] = response;
                 MonitoringProvider.counter('info.ConfigHelper_getConfig.cached');
@@ -45,8 +42,6 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
         } else {
             global._cache = global._cache || {};
             if (!cachedElement[cacheKeyString] || !global._cacheTimeStamp[cacheKeyString] || (new Date().getTime() - global._cacheTimeStamp[cacheKeyString]) > (UtilsHelper_convertToInt(process.env.MEM_CACHE_FOR_CONFIG_TTL_MS || 1000))) {
-                context.customData._cacheNum++;
-                console.log('time', context.customData._cacheNum);
                 const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 1);
                 cachedElement[cacheKeyString] = response;
                 global._cacheTimeStamp = global._cacheTimeStamp || {};
@@ -58,7 +53,6 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
             return _.get(cachedElement[cacheKeyString], 'data.node.config.config.0.data');
         }
     } else {
-        console.log('old');
         const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 1);
         const sectionsConfig = _.get(response, 'data.node.config.config.0.data');
 
