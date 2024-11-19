@@ -65,33 +65,27 @@ export function WidgetHelper_getWidgetCssClasses(componentName: string, widgetCo
 export async function WidgetHelper_findWidgetConfig(context: AppContext, objToCompare, containers: string[], boxes: string[] = ['box_top', 'box_left', 'box_middle', 'box_right', 'box_bottom']): Promise<any> {
     return new Promise(async (resolve, reject) => {
         const variant = context.websiteManagerVariant;
-        const domain = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
-        let variablesQuery = '';
         let configQuery = '';
         containers.forEach(section => {
             configQuery += section + ':config(codeName: "' + section + '"){ data } ';
         })
 
         const query = gql`
-            query($url: URL!, $variant:ID!){
-                site(url:$url, variantId: $variant){
-                    data {
-                        node {
-                            config {
-                                ${configQuery}
-                            }
-                        }
+            query($nodeID: ID!, $variant:ID!){
+                node(id: $nodeID){
+                    config(variantId: $variant){
+                        ${configQuery}
                     }
                 }
             }
         `;
         const variables = {
-            url: domain + context.url,
+            nodeID: context.siteNodeId,
             variant: variant,
         };
 
         const response = await WebsiteApiProvider.call(query, variables);
-        const sectionsConfig = _.get(response, 'data.site.data.node.config');
+        const sectionsConfig = _.get(response, 'data.node.config');
 
         if (!sectionsConfig) {
             return null;
