@@ -11,6 +11,10 @@ if (process.env.USE_REDIS == '1') {
     cacheAdapter = new RedisCacheAdapter();
 }
 
+export function CacheHelper_getCacheAdapter() {
+    return cacheAdapter;
+}
+
 export async function CacheHelper_set(key: any, value: any, TTL: null | number | undefined = null) {
     if (process.env.CACHE_TTL === '0' && !TTL) {
         return;
@@ -61,7 +65,13 @@ export async function CacheHelper_flush() {
 }
 
 export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false) {
-    const keys = await cacheAdapter.keys();
+    let keys: Array<string>= [];
+    if (cacheAdapter.keysByGlob) {
+        keys = await cacheAdapter.keysByGlob(`*${partialKey.join('*')}*`);
+    } else {
+        keys = await cacheAdapter.keys();
+    }
+
     let values: any = {};
 
     if (searchInValue) {
@@ -113,13 +123,6 @@ export function CacheHelper_del(keys: any) {
 }
 
 export function CacheHelper_keys() {
-    return cacheAdapter.keys();
-}
-
-export function CacheHelper_keysByGlob(globKey) {
-    if (cacheAdapter.keysByGlob) {
-        return cacheAdapter.keysByGlob(globKey);
-    }
     return cacheAdapter.keys();
 }
 
