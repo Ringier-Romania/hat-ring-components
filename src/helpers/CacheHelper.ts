@@ -113,17 +113,17 @@ export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notI
                 if (notInPartialKey.length > 0) {
                     if (!notInPartialKey.every((partKey) => value.includes(partKey))) {
                         // if (!cacheAdapter.delKeys) {
-                        //     await cacheAdapter.del(key);
+                            await cacheAdapter.del(key);
                         // } else {
-                            toRemove.push(key);
+                        //     toRemove.push(key);
                         // }
                         deleteCount.responses++;
                     }
                 } else {
                     // if (!cacheAdapter.delKeys) {
-                    //     await cacheAdapter.del(key);
+                        await cacheAdapter.del(key);
                     // } else {
-                        toRemove.push(key);
+                    //     toRemove.push(key);
                     // }
                     deleteCount.responses++;
                 }
