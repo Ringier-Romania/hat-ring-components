@@ -88,20 +88,20 @@ export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notI
         if (partialKey.every((partKey) => key.includes(partKey))) {
             if (notInPartialKey.length > 0) {
                 if (!notInPartialKey.every((partKey) => key.includes(partKey))) {
-                    // if (!cacheAdapter.delKeys) {
+                    if (!cacheAdapter.delKeys) {
                         await cacheAdapter.del(key);
-                    // } else {
-                    //     toRemove.push(key);
-                    // }
+                    } else {
+                        toRemove.push(key);
+                    }
                     deleteCount.keys++;
                     deleted = true;
                 }
             } else {
-                // if (!cacheAdapter.delKeys) {
+                if (!cacheAdapter.delKeys) {
                     await cacheAdapter.del(key);
-                // } else {
-                //     toRemove.push(key);
-                // }
+                } else {
+                    toRemove.push(key);
+                }
                 deleteCount.keys++;
                 deleted = true;
             }
@@ -112,19 +112,19 @@ export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notI
             if (partialKey.every((partKey) => value.includes(partKey))) {
                 if (notInPartialKey.length > 0) {
                     if (!notInPartialKey.every((partKey) => value.includes(partKey))) {
-                        // if (!cacheAdapter.delKeys) {
+                        if (!cacheAdapter.delKeys) {
                             await cacheAdapter.del(key);
-                        // } else {
-                        //     toRemove.push(key);
-                        // }
+                        } else {
+                            toRemove.push(key);
+                        }
                         deleteCount.responses++;
                     }
                 } else {
-                    // if (!cacheAdapter.delKeys) {
+                    if (!cacheAdapter.delKeys) {
                         await cacheAdapter.del(key);
-                    // } else {
-                    //     toRemove.push(key);
-                    // }
+                    } else {
+                        toRemove.push(key);
+                    }
                     deleteCount.responses++;
                 }
             }
@@ -132,7 +132,7 @@ export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notI
     }
 
     if (cacheAdapter.delKeys) {
-        // await cacheAdapter.delKeys(toRemove);
+        await cacheAdapter.delKeys(toRemove);
     }
     handleCleanCache()
     return deleteCount;
