@@ -67,12 +67,7 @@ export async function CacheHelper_flush() {
 
 export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false) {
     MonitoringProvider.counter('info.CacheHelper_clearByPartialKey.run');
-    let keys: Array<string>= [];
-    if (cacheAdapter.keysByGlob) {
-        keys = await cacheAdapter.keysByGlob(`*${partialKey.join('*')}*`);
-    } else {
-        keys = await cacheAdapter.keys();
-    }
+    let keys: Array<string> = await cacheAdapter.keys();
     MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
 
     let values: any = {};
