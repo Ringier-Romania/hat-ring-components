@@ -3,6 +3,7 @@ import {UtilsHelper_convertToInt} from "./UtilsHelper";
 import {RedisCacheAdapter} from "../adapters/cache/RedisCacheAdapter";
 import {CacheAdapterInterface} from "../adapters/cache/types";
 import {NodeCacheAdapter} from "../adapters/cache/NodeCacheAdapter";
+import {MonitoringProvider} from "../providers/MonitoringProvider";
 
 const stdTTL = process.env.CACHE_TTL ? UtilsHelper_convertToInt(process.env.CACHE_TTL) : 60;
 
@@ -65,12 +66,9 @@ export async function CacheHelper_flush() {
 }
 
 export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false) {
-    let keys: Array<string>= [];
-    if (cacheAdapter.keysByGlob) {
-        keys = await cacheAdapter.keysByGlob(`*${partialKey.join('*')}*`);
-    } else {
-        keys = await cacheAdapter.keys();
-    }
+    MonitoringProvider.counter('info.CacheHelper_clearByPartialKey.run');
+    let keys: Array<string> = await cacheAdapter.keys();
+    MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
 
     let values: any = {};
 
@@ -83,17 +81,27 @@ export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notI
         responses: 0,
     }
 
-    keys.forEach((key) => {
+    const toRemove: Array<string> = [];
+
+    for (const key in keys) {
         let deleted = false;
         if (partialKey.every((partKey) => key.includes(partKey))) {
             if (notInPartialKey.length > 0) {
                 if (!notInPartialKey.every((partKey) => key.includes(partKey))) {
-                    cacheAdapter.del(key);
+                    if (!cacheAdapter.delKeys) {
+                        await cacheAdapter.del(key);
+                    } else {
+                        toRemove.push(key);
+                    }
                     deleteCount.keys++;
                     deleted = true;
                 }
             } else {
-                cacheAdapter.del(key);
+                if (!cacheAdapter.delKeys) {
+                    await cacheAdapter.del(key);
+                } else {
+                    toRemove.push(key);
+                }
                 deleteCount.keys++;
                 deleted = true;
             }
@@ -104,16 +112,28 @@ export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notI
             if (partialKey.every((partKey) => value.includes(partKey))) {
                 if (notInPartialKey.length > 0) {
                     if (!notInPartialKey.every((partKey) => value.includes(partKey))) {
-                        cacheAdapter.del(key);
+                        if (!cacheAdapter.delKeys) {
+                            await cacheAdapter.del(key);
+                        } else {
+                            toRemove.push(key);
+                        }
                         deleteCount.responses++;
                     }
                 } else {
-                    cacheAdapter.del(key);
+                    if (!cacheAdapter.delKeys) {
+                        await cacheAdapter.del(key);
+                    } else {
+                        toRemove.push(key);
+                    }
                     deleteCount.responses++;
                 }
             }
         }
-    });
+    }
+
+    if (cacheAdapter.delKeys) {
+        await cacheAdapter.delKeys(toRemove);
+    }
     handleCleanCache()
     return deleteCount;
 }
@@ -126,12 +146,12 @@ export function CacheHelper_keys() {
     return cacheAdapter.keys();
 }
 
-export function CacheHelper_createParentChildRelation(parentId, childrenIds) {
-    childrenIds.forEach((childrenId) => {  
+export async function CacheHelper_createParentChildRelation(parentId, childrenIds) {
+    for (const childrenId in childrenIds) {
         if (childrenId) {
-            CacheHelper_set(`parent_${parentId}_child_${childrenId}`, '');
-        }    
-    })
+            await CacheHelper_set(`parent_${parentId}_child_${childrenId}`, '');
+        }
+    }
 }
 
 function handleCleanCache() {
