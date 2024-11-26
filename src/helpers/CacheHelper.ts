@@ -65,10 +65,11 @@ export async function CacheHelper_flush() {
     return await cacheAdapter.flushAll();
 }
 
-export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false) {
+export async function CacheHelper_clearByPartialKeyByGlob(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?:Array<string>) {
     MonitoringProvider.counter('info.CacheHelper_clearByPartialKey.run');
-    const keys = await cacheAdapter.keys();
+    let keys: Array<string> = allKeys ? allKeys : await cacheAdapter.keysByGlob('*');
     MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
+
     let values: any = {};
 
     if (searchInValue) {
@@ -106,6 +107,175 @@ export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notI
                     }
                 } else {
                     cacheAdapter.del(key);
+                    deleteCount.responses++;
+                }
+            }
+        }
+    });
+    handleCleanCache()
+    return deleteCount;
+}
+
+export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?:Array<string>) {
+    MonitoringProvider.counter('info.CacheHelper_clearByPartialKey.run');
+    let keys: Array<string> = allKeys ? allKeys : await cacheAdapter.keys();
+    MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
+
+    let values: any = {};
+
+    if (searchInValue) {
+        values = await cacheAdapter.mget(keys);
+    }
+
+    const deleteCount = {
+        keys: 0,
+        responses: 0,
+    }
+
+    keys.forEach((key) => {
+        let deleted = false;
+        if (partialKey.every((partKey) => key.includes(partKey))) {
+            if (notInPartialKey.length > 0) {
+                if (!notInPartialKey.every((partKey) => key.includes(partKey))) {
+                    cacheAdapter.del(key);
+                    deleteCount.keys++;
+                    deleted = true;
+                }
+            } else {
+                cacheAdapter.del(key);
+                deleteCount.keys++;
+                deleted = true;
+            }
+        }
+
+        if (searchInValue && !deleted) {
+            const value = JSON.stringify(values[key]);
+            if (partialKey.every((partKey) => value.includes(partKey))) {
+                if (notInPartialKey.length > 0) {
+                    if (!notInPartialKey.every((partKey) => value.includes(partKey))) {
+                        cacheAdapter.del(key);
+                        deleteCount.responses++;
+                    }
+                } else {
+                    cacheAdapter.del(key);
+                    deleteCount.responses++;
+                }
+            }
+        }
+    });
+    handleCleanCache()
+    return deleteCount;
+}
+
+export async function CacheHelper_clearByPartialKeyWithOutDel(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?:Array<string>) {
+    MonitoringProvider.counter('info.CacheHelper_clearByPartialKey.run');
+    let keys: Array<string> = allKeys ? allKeys : await cacheAdapter.keys();
+    MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
+
+    let values: any = {};
+
+    if (searchInValue) {
+        values = await cacheAdapter.mget(keys);
+    }
+
+    const deleteCount = {
+        keys: 0,
+        responses: 0,
+    }
+
+    keys.forEach((key) => {
+        let deleted = false;
+        if (partialKey.every((partKey) => key.includes(partKey))) {
+            if (notInPartialKey.length > 0) {
+                if (!notInPartialKey.every((partKey) => key.includes(partKey))) {
+                    // cacheAdapter.del(key);
+                    deleteCount.keys++;
+                    deleted = true;
+                }
+            } else {
+                // cacheAdapter.del(key);
+                deleteCount.keys++;
+                deleted = true;
+            }
+        }
+
+        if (searchInValue && !deleted) {
+            const value = JSON.stringify(values[key]);
+            if (partialKey.every((partKey) => value.includes(partKey))) {
+                if (notInPartialKey.length > 0) {
+                    if (!notInPartialKey.every((partKey) => value.includes(partKey))) {
+                        // cacheAdapter.del(key);
+                        deleteCount.responses++;
+                    }
+                } else {
+                    // cacheAdapter.del(key);
+                    deleteCount.responses++;
+                }
+            }
+        }
+    });
+    handleCleanCache()
+    return deleteCount;
+}
+
+export async function CacheHelper_clearByPartialKeyUnlink(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?:Array<string>) {
+    MonitoringProvider.counter('info.CacheHelper_clearByPartialKey.run');
+    let keys: Array<string> = allKeys ? allKeys : await cacheAdapter.keys();
+    MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
+
+    let values: any = {};
+
+    if (searchInValue) {
+        values = await cacheAdapter.mget(keys);
+    }
+
+    const deleteCount = {
+        keys: 0,
+        responses: 0,
+    }
+
+    keys.forEach((key) => {
+        let deleted = false;
+        if (partialKey.every((partKey) => key.includes(partKey))) {
+            if (notInPartialKey.length > 0) {
+                if (!notInPartialKey.every((partKey) => key.includes(partKey))) {
+                    if (cacheAdapter.unlink) {
+                        cacheAdapter.unlink(key);
+                    } else {
+                        cacheAdapter.del(key);
+                    }
+                    deleteCount.keys++;
+                    deleted = true;
+                }
+            } else {
+                if (cacheAdapter.unlink) {
+                    cacheAdapter.unlink(key);
+                } else {
+                    cacheAdapter.del(key);
+                }
+                deleteCount.keys++;
+                deleted = true;
+            }
+        }
+
+        if (searchInValue && !deleted) {
+            const value = JSON.stringify(values[key]);
+            if (partialKey.every((partKey) => value.includes(partKey))) {
+                if (notInPartialKey.length > 0) {
+                    if (!notInPartialKey.every((partKey) => value.includes(partKey))) {
+                        if (cacheAdapter.unlink) {
+                            cacheAdapter.unlink(key);
+                        } else {
+                            cacheAdapter.del(key);
+                        }
+                        deleteCount.responses++;
+                    }
+                } else {
+                    if (cacheAdapter.unlink) {
+                        cacheAdapter.unlink(key);
+                    } else {
+                        cacheAdapter.del(key);
+                    }
                     deleteCount.responses++;
                 }
             }
