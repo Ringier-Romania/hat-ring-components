@@ -133,17 +133,6 @@ export class RedisProvider {
         return await this.client.del(key);
     }
 
-    async delKeys(keys: Array<string>): Promise<any[]> {
-        if (!this.client) {
-            await this.initialize();
-        }
-        const multi = this.client.multi();
-        keys.forEach(key => {
-            multi.del(key);
-        });
-        return multi.exec();
-    }
-
     async flushAll(): Promise<any> {
         if (!this.client) {
             await this.initialize();
