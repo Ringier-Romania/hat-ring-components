@@ -67,8 +67,8 @@ export async function CacheHelper_flush() {
 
 export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false) {
     MonitoringProvider.counter('info.CacheHelper_clearByPartialKey.run');
-    MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
     const keys = await cacheAdapter.keys();
+    MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
     let values: any = {};
 
     if (searchInValue) {
