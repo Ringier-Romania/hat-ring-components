@@ -31,7 +31,7 @@ export async function RSS({context}: { context: AppContext }) {
         offset
     };
 
-    const response = await WebsiteApiProvider.call(query, variables) as {
+    const response = await WebsiteApiProvider.call(query, variables, 60 * 10) as {
         data: {
             stories: { total: number, edges: StoryEdge[] }
         },
