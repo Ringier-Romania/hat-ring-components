@@ -5,6 +5,7 @@ import {Hash} from '@aws-sdk/hash-node';
 import {HttpRequest} from '@aws-sdk/protocol-http';
 import {formatUrl} from "@aws-sdk/util-format-url";
 import {MonitoringProvider} from "./MonitoringProvider";
+import {ScanReply} from "@redis/client/dist/lib/commands/SCAN";
 
 
 interface RedisCacheValue {
@@ -153,6 +154,15 @@ export class RedisProvider {
         }
 
         const keysFromRedis = await this.client.keys("*");
+        return keysFromRedis;
+    }
+
+    async scan(cursor:number, match: string, count:number = 1000): Promise<ScanReply> {
+        if (!this.client) {
+            await this.initialize();
+        }
+
+        const keysFromRedis = await this.client.scan(cursor, { MATCH: match, COUNT: count });
         return keysFromRedis;
     }
 

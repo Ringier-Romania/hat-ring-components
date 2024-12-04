@@ -51,4 +51,8 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
         return await this.redisProvider.keysByGlob(globKey);
     }
 
+    async scan(cursor:number, match: string, count?:number) {
+        return await this.redisProvider.scan(cursor, match, count);
+    }
+
 }
