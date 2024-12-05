@@ -8,5 +8,6 @@ export interface CacheAdapterInterface {
     flushAll(): Promise<any>;
     keys(): Promise<string[]>;
     keysByGlob?(globKey: string): Promise<string[]>;
+    scan?(cursor:number, match: string, count?:number): Promise<{keys: Array<any>, cursor: number}>;
     mget(keys: string[]): Promise<{ [p: string]: unknown }>;
 }
