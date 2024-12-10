@@ -143,3 +143,43 @@ export async function WidgetHelper_getAppropriateTeaserImage(widgetConfig: Basic
 export function WidgetHelper_buildWidgetLocation(sectionName: string, boxName: string, index: number) {
     return [sectionName, boxName, index].join('--');
 }
+
+export function WidgetHelper_insertComponentAtPattern(blocks, widgetConfig, context ) {
+    const isMobile = context?.hatControllerParams?.isMobile;
+    const regex = /(\d*)n([+-]?\d+)?/;
+    const additionalComponents = widgetConfig?.additionalComponents;
+    const elementsToRender = [...blocks];
+    if (additionalComponents && additionalComponents.length !== 0) {
+        additionalComponents.forEach(component => {
+            const widgetName = _.upperFirst(component?.widget?.trim());
+            const AdditionalComponent = context?.customData?.widgets[widgetName];
+            let { platformMobile: mobile, platformDesktop: desktop, pattern, limit } = component || {};
+            if (AdditionalComponent && pattern && ((isMobile && mobile) || (!isMobile && desktop))) {
+                const match = pattern.match(regex);
+                
+                if (!match) return blocks;
+
+                const multiplier = match[1] ? Number(match[1]) : 1;
+                const offset = match[2] ? Number(match[2]) : 0;
+    
+                try {
+                    const config = component?.config ? JSON.parse(component?.config) : "";
+                    let insertCount = 0;
+                    const maxLimit = limit ? Number(limit) : elementsToRender.length;
+                    for (let i = 0; i < elementsToRender.length; i++) {
+                        if ((i + 1 - offset) % multiplier === 0 && insertCount < maxLimit) {
+                            elementsToRender.splice(i, 0, { AdditionalComponent, config, context });
+                            insertCount++;
+                            i++;
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error parsing data", error);
+                    return blocks;
+                }
+            }
+        });
+        return elementsToRender;
+    }
+    return blocks;
+}

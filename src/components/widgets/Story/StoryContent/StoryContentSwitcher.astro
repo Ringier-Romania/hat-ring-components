@@ -11,6 +11,7 @@ import * as BlocksTypes from "./StoryContentBlocks/index";
 import {AppContext} from "../../../../types/types";
 import {StoryContentWidgetConfig, StoryContentSwitcherParams} from "./types";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
+import { WidgetHelper_insertComponentAtPattern } from '../../../../helpers/WidgetHelper';
 let isGroupBlock = false;
 let isIgnoredGroupBlock = false;
 let groupElements: any[] = [];
@@ -72,11 +73,14 @@ function checkAndProcessGroupBlock(block) {
 
     return false;
 }
+
+const processedContent = WidgetHelper_insertComponentAtPattern(content, widgetConfig, context);
+
 ---
 
 {toRender ?
     <Fragment set:html={toRender}/> :
-    content.map((block, index) => {
+    processedContent.map((block, index) => {
         block = {...block};
         if (checkAndProcessGroupBlock(block)) {
             return null;
@@ -85,7 +89,10 @@ function checkAndProcessGroupBlock(block) {
         if (!isBlockWithinDisplayRange(index)) {
             return null;
         }
-
+        if (block?.AdditionalComponent) {
+            const { AdditionalComponent, config, context } = block;
+            return <AdditionalComponent widgetConfig={config} context={context} />;
+        }
         const BlockComponent = getBlockType(block);
         return BlockComponent ? (<BlockComponent blockData={block} widgetConfig={widgetConfig} context={context}/>) : null;
     })
