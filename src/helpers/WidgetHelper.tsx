@@ -144,42 +144,42 @@ export function WidgetHelper_buildWidgetLocation(sectionName: string, boxName: s
     return [sectionName, boxName, index].join('--');
 }
 
-export function WidgetHelper_insertComponentAtPattern(blocks, widgetConfig, context ) {
+export function WidgetHelper_insertComponentAtPattern(sourceElements, widgetConfig, context ) {
     const isMobile = context?.hatControllerParams?.isMobile;
-    const regex = /(\d*)n([+-]?\d+)?/;
+    const nthChildPatternRegex = /(\d*)n([+-]?\d+)?/;
     const additionalComponents = widgetConfig?.additionalComponents;
-    const elementsToRender = [...blocks];
+    const elementsToRender = [...sourceElements];
     if (additionalComponents && additionalComponents.length !== 0) {
-        additionalComponents.forEach(component => {
-            const widgetName = _.upperFirst(component?.widget?.trim());
+        additionalComponents.forEach(additionalWidget => {
+            const widgetName = _.upperFirst(additionalWidget?.widget?.trim());
             const AdditionalComponent = context?.customData?.widgets[widgetName];
-            let { platformMobile: mobile, platformDesktop: desktop, pattern, limit } = component || {};
-            if (AdditionalComponent && pattern && ((isMobile && mobile) || (!isMobile && desktop))) {
-                const match = pattern.match(regex);
-                
-                if (!match) return blocks;
+            const { platformMobile: isMobileEnabled, platformDesktop: isDesktopEnabled, pattern: insertionPattern, limit } = additionalWidget || {};
+            if (AdditionalComponent && insertionPattern && ((isMobile && isMobileEnabled) || (!isMobile && isDesktopEnabled))) {
+                const nthChildMatch = insertionPattern.match(nthChildPatternRegex);
+            
+                if (!nthChildMatch) return sourceElements;
 
-                const multiplier = match[1] ? Number(match[1]) : 1;
-                const offset = match[2] ? Number(match[2]) : 0;
+                const patternMultiplier = nthChildMatch[1] ? Number(nthChildMatch[1]) : 1;
+                const nthChildOffset = nthChildMatch[2] ? Number(nthChildMatch[2]) : 0;
     
                 try {
-                    const config = component?.config ? JSON.parse(component?.config) : "";
-                    let insertCount = 0;
-                    const maxLimit = limit ? Number(limit) : elementsToRender.length;
-                    for (let i = 0; i < elementsToRender.length; i++) {
-                        if ((i + 1 - offset) % multiplier === 0 && insertCount < maxLimit) {
-                            elementsToRender.splice(i, 0, { AdditionalComponent, config, context });
-                            insertCount++;
-                            i++;
+                    const config = additionalWidget?.config ? JSON.parse(additionalWidget?.config) : "";
+                    let insertedComponentsCount = 0;
+                    const maxComponentsToInsert = limit ? Number(limit) : elementsToRender.length;
+                    for (let insertPosition  = 0; insertPosition  < elementsToRender.length; insertPosition ++) {
+                        if ((insertPosition  + 1 - nthChildOffset) % patternMultiplier === 0 && insertedComponentsCount < maxComponentsToInsert) {
+                            elementsToRender.splice(insertPosition , 0, { AdditionalComponent, config, context });
+                            insertedComponentsCount++;
+                            insertPosition ++;
                         }
                     }
                 } catch (error) {
                     console.error("Error parsing data", error);
-                    return blocks;
+                    return sourceElements;
                 }
             }
         });
         return elementsToRender;
     }
-    return blocks;
+    return sourceElements;
 }
