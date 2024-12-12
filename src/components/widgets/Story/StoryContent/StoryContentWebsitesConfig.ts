@@ -55,6 +55,44 @@ export let StoryContentWebsitesConfig
                     "description": "Comma-separated block names to exclude from displaying, or leave empty to include all.",
                     "type": "textfield"
                 },
+                "additionalComponents": {
+                    "type": "treeobject",
+                    "name": "Additional Components",
+                    "description": "List of additional components",
+                    "required": false,
+                    "properties": [
+                        {
+                            "name": "widget",
+                            "type": "textfield",
+                            "description": "widget to insert e.g htmlInsert"
+                        },
+                        {
+                            "name": "platformDesktop",
+                            "description": "Desktop",
+                            "type": "checkbox"
+                        },
+                        {
+                            "name": "platformMobile",
+                            "description": "Mobile",
+                            "type": "checkbox"
+                        },
+                        {
+                            "name": "pattern",
+                            "type": "textfield",
+                            "description": "exmaple pattern: 2n, 3n+1, 5n-2"
+                        },
+                        {
+                            "name": "limit",
+                            "type": "textfield",
+                            "description": "limit number of components"
+                        },
+                        {
+                            "name": "config",
+                            "type": "code",
+                            "mode": "json"
+                        },
+                    ]
+                },
                 "cacheTTL": {
                     "name": "Cache TTL",
                     "description": "Cache TTL in seconds",
