@@ -338,6 +338,11 @@ export let BasicWidgetWebsitesConfig = {
                             "type": "checkbox"
                         },
                         {
+                            "name": "limit",
+                            "type": "textfield",
+                            "description": "limit number of components"
+                        },
+                        {
                             "name": "pattern",
                             "type": "textfield",
                             "description": "exmaple paterns: 2n, 3n+1, 5n-2"

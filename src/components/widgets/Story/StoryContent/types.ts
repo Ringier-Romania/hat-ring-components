@@ -8,6 +8,7 @@ export interface StoryContentWidgetConfig extends AbstractWidgetConfig {
     displayFrom?: string | number,
     displayTo?: string | number,
     ignoredFrameBlocksNames?: string,
+    additionalComponents?: string
 }
 
 export interface StoryContentExtendableAttributes {

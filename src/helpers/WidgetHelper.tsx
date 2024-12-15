@@ -143,3 +143,43 @@ export async function WidgetHelper_getAppropriateTeaserImage(widgetConfig: Basic
 export function WidgetHelper_buildWidgetLocation(sectionName: string, boxName: string, index: number) {
     return [sectionName, boxName, index].join('--');
 }
+
+export function WidgetHelper_insertComponentAtPattern(sourceElements, widgetConfig, context ) {
+    const isMobile = context?.hatControllerParams?.isMobile;
+    const nthChildPatternRegex = /(\d*)n([+-]?\d+)?/;
+    const additionalComponents = widgetConfig?.additionalComponents;
+    const elementsToRender = [...sourceElements];
+    if (additionalComponents && additionalComponents.length !== 0) {
+        additionalComponents.forEach(additionalWidget => {
+            const widgetName = _.upperFirst(additionalWidget?.widget?.trim());
+            const AdditionalComponent = context?.customData?.widgets[widgetName];
+            const { platformMobile: isMobileEnabled, platformDesktop: isDesktopEnabled, pattern: insertionPattern, limit } = additionalWidget || {};
+            if (AdditionalComponent && insertionPattern && ((isMobile && isMobileEnabled) || (!isMobile && isDesktopEnabled))) {
+                const nthChildMatch = insertionPattern.match(nthChildPatternRegex);
+            
+                if (!nthChildMatch) return sourceElements;
+
+                const patternMultiplier = nthChildMatch[1] ? Number(nthChildMatch[1]) : 1;
+                const nthChildOffset = nthChildMatch[2] ? Number(nthChildMatch[2]) : 0;
+    
+                try {
+                    const config = additionalWidget?.config ? JSON.parse(additionalWidget?.config) : "";
+                    let insertedComponentsCount = 0;
+                    const maxComponentsToInsert = limit ? Number(limit) : elementsToRender.length;
+                    for (let insertPosition  = 0; insertPosition  < elementsToRender.length; insertPosition ++) {
+                        if ((insertPosition  + 1 - nthChildOffset) % patternMultiplier === 0 && insertedComponentsCount < maxComponentsToInsert) {
+                            elementsToRender.splice(insertPosition , 0, { AdditionalComponent, config, context });
+                            insertedComponentsCount++;
+                            insertPosition ++;
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error parsing data", error);
+                    return sourceElements;
+                }
+            }
+        });
+        return elementsToRender;
+    }
+    return sourceElements;
+}

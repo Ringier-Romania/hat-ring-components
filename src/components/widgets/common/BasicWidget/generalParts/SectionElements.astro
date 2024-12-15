@@ -14,9 +14,8 @@ import {BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse}
 import * as ItemParts from "../itemParts";
 import _ from "lodash";
 import {RingLink} from "../../../../common/RingLink/RingLink";
-import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {WidgetHelper_insertComponentAtPattern, WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import {UtilsHelper_getValueIfExists} from "../../../../../helpers/UtilsHelper";
-
 interface AdditionalComponent extends SectionItemEdge {
     AdditionalComponent: Function;
     config: {
@@ -37,29 +36,10 @@ const bigElementsCount = Number(widgetConfig.countBig);
 const colNumber = Math.floor(12 / columnsCount);
 const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
 const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
-const additionalComponents = widgetConfig.additionalComponents;
-const isMobile = context?.hatControllerParams?.isMobile;
 
-if (additionalComponents && additionalComponents.length > 0) {
-    additionalComponents.forEach((component: { widget: string; config: string }, index: number) => {    
-        const widgetName = _.upperFirst(component?.widget?.trim());
-        const AdditionalComponent = context?.customData?.widgets[widgetName];
-        const { platformMobile: mobile, platformDesktop: desktop, pattern } = widgetConfig?.additionalComponents[index] || {};
-        if (AdditionalComponent && pattern && ((isMobile && mobile) || (!isMobile && desktop))) {
-            const [multiplier = 1, integerOffset = 0]: number[] = pattern.replace(/ /g, "").split("n")?.map(Number);
-            try {
-                const config = component?.config ? JSON.parse(component?.config) : "";
-                for (let i = 1; i <= elementsToRender.length; i++) {
-                    if (i >= integerOffset && (i - integerOffset) % multiplier === 0) {
-                        elementsToRender.splice(i - 1, 0, { AdditionalComponent, config } as AdditionalComponent);
-                    }
-                }
-            } catch (error) {
-                console.error("Error parsing data", error);
-            }
-        }
-    });
-}
+
+const processedContent = WidgetHelper_insertComponentAtPattern(elementsToRender, widgetConfig, context);
+
 ---
 
 {
@@ -67,21 +47,18 @@ if (additionalComponents && additionalComponents.length > 0) {
         <Fragment set:html={toRender} />
     ) : (
         <div class={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
-            {elementsToRender.map((edge, itemIndex) => {
+            {processedContent.map((edge, itemIndex) => {
                 if (widgetConfig.count && itemIndex >= widgetConfig.count) {
                     return null;
-                }
-                const { AdditionalComponent, config } = edge as AdditionalComponent;
-                if (AdditionalComponent && config) {
-                    widgetConfig.count++;
                 }
                 const isBig = itemIndex < bigElementsCount;
                 const colClass = isBig ? `col12` : `col${colNumber}`;
                 const bigElementClass = isBig ? `bigElement` : '';
-                return AdditionalComponent && config ? (
+                const { AdditionalComponent, config } = edge as AdditionalComponent;
+                return AdditionalComponent ? (
                     <div
                         key={itemIndex}
-                        class={["AdditionalComponent", "Item", colClass, bigElementClass, config?.widgetType].join(" ")}
+                        class={["AdditionalComponent", "Item", colClass, bigElementClass, processedContent.config?.widgetType].join(" ")}
                     >
                         <AdditionalComponent widgetConfig={config} context={context} />
                     </div>

@@ -28,6 +28,9 @@ const {blockData} = Astro.props as EmbeddedApplicationBlockParams;
         pulsembedScript.src = 'https://pulsembed.eu/pulsembed.js';
         pulsembedScript.id = 'pulseembed';
         pulsembedScript.defer = true;
+        document.querySelectorAll('.pulsembed_embed').forEach((element) => {
+            element.setAttribute('data-loading','lazy');
+        });
         pulsembedScript.onload = function () {
             if (window.pulsembed) {
                 window.pulsembed();
