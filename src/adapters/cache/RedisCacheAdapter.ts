@@ -38,10 +38,6 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
         return await this.redisProvider.del(key);
     }
 
-    async delKeys(keys: Array<string>): Promise<number> {
-        return await this.redisProvider.delKeys(keys);
-    }
-
     async getTtl(key: any): Promise<number | undefined> {
         const data = await this.redisProvider.getTtl(key);
         return data;
