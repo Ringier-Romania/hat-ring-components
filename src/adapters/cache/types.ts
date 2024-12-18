@@ -3,7 +3,6 @@ export interface CacheAdapterInterface {
     get(key: any): Promise<any>;
     del(key: any): Promise<number>;
     unlink?(key: any): Promise<number>;
-    delKeys?(keys: Array<string>): Promise<number>;
     getTtl(key: any): Promise<number|undefined>;
     flushAll(): Promise<any>;
     keys(): Promise<string[]>;
