@@ -153,10 +153,11 @@ export function WidgetHelper_insertComponentAtPattern(sourceElements, widgetConf
         additionalComponents.forEach(additionalWidget => {
             const widgetName = _.upperFirst(additionalWidget?.widget?.trim());
             const AdditionalComponent = context?.customData?.widgets[widgetName];
-            const { platformMobile: isMobileEnabled, platformDesktop: isDesktopEnabled, pattern: insertionPattern, limit } = additionalWidget || {};
+            const { platformMobile: isMobileEnabled, platformDesktop: isDesktopEnabled, pattern: insertionPattern, limit, customCssClass } = additionalWidget || {};
+
             if (AdditionalComponent && insertionPattern && ((isMobile && isMobileEnabled) || (!isMobile && isDesktopEnabled))) {
                 const nthChildMatch = insertionPattern.match(nthChildPatternRegex);
-            
+
                 if (!nthChildMatch) return sourceElements;
 
                 const patternMultiplier = nthChildMatch[1] ? Number(nthChildMatch[1]) : 1;
@@ -168,7 +169,7 @@ export function WidgetHelper_insertComponentAtPattern(sourceElements, widgetConf
                     const maxComponentsToInsert = limit ? Number(limit) : elementsToRender.length;
                     for (let insertPosition  = 0; insertPosition  < elementsToRender.length; insertPosition ++) {
                         if ((insertPosition  + 1 - nthChildOffset) % patternMultiplier === 0 && insertedComponentsCount < maxComponentsToInsert) {
-                            elementsToRender.splice(insertPosition , 0, { AdditionalComponent, config, context });
+                            elementsToRender.splice(insertPosition , 0, { AdditionalComponent, config, context, customCssClass });
                             insertedComponentsCount++;
                             insertPosition ++;
                         }

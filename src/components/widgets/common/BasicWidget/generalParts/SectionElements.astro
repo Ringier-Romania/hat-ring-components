@@ -14,13 +14,17 @@ import {BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse}
 import * as ItemParts from "../itemParts";
 import _ from "lodash";
 import {RingLink} from "../../../../common/RingLink/RingLink";
-import {WidgetHelper_insertComponentAtPattern, WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {
+    WidgetHelper_insertComponentAtPattern,
+    WidgetHelper_renderEmptyComponent
+} from "../../../../../helpers/WidgetHelper";
 import {UtilsHelper_getValueIfExists} from "../../../../../helpers/UtilsHelper";
 interface AdditionalComponent extends SectionItemEdge {
     AdditionalComponent: Function;
     config: {
         widgetType: string;
     };
+    customCssClass: string;
 }
 
 let toRender: boolean | JSX.Element | string = false;
@@ -39,52 +43,54 @@ const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
 
 
 const processedContent = WidgetHelper_insertComponentAtPattern(elementsToRender, widgetConfig, context);
-
 ---
 
 {
     toRender ? (
-        <Fragment set:html={toRender} />
-    ) : (
-        <div class={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
-            {processedContent.map((edge, itemIndex) => {
-                if (widgetConfig.count && itemIndex >= widgetConfig.count) {
-                    return null;
-                }
-                const isBig = itemIndex < bigElementsCount;
-                const colClass = isBig ? `col12` : `col${colNumber}`;
-                const bigElementClass = isBig ? `bigElement` : '';
-                const { AdditionalComponent, config } = edge as AdditionalComponent;
-                return AdditionalComponent ? (
+    <Fragment set:html={toRender}/>
+        ) : (
+    <div class={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
+        {processedContent.map((edge, itemIndex) => {
+            if (widgetConfig.count && itemIndex >= widgetConfig.count) {
+                return null;
+            }
+            const isBig = itemIndex < bigElementsCount;
+            const colClass = isBig ? `col12` : `col${colNumber}`;
+            const bigElementClass = isBig ? `bigElement` : '';
+            const {AdditionalComponent, config, customCssClass} = edge as AdditionalComponent;
+            return AdditionalComponent ? (
                     <div
-                        key={itemIndex}
-                        class={["AdditionalComponent", "Item", colClass, bigElementClass, processedContent.config?.widgetType].join(" ")}
+                            key={itemIndex}
+                            class={["AdditionalComponent", "Item", colClass, bigElementClass, processedContent.config?.widgetType, customCssClass].join(" ")}
                     >
-                        <AdditionalComponent widgetConfig={config} context={context} />
+                        <AdditionalComponent widgetConfig={config} context={context}/>
                     </div>
-                ) : (
+            ) : (
                     <div class={['Item', colClass, bigElementClass].join(' ')} key={itemIndex}>
                         <div class={'linkOverlay'}>
-                            <RingLink href={edge.node?.externalUrl || edge.node?.url || '#'} title={edge.node?.title || ''}>
+                            <RingLink href={edge.node?.externalUrl || edge.node?.url || '#'}
+                                      title={edge.node?.title || ''}>
                                 {widgetConfig.linkLabel}
                             </RingLink>
                         </div>
                         {widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {
-                                const Component = allItemParts[_.upperFirst(showOption)];
+                            const Component = allItemParts[_.upperFirst(showOption)];
 
-                                if (!Component) {
-                                    console.error(`No item part support ${showOption}`);
-                                return <Fragment set:html={WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet")}/>
-                                }
+                            if (!Component) {
+                                console.error(`No item part support ${showOption}`);
+                                return
+                                        <Fragment
+                                                set:html={WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet")}/>
+                            }
 
-                                return (
+                            return (
                                     <Component key={'aa' + itemIndex + index} itemIndex={itemIndex} context={context}
-                                        widgetConfig={widgetConfig}
+                                               widgetConfig={widgetConfig}
                                                data={edge.node}/>)
-                            })}
+                        })}
                     </div>
-                );
-            })}
-        </div>
-    )
-}
+            );
+        })}
+    </div>
+        )
+    }

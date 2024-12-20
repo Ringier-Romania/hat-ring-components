@@ -8,7 +8,6 @@ export { getFragment as PublicationDate_getFragment } from './PublicationDate.as
 export { default as ModificationDate } from './ModificationDate.astro';
 export { getFragment as ModificationDate_getFragment } from './ModificationDate.astro';
 export {default as Authors} from './Authors';
-export {default as AuthorsImages} from './AuthorsImages';
 export {default as Taxonomies} from './Taxonomies';
 export { default as TitleAddons } from "./TitleAddons.astro";
 export { getFragment as TitleAddons_getFragment } from "./TitleAddons.astro";
