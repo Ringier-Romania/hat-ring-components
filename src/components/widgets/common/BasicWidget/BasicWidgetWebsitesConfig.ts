@@ -73,7 +73,6 @@ export let BasicWidgetWebsitesConfig = {
                         "publicationDate",
                         "modificationDate",
                         "authors",
-                        "authorsImages",
                         "taxonomies",
                         "titleAddons"
                     ]
@@ -336,6 +335,11 @@ export let BasicWidgetWebsitesConfig = {
                             "name": "platformMobile",
                             "description": "Mobile",
                             "type": "checkbox"
+                        },
+                        {
+                            "name": "customCssClass",
+                            "description": "custom CSS class",
+                            "type": "textfield"
                         },
                         {
                             "name": "limit",

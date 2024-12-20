@@ -77,14 +77,19 @@ export let StoryContentWebsitesConfig
                             "type": "checkbox"
                         },
                         {
-                            "name": "pattern",
-                            "type": "textfield",
-                            "description": "exmaple pattern: 2n, 3n+1, 5n-2"
+                            "name": "customCssClass",
+                            "description": "custom CSS class",
+                            "type": "textfield"
                         },
                         {
                             "name": "limit",
                             "type": "textfield",
                             "description": "limit number of components"
+                        },
+                        {
+                            "name": "pattern",
+                            "type": "textfield",
+                            "description": "exmaple pattern: 2n, 3n+1, 5n-2"
                         },
                         {
                             "name": "config",

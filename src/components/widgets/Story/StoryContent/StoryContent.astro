@@ -10,7 +10,6 @@ const content = await StoryContent_getData(context, widgetConfig);
 
 
 <div class={WidgetHelper_getWidgetCssClasses('StoryContent', widgetConfig, context)}>
-    {/* @ts-expect-error Server Component */}
     <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context}
                           extendableAttributes={extendableAttributes}/>
 </div>

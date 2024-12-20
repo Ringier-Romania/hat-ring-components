@@ -16,7 +16,6 @@ export enum BasicWidgetShowOptions {
     Lead = 'lead',
     // Flags = 'flags',
     Authors = 'authors',
-    AuthorsImages = 'authorsImages',
     TitleAddons = 'titleAddons',
     // AlternativeTeasers = 'alternativeTeasers',
     // OrdinalNumber = 'ordinalNumber',
@@ -85,7 +84,6 @@ export interface BasicWidgetResponseNode {
     lead?: string,
     creationTime?: string,
     modificationTime?: string,
-    authors?: Array<string>,
     topics?: Array<string>
     titles?: Array<{
         role?: {

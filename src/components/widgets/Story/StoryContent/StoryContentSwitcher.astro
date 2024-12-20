@@ -73,7 +73,6 @@ function checkAndProcessGroupBlock(block) {
 
     return false;
 }
-
 const processedContent = WidgetHelper_insertComponentAtPattern(content, widgetConfig, context);
 
 ---
@@ -90,8 +89,10 @@ const processedContent = WidgetHelper_insertComponentAtPattern(content, widgetCo
             return null;
         }
         if (block?.AdditionalComponent) {
-            const { AdditionalComponent, config, context } = block;
-            return <AdditionalComponent widgetConfig={config} context={context} />;
+            const { AdditionalComponent, config, context, customCssClass } = block;
+            return <div class={["AdditionalComponent", customCssClass].join(" ")}>
+                <AdditionalComponent widgetConfig={config} context={context}/>
+            </div>
         }
         const BlockComponent = getBlockType(block);
         return BlockComponent ? (<BlockComponent blockData={block} widgetConfig={widgetConfig} context={context}/>) : null;
