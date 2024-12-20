@@ -13,7 +13,7 @@ export default function Authors(
             widgetConfig: BasicWidgetConfig,
             data: BasicWidgetResponseNode,
         }) {
-    const authorsObjs = data.authors?.map((name) => {return {name, image: {url: null, caption: null}}}) || data.originalContent?.authors?.map((obj) => obj.author);
+    const authorsObjs = data.originalContent?.authors?.map((obj) => {return {name: obj?.author?.name, image: {url: obj.author?.image?.url, caption: obj.author?.image?.caption}}}) || [];
 
     if (!authorsObjs || authorsObjs.length === 0) {
         return WidgetHelper_renderEmptyComponent('Authors','', true);
@@ -43,9 +43,6 @@ Authors.getFragment = () => {
     return {
         variables: {},
         query: gql`fragment AuthorsFragment on SectionItem {
-            authors {
-                name
-            }
             originalContent {
                 ... on Story {
                     authors {
