@@ -154,7 +154,7 @@ export function WidgetHelper_insertComponentAtPattern(sourceElements, widgetConf
             const widgetName = _.upperFirst(additionalWidget?.widget?.trim());
             const AdditionalComponent = context?.customData?.widgets[widgetName];
             const { platformMobile: isMobileEnabled, platformDesktop: isDesktopEnabled, pattern: insertionPattern, limit, customCssClass } = additionalWidget || {};
-            console.log(isMobile, isMobileEnabled, isDesktopEnabled)
+
             if (AdditionalComponent && insertionPattern && ((isMobile && isMobileEnabled) || (!isMobile && isDesktopEnabled))) {
                 const nthChildMatch = insertionPattern.match(nthChildPatternRegex);
 
