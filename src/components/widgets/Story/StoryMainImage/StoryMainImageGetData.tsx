@@ -10,6 +10,9 @@ export async function StoryMainImage_getData({widgetConfig, context}: StoryMainI
                 image{
                     url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}}),
                     caption
+                    image {
+                        description
+                    }
                 }
             }
         }
