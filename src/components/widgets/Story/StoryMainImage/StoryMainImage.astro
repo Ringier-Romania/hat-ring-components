@@ -7,6 +7,7 @@ import _ from 'lodash';
 import {StoryMainImageParams, StoryMainImageResponse} from "./types";
 import {RingImage} from "../../../common/RingImage";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
+import { StoryMainImageDescription } from "./StoryMainImageDescription";
 import {
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
@@ -14,9 +15,9 @@ import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/Imag
 
 const response = await StoryMainImage_getData({widgetConfig, context});
 const imageDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, context);
-
 const imgSrc = _.get(response, 'data.story.image.url');
 const caption = _.get(response, 'data.story.image.caption');
+const description = _.get(response, 'data.story.image.image.description');
 ---
 
 <div class={WidgetHelper_getWidgetCssClasses('StoryMainImage', widgetConfig, context)}>
@@ -29,5 +30,6 @@ const caption = _.get(response, 'data.story.image.caption');
             width={imageDimensions.width}
             height={imageDimensions.height}/>
         {caption && <StoryMainImageCaption caption={caption}/>}
+        {description && <StoryMainImageDescription description={description}/>}
     </> : null}
 </div>

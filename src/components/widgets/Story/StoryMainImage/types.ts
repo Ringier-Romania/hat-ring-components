@@ -6,6 +6,9 @@ export interface StoryMainImageResponse {
             "image": {
                 "url": string,
                 "caption": string | null
+                "image": {
+                    "description": string | null
+                }
             }
         }
     }
