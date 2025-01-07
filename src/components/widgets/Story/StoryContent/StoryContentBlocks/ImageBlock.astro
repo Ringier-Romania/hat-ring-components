@@ -2,7 +2,6 @@
 const {blockData, widgetConfig, context} = Astro.props as ImageBlockParams;
 import React from "react";
 import {default as RingImage} from "../../../../common/RingImage.astro";
-import {RingLink} from "../../../../common/RingLink/RingLink";
 import {ImageBlockParams} from "../types";
 import {UtilsHelper_convertToInt, UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
 import {TransformType} from "../../../../../helpers/AcceleratorImagesHelper";
@@ -32,7 +31,7 @@ if (maxImageHeight && maxImageHeight < imageHeight) {
 
 <div class={['ImageBlock', 'alignment-' + blockData.alignment].join(' ')}>
     {
-        <a href={link ? link.url : url} target="_blank" data-pswp-src={url}  data-pswp-width={image.width} data-pswp-height={image.height} >
+        <a class={link && link.url ? "withExternalUrl" : ""} href={link ? link.url : url} target="_blank" data-pswp-src={url}  data-pswp-width={image.width} data-pswp-height={image.height} >
             <RingImage src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight} transform={TransformType.ResizeCropAuto}  />
         </a>
     }

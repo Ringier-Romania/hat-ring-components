@@ -14,7 +14,7 @@ export let PhotoSwipeWebsitesConfig = {
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "gallerySelector": ".StoryContent ",
-                "childrenSelector": ".ImageBlock a",
+                "childrenSelector": ".ImageBlock a:not(.withExternalUrl)",
                 "widgetType": "photoswipe"
             },
             "paramsDescription": {

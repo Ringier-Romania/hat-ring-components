@@ -21,13 +21,15 @@ const caption = _.get(response, 'data.story.image.caption');
 
 <div class={WidgetHelper_getWidgetCssClasses('StoryMainImage', widgetConfig, context)}>
     {imgSrc ? <>
-        <RingImage
-            priority={true}
-            src={imgSrc}
-            alt={caption}
-            transform={TransformType.ResizeCropAuto}
-            width={imageDimensions.width}
-            height={imageDimensions.height}/>
+        <a href={imgSrc} target="_blank" data-pswp-src={imgSrc} data-pswp-width={parseInt(imageDimensions.width as string) * 3} data-pswp-height={parseInt(imageDimensions.height as string) * 3} >
+            <RingImage
+                priority={true}
+                src={imgSrc}
+                alt={caption}
+                transform={TransformType.ResizeCropAuto}
+                width={imageDimensions.width}
+                height={imageDimensions.height}/>
+        </a>
         {caption && <StoryMainImageCaption caption={caption}/>}
     </> : null}
 </div>
