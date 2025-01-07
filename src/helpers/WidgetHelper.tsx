@@ -164,7 +164,7 @@ export function WidgetHelper_insertComponentAtPattern(sourceElements, widgetConf
                 const nthChildOffset = nthChildMatch[2] ? Number(nthChildMatch[2]) : 0;
     
                 try {
-                    const config = additionalWidget?.config ? JSON.parse(additionalWidget?.config) : "";
+                    const config = typeof additionalWidget?.config === 'string' ? JSON.parse(additionalWidget?.config) : additionalWidget?.config || "";
                     let insertedComponentsCount = 0;
                     const maxComponentsToInsert = limit ? Number(limit) : elementsToRender.length;
                     for (let insertPosition  = 0; insertPosition  < elementsToRender.length; insertPosition ++) {
