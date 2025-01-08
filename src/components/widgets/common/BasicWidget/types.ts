@@ -92,6 +92,9 @@ export interface BasicWidgetResponseNode {
         text?: string
     }>,
     originalContent?: {
+        kind?: {
+            code?: string,
+        }
         image?: {
             url?: string,
             caption?: string

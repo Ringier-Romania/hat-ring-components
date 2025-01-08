@@ -68,6 +68,15 @@ export async function BasicWidget_getData(context: AppContext, queryNodeFragment
                             node {
                                 id
                                 url
+                                ... on SectionItem {
+                                    originalContent {
+                                        ... on Story {
+                                            kind {
+                                                code
+                                            }
+                                        }
+                                    }
+                                }
                                 ${dynamicFragmentsNames}
                                 ${queryNodeFragment}
                             }
