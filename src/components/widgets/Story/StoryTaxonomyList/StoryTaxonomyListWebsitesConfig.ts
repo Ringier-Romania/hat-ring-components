@@ -24,7 +24,7 @@ export let StoryTaxonomyListWebsitesConfig
                 ...AbstractWebsitesWidgetConfigParamsDescription,
                 "taxonomyKind": {
                     "name": "taxonomy kind",
-                    "description": "kind of taxonomy to be displayed",
+                    "description": "Kind of taxonomy to be displayed, comma-separated, order matters",
                     "type": "textfield",
                     "required": true
                 },

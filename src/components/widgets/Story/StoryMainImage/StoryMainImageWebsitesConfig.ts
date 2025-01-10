@@ -16,6 +16,7 @@ export let StoryMainImageWebsitesConfig
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "standardImageSize": "920x500",
                 "imageSizeMobile": "450x253",
+                "showLinkToImage": "false",
                 "widgetType": "detailMainImage"
             },
             "paramsDescription": {
@@ -29,6 +30,11 @@ export let StoryMainImageWebsitesConfig
                     "name": "Mobile image resolution",
                     "type": "textfield",
                     "description": "Mobile image resolution (empty = original), example: 450x253"
+                },
+                "showLinkToImage": {
+                    "name": "Show link to image",
+                    "type": "checkbox",
+                    "description": "When checked, the image will link to the image page or open in a lightbox after proper configuration"
                 },
                 "cacheTTL": {
                     "name": "Cache TTL",

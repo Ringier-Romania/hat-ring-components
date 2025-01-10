@@ -58,6 +58,7 @@ const processedContent = WidgetHelper_insertComponentAtPattern(elementsToRender,
             const colClass = isBig ? `col12` : `col${colNumber}`;
             const bigElementClass = isBig ? `bigElement` : '';
             const {AdditionalComponent, config, customCssClass} = edge as AdditionalComponent;
+            const kind = edge?.node?.originalContent?.kind?.code;
             return AdditionalComponent ? (
                     <div
                             key={itemIndex}
@@ -66,7 +67,7 @@ const processedContent = WidgetHelper_insertComponentAtPattern(elementsToRender,
                         <AdditionalComponent widgetConfig={config} context={context}/>
                     </div>
             ) : (
-                    <div class={['Item', colClass, bigElementClass].join(' ')} key={itemIndex}>
+                    <div class={['Item', colClass, bigElementClass, `kind-${kind}`].join(' ')} key={itemIndex}>
                         <div class={'linkOverlay'}>
                             <RingLink href={edge.node?.externalUrl || edge.node?.url || '#'}
                                       title={edge.node?.title || ''}>
