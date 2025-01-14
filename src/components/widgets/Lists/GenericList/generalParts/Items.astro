@@ -40,7 +40,7 @@ const colNumber = Math.floor(12 / columnsCount);
                        data={edge.node}/>;
         });
         const colClass = `col${colNumber}`;
-        return <div class={['Item', colClass].join(' ')}>
+        return <div class={['Item', colClass, `kind-${edge.node.kind?.code}`].join(' ')}>
             <div class={'linkOverlay'}>
                 <RingLink href={edge.node?.mainPublicationPoint?.url || '#'} title={edge.node?.title}>
                     {widgetConfig.linkLabel}
