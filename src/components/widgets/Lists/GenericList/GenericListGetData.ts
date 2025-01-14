@@ -110,7 +110,9 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
                 genericListReqTotal: total
                 edges {
                     node {
-                        
+                        kind {
+                            code
+                        }
                         id
                         mainPublicationPoint {
                             url
