@@ -1,10 +1,11 @@
 ---
 const {context, widgetConfig} = Astro.props;
 
+import _ from "lodash";
 import React from 'react';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {StoryTaxonomyListParams, StoryTaxonomyListResponse} from "./types";
+import {StoryTaxonomyListResponse} from "./types";
 import {RingLink} from "../../../common/RingLink/RingLink";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 
@@ -38,31 +39,33 @@ const variables = {
 };
 
 const response = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL) as StoryTaxonomyListResponse;
+
+const topics = response.data.story?.topics;
+const taxonomyList = (widgetConfig?.taxonomyKind || '').split(',').map(kind => kind.trim());
+const excludedUuids = (widgetConfig?.excludedUuids || '').split(',').map(uuid => uuid.trim());
+const filteredTopics = topics.filter(topic => {
+    if (!taxonomyList.includes(topic.topic.kind.code) || excludedUuids.includes(topic.topic.id)) {
+        return false;
+    }
+    return true;
+});
+
+const sortedTopics = _.sortBy(filteredTopics, topic => {
+    return taxonomyList.indexOf(topic.topic.kind.code)
+});
 ---
-
-
 <div class={WidgetHelper_getWidgetCssClasses('StoryTaxonomyList', widgetConfig, context)}>
     {widgetConfig.listPrefix && <span class={'listPrefix'}>{widgetConfig.listPrefix}</span>}
 
-    {response.data.story?.topics?.map((topic, index) => {
-            if (widgetConfig.taxonomyKind && topic.topic.kind.code != widgetConfig.taxonomyKind) {
-                return null;
-            }
-            if (widgetConfig.excludedUuids) {
-                const excludedUuids = widgetConfig.excludedUuids.split(',');
-                if (excludedUuids.includes(topic.topic.id)) {
-                    return null;
-                }
-            }
-            let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
-            let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
-            return url && widgetConfig.links ?
-                    <RingLink key={index} href={url}>
-                        <span class={'topic'}>{topic.topic.name}</span>
-                    </RingLink> : <span key={index} class={'topic'}>{topic.topic.name}</span>
+    {sortedTopics.map((topic, index) => {
+        let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
+        let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
+        return url && widgetConfig.links ?
+            <RingLink key={index} href={url}>
+                <span class={`topic kind-${topic.topic.kind.code}`}>{topic.topic.name}</span>
+            </RingLink> : <span key={index} class={`topic kind-${topic.topic.kind.code}`}>{topic.topic.name}</span>
         }
     )}
-
 </div>
 
 
