@@ -45,6 +45,11 @@ export let StoryContentWebsitesConfig
                     "type": "textfield",
                     "description": "Maximum image height in px (empty = original) for mobile"
                 },
+                "displayFrom": {
+                    "name": "Display blocks from",
+                    "description": "1 is first, empty display all",
+                    "type": "textfield"
+                },
                 "displayTo": {
                     "name": "Display blocks to",
                     "description": "empty is to the end",
