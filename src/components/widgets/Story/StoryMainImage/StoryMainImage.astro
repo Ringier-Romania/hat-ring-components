@@ -20,16 +20,16 @@ const imageDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, c
 const imgSrc = _.get(response, 'data.story.image.image.url');
 const caption = _.get(response, 'data.story.image.caption');
 const description = _.get(response, 'data.story.image.image.description');
-const preserveAspectRatio = _.get(widgetConfig, 'preserveAspectRatio', false);
+const keepAspectRatio = _.get(widgetConfig, 'keepAspectRatio', false);
 
-let maxImageWidth = UtilsHelper_convertToInt(imageDimensions.width);
-let maxImageHeight = UtilsHelper_convertToInt(imageDimensions.height);
+const maxImageWidth = UtilsHelper_convertToInt(imageDimensions.width);
+const maxImageHeight = UtilsHelper_convertToInt(imageDimensions.height);
 const originalImageWidth = UtilsHelper_convertToInt(response.data.story.image.image.width);
 const originalImageHeight = UtilsHelper_convertToInt(response.data.story.image.image.height);
 let imageWidth = originalImageWidth;
 let imageHeight = originalImageHeight;
 
-if (preserveAspectRatio && imageWidth !== 0 && imageHeight !== 0) {
+if (keepAspectRatio && imageWidth !== 0 && imageHeight !== 0) {
     // Adjust height to maintain aspect ratio if max width is set and less than current width.
     if (maxImageWidth && maxImageWidth < imageWidth) {
         imageHeight = maxImageWidth * imageHeight / imageWidth;
