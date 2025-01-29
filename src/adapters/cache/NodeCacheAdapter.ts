@@ -1,11 +1,14 @@
 import {CacheAdapterInterface} from "./types";
 import NodeCache from "node-cache";
+import {UtilsHelper_convertToInt} from "../../helpers/UtilsHelper";
 
 export class NodeCacheAdapter implements CacheAdapterInterface {
     private cache: NodeCache;
 
     constructor() {
-        this.cache = new NodeCache();
+        const stdTTL = process.env.CACHE_TTL ? UtilsHelper_convertToInt(process.env.CACHE_TTL) : 60;
+        const myCache = new NodeCache({stdTTL: stdTTL, checkperiod: 0, deleteOnExpire: false, useClones: false});
+        this.cache = myCache;
     }
 
     async set(key: any, value: any, TTL: number | null | undefined): Promise<void> {
