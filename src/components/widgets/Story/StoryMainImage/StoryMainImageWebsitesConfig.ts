@@ -17,6 +17,7 @@ export let StoryMainImageWebsitesConfig
                 "standardImageSize": "920x500",
                 "imageSizeMobile": "450x253",
                 "showLinkToImage": "false",
+                "preserveAspectRatio": "false",
                 "widgetType": "detailMainImage"
             },
             "paramsDescription": {
@@ -35,6 +36,11 @@ export let StoryMainImageWebsitesConfig
                     "name": "Show link to image",
                     "type": "checkbox",
                     "description": "When checked, the image will link to the image page or open in a lightbox after proper configuration"
+                },
+                "preserveAspectRatio": {
+                    "name": "Preserve aspect ratio",
+                    "type": "checkbox",
+                    "description": "When checked, this ensures that the image maintains its original aspect ratio while fitting within the specified maximum dimensions"
                 },
                 "cacheTTL": {
                     "name": "Cache TTL",

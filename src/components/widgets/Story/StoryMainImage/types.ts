@@ -4,10 +4,12 @@ export interface StoryMainImageResponse {
     "data": {
         "story": {
             "image": {
-                "url": string,
                 "caption": string | null
                 "image": {
+                    "url": string,
                     "description": string | null
+                    "width": number
+                    "height": number
                 }
             }
         }
