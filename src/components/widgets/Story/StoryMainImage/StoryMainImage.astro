@@ -5,9 +5,9 @@ import {StoryMainImage_getData} from "./StoryMainImageGetData";
 import React from 'react';
 import _ from 'lodash';
 import {StoryMainImageParams, StoryMainImageResponse} from "./types";
-import {RingImage} from "../../../common/RingImage";
+import RingImage from "../../../common/RingImage.astro";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
-import { StoryMainImageDescription } from "./StoryMainImageDescription";
+import {StoryMainImageDescription} from "./StoryMainImageDescription";
 import {
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
@@ -17,8 +17,12 @@ import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 const response = await StoryMainImage_getData({widgetConfig, context});
 
 const imageDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, context);
-const imgSrc = _.get(response, 'data.story.image.image.url');
-const caption = _.get(response, 'data.story.image.caption');
+const croppedSrc = _.get(response, 'data.story.image.url');
+const originalSrc = _.get(response, 'data.story.image.image.url');
+const isCropped = !!_.get(response, 'data.story.image.crop');
+const imgSrc = isCropped ? croppedSrc : originalSrc;
+
+const caption = _.get(response, 'data.story.image.caption', "");
 const description = _.get(response, 'data.story.image.image.description');
 const keepAspectRatio = _.get(widgetConfig, 'keepAspectRatio', false);
 
@@ -45,14 +49,14 @@ if (keepAspectRatio && imageWidth !== 0 && imageHeight !== 0) {
     imageWidth = maxImageWidth;
     imageHeight = maxImageHeight;
 }
-
 ---
 
 <div class={WidgetHelper_getWidgetCssClasses('StoryMainImage', widgetConfig, context)}>
     {imgSrc && (
             <>
                 {widgetConfig.showLinkToImage ? (
-                        <a href={imgSrc} target="_blank" data-pswp-src={imgSrc} data-pswp-width={originalImageWidth} data-pswp-height={originalImageHeight}>
+                        <a href={imgSrc} target="_blank" data-pswp-src={imgSrc} data-pswp-width={originalImageWidth}
+                           data-pswp-height={originalImageHeight}>
                             <RingImage
                                     priority={true}
                                     src={imgSrc}
@@ -70,8 +74,10 @@ if (keepAspectRatio && imageWidth !== 0 && imageHeight !== 0) {
                                 width={imageWidth}
                                 height={imageHeight}/>
                 )}
-                {caption && <StoryMainImageCaption caption={caption}/>}
-                {description && <StoryMainImageDescription description={description}/>}
+                {caption &&
+                        <StoryMainImageCaption caption={caption}/>}
+                {description &&
+                        <StoryMainImageDescription description={description}/>}
             </>
     )}
 </div>
