@@ -5,33 +5,60 @@ import {StoryMainImage_getData} from "./StoryMainImageGetData";
 import React from 'react';
 import _ from 'lodash';
 import {StoryMainImageParams, StoryMainImageResponse} from "./types";
-import {RingImage} from "../../../common/RingImage";
+import RingImage from "../../../common/RingImage.astro";
 import {StoryMainImageCaption} from "./StoryMainImageCaption";
-import { StoryMainImageDescription } from "./StoryMainImageDescription";
+import {StoryMainImageDescription} from "./StoryMainImageDescription";
 import {
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
-import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
+import {
+    ImageHelper_getImageDimensionsFromObject,
+    ImageHelper_getImageDimensionsWithAspectRatio
+} from "../../../../helpers/ImageHelper";
+import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 
 const response = await StoryMainImage_getData({widgetConfig, context});
+
 const imageDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, context);
-const imgSrc = _.get(response, 'data.story.image.url');
-const caption = _.get(response, 'data.story.image.caption');
+const croppedSrc = _.get(response, 'data.story.image.url');
+const originalSrc = _.get(response, 'data.story.image.image.url');
+const isCropped = !!_.get(response, 'data.story.image.crop');
+const imgSrc = isCropped ? croppedSrc : originalSrc;
+
+const caption = _.get(response, 'data.story.image.caption', "");
 const description = _.get(response, 'data.story.image.image.description');
+const imageResizeCropMode = _.get(widgetConfig, 'imageResizeCropMode', 'cover');
+
+const maxImageWidth = UtilsHelper_convertToInt(imageDimensions.width);
+const maxImageHeight = UtilsHelper_convertToInt(imageDimensions.height);
+const originalImageWidth = UtilsHelper_convertToInt(response.data.story.image.image.width);
+const originalImageHeight = UtilsHelper_convertToInt(response.data.story.image.image.height);
+let imageWidth = originalImageWidth;
+let imageHeight = originalImageHeight;
+
+if (imageResizeCropMode === 'contain' && imageWidth !== 0 && imageHeight !== 0) {
+    const calculatedDimensions = ImageHelper_getImageDimensionsWithAspectRatio(imageWidth, imageHeight, maxImageWidth, maxImageHeight);
+    imageWidth = calculatedDimensions.width;
+    imageHeight = calculatedDimensions.height;
+} else {
+    imageWidth = maxImageWidth;
+    imageHeight = maxImageHeight;
+}
 ---
 
 <div class={WidgetHelper_getWidgetCssClasses('StoryMainImage', widgetConfig, context)}>
     {imgSrc && (
             <>
                 {widgetConfig.showLinkToImage ? (
-                        <a href={imgSrc} target="_blank" data-pswp-src={imgSrc} data-pswp-width={parseInt(imageDimensions.width as string) * 3} data-pswp-height={parseInt(imageDimensions.height as string) * 3}>
+                        <a href={imgSrc} target="_blank" data-pswp-src={imgSrc} data-pswp-width={originalImageWidth}
+                           data-pswp-height={originalImageHeight}>
                             <RingImage
                                     priority={true}
                                     src={imgSrc}
                                     alt={caption}
                                     transform={TransformType.ResizeCropAuto}
-                                    width={imageDimensions.width}
-                                    height={imageDimensions.height}/>
+                                    width={imageWidth}
+                                    height={imageHeight}/>
                         </a>
                 ) : (
                         <RingImage
@@ -39,11 +66,13 @@ const description = _.get(response, 'data.story.image.image.description');
                                 src={imgSrc}
                                 alt={caption}
                                 transform={TransformType.ResizeCropAuto}
-                                width={imageDimensions.width}
-                                height={imageDimensions.height}/>
+                                width={imageWidth}
+                                height={imageHeight}/>
                 )}
-                {caption && <StoryMainImageCaption caption={caption}/>}
-                {description && <StoryMainImageDescription description={description}/>}
+                {caption &&
+                        <StoryMainImageCaption caption={caption}/>}
+                {description &&
+                        <StoryMainImageDescription description={description}/>}
             </>
     )}
 </div>

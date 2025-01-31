@@ -1,4 +1,8 @@
 ---
+import {
+    ImageHelper_getImageDimensionsFromObject,
+    ImageHelper_getImageDimensionsWithAspectRatio
+} from "../../../../../helpers/ImageHelper";
 const {blockData, widgetConfig, context} = Astro.props as ImageBlockParams;
 import React from "react";
 import {default as RingImage} from "../../../../common/RingImage.astro";
@@ -9,30 +13,26 @@ const {title, alt, image, url, link} = blockData;
 let imageWidth = image.width;
 let imageHeight = image.height;
 
-let maxImageWidth = widgetConfig.standardImageWidth && UtilsHelper_convertToInt(widgetConfig.standardImageWidth);
-let maxImageHeight = widgetConfig.standardImageHeight && UtilsHelper_convertToInt(widgetConfig.standardImageHeight);
+let maxImageWidth = UtilsHelper_convertToInt(widgetConfig.standardImageWidth);
+let maxImageHeight = UtilsHelper_convertToInt(widgetConfig.standardImageHeight);
 
-if(UtilsHelper_isMobile(context)){
-    maxImageWidth = widgetConfig.mobileImageWidth && UtilsHelper_convertToInt(widgetConfig.mobileImageWidth);
-    maxImageHeight = widgetConfig.mobileImageHeight && UtilsHelper_convertToInt(widgetConfig.mobileImageHeight);
+if (UtilsHelper_isMobile(context)) {
+    maxImageWidth = UtilsHelper_convertToInt(widgetConfig.mobileImageWidth);
+    maxImageHeight = UtilsHelper_convertToInt(widgetConfig.mobileImageHeight);
 }
 
-if (maxImageWidth && maxImageWidth < imageWidth) {
-    imageHeight = UtilsHelper_convertToInt(maxImageWidth * imageHeight / imageWidth);
-    imageWidth = maxImageWidth;
-}
-
-if (maxImageHeight && maxImageHeight < imageHeight) {
-    imageWidth = UtilsHelper_convertToInt(maxImageHeight * imageWidth / imageHeight);
-    imageHeight = maxImageHeight;
-}
+const calculatedDimensions = ImageHelper_getImageDimensionsWithAspectRatio(imageWidth, imageHeight, maxImageWidth, maxImageHeight);
+imageWidth = calculatedDimensions.width;
+imageHeight = calculatedDimensions.height;
 ---
 
 
 <div class={['ImageBlock', 'alignment-' + blockData.alignment].join(' ')}>
     {
-        <a class={link && link.url ? "withExternalUrl" : ""} href={link ? link.url : url} target="_blank" data-pswp-src={url}  data-pswp-width={image.width} data-pswp-height={image.height} >
-            <RingImage src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight} transform={TransformType.ResizeCropAuto}  />
+        <a class={link && link.url ? "withExternalUrl" : ""} href={link ? link.url : url} target="_blank"
+           data-pswp-src={url} data-pswp-width={image.width} data-pswp-height={image.height}>
+            <RingImage src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight}
+                       transform={TransformType.ResizeCropAuto}/>
         </a>
     }
     <div class="imgMetaData">

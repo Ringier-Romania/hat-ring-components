@@ -5,13 +5,19 @@ import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/Imag
 
 export async function StoryMainImage_getData({widgetConfig, context}: StoryMainImageParams) {
     const query = gql`
-        query($storyId: UUID, $imageWidth:Int!, $imageHeight:Int!){
+        query($storyId: UUID){
             story(id:$storyId){
-                image{
-                    url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}}),
+                image {
+                url
                     caption
+                    crop {
+                        x
+                    }
                     image {
+                        url
                         description
+                        width
+                        height
                     }
                 }
             }

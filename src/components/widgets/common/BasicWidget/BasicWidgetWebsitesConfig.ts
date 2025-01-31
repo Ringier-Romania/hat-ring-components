@@ -36,6 +36,7 @@ export let BasicWidgetWebsitesConfig = {
                 "standardImageSizeMobile": "600x330",
                 "listElementsImageSize": "600x330",
                 "listElementsImageSizeMobile": "600x330",
+                "imageResizeCropMode": "cover",
                 "preloadImagesCount": 0,
                 "mobilePreloadImagesCount": 0,
                 "titleAddonsCodeNames": "",
@@ -273,6 +274,16 @@ export let BasicWidgetWebsitesConfig = {
                     "type": "textfield",
                     "description": "empty = original, works with images from Ring CMS",
                     "required": false
+                },
+                "imageResizeCropMode": {
+                    "name": "Image resize crop mode",
+                    "type": "select",
+                    "allowBlank": false,
+                    "multiSelect": false,
+                    "items": [
+                        ["cover", "Cover - Fill whole box with image, cropping if necessary"],
+                        ["contain", "Contain - Fit image within box, scaling image to fit without cropping"],
+                    ],
                 },
                 "preloadImagesCount": {
                     "name": "Number of images that would be preloaded",

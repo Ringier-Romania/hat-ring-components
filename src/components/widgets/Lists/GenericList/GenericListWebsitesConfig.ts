@@ -27,6 +27,7 @@ export let GenericListWebsitesConfig
                 "customListUuid": "",
                 "imageSize": "400x225",
                 "imageSizeMobile": "",
+                "imageResizeCropMode": "cover",
                 "preloadImagesCount": 0,
                 "mobilePreloadImagesCount": 0,
                 "widgetType": "genericList",
@@ -126,6 +127,16 @@ export let GenericListWebsitesConfig
                     "name": "Mobile image resolution",
                     "type": "textfield",
                     "description": "Image resolution (empty = same as desktop), example: 600x330"
+                },
+                "imageResizeCropMode": {
+                    "name": "Image resize crop mode",
+                    "type": "select",
+                    "allowBlank": false,
+                    "multiSelect": false,
+                    "items": [
+                        ["cover", "Cover - Fill whole box with image, cropping if necessary"],
+                        ["contain", "Contain - Fit image within box, scaling image to fit without cropping"],
+                    ],
                 },
                 "preloadImagesCount": {
                     "name": "Number of images that would be preloaded",

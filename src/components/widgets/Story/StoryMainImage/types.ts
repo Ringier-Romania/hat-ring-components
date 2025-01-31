@@ -4,10 +4,15 @@ export interface StoryMainImageResponse {
     "data": {
         "story": {
             "image": {
-                "url": string,
                 "caption": string | null
+                "crop": {
+                    x: number
+                },
                 "image": {
+                    "url": string,
                     "description": string | null
+                    "width": number
+                    "height": number
                 }
             }
         }
@@ -19,6 +24,7 @@ export interface  StoryMainImageWidgetConfig extends AbstractWidgetConfig {
     standardImageSize?: string,
     imageSizeMobile?: string,
     cacheTTL?: number,
+    imageResizeCropMode?: "cover" | "contain",
 }
 
 export interface StoryMainImageParams extends WidgetParams {
