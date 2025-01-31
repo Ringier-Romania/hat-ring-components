@@ -11,7 +11,10 @@ import {StoryMainImageDescription} from "./StoryMainImageDescription";
 import {
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
-import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
+import {
+    ImageHelper_getImageDimensionsFromObject,
+    ImageHelper_getImageDimensionsWithAspectRatio
+} from "../../../../helpers/ImageHelper";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 
 const response = await StoryMainImage_getData({widgetConfig, context});
@@ -24,7 +27,7 @@ const imgSrc = isCropped ? croppedSrc : originalSrc;
 
 const caption = _.get(response, 'data.story.image.caption', "");
 const description = _.get(response, 'data.story.image.image.description');
-const keepAspectRatio = _.get(widgetConfig, 'keepAspectRatio', false);
+const imageResizeCropMode = _.get(widgetConfig, 'imageResizeCropMode', 'cover');
 
 const maxImageWidth = UtilsHelper_convertToInt(imageDimensions.width);
 const maxImageHeight = UtilsHelper_convertToInt(imageDimensions.height);
@@ -33,18 +36,10 @@ const originalImageHeight = UtilsHelper_convertToInt(response.data.story.image.i
 let imageWidth = originalImageWidth;
 let imageHeight = originalImageHeight;
 
-if (keepAspectRatio && imageWidth !== 0 && imageHeight !== 0) {
-    // Adjust height to maintain aspect ratio if max width is set and less than current width.
-    if (maxImageWidth && maxImageWidth < imageWidth) {
-        imageHeight = maxImageWidth * imageHeight / imageWidth;
-        imageWidth = maxImageWidth;
-    }
-
-    // Adjust width to maintain aspect ratio if max height is set and less than current height.
-    if (maxImageHeight && maxImageHeight < imageHeight) {
-        imageWidth = maxImageHeight * imageWidth / imageHeight;
-        imageHeight = maxImageHeight;
-    }
+if (imageResizeCropMode === 'contain' && imageWidth !== 0 && imageHeight !== 0) {
+    const calculatedDimensions = ImageHelper_getImageDimensionsWithAspectRatio(imageWidth, imageHeight, maxImageWidth, maxImageHeight);
+    imageWidth = calculatedDimensions.width;
+    imageHeight = calculatedDimensions.height;
 } else {
     imageWidth = maxImageWidth;
     imageHeight = maxImageHeight;

@@ -24,6 +24,7 @@ export interface  StoryMainImageWidgetConfig extends AbstractWidgetConfig {
     standardImageSize?: string,
     imageSizeMobile?: string,
     cacheTTL?: number,
+    imageResizeCropMode?: "cover" | "contain",
 }
 
 export interface StoryMainImageParams extends WidgetParams {
