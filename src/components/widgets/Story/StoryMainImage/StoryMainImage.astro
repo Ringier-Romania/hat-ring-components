@@ -31,8 +31,8 @@ const imageResizeCropMode = _.get(widgetConfig, 'imageResizeCropMode', 'cover');
 
 const maxImageWidth = UtilsHelper_convertToInt(imageDimensions.width);
 const maxImageHeight = UtilsHelper_convertToInt(imageDimensions.height);
-const originalImageWidth = UtilsHelper_convertToInt(response.data.story.image.image.width);
-const originalImageHeight = UtilsHelper_convertToInt(response.data.story.image.image.height);
+const originalImageWidth = UtilsHelper_convertToInt(response?.data?.story?.image?.image?.width);
+const originalImageHeight = UtilsHelper_convertToInt(response?.data?.story?.image?.image?.height);
 let imageWidth = originalImageWidth;
 let imageHeight = originalImageHeight;
 
