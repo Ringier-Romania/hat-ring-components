@@ -69,7 +69,8 @@ export let GenericListWebsitesConfig
                         "modificationTime",
                         "creationTime",
                         "lead",
-                        "titleAddons"
+                        "titleAddons",
+                        "authors"
                     ],
                     "required": false
                 },

@@ -10,3 +10,5 @@ export { getFragment as ModificationTime_getFragment } from './ModificationTime.
 export { default as Lead } from './Lead';
 export { default as TitleAddons } from './TitleAddons.astro';
 export { getFragment as TitleAddons_getFragment } from './TitleAddons.astro';
+export { default as Authors } from './Authors.astro';
+export { getFragment as Authors_getFragment } from './Authors.astro';

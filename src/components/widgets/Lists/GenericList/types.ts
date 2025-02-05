@@ -10,12 +10,20 @@ import {
 export enum GenericListGeneralShowOptions {
     Items = "items",
     Header = "header",
-    Pagination = "pagination"
+    Pagination = "pagination",
+    InfiniteScrollButton = "infiniteScrollButton",
+    Button = "button",
 }
 
 export enum GenericListShowOptions {
     Image = "image",
     Title = "title",
+    Authors = "authors",
+    CreationTime = "creationTime",
+    ModificationTime = "modificationTime",
+    Lead = "lead",
+    TitleAddons = "titleAddons",
+    Taxonomies = "taxonomies",
 }
 
 export interface GenericListWidgetConfig extends AbstractWidgetConfig {
