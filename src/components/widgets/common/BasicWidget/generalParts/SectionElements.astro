@@ -7,10 +7,6 @@ const {
     extendableAttributes
 } = Astro.props;
 
-
-import React from 'react';
-import {AppContext} from "../../../../../types/types";
-import {BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse} from "../types";
 import * as ItemParts from "../itemParts";
 import _ from "lodash";
 import {RingLink} from "../../../../common/RingLink/RingLink";
@@ -18,7 +14,6 @@ import {
     WidgetHelper_insertComponentAtPattern,
     WidgetHelper_renderEmptyComponent
 } from "../../../../../helpers/WidgetHelper";
-import {UtilsHelper_getValueIfExists} from "../../../../../helpers/UtilsHelper";
 interface AdditionalComponent extends SectionItemEdge {
     AdditionalComponent: Function;
     config: {
@@ -29,8 +24,8 @@ interface AdditionalComponent extends SectionItemEdge {
 
 let toRender: boolean | JSX.Element | string = false;
 
-const elementsToRender = _.get(response, 'data.section.items.edges', _.get(response, 'data.sectionGroup.sections[0].items.edges', [])) as SectionItemEdge[];
-if (_.get(elementsToRender, 'length', 0) === 0) {
+const elementsToRender = [..._.get(response, 'data.section.items.edges', _.get(response, 'data.sectionGroup.sections[0].items.edges', [])) as SectionItemEdge[]];
+if (elementsToRender.length === 0) {
     toRender = WidgetHelper_renderEmptyComponent('SectionElements');
 }
 
@@ -60,10 +55,7 @@ const processedContent = WidgetHelper_insertComponentAtPattern(elementsToRender,
             const {AdditionalComponent, config, customCssClass} = edge as AdditionalComponent;
             const kind = edge?.node?.originalContent?.kind?.code;
             return AdditionalComponent ? (
-                    <div
-                            key={itemIndex}
-                            class={["AdditionalComponent", "Item", colClass, bigElementClass, processedContent.config?.widgetType, customCssClass].join(" ")}
-                    >
+                    <div class={["AdditionalComponent", "Item", colClass, bigElementClass, processedContent.config?.widgetType, customCssClass].join(" ")}>
                         <AdditionalComponent widgetConfig={config} context={context}/>
                     </div>
             ) : (
@@ -79,15 +71,14 @@ const processedContent = WidgetHelper_insertComponentAtPattern(elementsToRender,
 
                             if (!Component) {
                                 console.error(`No item part support ${showOption}`);
-                                return
-                                        <Fragment
-                                                set:html={WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet")}/>
+                                return <Fragment set:html={WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet")}/>
                             }
 
                             return (
-                                    <Component key={'aa' + itemIndex + index} itemIndex={itemIndex} context={context}
-                                               widgetConfig={widgetConfig}
-                                               data={edge.node}/>)
+                                <Component itemIndex={itemIndex} context={context}
+                                       widgetConfig={widgetConfig}
+                                       data={edge.node}/>
+                            )
                         })}
                     </div>
             );

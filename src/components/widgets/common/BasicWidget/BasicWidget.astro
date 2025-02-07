@@ -20,9 +20,6 @@ if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
 }
 const allGeneralParts = (extendableAttributes ? extendableAttributes.generalParts : null) || GeneralParts;
 let response: BasicWidgetResponse;
-let responseClone: BasicWidgetResponse = {
-    data: {}
-};
 if (!toRender) {
     let queryFragment = "";
 
@@ -32,42 +29,8 @@ if (!toRender) {
             : ({} as BasicWidgetResponse);
 
     let edges = _.get(response, "data.section.items.edges", []);
-    let groupSectionEdges = _.get(response, "data.sectionGroup.sections[0].items.edges", []);
-    let offset = Number(widgetConfig.offset);
 
-    if (edges.length > 0) {
-        responseClone = {
-            ...response,
-            data: {
-                ...response.data,
-                section: {
-                    ...response.data.section,
-                    items: {
-                        edges: edges.slice(offset)
-                    }
-                }
-            }
-        };
-    } else if (response?.data?.sectionGroup?.sections && groupSectionEdges.length > 0) {
-        responseClone = {
-            ...response,
-            data: {
-                ...response.data,
-                sectionGroup: {
-                    ...response.data.sectionGroup,
-                    sections: [
-                        {
-                            items: {
-                                edges: groupSectionEdges.slice(offset)
-                            }
-                        }
-                    ]
-                }
-            }
-        };
-    } else {
-        responseClone = response;
-    }
+
 
     const hideWhenNoItems =
         widgetConfig.additionalOptions &&
@@ -98,7 +61,7 @@ let cssModules = styles.BasicWidget;
                             key={index}
                             context={context}
                             widgetConfig={widgetConfig}
-                            response={responseClone}
+                            response={response}
                             extendableAttributes={extendableAttributes}
                         />
                     );
