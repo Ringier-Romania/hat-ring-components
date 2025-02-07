@@ -1,7 +1,7 @@
 ---
-import { BasicWidget_getData } from "./BasicWidgetGetData";
-const { context, widgetConfig, extendableAttributes } = Astro.props;
-import { BasicWidgetAdditionalOptions, BasicWidgetResponse } from "./types";
+import {BasicWidget_getData} from "./BasicWidgetGetData";
+const {context, widgetConfig, extendableAttributes} = Astro.props;
+import {BasicWidgetAdditionalOptions, BasicWidgetResponse} from "./types";
 import * as GeneralParts from "./generalParts";
 import _ from "lodash";
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
@@ -20,6 +20,9 @@ if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
 }
 const allGeneralParts = (extendableAttributes ? extendableAttributes.generalParts : null) || GeneralParts;
 let response: BasicWidgetResponse;
+let responseClone: BasicWidgetResponse = {
+    data: {}
+};
 if (!toRender) {
     let queryFragment = "";
 
@@ -33,9 +36,37 @@ if (!toRender) {
     let offset = Number(widgetConfig.offset);
 
     if (edges.length > 0) {
-        _.set(response, "data.section.items.edges", edges.slice(offset));
+        responseClone = {
+            ...response,
+            data: {
+                ...response.data,
+                section: {
+                    ...response.data.section,
+                    items: {
+                        edges: edges.slice(offset)
+                    }
+                }
+            }
+        };
     } else if (response?.data?.sectionGroup?.sections && groupSectionEdges.length > 0) {
-        _.set(response, "data.sectionGroup.sections[0].items.edges", groupSectionEdges.slice(offset));
+        responseClone = {
+            ...response,
+            data: {
+                ...response.data,
+                sectionGroup: {
+                    ...response.data.sectionGroup,
+                    sections: [
+                        {
+                            items: {
+                                edges: groupSectionEdges.slice(offset)
+                            }
+                        }
+                    ]
+                }
+            }
+        };
+    } else {
+        responseClone = response;
     }
 
     const hideWhenNoItems =
@@ -52,7 +83,7 @@ let cssModules = styles.BasicWidget;
 
 {
     toRender ? (
-        <Fragment set:html={toRender} />
+        <Fragment set:html={toRender}/>
     ) : (
         <div class={WidgetHelper_getWidgetCssClasses("BasicWidget", widgetConfig, context, [cssModules])}>
             {widgetConfig.generalShowOptions &&
@@ -67,7 +98,7 @@ let cssModules = styles.BasicWidget;
                             key={index}
                             context={context}
                             widgetConfig={widgetConfig}
-                            response={response}
+                            response={responseClone}
                             extendableAttributes={extendableAttributes}
                         />
                     );
