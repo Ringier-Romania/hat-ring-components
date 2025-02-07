@@ -1,7 +1,7 @@
 ---
-import { BasicWidget_getData } from "./BasicWidgetGetData";
-const { context, widgetConfig, extendableAttributes } = Astro.props;
-import { BasicWidgetAdditionalOptions, BasicWidgetResponse } from "./types";
+import {BasicWidget_getData} from "./BasicWidgetGetData";
+const {context, widgetConfig, extendableAttributes} = Astro.props;
+import {BasicWidgetAdditionalOptions, BasicWidgetResponse} from "./types";
 import * as GeneralParts from "./generalParts";
 import _ from "lodash";
 import styles from "../../../../../styles/widgets/common/BasicWidget.module.scss";
@@ -29,14 +29,8 @@ if (!toRender) {
             : ({} as BasicWidgetResponse);
 
     let edges = _.get(response, "data.section.items.edges", []);
-    let groupSectionEdges = _.get(response, "data.sectionGroup.sections[0].items.edges", []);
-    let offset = Number(widgetConfig.offset);
 
-    if (edges.length > 0) {
-        _.set(response, "data.section.items.edges", edges.slice(offset));
-    } else if (response?.data?.sectionGroup?.sections && groupSectionEdges.length > 0) {
-        _.set(response, "data.sectionGroup.sections[0].items.edges", groupSectionEdges.slice(offset));
-    }
+
 
     const hideWhenNoItems =
         widgetConfig.additionalOptions &&
@@ -52,7 +46,7 @@ let cssModules = styles.BasicWidget;
 
 {
     toRender ? (
-        <Fragment set:html={toRender} />
+        <Fragment set:html={toRender}/>
     ) : (
         <div class={WidgetHelper_getWidgetCssClasses("BasicWidget", widgetConfig, context, [cssModules])}>
             {widgetConfig.generalShowOptions &&
