@@ -20,6 +20,7 @@ export interface  StoryAuthorsWidgetConfig extends AbstractWidgetConfig {
     standardImageSize?: string,
     imageSizeMobile?: string,
     showOptions?: Array<StoryAuthorsShowOptions>
+    nameTag?: string
 }
 
 export interface StoryAuthorsParams extends WidgetParams {

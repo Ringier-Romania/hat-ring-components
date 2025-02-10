@@ -1,0 +1,28 @@
+---
+import {AppContext, SiteContentType} from "../../../../../types/types";
+import {StoryAuthorsWidgetConfig} from "../types";
+import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import {UtilsHelper_getCurrentPageType} from "../../../../../helpers/UtilsHelper";
+import _ from "lodash";
+
+const {context, widgetConfig, author} = Astro.props as {
+    context: AppContext,
+    widgetConfig: StoryAuthorsWidgetConfig,
+    author: Author
+};
+
+const tagName = _.get(widgetConfig, 'nameTag', null);
+let Tag = 'div';
+if (tagName === null) {
+    // backward compatibility
+    Tag = UtilsHelper_getCurrentPageType(context) === SiteContentType.Author ? 'h1' : 'div';
+} else if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(tagName)) {
+    Tag = tagName;
+}
+
+---
+<Tag class={['Name'].join(' ')}>
+    {author?.name}
+</Tag>
+
+

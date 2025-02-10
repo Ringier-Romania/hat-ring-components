@@ -1,9 +1,7 @@
 ---
 const {widgetConfig, context} = Astro.props;
-import React from 'react';
-import _ from 'lodash';
 import {gql} from 'graphql-tag';
-import {AuthorParams, AuthorResponse} from "./types";
+import {AuthorResponse} from "./types";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
@@ -14,7 +12,6 @@ import {default as StoryAuthor} from "../../Story/StoryAuthors/StoryAuthor.astro
 import {authorGqlFragment} from "../../Story/StoryAuthors/StoryAuthors.astro";
 
 const descriptionFragment = widgetConfig.showOptions?.includes(StoryAuthorsShowOptions.Description) ? `description { ${StoryHelper_getGqlContentFragment()} }` : '';
-
 
 const query = gql`
         query($uuid: UUID, $imageWidth:Int!, $imageHeight:Int!){
@@ -33,20 +30,14 @@ const variables = {
     imageHeight: imageDimensions.height,
 };
 
-
 let response = widgetConfig?.response;
 if (!response) {
     response = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL) as AuthorResponse;
 }
 
 let cssModules = styles.StoryAuthors;
-
-
 ---
 
-
-
-<div class={WidgetHelper_getWidgetCssClasses('Author', widgetConfig, context,[cssModules])}>
-    {/* @ts-expect-error Server Component */}
+<div class={WidgetHelper_getWidgetCssClasses('Author', widgetConfig, context, [cssModules])}>
     <StoryAuthor author={response.data.author} context={context} widgetConfig={widgetConfig}/>
 </div>

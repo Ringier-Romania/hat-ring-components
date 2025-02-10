@@ -16,6 +16,7 @@ export let StoryAuthorsWebsitesConfig
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "standardImageSize": "300x300",
                 "imageSizeMobile": "300x300",
+                "nameTag": "h1",
                 "showOptions": [
                     "name",
                     "linkOverlay"
@@ -49,6 +50,23 @@ export let StoryAuthorsWebsitesConfig
                         ["socialProfiles", "Social profiles"]
                     ],
                     "required": false
+                },
+                "nameTag": {
+                    "name": "Authors name tag",
+                    "description": "Html tag for authors name",
+                    "type": "select",
+                    "allowBlank": false,
+                    "multiSelect": false,
+                    "required": true,
+                    "items": [
+                        "h1",
+                        "h2",
+                        "h3",
+                        "h4",
+                        "h5",
+                        "h6",
+                        "none"
+                    ]
                 },
                 "cacheTTL": {
                     "name": "Cache TTL",
