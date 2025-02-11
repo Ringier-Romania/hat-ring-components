@@ -24,7 +24,8 @@ interface AdditionalComponent extends SectionItemEdge {
 
 let toRender: boolean | JSX.Element | string = false;
 
-const elementsToRender = [..._.get(response, 'data.section.items.edges', _.get(response, 'data.sectionGroup.sections[0].items.edges', [])) as SectionItemEdge[]];
+const offset = Number(widgetConfig.offset);
+const elementsToRender = [..._.get(response, 'data.section.items.edges', _.get(response, 'data.sectionGroup.sections[0].items.edges', [])) as SectionItemEdge[]].slice(offset);
 if (elementsToRender.length === 0) {
     toRender = WidgetHelper_renderEmptyComponent('SectionElements');
 }
