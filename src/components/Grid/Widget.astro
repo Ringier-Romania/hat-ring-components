@@ -36,10 +36,16 @@ if (widgetConfig.customWidth && widgetConfig.customWidth !== 'none') {
 if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
     cssClasses.push(`gridPosition${_.upperFirst(widgetConfig.customPosition)}`);
 }
+
+if (['wrapperStart'].includes(widgetConfig.widgetType)) {
+    widgetConfig.customClass = `${cssClasses.join(' ')} ${widgetConfig.customClass}`;
+}
+
 ---
 
 {toRender ? <Fragment set:html={toRender}/> :
-    <div id={widgetConfig.gridLocation} class={cssClasses.join(' ')}>
+    ['wrapperStart', 'wrapperEnd'].includes(widgetConfig.widgetType) ? <Component widgetConfig={widgetConfig} context={context}/>
+    : <div id={widgetConfig.gridLocation} class={cssClasses.join(' ')}>
         {Component && <Component widgetConfig={widgetConfig} context={context}/>}
     </div>
-    }
+}

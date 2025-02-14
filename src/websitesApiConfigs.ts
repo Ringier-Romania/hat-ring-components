@@ -33,3 +33,5 @@ export * from "./components/widgets/common/Breadcrumbs/BreadcrumbsWebsitesConfig
 export * from "./components/widgets/common/SearchBox/SearchBoxWebsitesConfig";
 export * from "./components/widgets/Story/StoryTitleAddons/StoryTitleAddonsWebsitesConfig";
 export * from "./components/widgets/Story/StoryFrame/StoryFrameWebsitesConfig";
+export * from "./components/widgets/common/WrapperStartWebsitesConfig";
+export * from "./components/widgets/common/WrapperEndWebsitesConfig";

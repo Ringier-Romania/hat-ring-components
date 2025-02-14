@@ -53,3 +53,5 @@ export { default as Breadcrumbs } from "./components/widgets/common/Breadcrumbs/
 export { default as SearchBox } from "./components/widgets/common/SearchBox/SearchBox.astro";
 export { default as StoryTitleAddons } from "./components/widgets/Story/StoryTitleAddons/StoryTitleAddons.astro";
 export { default as StoryFrame } from "./components/widgets/Story/StoryFrame/StoryFrame.astro"
+export { default as WrapperStart } from "./components/widgets/common/WrapperStart.astro"
+export { default as WrapperEnd } from "./components/widgets/common/WrapperEnd.astro"

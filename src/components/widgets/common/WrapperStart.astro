@@ -1,0 +1,6 @@
+---
+import {WidgetHelper_getWidgetCssClasses} from "../../../helpers/WidgetHelper";
+const {widgetConfig, context} = Astro.props;
+
+---
+<Fragment set:html={`<div id="${widgetConfig.gridLocation}" class="${WidgetHelper_getWidgetCssClasses('WrapperStart', widgetConfig, context)}">`}/>

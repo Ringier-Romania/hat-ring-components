@@ -1,4 +1,5 @@
 ---
+import {WidgetHelper_shouldHideWidget} from "../../helpers/WidgetHelper";
 const {context, boxName, widgets, size, tagName, sectionName} = Astro.props;
 
 import React from "react";
@@ -17,12 +18,20 @@ interface GridBoxParams {
     sectionName: string
 };
 const BoxTag = `${tagName || 'div'}`;
+let filteredWidgets = [];
+const wrapperStartCount = widgets.filter(widget => widget.widgetType === 'wrapperStart' && _.get(widget, 'enabled', true) && !WidgetHelper_shouldHideWidget(widget, context)).length;
+const wrapperEndCount = widgets.filter(widget => widget.widgetType === 'wrapperEnd' && _.get(widget, 'enabled', true) && !WidgetHelper_shouldHideWidget(widget, context)).length;
 
+if (wrapperStartCount !== wrapperEndCount) {
+    filteredWidgets = widgets.filter(widget => widget.widgetType !== 'wrapperStart' && widget.widgetType !== 'wrapperEnd');
+} else {
+    filteredWidgets = widgets;
+}
 
 ---
 
 <BoxTag class={['gridBox', boxName, 'gridCol' + size, styles.box].join(' ')}>
-    {widgets && widgets.map((widgetConfig, i) => {
+    {filteredWidgets && filteredWidgets.map((widgetConfig, i) => {
         return <>
             {Widget && _.get(widgetConfig, 'enabled', true) && <Widget widgetConfig={widgetConfig} context={context} key={i} index={i} boxName={boxName} sectionName={sectionName} />}
             </>
