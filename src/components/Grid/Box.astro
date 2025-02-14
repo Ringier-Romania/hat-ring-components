@@ -18,14 +18,12 @@ interface GridBoxParams {
     sectionName: string
 };
 const BoxTag = `${tagName || 'div'}`;
-let filteredWidgets = [];
+let filteredWidgets = widgets;
 const wrapperStartCount = widgets.filter(widget => widget.widgetType === 'wrapperStart' && _.get(widget, 'enabled', true) && !WidgetHelper_shouldHideWidget(widget, context)).length;
 const wrapperEndCount = widgets.filter(widget => widget.widgetType === 'wrapperEnd' && _.get(widget, 'enabled', true) && !WidgetHelper_shouldHideWidget(widget, context)).length;
 
 if (wrapperStartCount !== wrapperEndCount) {
     filteredWidgets = widgets.filter(widget => widget.widgetType !== 'wrapperStart' && widget.widgetType !== 'wrapperEnd');
-} else {
-    filteredWidgets = widgets;
 }
 
 ---
