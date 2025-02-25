@@ -14,7 +14,8 @@ export async function DateHelper_convertDate(
     context: AppContext,
     date: string,
     format = null as string | null,
-    fromNow = false
+    fromNow = false,
+    relativeTimeObject?: {}
 ): Promise<string> {
     const dateSettings = await ConfigHelper_getDateFormatConfig(context);
     const destinationLanguage = await ConfigHelper_getLanguage(context);
@@ -27,25 +28,18 @@ export async function DateHelper_convertDate(
     }
     if (fromNow) {
         dayjs.extend(relativeTime);
-        dayjs.extend(updateLocale);
-        if (destinationLanguage === "de") {
-            dayjs.updateLocale("de", {
-                relativeTime: {
-                    future: "in %s",
-                    past: "%s",
-                    s: "Aktualisiert vor einigen Sekunden",
-                    m: "Aktualisiert vor 1 Minute",
-                    mm: "Aktualisiert vor %d Minuten",
-                    h: "Aktualisiert vor 1 Stunde",
-                    hh: "Aktualisiert vor %d Stunden",
-                    d: "Aktualisiert vor 1 Tag",
-                    dd: "Aktualisiert vor %d Tagen",
-                    M: "Aktualisiert vor 1 Monat",
-                    MM: "Aktualisiert vor %d Monaten",
-                    y: "Aktualisiert vor 1 Jahr",
-                    yy: "Aktualisiert vor %d Jahren",
-                },
-            });
+        if (relativeTimeObject) {
+            dayjs.extend(updateLocale);
+            dayjs.updateLocale(destinationLanguage, relativeTimeObject);
+        }
+        return dateJsObj.fromNow();
+    }
+
+    if (fromNow) {
+        dayjs.extend(relativeTime);
+        if (relativeTimeObject) {
+            dayjs.extend(updateLocale);
+            dayjs.updateLocale(destinationLanguage, relativeTimeObject);
         }
         return dateJsObj.fromNow();
     }
