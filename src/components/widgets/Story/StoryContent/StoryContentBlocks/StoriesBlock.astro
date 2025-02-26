@@ -1,0 +1,30 @@
+---
+import {StoryContentWidgetConfig} from "../types";
+const {blockData, context, widgetConfig} = Astro.props;
+import {Term} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import _ from "lodash";
+import * as ringStoriesBlocks from "../storiesBlocks/index";
+
+let toRender: boolean | JSX.Element | string = false;
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+
+
+const availableStoriesBlocks = Object.assign({}, ringStoriesBlocks, context?.customData.storiesBlocks);
+if (!blockData.kind || !blockData.kind.code) {
+    toRender = WidgetHelper_renderEmptyComponent('StoriesBlock', 'StoriesBlock: blockData.kind.code is missing', false);
+}
+const storiesBlockName = _.upperFirst(_.camelCase(blockData.kind.code));
+const Component = availableStoriesBlocks[storiesBlockName];
+
+if (!Component) {
+    toRender = WidgetHelper_renderEmptyComponent('StoriesBlock', `StoriesBlock: ${storiesBlockName} is not available in the context`, false);
+}
+---
+{toRender ?
+<Fragment set:html={toRender}/>
+    :
+<div class="StoriesBlock">
+    {Component &&
+            <Component blockData={blockData} context={context} widgetConfig={widgetConfig}/>}
+</div>
+    }

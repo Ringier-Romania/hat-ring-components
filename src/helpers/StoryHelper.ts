@@ -222,6 +222,17 @@ export function StoryHelper_getGqlContentFragment(): any {
                             code
                         }
                      }
+                     ...on StoriesBlock{
+                       type
+                      kind{
+                        code
+                      }
+                      stories{
+                        story{
+                          id
+                        }
+                      }
+                    }
                 }
             }`;
 }
