@@ -34,15 +34,7 @@ export async function DateHelper_convertDate(
         }
         return dateJsObj.fromNow();
     }
-
-    if (fromNow) {
-        dayjs.extend(relativeTime);
-        if (relativeTimeObject) {
-            dayjs.extend(updateLocale);
-            dayjs.updateLocale(destinationLanguage, relativeTimeObject);
-        }
-        return dateJsObj.fromNow();
-    }
+    
     if (dateSettings && dateSettings.useExtendedDatesFormat) {
         dayjs.extend(calendar)
         // @ts-ignore
