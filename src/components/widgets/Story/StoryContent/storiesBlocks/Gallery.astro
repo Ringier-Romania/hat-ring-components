@@ -1,12 +1,13 @@
 ---
 import Slider from "../../../common/Slider/Slider.astro";
-const {blockData, context, widgetConfig} = Astro.props;
-import {gql} from 'graphql-tag';
-import _ from 'lodash';
-import {ImageBlock} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {ImageSourceReference} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {WebsiteApiProvider} from "../../../../../providers/WebsiteApiProvider";
-import {UtilsHelper_convertToInt, UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
+const { blockData, context, widgetConfig } = Astro.props;
+import { gql } from "graphql-tag";
+import _ from "lodash";
+import { EmbedBlock, ImageBlock } from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import { ImageSourceReference } from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import { WebsiteApiProvider } from "../../../../../providers/WebsiteApiProvider";
+import { UtilsHelper_convertToInt, UtilsHelper_isMobile } from "../../../../../helpers/UtilsHelper";
+import { EmbeddedApplicationBlock } from "../StoryContentBlocks";
 
 let toRender: boolean | string | null = false;
 
@@ -25,31 +26,44 @@ const query = gql`
         story(id: $storyID) {
             id
             title
-                galleryContent: content(role: "gallery") {
-                    blocks {
-                        ... on ImageBlock {
-                            title
-                            url
-                            image {
-                                description
-                                width
-                                height
-                                sources {
-                                    source {
-                                        name
-                                    }
+            galleryContent: content(role: "gallery") {
+                blocks {
+                    ... on ImageBlock {
+                        title
+                        url
+                        image {
+                            description
+                            width
+                            height
+                            sources {
+                                source {
+                                    name
                                 }
                             }
-                        }                  
+                        }
+                    }
+                    ... on EmbedBlock {
+                        type
+                        embed {
+                            id
+                            html
+                            kind {
+                                code
+                            }
+                        }
                     }
                 }
             }
         }
-    `;
+    }
+`;
 
 const result = await WebsiteApiProvider.call(query, variables);
 
 const imageBlocks: ImageBlock[] = _.get(result, 'data.story.galleryContent.0.blocks', []).filter((block: ImageBlock) => block.__typename === 'ImageBlock');
+const embedBlock: EmbedBlock = _.get(result, 'data.story.galleryContent.0.blocks', []).find(
+    (block: EmbedBlock) => block.__typename === "EmbedBlock"
+);
 
 const slides = imageBlocks.map((imageBlock) => {
     let imageWidth = _.get(imageBlock, 'image.width', 1920);
@@ -89,7 +103,6 @@ const slides = imageBlocks.map((imageBlock) => {
         },
     }
 });
-
 const sliderWidgetConfig = {
     "module": "slider_wdg",
     "platformDesktop": true,
@@ -122,7 +135,8 @@ const sliderWidgetConfig = {
 <Fragment set:html={toRender}/>
     :
 <div class="Gallery">
-    <Slider widgetConfig={sliderWidgetConfig} context={context}/>
+    {embedBlock && <EmbeddedApplicationBlock blockData={embedBlock}/>}
+    {slides && <Slider widgetConfig={sliderWidgetConfig} context={context}/>}
 </div>
 
     }
