@@ -9,3 +9,4 @@ export { default as GroupBlock } from './GroupBlock.astro';
 export { default as PreformattedBlock } from './PreformattedBlock.astro';
 export { default as NotHandledBlock } from './NotHandledBlock';
 export { default as SlotBlock } from './SlotBlock.astro';
+export { default as StoriesBlock } from './StoriesBlock.astro';
