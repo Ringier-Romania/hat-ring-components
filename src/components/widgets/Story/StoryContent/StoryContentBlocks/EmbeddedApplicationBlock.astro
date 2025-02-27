@@ -11,7 +11,7 @@ export interface EmbeddedApplicationBlockParams {
 const {blockData} = Astro.props as EmbeddedApplicationBlockParams;
 ---
 <div class="EmbeddedApplicationBlock">
-    <div class="pulseembed" set:html={blockData.embed.html}></div>
+    <div class="pulseembed" set:html={blockData?.embed?.html}></div>
 </div>
 
 <script>
