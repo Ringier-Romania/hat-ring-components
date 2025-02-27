@@ -143,9 +143,9 @@ const sliderWidgetConfig = {
         <Fragment set:html={toRender} />
     ) : (
         <div class="Gallery">
-            {embedBlock &&
+            {embedBlock.length > 0 &&
                 embedBlock.map((blockData: EmbedBlock) => <EmbeddedApplicationBlock blockData={blockData} />)}
-            {slides && <Slider widgetConfig={sliderWidgetConfig} context={context} />}
+            {slides.length > 0 && <Slider widgetConfig={sliderWidgetConfig} context={context} />}
         </div>
     )
 }

@@ -133,7 +133,7 @@ const id = 'slider_'+UtilsHelper_generateRandomString();
     function addIntersectionObserver() {
         const config = {
             rootMargin: '280px 0px 280px 0px',
-            threshold: [1]
+            threshold: [0.1]
         };
 
         if ('IntersectionObserver' in window) {
