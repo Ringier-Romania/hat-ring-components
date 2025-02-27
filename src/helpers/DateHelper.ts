@@ -4,6 +4,7 @@ import { AppContext } from "../types/types";
 import utc from "dayjs/plugin/utc";
 import calendar from "dayjs/plugin/calendar";
 import timezone from "dayjs/plugin/timezone";
+import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/de";
 import "dayjs/locale/fr";
 import "dayjs/locale/es";
@@ -51,6 +52,7 @@ function importDayJs(locale: string) {
 }
 
 export async function DateHelper_formNow(context: AppContext, date: string, dateTemplate?: {}): Promise<string> {
+    dayjs.extend(relativeTime);
     const dateSettings = await ConfigHelper_getDateFormatConfig(context);
     const destinationLanguage = await ConfigHelper_getLanguage(context);
     importDayJs(destinationLanguage);
