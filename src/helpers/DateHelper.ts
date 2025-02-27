@@ -4,8 +4,6 @@ import { AppContext } from "../types/types";
 import utc from "dayjs/plugin/utc";
 import calendar from "dayjs/plugin/calendar";
 import timezone from "dayjs/plugin/timezone";
-import relativeTime from "dayjs/plugin/relativeTime";
-import updateLocale from "dayjs/plugin/updateLocale";
 import "dayjs/locale/de";
 import "dayjs/locale/fr";
 import "dayjs/locale/es";
@@ -13,9 +11,7 @@ import "dayjs/locale/es";
 export async function DateHelper_convertDate(
     context: AppContext,
     date: string,
-    format = null as string | null,
-    fromNow = false,
-    relativeTimeObject?: {}
+    format = null as string | null
 ): Promise<string> {
     const dateSettings = await ConfigHelper_getDateFormatConfig(context);
     const destinationLanguage = await ConfigHelper_getLanguage(context);
@@ -26,15 +22,7 @@ export async function DateHelper_convertDate(
     if (format) {
         return dateJsObj.format(format);
     }
-    if (fromNow) {
-        dayjs.extend(relativeTime);
-        if (relativeTimeObject) {
-            dayjs.extend(updateLocale);
-            dayjs.updateLocale(destinationLanguage, relativeTimeObject);
-        }
-        return dateJsObj.fromNow();
-    }
-    
+
     if (dateSettings && dateSettings.useExtendedDatesFormat) {
         dayjs.extend(calendar)
         // @ts-ignore
@@ -60,4 +48,17 @@ function importDayJs(locale: string) {
     dayjs.extend(timezone);
     //@TODO refactor
     dayjs.locale(locale);
+}
+
+export async function DateHelper_formNow(context: AppContext, date: string, dateTemplate?: {}): Promise<string> {
+    const dateSettings = await ConfigHelper_getDateFormatConfig(context);
+    const destinationLanguage = await ConfigHelper_getLanguage(context);
+    importDayJs(destinationLanguage);
+    const timeZone = dateSettings ? dateSettings.timeZone : "Europe/London";
+    let dateJsObj = dayjs(date).tz(timeZone);
+    if (dateTemplate) {
+        dateJsObj.locale(destinationLanguage, dateTemplate);
+    }
+
+    return dateJsObj.fromNow();
 }
