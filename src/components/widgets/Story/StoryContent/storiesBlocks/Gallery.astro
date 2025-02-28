@@ -67,8 +67,6 @@ const embedBlock: EmbedBlock[] = _.get(result, "data.story.galleryContent.0.bloc
     (block: EmbedBlock) => block.__typename === "EmbedBlock"
 );
 
-console.log();
-
 const slides = imageBlocks.map((imageBlock) => {
     let imageWidth = _.get(imageBlock, "image.width", 1920);
     let imageHeight = _.get(imageBlock, "image.height", 1920);
