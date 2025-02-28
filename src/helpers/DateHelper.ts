@@ -9,7 +9,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/de";
 import "dayjs/locale/fr";
 import "dayjs/locale/es";
-
+import "dayjs/locale/pl";
 export async function DateHelper_convertDate(
     context: AppContext,
     date: string,

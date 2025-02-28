@@ -1,59 +1,75 @@
 ---
 import Slider from "../../../common/Slider/Slider.astro";
-const {blockData, context, widgetConfig} = Astro.props;
-import {gql} from 'graphql-tag';
-import _ from 'lodash';
-import {ImageBlock} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {ImageSourceReference} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {WebsiteApiProvider} from "../../../../../providers/WebsiteApiProvider";
-import {UtilsHelper_convertToInt, UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
+const { blockData, context, widgetConfig } = Astro.props;
+import { gql } from "graphql-tag";
+import _ from "lodash";
+import { EmbedBlock, ImageBlock } from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import { ImageSourceReference } from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import { WebsiteApiProvider } from "../../../../../providers/WebsiteApiProvider";
+import { UtilsHelper_convertToInt, UtilsHelper_isMobile } from "../../../../../helpers/UtilsHelper";
+import { EmbeddedApplicationBlock } from "../StoryContentBlocks";
 
 let toRender: boolean | string | null = false;
 
-const galleryUuid = _.get(blockData, 'stories.0.story.id', null);
+const galleryUuid = _.get(blockData, "stories.0.story.id", null);
 
 if (!galleryUuid) {
     toRender = null;
 }
 
 const variables = {
-    storyID: galleryUuid
+    storyID: galleryUuid,
 };
 
 const query = gql`
-    query($storyID: UUID){
+    query ($storyID: UUID) {
         story(id: $storyID) {
             id
             title
-                galleryContent: content(role: "gallery") {
-                    blocks {
-                        ... on ImageBlock {
-                            title
-                            url
-                            image {
-                                description
-                                width
-                                height
-                                sources {
-                                    source {
-                                        name
-                                    }
+            galleryContent: content(role: "gallery") {
+                blocks {
+                    ... on ImageBlock {
+                        title
+                        url
+                        image {
+                            description
+                            width
+                            height
+                            sources {
+                                source {
+                                    name
                                 }
                             }
-                        }                  
+                        }
+                    }
+                    ... on EmbedBlock {
+                        type
+                        embed {
+                            id
+                            html
+                            kind {
+                                code
+                            }
+                        }
                     }
                 }
             }
         }
-    `;
+    }
+`;
 
 const result = await WebsiteApiProvider.call(query, variables);
 
-const imageBlocks: ImageBlock[] = _.get(result, 'data.story.galleryContent.0.blocks', []).filter((block: ImageBlock) => block.__typename === 'ImageBlock');
+const imageBlocks: ImageBlock[] = _.get(result, "data.story.galleryContent.0.blocks", []).filter(
+    (block: ImageBlock) => block.__typename === "ImageBlock"
+);
+const embedBlock: EmbedBlock[] = _.get(result, "data.story.galleryContent.0.blocks", []).filter(
+    (block: EmbedBlock) => block.__typename === "EmbedBlock"
+);
 
 const slides = imageBlocks.map((imageBlock) => {
-    let imageWidth = _.get(imageBlock, 'image.width', 1920);
-    let imageHeight = _.get(imageBlock, 'image.height', 1920);
+    let imageWidth = _.get(imageBlock, "image.width", 1920);
+    let imageHeight = _.get(imageBlock, "image.height", 1920);
 
     let maxImageWidth = widgetConfig.standardImageWidth && UtilsHelper_convertToInt(widgetConfig.standardImageWidth);
     let maxImageHeight = widgetConfig.standardImageHeight && UtilsHelper_convertToInt(widgetConfig.standardImageHeight);
@@ -64,65 +80,70 @@ const slides = imageBlocks.map((imageBlock) => {
     }
 
     if (maxImageWidth && maxImageWidth < imageWidth) {
-        imageHeight = Math.floor(UtilsHelper_convertToInt(maxImageWidth * imageHeight / imageWidth));
+        imageHeight = Math.floor(UtilsHelper_convertToInt((maxImageWidth * imageHeight) / imageWidth));
         imageWidth = maxImageWidth;
     }
 
     if (maxImageHeight && maxImageHeight < imageHeight) {
-        imageWidth = Math.floor(UtilsHelper_convertToInt(maxImageHeight * imageWidth / imageHeight));
+        imageWidth = Math.floor(UtilsHelper_convertToInt((maxImageHeight * imageWidth) / imageHeight));
         imageHeight = maxImageHeight;
     }
 
     return {
-        "text": "",
-        "children": [],
+        text: "",
+        children: [],
         "Source type": "Image",
-        "Source url": _.get(imageBlock, 'url', null),
-        "Source desktop dimensions(eg. 600x300)": imageWidth + 'x' + imageHeight,
-        "Title": _.get(imageBlock, 'title', null),
-        "Description": _.get(imageBlock, 'image.sources', []).map((contentSource: ImageSourceReference) => contentSource.source.name).join(','),
+        "Source url": _.get(imageBlock, "url", null),
+        "Source desktop dimensions(eg. 600x300)": imageWidth + "x" + imageHeight,
+        Title: _.get(imageBlock, "title", null),
+        Description: _.get(imageBlock, "image.sources", [])
+            .map((contentSource: ImageSourceReference) => contentSource.source.name)
+            .join(","),
         "Link url": "",
-        "isExpanded": true,
+        isExpanded: true,
         originalImageDimensions: {
             width: _.get(imageBlock, "image.width", null),
             height: _.get(imageBlock, "image.height", null),
         },
-    }
+    };
 });
-
 const sliderWidgetConfig = {
-    "module": "slider_wdg",
-    "platformDesktop": true,
-    "platformMobile": true,
-    "customClass": "",
-    "customPosition": "none",
-    "customWidth": "none",
-    "widgetType": "slider",
-    "slides": slides || [],
-    "slidesPerView": 1,
-    "autoplayDelay": 0,
-    "loop": false,
-    "navigation": true,
-    "pagination": false,
-    "breakpoints": [
+    module: "slider_wdg",
+    platformDesktop: true,
+    platformMobile: true,
+    customClass: "",
+    customPosition: "none",
+    customWidth: "none",
+    widgetType: "slider",
+    slides: slides || [],
+    slidesPerView: 1,
+    autoplayDelay: 0,
+    loop: false,
+    navigation: true,
+    pagination: false,
+    breakpoints: [
         {
-            "text": "",
-            "children": [],
+            text: "",
+            children: [],
             "Slides per view": "1",
-            "Minimal screen size": "1024"
-        }
+            "Minimal screen size": "1024",
+        },
     ],
-    "headerSeoTag": "none",
-    "headerText": _.get(result, 'data.story.title', ''),
-    "navigationButtonsOutside": false,
-    "isUsedWithLightbox": true,
+    headerSeoTag: "none",
+    headerText: _.get(result, "data.story.title", ""),
+    navigationButtonsOutside: false,
+    isUsedWithLightbox: true,
 };
 ---
-{toRender === null ?
-<Fragment set:html={toRender}/>
-    :
-<div class="Gallery">
-    <Slider widgetConfig={sliderWidgetConfig} context={context}/>
-</div>
 
-    }
+{
+    toRender === null ? (
+        <Fragment set:html={toRender} />
+    ) : (
+        <div class="Gallery">
+            {embedBlock.length > 0 &&
+                embedBlock.map((blockData: EmbedBlock) => <EmbeddedApplicationBlock blockData={blockData} />)}
+            {slides.length > 0 && <Slider widgetConfig={sliderWidgetConfig} context={context} />}
+        </div>
+    )
+}
