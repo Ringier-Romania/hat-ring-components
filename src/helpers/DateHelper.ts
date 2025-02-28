@@ -1,19 +1,26 @@
 import dayjs from "dayjs";
-import {ConfigHelper_getDateFormatConfig, ConfigHelper_getLanguage} from "./ConfigHelper";
-import {AppContext} from "../types/types";
+import _ from "lodash";
+import { ConfigHelper_getDateFormatConfig, ConfigHelper_getLanguage } from "./ConfigHelper";
+import { AppContext } from "../types/types";
 import utc from "dayjs/plugin/utc";
 import calendar from "dayjs/plugin/calendar";
-import timezone from 'dayjs/plugin/timezone';
+import timezone from "dayjs/plugin/timezone";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/de";
+import "dayjs/locale/fr";
+import "dayjs/locale/es";
 
-export async function DateHelper_convertDate(context: AppContext, date: string, format = null as string | null): Promise<string> {
-
+export async function DateHelper_convertDate(
+    context: AppContext,
+    date: string,
+    format = null as string | null
+): Promise<string> {
     const dateSettings = await ConfigHelper_getDateFormatConfig(context);
     const destinationLanguage = await ConfigHelper_getLanguage(context);
     importDayJs(destinationLanguage);
     const timeZone = dateSettings ? dateSettings.timeZone : "Europe/London";
     // @ts-ignore
-    let dateJsObj = dayjs(date).locale(destinationLanguage).tz(timeZone);
-
+    let dateJsObj = dayjs(date).tz(timeZone);
     if (format) {
         return dateJsObj.format(format);
     }
@@ -43,4 +50,19 @@ function importDayJs(locale: string) {
     dayjs.extend(timezone);
     //@TODO refactor
     dayjs.locale(locale);
+}
+
+export async function DateHelper_formNow(context: AppContext, date: string, dateTemplate?: {}): Promise<string> {
+    dayjs.extend(relativeTime);
+    const dateSettings = await ConfigHelper_getDateFormatConfig(context);
+    const destinationLanguage = await ConfigHelper_getLanguage(context);
+    importDayJs(destinationLanguage);
+    const timeZone = dateSettings ? dateSettings.timeZone : "Europe/London";
+    const dateJsObj = dayjs(date).tz(timeZone);
+
+    if (!_.isEmpty(dateTemplate)) {
+        dateJsObj.locale(destinationLanguage, dateTemplate);
+    }
+
+    return dateJsObj.fromNow();
 }
