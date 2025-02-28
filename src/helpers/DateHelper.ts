@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import _ from "lodash";
 import { ConfigHelper_getDateFormatConfig, ConfigHelper_getLanguage } from "./ConfigHelper";
 import { AppContext } from "../types/types";
 import utc from "dayjs/plugin/utc";
@@ -57,8 +58,9 @@ export async function DateHelper_formNow(context: AppContext, date: string, date
     const destinationLanguage = await ConfigHelper_getLanguage(context);
     importDayJs(destinationLanguage);
     const timeZone = dateSettings ? dateSettings.timeZone : "Europe/London";
-    let dateJsObj = dayjs(date).tz(timeZone);
-    if (dateTemplate) {
+    const dateJsObj = dayjs(date).tz(timeZone);
+
+    if (!_.isEmpty(dateTemplate)) {
         dateJsObj.locale(destinationLanguage, dateTemplate);
     }
 
