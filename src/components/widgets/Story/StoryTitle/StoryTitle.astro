@@ -1,6 +1,6 @@
 ---
 import {StoryTitleWidgetConfig} from "./types";
-import {AppContext} from "../../../../types/types";
+import {AppContext, SiteContentType} from "../../../../types/types";
 const {context, widgetConfig} = Astro.props as {context: AppContext, widgetConfig: StoryTitleWidgetConfig};
 
 import _ from 'lodash';
@@ -9,6 +9,7 @@ import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTitleResponse} from "./types";
 import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper";
 import {ConfigHelper_getDeveloperSettingsConfig} from "../../../../helpers/ConfigHelper";
+import {UtilsHelper_getCurrentPageType} from "../../../../helpers/UtilsHelper";
 
 let toRender: boolean | JSX.Element | string = false;
 
@@ -49,11 +50,18 @@ if (displayTitleCodeName && displayTitleCodeName !== '') {
 if (!title) {
     toRender = WidgetHelper_renderEmptyComponent('Title','', true);
 }
+
+const tagName = _.get(widgetConfig, 'titleTag', 'h1');
+
+let Tag = 'div';
+if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(tagName)) {
+    Tag = tagName;
+}
 ---
 {toRender ?
     <Fragment set:html={toRender}/>
     :
     <div class={WidgetHelper_getWidgetCssClasses('StoryTitle', widgetConfig, context)}>
-        <h1>{title}</h1>
+        <Tag>{title}</Tag>
     </div>
 }
