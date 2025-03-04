@@ -62,6 +62,7 @@ export async function DateHelper_fromNow(context: AppContext, date: string, date
     if (dateTemplate) {
         const localLocale = {
             ...dayjs.Ls[destinationLanguage],
+            //temporary name field for additional dateTemplate to avoid global configuration change
             name: `fromNow-temp`,
             relativeTime: dateTemplate.relativeTime,
         };
