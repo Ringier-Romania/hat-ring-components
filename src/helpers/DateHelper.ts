@@ -52,17 +52,22 @@ function importDayJs(locale: string) {
     dayjs.locale(locale);
 }
 
-export async function DateHelper_formNow(context: AppContext, date: string, dateTemplate?: {}): Promise<string> {
+export async function DateHelper_fromNow(context: AppContext, date: string, dateTemplate?: any): Promise<string> {
     dayjs.extend(relativeTime);
-    const dateSettings = await ConfigHelper_getDateFormatConfig(context);
     const destinationLanguage = await ConfigHelper_getLanguage(context);
-    importDayJs(destinationLanguage);
+    const dateSettings = await ConfigHelper_getDateFormatConfig(context);
     const timeZone = dateSettings ? dateSettings.timeZone : "Europe/London";
-    const dateJsObj = dayjs(date).tz(timeZone);
-
-    if (!_.isEmpty(dateTemplate)) {
-        dateJsObj.locale(destinationLanguage, dateTemplate);
+    dayjs.tz.setDefault(timeZone);
+    
+    if (dateTemplate) {
+        const localLocale = {
+            ...dayjs.Ls[destinationLanguage],
+            name: `fromNow-temp`,
+            relativeTime: dateTemplate.relativeTime,
+        };
+        delete dayjs.Ls["fromNow-temp"];
+        return dayjs(date).locale(localLocale).fromNow();
     }
 
-    return dateJsObj.fromNow();
+    return dayjs(date).locale(destinationLanguage).fromNow();
 }
