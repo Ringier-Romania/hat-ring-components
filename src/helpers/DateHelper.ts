@@ -54,11 +54,12 @@ function importDayJs(locale: string) {
 
 export async function DateHelper_fromNow(context: AppContext, date: string, dateTemplate?: any): Promise<string> {
     dayjs.extend(relativeTime);
+    dayjs.extend(utc);
+    dayjs.extend(timezone);
     const destinationLanguage = await ConfigHelper_getLanguage(context);
     const dateSettings = await ConfigHelper_getDateFormatConfig(context);
     const timeZone = dateSettings ? dateSettings.timeZone : "Europe/London";
-    dayjs.tz.setDefault(timeZone);
-    
+    dayjs().tz(timeZone).utc();
     if (dateTemplate) {
         const localLocale = {
             ...dayjs.Ls[destinationLanguage],
