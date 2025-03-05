@@ -65,9 +65,7 @@ export async function DateHelper_fromNow(context: AppContext, date: string, date
             name: `fromNow-temp`,
             relativeTime: dateTemplate.relativeTime,
         };
-        delete dayjs.Ls["fromNow-temp"];
         return dayjs(date).tz(timeZone).locale(localLocale).fromNow();
     }
-
     return dayjs(date).tz(timeZone).locale(destinationLanguage).fromNow();
 }
