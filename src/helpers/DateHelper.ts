@@ -52,7 +52,9 @@ function importDayJs(locale: string) {
     dayjs.locale(locale);
 }
 
-export async function DateHelper_fromNow(context: AppContext, date: string, dateTemplate?: any): Promise<string> {
+
+export async function DateHelper_fromNow(context: AppContext, date: string | Date, dateTemplate?: any): Promise<string> {
+
     dayjs.extend(relativeTime);
     dayjs.extend(timezone);
     const destinationLanguage = await ConfigHelper_getLanguage(context);
