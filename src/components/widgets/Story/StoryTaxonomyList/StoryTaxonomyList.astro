@@ -38,7 +38,7 @@ const variables = {
     storyId: context.id,
 };
 
-const response = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL) as StoryTaxonomyListResponse;
+const response = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL) as StoryTaxonomyListResponse;
 
 const topics = response.data.story?.topics;
 const taxonomyList = (widgetConfig?.taxonomyKind || '').split(',').map(kind => kind.trim());
