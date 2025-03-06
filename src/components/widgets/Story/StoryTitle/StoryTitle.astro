@@ -37,7 +37,7 @@ const variables = {
 
 let response = widgetConfig?.response;
 if (!response) {
-    response = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL) as StoryTitleResponse;
+    response = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL) as StoryTitleResponse;
 }
 
 if (displayTitleCodeName && displayTitleCodeName !== '') {

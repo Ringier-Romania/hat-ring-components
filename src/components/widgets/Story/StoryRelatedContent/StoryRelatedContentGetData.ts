@@ -90,7 +90,7 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
 
     let res: GenericListResponse = {data: {stories: {edges: [], total: widgetConfig.paginationElements || 0}}};
 
-    const result = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL);
+    const result = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL);
 
     res.data.stories.edges = res.data.stories.edges.concat(_.get(result, 'data.story.stories', []).map(story => {
         return {node: story.story}
