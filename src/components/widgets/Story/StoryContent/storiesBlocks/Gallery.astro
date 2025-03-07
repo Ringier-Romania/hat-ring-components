@@ -3,7 +3,7 @@ import Slider from "../../../common/Slider/Slider.astro";
 const { blockData, context, widgetConfig } = Astro.props;
 import { gql } from "graphql-tag";
 import _ from "lodash";
-import { EmbedBlock, ImageBlock } from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import { ImageBlock, EmbedBlock } from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import { ImageSourceReference } from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import { WebsiteApiProvider } from "../../../../../providers/WebsiteApiProvider";
 import { UtilsHelper_convertToInt, UtilsHelper_isMobile } from "../../../../../helpers/UtilsHelper";
@@ -12,7 +12,8 @@ import { EmbeddedApplicationBlock } from "../StoryContentBlocks";
 let toRender: boolean | string | null = false;
 
 const galleryUuid = _.get(blockData, "stories.0.story.id", null);
-
+const embeddedBlockTypeName = "EmbedBlock";
+const imageBlockTypeName = "ImageBlock";
 if (!galleryUuid) {
     toRender = null;
 }
@@ -60,52 +61,61 @@ const query = gql`
 
 const result = await WebsiteApiProvider.call(query, variables);
 
-const imageBlocks: ImageBlock[] = _.get(result, "data.story.galleryContent.0.blocks", []).filter(
-    (block: ImageBlock) => block.__typename === "ImageBlock"
-);
-const embedBlock: EmbedBlock[] = _.get(result, "data.story.galleryContent.0.blocks", []).filter(
-    (block: EmbedBlock) => block.__typename === "EmbedBlock"
+const filteredBlocks: (ImageBlock | EmbedBlock)[] = _.get(result, "data.story.galleryContent.0.blocks", []).filter(
+    (block: ImageBlock | EmbedBlock) =>
+        block.__typename === embeddedBlockTypeName || block.__typename === imageBlockTypeName
 );
 
-const slides = imageBlocks.map((imageBlock) => {
-    let imageWidth = _.get(imageBlock, "image.width", 1920);
-    let imageHeight = _.get(imageBlock, "image.height", 1920);
+const slides = filteredBlocks.map((block) => {
+    if (block.__typename === embeddedBlockTypeName) {
+        return {
+            type: "embedded_application",
+            embed: _.get(block, "embed", ''),
+        };
+    } else if (block.__typename === imageBlockTypeName) {
+        const imageBlock = block as ImageBlock;
+        let imageWidth = _.get(imageBlock, "image.width", 1920);
+        let imageHeight = _.get(imageBlock, "image.height", 1920);
 
-    let maxImageWidth = widgetConfig.standardImageWidth && UtilsHelper_convertToInt(widgetConfig.standardImageWidth);
-    let maxImageHeight = widgetConfig.standardImageHeight && UtilsHelper_convertToInt(widgetConfig.standardImageHeight);
+        let maxImageWidth =
+            widgetConfig.standardImageWidth && UtilsHelper_convertToInt(widgetConfig.standardImageWidth);
+        let maxImageHeight =
+            widgetConfig.standardImageHeight && UtilsHelper_convertToInt(widgetConfig.standardImageHeight);
 
-    if (UtilsHelper_isMobile(context)) {
-        maxImageWidth = widgetConfig.mobileImageWidth && UtilsHelper_convertToInt(widgetConfig.mobileImageWidth);
-        maxImageHeight = widgetConfig.mobileImageHeight && UtilsHelper_convertToInt(widgetConfig.mobileImageHeight);
+        if (UtilsHelper_isMobile(context)) {
+            maxImageWidth = widgetConfig.mobileImageWidth && UtilsHelper_convertToInt(widgetConfig.mobileImageWidth);
+            maxImageHeight = widgetConfig.mobileImageHeight && UtilsHelper_convertToInt(widgetConfig.mobileImageHeight);
+        }
+
+        if (maxImageWidth && maxImageWidth < imageWidth) {
+            imageHeight = Math.floor(UtilsHelper_convertToInt((maxImageWidth * imageHeight) / imageWidth));
+            imageWidth = maxImageWidth;
+        }
+
+        if (maxImageHeight && maxImageHeight < imageHeight) {
+            imageWidth = Math.floor(UtilsHelper_convertToInt((maxImageHeight * imageWidth) / imageHeight));
+            imageHeight = maxImageHeight;
+        }
+
+        return {
+            text: "",
+            children: [],
+            "Source type": "Image",
+            "Source url": _.get(imageBlock, "url", null),
+            "Source desktop dimensions(eg. 600x300)": imageWidth + "x" + imageHeight,
+            Title: _.get(imageBlock, "title", null),
+            Description: _.get(imageBlock, "image.sources", [])
+                .map((contentSource: ImageSourceReference) => contentSource.source.name)
+                .join(","),
+            "Link url": "",
+            isExpanded: true,
+            originalImageDimensions: {
+                width: _.get(imageBlock, "image.width", null),
+                height: _.get(imageBlock, "image.height", null),
+            },
+        };
     }
-
-    if (maxImageWidth && maxImageWidth < imageWidth) {
-        imageHeight = Math.floor(UtilsHelper_convertToInt((maxImageWidth * imageHeight) / imageWidth));
-        imageWidth = maxImageWidth;
-    }
-
-    if (maxImageHeight && maxImageHeight < imageHeight) {
-        imageWidth = Math.floor(UtilsHelper_convertToInt((maxImageHeight * imageWidth) / imageHeight));
-        imageHeight = maxImageHeight;
-    }
-
-    return {
-        text: "",
-        children: [],
-        "Source type": "Image",
-        "Source url": _.get(imageBlock, "url", null),
-        "Source desktop dimensions(eg. 600x300)": imageWidth + "x" + imageHeight,
-        Title: _.get(imageBlock, "title", null),
-        Description: _.get(imageBlock, "image.sources", [])
-            .map((contentSource: ImageSourceReference) => contentSource.source.name)
-            .join(","),
-        "Link url": "",
-        isExpanded: true,
-        originalImageDimensions: {
-            width: _.get(imageBlock, "image.width", null),
-            height: _.get(imageBlock, "image.height", null),
-        },
-    };
+    return "";
 });
 const sliderWidgetConfig = {
     module: "slider_wdg",
@@ -141,8 +151,8 @@ const sliderWidgetConfig = {
         <Fragment set:html={toRender} />
     ) : (
         <div class="Gallery">
-            {embedBlock.length > 0 &&
-                embedBlock.map((blockData: EmbedBlock) => <EmbeddedApplicationBlock blockData={blockData} />)}
+            {/* {embedBlock.length > 0 &&
+                embedBlock.map((blockData: EmbedBlock) => <EmbeddedApplicationBlock blockData={blockData} />)} */}
             {slides.length > 0 && <Slider widgetConfig={sliderWidgetConfig} context={context} />}
         </div>
     )
