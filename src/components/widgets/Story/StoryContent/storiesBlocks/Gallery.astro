@@ -69,6 +69,7 @@ const filteredBlocks: (ImageBlock | EmbedBlock)[] = _.get(result, "data.story.ga
 const slides = filteredBlocks.map((block) => {
     if (block.__typename === embeddedBlockTypeName) {
         return {
+            "Source type": "Embed",
             type: "embedded_application",
             embed: _.get(block, "embed", ''),
         };

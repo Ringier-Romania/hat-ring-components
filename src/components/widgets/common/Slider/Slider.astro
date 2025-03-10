@@ -113,7 +113,7 @@ const id = 'slider_'+UtilsHelper_generateRandomString();
                         headerTagLevel={headerTagLevel}
                         childLevel={1}
                     />
-                ) : slide?.type === "embedded_application" ? (
+                ) : slide["Source type"] === "Embed" ? (
                     <EmbeddedApplicationBlock blockData={slide} />
                 ) : (
                     ""
