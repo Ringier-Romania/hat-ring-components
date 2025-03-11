@@ -6,6 +6,7 @@ import styles from '../../../../../styles/widgets/common/Slider.module.scss';
 import _ from 'lodash';
 import {UtilsHelper_generateRandomString, UtilsHelper_getValueIfExists} from '../../../../helpers/UtilsHelper';
 import Slide from './Slide.astro';
+import { EmbeddedApplicationBlock } from '../../Story/StoryContent/StoryContentBlocks';
 
 const {context, widgetConfig, extendableAttributes = {}} = Astro.props;
 
@@ -104,9 +105,20 @@ const id = 'slider_'+UtilsHelper_generateRandomString();
     >
         {widgetConfig.slides && widgetConfig.slides.map((slide) => (
             <swiper-slide class={slide['Custom CSS Class'] || ''}>
-                <Slide slide={slide} isUsedWithLightbox={widgetConfig.isUsedWithLightbox} context={context}
-                       headerTagLevel={headerTagLevel} childLevel={1}/>
-            </swiper-slide>
+                 {slide["Source type"] === "Image" ? (
+                    <Slide
+                        slide={slide}
+                        isUsedWithLightbox={widgetConfig.isUsedWithLightbox}
+                        context={context}
+                        headerTagLevel={headerTagLevel}
+                        childLevel={1}
+                    />
+                ) : slide["Source type"] === "Embedded application" ? (
+                    <EmbeddedApplicationBlock blockData={{ ...slide, type: "embedded_application" }} />
+                ) : (
+                    ""
+                )}
+            </swiper-slide> 
         ))}
     </swiper-container>
 </div>
