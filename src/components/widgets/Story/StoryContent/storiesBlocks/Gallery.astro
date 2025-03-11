@@ -7,7 +7,6 @@ import { ImageBlock, EmbedBlock } from "@ringpublishing/graphql-api-client/lib/t
 import { ImageSourceReference } from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import { WebsiteApiProvider } from "../../../../../providers/WebsiteApiProvider";
 import { UtilsHelper_convertToInt, UtilsHelper_isMobile } from "../../../../../helpers/UtilsHelper";
-import { EmbeddedApplicationBlock } from "../StoryContentBlocks";
 
 let toRender: boolean | string | null = false;
 
@@ -69,8 +68,7 @@ const filteredBlocks: (ImageBlock | EmbedBlock)[] = _.get(result, "data.story.ga
 const slides = filteredBlocks.map((block) => {
     if (block.__typename === embeddedBlockTypeName) {
         return {
-            "Source type": "Embed",
-            type: "embedded_application",
+            "Source type": "Embedded application",
             embed: _.get(block, "embed", ''),
         };
     } else if (block.__typename === imageBlockTypeName) {
