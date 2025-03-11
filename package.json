@@ -20,7 +20,7 @@
 		"@aws-sdk/util-format-url": "3.609.0",
 		"@ringieraxelspringer/tsconfig": "^6.0.0",
 		"@ringpublishing/accelerator-images": "^0.1.3",
-		"@ringpublishing/graphql-api-client": "^3.3.0",
+		"@ringpublishing/graphql-api-client": "^4.0.1",
 		"@types/node": "*",
 		"astro": "^5.0.9",
 		"cheerio": "^1.0.0",
