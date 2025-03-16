@@ -81,7 +81,16 @@ const {widgetConfig, context} = Astro.props as {
                     }
                 });
             });
+
             lightbox.init();
+            const event = new CustomEvent('lightboxInitialized', {detail: {lightbox}});
+            document.dispatchEvent(event);
+            if(!window.photoswipeInstances){
+                window.photoswipeInstances = [lightbox];
+            }
+            else{
+                window.photoswipeInstances.push(lightbox);
+            }
         }
     }
 </script>
