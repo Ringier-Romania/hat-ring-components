@@ -73,12 +73,38 @@ const {widgetConfig, context} = Astro.props as {
                                     captionHTML = caption.innerHTML;
                                 } else {
                                     // get caption from alt attribute
-                                    captionHTML = currSlideElement.querySelector('img').getAttribute('alt');
+                                    captionHTML = currSlideElement.querySelector('img').getAttribute("alt");
+                                    if (!captionHTML) {
+                                        el.style.display = "none";
+                                    }
                                 }
                             }
                             el.innerHTML = captionHTML || '';
                         });
-                    }
+                    },
+                });
+                lightbox.pswp.ui.registerElement({
+                    name: "description",
+                    order: 10,
+                    isButton: false,
+                    appendTo: "root",
+                    html: "Description",
+                    onInit: (el, pswp) => {
+                        lightbox.pswp.on("change", () => {
+                            const currSlideElement = lightbox.pswp.currSlide.data.element;
+                            console.log(currSlideElement);
+                            
+
+                            if (currSlideElement) {
+                                const description = currSlideElement.querySelector(".description");
+                                if (description) {
+                                    el.innerHTML = description.innerHTML || "";
+                                } else {
+                                    el.style.display = "none";
+                                }
+                            }
+                        });
+                    },
                 });
             });
 
@@ -96,20 +122,36 @@ const {widgetConfig, context} = Astro.props as {
 </script>
 
 <style is:global>
+    .pswp__description,
     .pswp__caption {
         background: rgba(20, 20, 20, 0.75);
         font-size: 16px;
         color: #fff;
-        width: calc(100% - 32px);
         max-width: 400px;
         padding: 2px 8px;
         border-radius: 4px;
         position: absolute;
+    }
+    .pswp__caption {
+        width: calc(100% - 32px);
         left: 50%;
-        bottom: 16px;
+        bottom: 50px;
         transform: translateX(-50%);
     }
+
     .pswp__caption a {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    .pswp__description {
+        right: 16px;
+        bottom: 16px;
+    }
+    .pswp__description p{
+        margin: 0;
+    }
+    .pswp__description a {
         color: #fff;
         text-decoration: underline;
     }
