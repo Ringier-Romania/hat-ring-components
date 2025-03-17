@@ -1,16 +1,20 @@
 ---
-import {AppContext} from "../../../../types/types";
-const {widgetConfig, context} = Astro.props as {
+import { AppContext } from "../../../../types/types";
+const { widgetConfig, context } = Astro.props as {
     widgetConfig: {
-        gallerySelector: string,
-        childrenSelector: string,
-    }, context: AppContext
+        gallerySelector: string;
+        childrenSelector: string;
+    };
+    context: AppContext;
 };
 ---
-<script define:vars={{
-    gallerySelector: widgetConfig.gallerySelector,
-    childrenSelector: widgetConfig.childrenSelector
-}}>
+
+<script
+    define:vars={{
+        gallerySelector: widgetConfig.gallerySelector,
+        childrenSelector: widgetConfig.childrenSelector,
+    }}
+>
     if (document.querySelector(gallerySelector)) {
         if (!window.PhotoSwipe) {
             loadScripts();
@@ -21,20 +25,20 @@ const {widgetConfig, context} = Astro.props as {
 
     function loadScripts() {
         let loaded = 0;
-        let stylesheet = document.createElement('link');
-        stylesheet.rel = 'stylesheet';
-        stylesheet.href = 'https://ocdn.eu/customerpoc/hat-ring-components/photoswipe_5.4.4.min.css';
+        let stylesheet = document.createElement("link");
+        stylesheet.rel = "stylesheet";
+        stylesheet.href = "https://ocdn.eu/customerpoc/hat-ring-components/photoswipe_5.4.4.min.css";
         document.head.appendChild(stylesheet);
 
-        let photoswipeScript = document.createElement('script');
-        photoswipeScript.src = 'https://ocdn.eu/customerpoc/hat-ring-components/photoswipe_5.4.4.umd.min.js';
+        let photoswipeScript = document.createElement("script");
+        photoswipeScript.src = "https://ocdn.eu/customerpoc/hat-ring-components/photoswipe_5.4.4.umd.min.js";
         photoswipeScript.async = true;
         photoswipeScript.fetchpriority = "low";
         photoswipeScript.onload = onload;
         document.head.appendChild(photoswipeScript);
 
-        let lightboxScript = document.createElement('script');
-        lightboxScript.src = 'https://ocdn.eu/customerpoc/hat-ring-components/photoswipe-lightbox_5.4.4.umd.min.js';
+        let lightboxScript = document.createElement("script");
+        lightboxScript.src = "https://ocdn.eu/customerpoc/hat-ring-components/photoswipe-lightbox_5.4.4.umd.min.js";
         lightboxScript.async = true;
         lightboxScript.fetchpriority = "low";
         lightboxScript.onload = onload;
@@ -53,53 +57,44 @@ const {widgetConfig, context} = Astro.props as {
             pswpModule: PhotoSwipe,
             children: childrenSelector,
             gallery: gallerySelector,
-        })
+        });
         if (lightbox) {
-            lightbox.on('uiRegister', function () {
+            lightbox.on("uiRegister", function () {
                 lightbox.pswp.ui.registerElement({
-                    name: 'caption',
+                    name: "infoContainer",
                     order: 9,
                     isButton: false,
-                    appendTo: 'root',
-                    html: 'Caption',
-                    onInit: (el, pswp) => {
-                        lightbox.pswp.on('change', () => {
-                            const currSlideElement = lightbox.pswp.currSlide.data.element;
-                            let captionHTML = '';
-                            if (currSlideElement) {
-                                const caption = currSlideElement.querySelector('.caption');
-                                if (caption) {
-                                    // get caption from element with class hidden-caption-content
-                                    captionHTML = caption.innerHTML;
-                                } else {
-                                    // get caption from alt attribute
-                                    captionHTML = currSlideElement.querySelector('img').getAttribute("alt");
-                                    if (!captionHTML) {
-                                        el.style.display = "none";
-                                    }
-                                }
-                            }
-                            el.innerHTML = captionHTML || '';
-                        });
-                    },
-                });
-                lightbox.pswp.ui.registerElement({
-                    name: "description",
-                    order: 10,
-                    isButton: false,
                     appendTo: "root",
-                    html: "Description",
                     onInit: (el, pswp) => {
+                        const captionEl = document.createElement("div");
+                        captionEl.className = "pswp__caption";
+                        el.appendChild(captionEl);
+                        const descriptionEl = document.createElement("div");
+                        descriptionEl.className = "pswp__description";
+                        el.appendChild(descriptionEl);
+
                         lightbox.pswp.on("change", () => {
                             const currSlideElement = lightbox.pswp.currSlide.data.element;
+                            if (!currSlideElement) return;
 
-                            if (currSlideElement) {
-                                const description = currSlideElement.querySelector(".description");
-                                if (description) {
-                                    el.innerHTML = description.innerHTML || "";
-                                } else {
-                                    el.style.display = "none";
-                                }
+                            const caption = currSlideElement.querySelector(".caption");
+                            let captionHTML = "";
+                            if (caption) {
+                                captionHTML = caption.innerHTML;
+                            } else {
+                                captionHTML = currSlideElement.querySelector('img').getAttribute("alt");
+                            }
+
+                            if (captionHTML) {
+                                captionEl.innerHTML = captionHTML;
+                            } else {
+                                captionEl.style.display = "none";
+                            }
+                            const description = currSlideElement.querySelector(".description");
+                            if (description && description.innerHTML) {
+                                descriptionEl.innerHTML = description.innerHTML;
+                            } else {
+                                descriptionEl.style.display = "none";
                             }
                         });
                     },
@@ -107,12 +102,11 @@ const {widgetConfig, context} = Astro.props as {
             });
 
             lightbox.init();
-            const event = new CustomEvent('lightboxInitialized', {detail: {lightbox}});
+            const event = new CustomEvent("lightboxInitialized", { detail: { lightbox } });
             document.dispatchEvent(event);
-            if(!window.photoswipeInstances){
+            if (!window.photoswipeInstances) {
                 window.photoswipeInstances = [lightbox];
-            }
-            else{
+            } else {
                 window.photoswipeInstances.push(lightbox);
             }
         }
@@ -120,31 +114,26 @@ const {widgetConfig, context} = Astro.props as {
 </script>
 
 <style is:global>
+    .pswp__infoContainer {
+        position: absolute;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
     .pswp__caption,
     .pswp__description {
         background: rgba(20, 20, 20, 0.75);
         font-size: 16px;
         color: #fff;
         max-width: 400px;
+        margin-bottom: 8px;
         padding: 2px 8px;
         border-radius: 4px;
-        position: absolute;
-        width: calc(100% - 32px);
-        left: 50%;
-        bottom: 50px;
-        transform: translateX(-50%);
-    }
-    .pswp__description {
-        bottom: 16px;
-        width: auto;
-    }
-    .pswp__description a,
-    .pswp__caption a {
-        color: #fff;
-        text-decoration: underline;
     }
     .pswp__description p {
         margin: 0;
     }
- 
 </style>
