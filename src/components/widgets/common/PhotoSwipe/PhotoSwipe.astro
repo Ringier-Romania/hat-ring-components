@@ -120,8 +120,8 @@ const {widgetConfig, context} = Astro.props as {
 </script>
 
 <style is:global>
-    .pswp__description,
-    .pswp__caption {
+    .pswp__caption,
+    .pswp__description {
         background: rgba(20, 20, 20, 0.75);
         font-size: 16px;
         color: #fff;
@@ -129,26 +129,22 @@ const {widgetConfig, context} = Astro.props as {
         padding: 2px 8px;
         border-radius: 4px;
         position: absolute;
-    }
-    .pswp__caption {
         width: calc(100% - 32px);
         left: 50%;
         bottom: 50px;
         transform: translateX(-50%);
     }
-
+    .pswp__description {
+        bottom: 16px;
+        width: auto;
+    }
     .pswp__description a,
     .pswp__caption a {
         color: #fff;
         text-decoration: underline;
     }
-
-    .pswp__description {
-        right: 16px;
-        bottom: 16px;
-    }
-    .pswp__description p{
+    .pswp__description p {
         margin: 0;
     }
-
+ 
 </style>
