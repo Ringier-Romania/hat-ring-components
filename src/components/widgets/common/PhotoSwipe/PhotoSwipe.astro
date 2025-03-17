@@ -92,8 +92,6 @@ const {widgetConfig, context} = Astro.props as {
                     onInit: (el, pswp) => {
                         lightbox.pswp.on("change", () => {
                             const currSlideElement = lightbox.pswp.currSlide.data.element;
-                            console.log(currSlideElement);
-                            
 
                             if (currSlideElement) {
                                 const description = currSlideElement.querySelector(".description");
