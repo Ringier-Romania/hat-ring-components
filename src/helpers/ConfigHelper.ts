@@ -7,6 +7,10 @@ import {MonitoringProvider} from "../providers/MonitoringProvider";
 
 export async function ConfigHelper_getConfig(context: AppContext, configKey) {
     const variant = context.websiteManagerVariant;
+    if(!context.siteNodeId){
+        console.warn('ConfigHelper_getConfig: siteNodeId is not defined for url:', context.url);
+        return false;
+    }
     const variables = {
         nodeID: context.siteNodeId,
         variant: variant,
