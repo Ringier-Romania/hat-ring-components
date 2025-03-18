@@ -109,9 +109,7 @@ if (!toRender) {
                 "Source url": _.get(imageBlock, "url", null),
                 "Source desktop dimensions(eg. 600x300)": imageWidth + "x" + imageHeight,
                 Title: _.get(imageBlock, "title", null),
-                Description: _.get(imageBlock, "image.sources", [])
-                    .map((contentSource: ImageSourceReference) => contentSource.source.name)
-                    .join(","),
+                Description: _.get(imageBlock, "image.description", ""),
                 "Link url": "",
                 isExpanded: true,
                 originalImageDimensions: {
