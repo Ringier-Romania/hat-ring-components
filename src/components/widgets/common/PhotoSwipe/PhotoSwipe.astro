@@ -94,14 +94,9 @@ const { widgetConfig, context } = Astro.props as {
                                     captionEl.innerHTML = altText;
                                 }
                             }
-                            const description = currSlideElement.querySelector(".description");
+                            const description = currSlideElement.querySelector(".description, .StoryMainImageDescription");
                             if (description) {
                                 descriptionEl.innerHTML = description.innerHTML;
-                            } else {
-                                const storyMainImageDescription = currSlideElement.querySelector(".StoryMainImageDescription");
-                                if (storyMainImageDescription) {
-                                    descriptionEl.innerHTML = storyMainImageDescription.innerHTML;
-                                }
                             }
                         });
                     },
