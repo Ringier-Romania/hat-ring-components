@@ -66,35 +66,37 @@ const { widgetConfig, context } = Astro.props as {
                     isButton: false,
                     appendTo: "root",
                     onInit: (el, pswp) => {
+          
                         const captionEl = document.createElement("div");
                         captionEl.className = "pswp__caption";
-                        el.appendChild(captionEl);
+
                         const descriptionEl = document.createElement("div");
                         descriptionEl.className = "pswp__description";
+
+                        el.appendChild(captionEl);
                         el.appendChild(descriptionEl);
 
                         lightbox.pswp.on("change", () => {
+            
+                            captionEl.innerHTML = "";
+                            descriptionEl.innerHTML = "";
+
                             const currSlideElement = lightbox.pswp.currSlide.data.element;
                             if (!currSlideElement) return;
 
+              
                             const caption = currSlideElement.querySelector(".caption");
-                            let captionHTML = "";
                             if (caption) {
-                                captionHTML = caption.innerHTML;
+                                captionEl.innerHTML = caption.innerHTML;
                             } else {
-                                captionHTML = currSlideElement.querySelector('img').getAttribute("alt");
+                                const altText = currSlideElement.querySelector("img")?.getAttribute("alt");
+                                if (altText) {
+                                    captionEl.innerHTML = altText;
+                                }
                             }
-
-                            if (captionHTML) {
-                                captionEl.innerHTML = captionHTML;
-                            } else {
-                                captionEl.style.display = "none";
-                            }
-                            const description = currSlideElement.querySelector(".description");
-                            if (description && description.innerHTML) {
+                            const description = currSlideElement.querySelector(".description, .StoryMainImageDescription");
+                            if (description) {
                                 descriptionEl.innerHTML = description.innerHTML;
-                            } else {
-                                descriptionEl.style.display = "none";
                             }
                         });
                     },
