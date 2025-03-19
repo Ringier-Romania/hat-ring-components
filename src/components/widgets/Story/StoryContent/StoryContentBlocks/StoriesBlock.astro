@@ -13,7 +13,7 @@ const availableStoriesBlocks = Object.assign({}, ringStoriesBlocks, context?.cus
 if (!blockData.kind || !blockData.kind.code) {
     toRender = WidgetHelper_renderEmptyComponent('StoriesBlock', 'StoriesBlock: blockData.kind.code is missing', false);
 }
-const storiesBlockName = _.upperFirst(_.camelCase(blockData.kind.code));
+const storiesBlockName = _.upperFirst(_.camelCase(blockData.kind?.code));
 const Component = availableStoriesBlocks[storiesBlockName];
 
 if (!Component) {

@@ -40,7 +40,7 @@ let liveblogUuid: boolean | string = false;
 if (widgetConfig.liveBlogId) {
     liveblogUuid = widgetConfig.liveBlogId;
 } else {
-    const response = await WebsiteApiProvider.call(query, variables, widgetConfig.cacheTTL);
+    const response = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL);
     liveblogUuid = _.get(response, 'data.story.extensions[0].data.id', false);
 }
 
