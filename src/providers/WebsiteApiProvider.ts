@@ -28,7 +28,11 @@ export class WebsiteApiProvider {
                     }
                     global.HATCacheInCallInProgress[cacheKeyString] = 1;
                     const response = await this._call(query, variables);
-                    CacheHelper_set(cacheKey, response, cacheTtl);
+                    if (response) {
+                        CacheHelper_set(cacheKey, response, cacheTtl);
+                    } else {
+                        MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
+                    }
                     delete global.HATCacheInCallInProgress[cacheKeyString];
                 });
                 if (cachedResponse && typeof cachedResponse === 'object') {
@@ -41,7 +45,11 @@ export class WebsiteApiProvider {
             //console.log('non cached', variables);
             MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
             const response = await this._call(query, variables);
-            CacheHelper_set(cacheKey, response, cacheTtl);
+            if (response) {
+                CacheHelper_set(cacheKey, response, cacheTtl);
+            } else {
+                MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
+            }
             if (response && typeof response === 'object') {
                 response["isCachedByHat"] = false;
             }
@@ -60,59 +68,64 @@ export class WebsiteApiProvider {
 
 
     static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache'): Promise<any> {
-        //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
-       // console.log('call');
-        const accessKey = process.env.WEBSITE_API_PUBLIC!;
-        const secretKey = process.env.WEBSITE_API_SECRET!;
-        const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
+        try {
+            //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
+            // console.log('call');
+            const accessKey = process.env.WEBSITE_API_PUBLIC!;
+            const secretKey = process.env.WEBSITE_API_SECRET!;
+            const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
-        if (!global.websitesApiApolloClient) {
-            global.websitesApiApolloClient = new WebsitesApiClientBuilder({
-                accessKey,
-                secretKey,
-                spaceUuid
-            }).buildApolloClient();
-        }
-
-        const currentTime = new Date().getTime();
-        const timer = MonitoringProvider.timer(
-            `info.WebsitesApiProvider.call.hitApiTimer`
-        );
-
-        const queryTypeToCounter = {
-            'story(': 'Story',
-            'node(': 'Node',
-            'author(': 'Author',
-            'stories(': 'Stories',
-            'site(': 'Site',
-            'section(': 'Section',
-        };
-
-        const queryBody = query.loc?.source.body || '';
-        let counterType = 'Unspecified';
-        for (const [queryType, counterName] of Object.entries(queryTypeToCounter)) {
-            if (queryBody.includes(queryType)) {
-                counterType = counterName;
-                break;
+            if (!global.websitesApiApolloClient) {
+                global.websitesApiApolloClient = new WebsitesApiClientBuilder({
+                    accessKey,
+                    secretKey,
+                    spaceUuid
+                }).buildApolloClient();
             }
-        }
-        MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${counterType}`);
 
-        const response = await global.websitesApiApolloClient.query({
-            query,
-            variables,
-            fetchPolicy
-        });
+            const currentTime = new Date().getTime();
+            const timer = MonitoringProvider.timer(
+                `info.WebsitesApiProvider.call.hitApiTimer`
+            );
 
-        if (timer) {
-            timer.done();
-        }
-        const timeDifference = new Date().getTime() - currentTime;
-        if (timeDifference > 4000) {
-            console.log('Websites Api long query ', query.loc?.source.body, variables);
-        }
-        MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime', timeDifference);
-        return response;
+            const queryTypeToCounter = {
+                'story(': 'Story',
+                'node(': 'Node',
+                'author(': 'Author',
+                'stories(': 'Stories',
+                'site(': 'Site',
+                'section(': 'Section',
+            };
 
+            const queryBody = query.loc?.source.body || '';
+            let counterType = 'Unspecified';
+            for (const [queryType, counterName] of Object.entries(queryTypeToCounter)) {
+                if (queryBody.includes(queryType)) {
+                    counterType = counterName;
+                    break;
+                }
+            }
+            MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${counterType}`);
+
+            const response = await global.websitesApiApolloClient.query({
+                query,
+                variables,
+                fetchPolicy
+            });
+
+            if (timer) {
+                timer.done();
+            }
+            const timeDifference = new Date().getTime() - currentTime;
+            if (timeDifference > 4000) {
+                console.info('Websites Api long query ', query.loc?.source.body, variables);
+            }
+            MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime', timeDifference);
+            return response;
+
+        } catch (e) {
+            console.error('Websites Api _call error:', e);
+            return null;
+        }
     }
 }
