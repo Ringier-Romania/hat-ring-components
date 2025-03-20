@@ -317,7 +317,7 @@ function handleCleanCache() {
     const TTL = process.env.CACHE_CLEAN_INTERVAL ? UtilsHelper_convertToInt(process.env.CACHE_CLEAN_INTERVAL) : 60;
     if (currentTime - global.lastHATCacheClean > (TTL * 1000)) {
         global.HATCacheInCallInProgress = {};
-        CacheHelper_flush();
+        //CacheHelper_flush();
         global.lastHATCacheClean = currentTime;
     }
 }
