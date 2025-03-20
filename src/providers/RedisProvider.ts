@@ -60,8 +60,14 @@ export class RedisProvider {
             },
         }) as RedisClientType;
 
-        await rwClient.connect();
-        this.client = rwClient;
+        try {
+            await rwClient.connect();
+            this.client = rwClient;
+            MonitoringProvider.counter('info.RedisProvider.initialize');
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.initialize');
+        }
+
     }
 
     async getToken(): Promise<string | undefined> {
@@ -109,7 +115,12 @@ export class RedisProvider {
             expirationTimestamp = Date.now() + ttl * 1000;
         }
         const setValue = JSON.stringify({data: value, ttl: expirationTimestamp} as RedisCacheValue);
-        await this.client.set(key, setValue);
+        try {
+            await this.client.set(key, setValue);
+            MonitoringProvider.counter('info.RedisProvider.set');
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.set');
+        }
     }
 
     async get({key}: {
@@ -119,18 +130,26 @@ export class RedisProvider {
             await this.initialize();
         }
 
-        const data = await this.client.get(key);
-        if(!data){
+        try {
+            const data = await this.client.get(key);
+            if (!data) {
+                return null;
+            }
+            const parsedData = this._parseResponse(data, key);
+            MonitoringProvider.counter('info.RedisProvider.get');
+            return parsedData.data;
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.get');
             return null;
         }
-        const parsedData = this._parseResponse(data, key);
-        return parsedData.data;
+
     }
 
     async del(key: string): Promise<number> {
         if (!this.client) {
             await this.initialize();
         }
+        MonitoringProvider.counter('info.RedisProvider.del');
         return await this.client.del(key);
     }
 
@@ -157,12 +176,12 @@ export class RedisProvider {
         return keysFromRedis;
     }
 
-    async scan(cursor:number, match: string, count:number = 1000): Promise<ScanReply> {
+    async scan(cursor: number, match: string, count: number = 1000): Promise<ScanReply> {
         if (!this.client) {
             await this.initialize();
         }
 
-        const keysFromRedis = await this.client.scan(cursor, { MATCH: match, COUNT: count });
+        const keysFromRedis = await this.client.scan(cursor, {MATCH: match, COUNT: count});
         return keysFromRedis;
     }
 
