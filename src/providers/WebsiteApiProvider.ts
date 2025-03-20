@@ -5,6 +5,7 @@ import {
     CacheHelper_set, CacheHelper_runCallbackIfTimeStampHasExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
+if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 
 export class WebsiteApiProvider {
     static async call(query: DocumentNode, variables, cacheTtl: null | number = null) {
@@ -124,7 +125,7 @@ export class WebsiteApiProvider {
                 }
             } else {
 
-                // NOWE END
+                // Stare
 
                 let cachedResponse = await CacheHelper_get(cacheKey);
 
@@ -158,20 +159,19 @@ export class WebsiteApiProvider {
                     return cachedResponse;
                 }
                 // console.log('non cached')
+                //console.log('non cached', variables);
+                MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
+                const response = await this._call(query, variables);
+                if (response) {
+                    CacheHelper_set(cacheKey, response, cacheTtl);
+                } else {
+                    MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
+                }
+                if (response && typeof response === 'object') {
+                    response["isCachedByHat"] = false;
+                }
+                return response;
             }
-
-            //console.log('non cached', variables);
-            MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
-            const response = await this._call(query, variables);
-            if (response) {
-                CacheHelper_set(cacheKey, response, cacheTtl);
-            } else {
-                MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
-            }
-            if (response && typeof response === 'object') {
-                response["isCachedByHat"] = false;
-            }
-            return response;
         } catch (e) {
             if (global.HATCacheInCallInProgress) {
                 delete global.HATCacheInCallInProgress[cacheKeyString];
