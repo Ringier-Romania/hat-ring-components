@@ -7,7 +7,7 @@ import {MonitoringProvider} from "../providers/MonitoringProvider";
 
 export async function ConfigHelper_getConfig(context: AppContext, configKey) {
     const variant = context.websiteManagerVariant;
-    if(!context.siteNodeId){
+    if (!context.siteNodeId) {
         console.warn('ConfigHelper_getConfig: siteNodeId is not defined for url:', context.url);
         return false;
     }
@@ -36,6 +36,7 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
 
         if (process.env.MEM_CACHE_FOR_CONFIG_MODE === 'request') {
             if (!cachedElement[cacheKeyString]) {
+                MonitoringProvider.counter('info.ConfigHelper_getConfigByKey.' + configKey);
                 const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 1);
                 cachedElement[cacheKeyString] = response;
                 MonitoringProvider.counter('info.ConfigHelper_getConfig.cached');
@@ -46,6 +47,7 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
         } else {
             global._cache = global._cache || {};
             if (!cachedElement[cacheKeyString] || !global._cacheTimeStamp[cacheKeyString] || (new Date().getTime() - global._cacheTimeStamp[cacheKeyString]) > (UtilsHelper_convertToInt(process.env.MEM_CACHE_FOR_CONFIG_TTL_MS || 1000))) {
+                MonitoringProvider.counter('info.ConfigHelper_getConfigByKey.' + configKey);
                 const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 1);
                 cachedElement[cacheKeyString] = response;
                 global._cacheTimeStamp = global._cacheTimeStamp || {};
@@ -57,6 +59,7 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
             return _.get(cachedElement[cacheKeyString], 'data.node.config.config.0.data');
         }
     } else {
+        MonitoringProvider.counter('info.ConfigHelper_getConfigByKey.' + configKey);
         const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 1);
         const sectionsConfig = _.get(response, 'data.node.config.config.0.data');
 
@@ -64,7 +67,7 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
     }
 }
 
-export async function ConfigHelper_getGeneralConfig(context) :Promise<{
+export async function ConfigHelper_getGeneralConfig(context): Promise<{
     language: string,
     siteName: string,
     siteDescription: string,
@@ -77,7 +80,7 @@ export async function ConfigHelper_getGeneralConfig(context) :Promise<{
     return ConfigHelper_getConfig(context, 'general');
 }
 
-export async function ConfigHelper_getSeoGeneralConfig(context) :Promise<{
+export async function ConfigHelper_getSeoGeneralConfig(context): Promise<{
     defaultArticleAuthor: string,
     defaultArticleAuthorEmail: string,
     homepageNodeIds: string,
@@ -115,7 +118,7 @@ export interface SeoTitlesAndDescription {
     detailPageDescription: string
 }
 
-export async function ConfigHelper_getSeoTitlesAndDescriptionConfig(context) :Promise<SeoTitlesAndDescription> {
+export async function ConfigHelper_getSeoTitlesAndDescriptionConfig(context): Promise<SeoTitlesAndDescription> {
     return ConfigHelper_getConfig(context, 'seoTitlesAndDescription');
 }
 
@@ -160,7 +163,7 @@ export async function ConfigHelper_getDateFormatConfig(context) {
     }>;
 }
 
-export async function getDeveloperSettingDetail(context): Promise <{
+export async function getDeveloperSettingDetail(context): Promise<{
     linksReplace: Array<{
         'text': string,
         'role': string,
@@ -207,7 +210,7 @@ export async function ConfigHelper_getHomepageUrl(context) {
 }
 
 export async function ConfigHelper_currentUrl(context) {
-    return  `${UtilsHelper_getDomain()}${context.url}`;
+    return `${UtilsHelper_getDomain()}${context.url}`;
 }
 
 export async function ConfigHelper_getMainCategoryUuid(context) {
