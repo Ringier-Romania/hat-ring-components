@@ -14,24 +14,6 @@ export class WebsiteApiProvider {
         let cachedResponse = await CacheHelper_get(cacheKey);        
         try {            
             if (cachedResponse) {
-                const queryTypeToCounter = {
-                    'story(': 'Story',
-                    'node(': 'Node',
-                    'author(': 'Author',
-                    'stories(': 'Stories',
-                    'site(': 'Site',
-                    'section(': 'Section',
-                };
-
-                const queryBody = query.loc?.source.body || '';
-                let counterType = 'Unspecified';
-                for (const [queryType, counterName] of Object.entries(queryTypeToCounter)) {
-                    if (queryBody.includes(queryType)) {
-                        counterType = counterName;
-                        break;
-                    }
-                }
-                MonitoringProvider.counter(`info.WebsitesApiProvider.call.cachedResponse_${counterType}`);
                 MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
 
                 CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
@@ -96,11 +78,32 @@ export class WebsiteApiProvider {
         const timer = MonitoringProvider.timer(
             `info.WebsitesApiProvider.call.hitApiTimer`
         );
+
+        const queryTypeToCounter = {
+            'story(': 'Story',
+            'node(': 'Node',
+            'author(': 'Author',
+            'stories(': 'Stories',
+            'site(': 'Site',
+            'section(': 'Section',
+        };
+
+        const queryBody = query.loc?.source.body || '';
+        let counterType = 'Unspecified';
+        for (const [queryType, counterName] of Object.entries(queryTypeToCounter)) {
+            if (queryBody.includes(queryType)) {
+                counterType = counterName;
+                break;
+            }
+        }
+        MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${counterType}`);
+
         const response = await global.websitesApiApolloClient.query({
             query,
             variables,
             fetchPolicy
         });
+
         if (timer) {
             timer.done();
         }
