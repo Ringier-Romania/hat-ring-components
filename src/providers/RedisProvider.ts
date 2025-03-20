@@ -123,7 +123,7 @@ export class RedisProvider {
         if(!data){
             return null;
         }
-        const parsedData = this._parseResponse(data);
+        const parsedData = this._parseResponse(data, key);
         return parsedData.data;
     }
 
@@ -186,7 +186,7 @@ export class RedisProvider {
 
     }
 
-    _parseResponse(data: any): RedisCacheValue {
+    _parseResponse(data: any, key: string): RedisCacheValue {
         var parsedData = data;
         try {
             if (typeof data === 'string') {
@@ -197,7 +197,7 @@ export class RedisProvider {
                 ttl: undefined,
             };
         } catch (e) {
-            console.error('Redis Error parsing data', data);
+            console.error('Redis Error parsing data for key: ', key, data);
             return {
                 data: data,
                 ttl: undefined,
