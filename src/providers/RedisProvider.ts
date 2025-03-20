@@ -180,13 +180,13 @@ export class RedisProvider {
             await this.initialize();
         }
         const data = await this.client.get(key);
-        const parsedData = this._parseResponse(data);
+        const parsedData = this._parseResponse(data, key);
 
         return parsedData.ttl;
 
     }
 
-    _parseResponse(data: any, key: string): RedisCacheValue {
+    _parseResponse(data: any, key?: string): RedisCacheValue {
         var parsedData = data;
         try {
             if (typeof data === 'string') {
