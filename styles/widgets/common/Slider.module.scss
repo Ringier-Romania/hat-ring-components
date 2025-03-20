@@ -1,5 +1,14 @@
 .Slider {
   :global {
+    swiper-container:not(.swiper-initialized) {
+      display: flex;
+      overflow: hidden;
+
+      swiper-slide {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
+    }
     .item {
       position: relative;
       .linkOverlay {
