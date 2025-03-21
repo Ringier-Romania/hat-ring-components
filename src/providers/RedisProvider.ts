@@ -171,7 +171,7 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
-
+        MonitoringProvider.counter('info.RedisProvider.keys');
         const keysFromRedis = await this.client.keys("*");
         return keysFromRedis;
     }
@@ -180,7 +180,7 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
-
+        MonitoringProvider.counter('info.RedisProvider.scan');
         const keysFromRedis = await this.client.scan(cursor, {MATCH: match, COUNT: count});
         return keysFromRedis;
     }
@@ -190,6 +190,7 @@ export class RedisProvider {
             await this.initialize();
         }
 
+        MonitoringProvider.counter('info.RedisProvider.keysByGlob');
         const keysFromRedis = await this.client.keys(globKey);
         return keysFromRedis;
     }
@@ -198,6 +199,7 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
+        MonitoringProvider.counter('info.RedisProvider.getTtl');
         const data = await this.client.get(key);
         const parsedData = this._parseResponse(data, key);
 
@@ -229,6 +231,7 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
+        MonitoringProvider.counter('info.RedisProvider.stats');
         return this.client.info();
     }
 
@@ -236,6 +239,7 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
+        MonitoringProvider.counter('info.RedisProvider.mGet');
         const values = await this.client.mGet(keys);
         const result = {};
         keys.forEach((key, index) => {
