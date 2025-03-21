@@ -56,9 +56,21 @@ export class RedisProvider {
             socket: {
                 host: this.url,
                 tls: true,
-                reconnectStrategy: false,
+                reconnectStrategy: function (retries) {
+                    if (retries > 20) {
+                        console.error("Too many attempts to reconnect. Redis connection was terminated");
+                        return new Error("Too many retries.");
+                    } else {
+                        return retries * 500;
+                    }
+                },
             },
         }) as RedisClientType;
+
+        rwClient.on('error', (error) => {
+            MonitoringProvider.counter(`error.redis.onError`);
+            console.error(`Redis Client Error: ${error}`);
+        });
 
         try {
             await rwClient.connect();
