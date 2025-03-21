@@ -20,6 +20,8 @@ export class RedisProvider {
     service: string;
     region: string;
     username: string;
+    maxReInitialize: number;
+    currentReInitialize: number;
 
     constructor() {
         this.url = process.env.REDIS_RW;
@@ -27,6 +29,8 @@ export class RedisProvider {
         this.username = 'iam-user';
         this.region = 'eu-central-1';
         this.service = 'elasticache';
+        this.maxReInitialize = 10;
+        this.currentReInitialize = 0;
 
         setInterval(async () => {
             if (!this.client) {
@@ -47,9 +51,9 @@ export class RedisProvider {
         }, 10 * 1000);
     }
 
-    async initialize() {
+    async createRedisClient() {
         const token = await this.getToken();
-        const rwClient = createClient({
+        this.client = createClient({
             username: this.username,
             password: token,
             database: 1,
@@ -61,20 +65,41 @@ export class RedisProvider {
                         console.error("Too many attempts to reconnect. Redis connection was terminated");
                         return new Error("Too many retries.");
                     } else {
+                        MonitoringProvider.counter('error.RedisProvider.reconnectStrategy');
                         return retries * 500;
                     }
                 },
             },
         }) as RedisClientType;
+    }
 
-        rwClient.on('error', (error) => {
+    attachRedisErrorsHandler() {
+        this.client.on('error', async (error) => {
             MonitoringProvider.counter(`error.redis.onError`);
             console.error(`Redis Client Error: ${error}`);
-        });
 
+            if (error.message.toString().includes('ECONNRESET')) {
+                if (this.currentReInitialize < this.maxReInitialize) {
+                    this.currentReInitialize += 1;
+                    MonitoringProvider.counter('info.RedisProvider.reinitialize_started');
+                    await this.client.quit();
+                    await this.createRedisClient();
+                    this.attachRedisErrorsHandler();
+                    await this.client.connect();
+                    MonitoringProvider.counter('info.RedisProvider.reinitialize_ended');
+                } else {
+                    MonitoringProvider.counter('error.RedisProvider.reachedMaxReinitialize');
+                    process.exit(1);
+                }
+            }
+        });
+    }
+
+    async initialize() {
         try {
-            await rwClient.connect();
-            this.client = rwClient;
+            await this.createRedisClient();
+            this.attachRedisErrorsHandler();
+            await this.client.connect();
             MonitoringProvider.counter('info.RedisProvider.initialize');
         } catch (err) {
             MonitoringProvider.counter('error.RedisProvider.initialize');
