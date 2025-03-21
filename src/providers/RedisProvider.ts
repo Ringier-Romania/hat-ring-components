@@ -82,7 +82,7 @@ export class RedisProvider {
                 if (this.currentReInitialize < this.maxReInitialize) {
                     this.currentReInitialize += 1;
                     MonitoringProvider.counter('info.RedisProvider.reinitialize_started');
-                    await this.client.quit();
+                    await this.client.disconnect();
                     await this.createRedisClient();
                     this.attachRedisErrorsHandler();
                     await this.client.connect();
