@@ -96,7 +96,7 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
         return {node: story.story}
     }));
 
-    CacheHelper_createParentChildRelation(context.id, res.data.stories.edges.map((edge) => edge.node.id));
+    CacheHelper_createParentChildRelation(context.id, res.data.stories.edges.map((edge) => edge?.node?.id));
 
     if (widgetConfig.autocomplete && (widgetConfig.paginationElements || 0) > res.data.stories.edges.length) {
         switch (widgetConfig.autocompleteFrom) {
