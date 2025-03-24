@@ -16,13 +16,15 @@ import {
     ImageHelper_getImageDimensionsWithAspectRatio
 } from "../../../../helpers/ImageHelper";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
+import { undefined } from "astro:schema";
 
 const response = await StoryMainImage_getData({widgetConfig, context});
 
 const imageDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, context);
 const croppedSrc = _.get(response, 'data.story.image.url');
 const originalSrc = _.get(response, 'data.story.image.image.url');
-const isCropped = !!_.get(response, 'data.story.image.crop');
+const imageCrop = _.get(response, 'data.story.image.crop');
+const isCropped = (imageCrop?.x ?? 0) !== 0;
 const imgSrc = isCropped ? croppedSrc : originalSrc;
 
 const caption = _.get(response, 'data.story.image.caption', "");
