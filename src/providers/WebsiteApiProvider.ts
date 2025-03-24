@@ -79,8 +79,7 @@ export class WebsiteApiProvider {
             const secretKey = process.env.WEBSITE_API_SECRET!;
             const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
-            if (!global.websitesApiApolloClient
-            ) {
+            if (!global.websitesApiApolloClient) {
                 global.websitesApiApolloClient = new WebsitesApiClientBuilder({
                     accessKey,
                     secretKey,
@@ -117,8 +116,6 @@ export class WebsiteApiProvider {
                 variables,
                 fetchPolicy
             });
-            // global.apiCount++;
-            // console.log('apiCount', global.apiCount);
 
             if (timer) {
                 timer.done();
@@ -130,8 +127,7 @@ export class WebsiteApiProvider {
             MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime', timeDifference);
             return response;
 
-        } catch
-            (e) {
+        } catch (e) {
             console.error('Websites Api _call error:', e);
             return null;
         }

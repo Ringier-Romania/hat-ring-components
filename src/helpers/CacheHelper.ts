@@ -318,7 +318,7 @@ function handleCleanCache() {
     if (currentTime - global.lastHATCacheClean > (TTL * 1000)) {
         global.HATCacheInCallInProgress = {};
         MonitoringProvider.counter('info.CacheHelper_handleCleanCache.CacheHelper_flush');
-        //CacheHelper_flush();
+        CacheHelper_flush();
         global.lastHATCacheClean = currentTime;
     }
 }
