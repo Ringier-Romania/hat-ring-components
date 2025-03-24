@@ -37,7 +37,7 @@ export function AcceleratorImagesHelper_getUrl(src: string | any, width: number 
 
             srcToReturn = image.getUrl();
         } catch (e) {
-            console.info('Unable to transform image ' + src);
+            console.log('Unable to transform image ' + src);
         }
     }
 

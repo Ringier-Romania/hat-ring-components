@@ -20,6 +20,8 @@ export class RedisProvider {
     service: string;
     region: string;
     username: string;
+    maxReInitialize: number;
+    currentReInitialize: number;
 
     constructor() {
         this.url = process.env.REDIS_RW;
@@ -27,6 +29,8 @@ export class RedisProvider {
         this.username = 'iam-user';
         this.region = 'eu-central-1';
         this.service = 'elasticache';
+        this.maxReInitialize = 10;
+        this.currentReInitialize = 0;
 
         setInterval(async () => {
             if (!this.client) {
@@ -47,21 +51,60 @@ export class RedisProvider {
         }, 10 * 1000);
     }
 
-    async initialize() {
+    async createRedisClient() {
         const token = await this.getToken();
-        const rwClient = createClient({
+        this.client = createClient({
             username: this.username,
             password: token,
             database: 1,
             socket: {
                 host: this.url,
                 tls: true,
-                reconnectStrategy: false,
+                reconnectStrategy: function (retries) {
+                    if (retries > 20) {
+                        console.error("Too many attempts to reconnect. Redis connection was terminated");
+                        return new Error("Too many retries.");
+                    } else {
+                        MonitoringProvider.counter('error.RedisProvider.reconnectStrategy');
+                        return retries * 500;
+                    }
+                },
             },
         }) as RedisClientType;
+    }
 
-        await rwClient.connect();
-        this.client = rwClient;
+    attachRedisErrorsHandler() {
+        this.client.on('error', async (error) => {
+            MonitoringProvider.counter(`error.redis.onError`);
+            console.error(`Redis Client Error: ${error}`);
+
+            if (error.message.toString().includes('ECONNRESET')) {
+                if (this.currentReInitialize < this.maxReInitialize) {
+                    this.currentReInitialize += 1;
+                    MonitoringProvider.counter('info.RedisProvider.reinitialize_started');
+                    await this.client.disconnect();
+                    await this.createRedisClient();
+                    this.attachRedisErrorsHandler();
+                    await this.client.connect();
+                    MonitoringProvider.counter('info.RedisProvider.reinitialize_ended');
+                } else {
+                    MonitoringProvider.counter('error.RedisProvider.reachedMaxReinitialize');
+                    process.exit(1);
+                }
+            }
+        });
+    }
+
+    async initialize() {
+        try {
+            await this.createRedisClient();
+            this.attachRedisErrorsHandler();
+            await this.client.connect();
+            MonitoringProvider.counter('info.RedisProvider.initialize');
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.initialize');
+        }
+
     }
 
     async getToken(): Promise<string | undefined> {
@@ -109,7 +152,12 @@ export class RedisProvider {
             expirationTimestamp = Date.now() + ttl * 1000;
         }
         const setValue = JSON.stringify({data: value, ttl: expirationTimestamp} as RedisCacheValue);
-        await this.client.set(key, setValue);
+        try {
+            await this.client.set(key, setValue);
+            MonitoringProvider.counter('info.RedisProvider.set');
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.set');
+        }
     }
 
     async get({key}: {
@@ -119,18 +167,26 @@ export class RedisProvider {
             await this.initialize();
         }
 
-        const data = await this.client.get(key);
-        if(!data){
+        try {
+            const data = await this.client.get(key);
+            if (!data) {
+                return null;
+            }
+            const parsedData = this._parseResponse(data, key);
+            MonitoringProvider.counter('info.RedisProvider.get');
+            return parsedData.data;
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.get');
             return null;
         }
-        const parsedData = this._parseResponse(data, key);
-        return parsedData.data;
+
     }
 
     async del(key: string): Promise<number> {
         if (!this.client) {
             await this.initialize();
         }
+        MonitoringProvider.counter('info.RedisProvider.del');
         return await this.client.del(key);
     }
 
@@ -152,17 +208,17 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
-
+        MonitoringProvider.counter('info.RedisProvider.keys');
         const keysFromRedis = await this.client.keys("*");
         return keysFromRedis;
     }
 
-    async scan(cursor:number, match: string, count:number = 1000): Promise<ScanReply> {
+    async scan(cursor: number, match: string, count: number = 1000): Promise<ScanReply> {
         if (!this.client) {
             await this.initialize();
         }
-
-        const keysFromRedis = await this.client.scan(cursor, { MATCH: match, COUNT: count });
+        MonitoringProvider.counter('info.RedisProvider.scan');
+        const keysFromRedis = await this.client.scan(cursor, {MATCH: match, COUNT: count});
         return keysFromRedis;
     }
 
@@ -171,6 +227,7 @@ export class RedisProvider {
             await this.initialize();
         }
 
+        MonitoringProvider.counter('info.RedisProvider.keysByGlob');
         const keysFromRedis = await this.client.keys(globKey);
         return keysFromRedis;
     }
@@ -179,6 +236,7 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
+        MonitoringProvider.counter('info.RedisProvider.getTtl');
         const data = await this.client.get(key);
         const parsedData = this._parseResponse(data, key);
 
@@ -210,6 +268,7 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
+        MonitoringProvider.counter('info.RedisProvider.stats');
         return this.client.info();
     }
 
@@ -217,6 +276,7 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
+        MonitoringProvider.counter('info.RedisProvider.mGet');
         const values = await this.client.mGet(keys);
         const result = {};
         keys.forEach((key, index) => {

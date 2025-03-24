@@ -5,28 +5,44 @@ import {
     CacheHelper_set, CacheHelper_runCallbackIfTimeStampHasExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
+if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 
 export class WebsiteApiProvider {
-
     static async call(query: DocumentNode, variables, cacheTtl: null | number = null) {
         const cacheKey = {query: query.loc?.source.body, variables};
         const cacheKeyString = JSON.stringify(cacheKey);
-        let cachedResponse = await CacheHelper_get(cacheKey);        
-        try {            
-            if (cachedResponse) {
-                MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
-
-                CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
-                    //console.log('Cache expired, calling api');
-                    if (!global.HATCacheInCallInProgress) {
-                        global.HATCacheInCallInProgress = {};
-                        //console.log('global.HATCacheInCallInProgress initialized');
-                    }
+        try {
+            return new Promise(async (resolve, reject) => {
+                let cachedResponse = await CacheHelper_get(cacheKey);
+                if (!cachedResponse) {
                     if (global.HATCacheInCallInProgress[cacheKeyString]) {
-                        // console.log('during calling api') ;
-                        return false;
+                        await new Promise(() => {
+                            const interval = setInterval(async () => {
+                                if (!global.HATCacheInCallInProgress[cacheKeyString]) {
+                                    resolve(await this.call(query, variables, cacheTtl));
+                                    clearInterval(interval);
+                                }
+                            }, 10);
+                        });
+                    } else {
+                        global.HATCacheInCallInProgress[cacheKeyString] = 1;
                     }
-                    global.HATCacheInCallInProgress[cacheKeyString] = 1;
+                }
+                try {
+                    if (cachedResponse) {
+                        MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
+                        CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
+                            const response = await this._call(query, variables);
+                            if (response) {
+                                CacheHelper_set(cacheKey, response, cacheTtl);
+                            } else {
+                                MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
+                            }
+                            delete global.HATCacheInCallInProgress[cacheKeyString];
+                        });
+                        return resolve(cachedResponse);
+                    }
+                    MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
                     const response = await this._call(query, variables);
                     if (response) {
                         CacheHelper_set(cacheKey, response, cacheTtl);
@@ -34,28 +50,16 @@ export class WebsiteApiProvider {
                         MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
                     }
                     delete global.HATCacheInCallInProgress[cacheKeyString];
-                });
-                if (cachedResponse && typeof cachedResponse === 'object') {
-                    cachedResponse["isCachedByHat"] = true;
+                    return resolve(response);
+                } catch (e) {
+                    delete global.HATCacheInCallInProgress[cacheKeyString];
+                    MonitoringProvider.counter('error.WebsitesApiProvider.call.catch');
+                    console.error(query.loc?.source.body, variables, e);
+                    return resolve(null);
                 }
-
-                return cachedResponse;
-            }
-
-            //console.log('non cached', variables);
-            MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
-            const response = await this._call(query, variables);
-            if (response) {
-                CacheHelper_set(cacheKey, response, cacheTtl);
-            } else {
-                MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
-            }
-            if (response && typeof response === 'object') {
-                response["isCachedByHat"] = false;
-            }
-            return response;
+            });
         } catch (e) {
-            if(global.HATCacheInCallInProgress){
+            if (global.HATCacheInCallInProgress) {
                 delete global.HATCacheInCallInProgress[cacheKeyString];
             }
 
@@ -63,7 +67,7 @@ export class WebsiteApiProvider {
             console.error(query.loc?.source.body, variables, e);
             return null;
         }
-        
+
     }
 
 
@@ -129,3 +133,62 @@ export class WebsiteApiProvider {
         }
     }
 }
+
+
+// promises - missing header bug
+// let cachedResponse = await CacheHelper_get(cacheKey);
+//
+// if (!cachedResponse) {
+//     if (!global.HATCacheTest) {
+//         global.HATCacheTest = {};
+//     }
+//
+//     if (!global.HATCacheTest[cacheKeyString]) {
+//         // console.log('missing HATCacheTest')
+//         global.HATCacheTest[cacheKeyString] = this._call(query, variables).then((response) => {
+//             MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
+//             if (response) {
+//                 CacheHelper_set(cacheKeyString, response, cacheTtl);
+//             } else {
+//                 MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
+//             }
+//             if (response && typeof response === 'object') {
+//                 response["isCachedByHat"] = false;
+//             }
+//             // delete global.HATCacheTest[cacheKeyString];
+//             return response;
+//         });
+//     }
+//     // console.log('HATCacheTest')
+//     return await global.HATCacheTest[cacheKeyString]
+// } else {
+//     delete global.HATCacheTest[cacheKeyString];
+//     // console.log('cached')
+//     MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
+//
+//     CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
+//         //console.log('Cache expired, calling api');
+//         if (!global.HATCacheInCallInProgress) {
+//             global.HATCacheInCallInProgress = {};
+//             //console.log('global.HATCacheInCallInProgress initialized');
+//         }
+//         if (global.HATCacheInCallInProgress[cacheKeyString]) {
+//             // console.log('during calling api') ;
+//             return false;
+//         }
+//         global.HATCacheInCallInProgress[cacheKeyString] = 1;
+//         const response = await this._call(query, variables);
+//         if (response) {
+//             CacheHelper_set(cacheKey, response, cacheTtl);
+//         } else {
+//             MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
+//         }
+//         delete global.HATCacheInCallInProgress[cacheKeyString];
+//     });
+//     if (cachedResponse && typeof cachedResponse === 'object') {
+//         cachedResponse["isCachedByHat"] = true;
+//     }
+//
+//     return cachedResponse;
+// }
+

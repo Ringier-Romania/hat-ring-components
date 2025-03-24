@@ -28,7 +28,7 @@ export async function SeoMetaDecoratorRobots(context: AppContext, generatedMetaT
     }
 
     const customMetaRobotsTags =
-        generatedMetaTags.extend?.meta.find((tag) => tag.name === "robots")?.content?.split(",") || []
+        generatedMetaTags.extend?.meta?.find((tag) => tag.name === "robots")?.content?.split(",") || []
 
     if (customMetaRobotsTags.length > 0) {
         if (UtilsHelper_getCurrentPageType(context) === SiteContentType.Story) {
