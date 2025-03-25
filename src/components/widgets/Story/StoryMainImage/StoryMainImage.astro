@@ -23,7 +23,7 @@ const imageDimensions = ImageHelper_getImageDimensionsFromObject(widgetConfig, c
 const croppedSrc = _.get(response, 'data.story.image.url');
 const originalSrc = _.get(response, 'data.story.image.image.url');
 const imageCrop = _.get(response, 'data.story.image.crop');
-const isCropped = (imageCrop?.x ?? 0) !== 0;
+const isCropped = (imageCrop?.x ?? 0) !== 0 || (imageCrop?.y ?? 0) !== 0;
 const imgSrc = isCropped ? croppedSrc : originalSrc;
 
 const caption = _.get(response, 'data.story.image.caption', "");

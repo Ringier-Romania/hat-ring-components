@@ -12,6 +12,7 @@ export async function StoryMainImage_getData({widgetConfig, context}: StoryMainI
                     caption
                     crop {
                         x
+                        y
                     }
                     image {
                         url

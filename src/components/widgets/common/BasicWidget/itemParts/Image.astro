@@ -71,7 +71,7 @@ const imageResizeCropMode = _.get(widgetConfig, 'imageResizeCropMode', 'cover');
 const croppedSrc = _.get(data, 'image.url');
 const originalSrc = _.get(data, 'originalContent.image.image.url');
 const imageCrop = _.get(data, 'image.crop');
-const isCropped = (imageCrop?.x ?? 0) !== 0;
+const isCropped = (imageCrop?.x ?? 0) !== 0 || (imageCrop?.y ?? 0) !== 0;
 const imgSrc = isCropped ? croppedSrc : originalSrc;
 const originalImageWidth = UtilsHelper_convertToInt(_.get(data, 'originalContent.image.image.width', 0));
 const originalImageHeight = UtilsHelper_convertToInt(_.get(data, 'originalContent.image.image.height', 0));
