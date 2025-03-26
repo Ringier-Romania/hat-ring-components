@@ -22,6 +22,7 @@ export async function RSS({context}: { context: AppContext }) {
     const query = RSSGqlQuery;
 
     const categoryId = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id');
+    if(!categoryId) return {feed: null, type: null};
     const limit = seoRssConfig.limit || 10;
     const offset = ((page - 1) * UtilsHelper_convertToInt(limit));
 
