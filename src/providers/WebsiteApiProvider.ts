@@ -128,7 +128,7 @@ export class WebsiteApiProvider {
             return response;
 
         } catch (e) {
-            console.error('Websites Api _call error:', e);
+            console.error('Websites Api _call error:', variables, e);
             return null;
         }
     }
