@@ -114,8 +114,8 @@ export let SEOWebsitesConfig
             "limit": 10,
         },
         "seoOpenGraph": {
-            "imageSizesDesktop": "",
-            "imageSizesMobile": ""
+            "imageSizesDesktop": "1200x630",
+            "imageSizesMobile": "1200x630",
         },
         "metaData": {
             "customMetaTags": []
