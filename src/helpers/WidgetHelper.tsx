@@ -145,6 +145,7 @@ export function WidgetHelper_buildWidgetLocation(sectionName: string, boxName: s
 }
 
 export function WidgetHelper_insertComponentAtPattern(sourceElements, widgetConfig, context ) {
+    if(!sourceElements || sourceElements.length === 0) return [];
     const isMobile = context?.hatControllerParams?.isMobile;
     const nthChildPatternRegex = /(\d*)n([+-]?\d+)?/;
     const additionalComponents = widgetConfig?.additionalComponents;
