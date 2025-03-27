@@ -29,6 +29,9 @@ const variables = {
     variant: variant,
 };
 
+if(!variables.nodeID || !variables.variant){
+        return '';
+}
 
 let configQuery = '';
 config.containers.forEach(section => {
