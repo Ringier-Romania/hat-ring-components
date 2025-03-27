@@ -41,7 +41,8 @@ export let BasicWidgetWebsitesConfig = {
                 "mobilePreloadImagesCount": 0,
                 "titleAddonsCodeNames": "",
                 "widgetType": "basicWidget",
-                "customTeasers": []
+                "customTeasers": [],
+                "useOriginalImage": true
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -320,6 +321,11 @@ export let BasicWidgetWebsitesConfig = {
                             "type": "checkbox",
                         }
                     ]
+                },
+                "useOriginalImage": {
+                    "name": "Use original image",
+                    "type": "checkbox",
+                    "description": "Use original image without cropping"
                 },
                 "cacheTTL": {
                     "name": "Cache TTL",

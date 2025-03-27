@@ -9,17 +9,13 @@ export async function StoryMainImage_getData({widgetConfig, context}: StoryMainI
             story(id:$storyId){
                 image {
                 url
-                    caption
-                    crop {
-                        x
-                        y
-                    }
-                    image {
-                        url
-                        description
-                        width
-                        height
-                    }
+                caption
+                image {
+                    url
+                    description
+                    width
+                    height
+                }
                 }
             }
         }

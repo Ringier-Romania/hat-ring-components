@@ -38,6 +38,7 @@ export let GenericListWebsitesConfig
                 "moreText": "",
                 "moreUrl": "",
                 "titleAddonsCodeNames": "",
+                "useOriginalImage": true
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -208,6 +209,11 @@ export let GenericListWebsitesConfig
                     "name": "Title addons code names to show",
                     "description": "(comma separated code names)",
                     "type": "textfield"
+                },
+                "useOriginalImage": {
+                    "name": "Use original image",
+                    "type": "checkbox",
+                    "description": "Use original image without cropping"
                 },
                 "cacheTTL": {
                     "name": "Cache TTL",
