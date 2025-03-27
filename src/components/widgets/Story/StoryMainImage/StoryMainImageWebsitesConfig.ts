@@ -18,8 +18,7 @@ export let StoryMainImageWebsitesConfig
                 "imageSizeMobile": "450x253",
                 "showLinkToImage": false,
                 "imageResizeCropMode": "cover",
-                "widgetType": "detailMainImage",
-                "useOriginalImage": true
+                "widgetType": "detailMainImage"
             },
             "paramsDescription": {
                ...AbstractWebsitesWidgetConfigParamsDescription,

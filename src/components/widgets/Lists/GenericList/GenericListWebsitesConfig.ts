@@ -37,8 +37,7 @@ export let GenericListWebsitesConfig
                 "customTeasers": [],
                 "moreText": "",
                 "moreUrl": "",
-                "titleAddonsCodeNames": "",
-                "useOriginalImage": true
+                "titleAddonsCodeNames": ""
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
