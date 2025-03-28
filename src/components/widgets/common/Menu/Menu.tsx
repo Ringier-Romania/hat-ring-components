@@ -33,7 +33,7 @@ export interface MenuParams extends WidgetParams {
 export function Menu(
     {widgetConfig, context}: MenuParams
 ) {
-
+    
     function renderMenuElement(menuElement: MenuElement, index) {
         const imageDimensions = ImageHelper_getImageDimensionsFromObject(menuElement, context, "image dimensions (eg. 200x200)");
         const item = <>
