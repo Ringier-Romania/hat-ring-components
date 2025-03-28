@@ -321,6 +321,11 @@ export let BasicWidgetWebsitesConfig = {
                         }
                     ]
                 },
+                "useOriginalImage": {
+                    "name": "Use original image",
+                    "type": "checkbox",
+                    "description": "Use original image without cropping"
+                },
                 "cacheTTL": {
                     "name": "Cache TTL",
                     "description": "BasicWidget cache TTL in seconds",

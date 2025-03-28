@@ -209,6 +209,11 @@ export let GenericListWebsitesConfig
                     "description": "(comma separated code names)",
                     "type": "textfield"
                 },
+                "useOriginalImage": {
+                    "name": "Use original image",
+                    "type": "checkbox",
+                    "description": "Use original image without cropping"
+                },
                 "cacheTTL": {
                     "name": "Cache TTL",
                     "description": "GenericList cache TTL in seconds",

@@ -8,12 +8,8 @@ export async function StoryMainImage_getData({widgetConfig, context}: StoryMainI
         query($storyId: UUID){
             story(id:$storyId){
                 image {
-                url
+                    url
                     caption
-                    crop {
-                        x
-                        y
-                    }
                     image {
                         url
                         description

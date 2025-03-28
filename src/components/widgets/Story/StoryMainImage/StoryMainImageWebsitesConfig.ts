@@ -16,7 +16,7 @@ export let StoryMainImageWebsitesConfig
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "standardImageSize": "920x500",
                 "imageSizeMobile": "450x253",
-                "showLinkToImage": "false",
+                "showLinkToImage": false,
                 "imageResizeCropMode": "cover",
                 "widgetType": "detailMainImage"
             },
@@ -36,6 +36,11 @@ export let StoryMainImageWebsitesConfig
                     "name": "Show link to image",
                     "type": "checkbox",
                     "description": "When checked, the image will link to the image page or open in a lightbox after proper configuration"
+                },
+                "useOriginalImage": {
+                    "name": "Use original image",
+                    "type": "checkbox",
+                    "description": "Use original image without cropping"
                 },
                 "imageResizeCropMode": {
                     "name": "Image resize crop mode",
