@@ -194,6 +194,7 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
+        MonitoringProvider.counter('info.RedisProvider.unlink');
         return await this.client.unlink(key);
     }
 
@@ -201,6 +202,7 @@ export class RedisProvider {
         if (!this.client) {
             await this.initialize();
         }
+        MonitoringProvider.counter('info.RedisProvider.flushAll');
         return this.client.flushAll();
     }
 

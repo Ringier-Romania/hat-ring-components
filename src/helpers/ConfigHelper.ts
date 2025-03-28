@@ -16,6 +16,11 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
         variant: variant,
     };
 
+    if(!variant || !variables.nodeID){
+        console.warn('ConfigHelper_getConfig: variant or nodeID is not defined for url:', context.url);
+        return false;
+    }
+
     const query = gql`
         query($nodeID: ID!, $variant:ID!){
             node(id: $nodeID){
