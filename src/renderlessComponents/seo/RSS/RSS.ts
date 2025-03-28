@@ -2,7 +2,8 @@ import {AppContext, SiteContentType} from "../../../types/types";
 import {Feed} from "feed";
 import {
     ConfigHelper_getGeneralConfig, ConfigHelper_getSeoGeneralConfig,
-    ConfigHelper_getSeoRssDefaultConfig
+    ConfigHelper_getSeoRssDefaultConfig,
+    ConfigHelper_getSiteName
 } from "../../../helpers/ConfigHelper";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
@@ -20,7 +21,6 @@ export async function RSS({context}: { context: AppContext }) {
     const page = UtilsHelper_convertToInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
 
     const query = RSSGqlQuery;
-
     const categoryId = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id');
     if(!categoryId) return {feed: null, type: null};
     const limit = seoRssConfig.limit || 10;
@@ -43,7 +43,7 @@ export async function RSS({context}: { context: AppContext }) {
     const feed = new Feed({
         copyright: "",
         id: domain,
-        title: "RSS",
+        title: await ConfigHelper_getSiteName(context),
         language: generalConfig.language,
         generator: "RAS Tech",
         link: domain + context.url,
