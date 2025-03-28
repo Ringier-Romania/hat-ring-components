@@ -78,6 +78,9 @@ export function UtilsHelper_getDomain(alwaysProduction = false) {
     return alwaysProduction ? process.env.NEXT_PUBLIC_WEBSITE_DOMAIN : UtilsHelper_isDevelopmentMode() ? 'http://localhost' : process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 }
 
+export function UtilsHelper_getCurrentUrlWithDomain(context: AppContext, alwaysProduction = false) {
+    return UtilsHelper_getDomain(alwaysProduction) + context.url;
+}
 export function UtilsHelper_getCurrentNodeCategoryId(context: AppContext) {
     return _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.id', null);
 }
