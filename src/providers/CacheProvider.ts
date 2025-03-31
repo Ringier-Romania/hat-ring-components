@@ -6,15 +6,15 @@ import {
 import {UtilsHelper_convertToInt} from "../helpers/UtilsHelper";
 
 interface CacheService {
-    set(key: any, value: any, TTL: null | number | undefined): void;
+    set(key: any, value: any, TTL: null | number | undefined, tags: string[] | null | boolean): void;
     get(key: any): void;
     runCallbackIfTimeStampHasExpired(key: any, callback: Function): void;
     getTTL(key: any): number;
 }
 
 export class CacheProvider {
-    static async set(key: any, value: any, TTL: null | number | undefined = null) {
-        return await CacheHelper_set(key, value, TTL);
+    static async set(key: any, value: any, TTL: null | number | undefined = null, tags: string[] | null | boolean = null) {
+        return await CacheHelper_set(key, value, TTL, tags);
     }
 
     static async get(key: any) {

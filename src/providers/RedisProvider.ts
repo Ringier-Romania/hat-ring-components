@@ -138,10 +138,12 @@ export class RedisProvider {
                   key,
                   ttl,
                   value,
+                  tags,
               }: {
         key: string;
         ttl?: number | null | undefined;
         value: string;
+        tags?: string[] | null | boolean;
     }): Promise<void> {
         if (!this.client) {
             await this.initialize();
@@ -154,11 +156,17 @@ export class RedisProvider {
         const setValue = JSON.stringify({data: value, ttl: expirationTimestamp} as RedisCacheValue);
         try {
             await this.client.set(key, setValue);
+            if (tags && typeof tags === 'object') {
+                for (const tag of tags) {
+                    await this.client.sAdd('tag:' + tag, key);
+                }
+            }
             MonitoringProvider.counter('info.RedisProvider.set');
         } catch (err) {
             MonitoringProvider.counter('error.RedisProvider.set');
         }
     }
+
 
     async get({key}: {
         key: string;
@@ -214,6 +222,7 @@ export class RedisProvider {
         const keysFromRedis = await this.client.keys("*");
         return keysFromRedis;
     }
+
 
     async scan(cursor: number, match: string, count: number = 1000): Promise<ScanReply> {
         if (!this.client) {
@@ -285,6 +294,30 @@ export class RedisProvider {
             result[key] = values[index];
         });
         return result;
+    }
+
+    async getKeysByTag(tag) {
+        if (!this.client) {
+            await this.initialize();
+        }
+        return await this.client.sMembers(`tag:${tag}`);
+    }
+
+    async getValuesByTag(tag) {
+        const keys = await this.getKeysByTag(tag);
+        if (keys.length === 0) return [];
+        return await this.client.mGet(keys);
+    }
+
+    async removeKeyFromTag(tag, key) {
+        if (!this.client) {
+            await this.initialize();
+        }
+        await this.client.sRem(`tag:${tag}`, key);
+    }
+
+    async removeTag(tag) {
+        await this.client.del(`tag:${tag}`);
     }
 
 

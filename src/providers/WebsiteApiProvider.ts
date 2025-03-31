@@ -5,12 +5,16 @@ import {
     CacheHelper_set, CacheHelper_runCallbackIfTimeStampHasExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
+
 if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 
 export class WebsiteApiProvider {
-    static async call(query: DocumentNode, variables, cacheTtl: null | number = null): Promise<any> {
+    static async call(query: DocumentNode, variables, cacheTtl: null | number = null) {
         const cacheKey = {query: query.loc?.source.body, variables};
         const cacheKeyString = JSON.stringify(cacheKey);
+        const queryType = this._determineQueryType(query);
+        const tags = this.determineQueryTags(query, variables, queryType);
+
         try {
             return new Promise(async (resolve, reject) => {
                 let cachedResponse = await CacheHelper_get(cacheKey);
@@ -34,7 +38,7 @@ export class WebsiteApiProvider {
                         CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
                             const response = await this._call(query, variables);
                             if (response) {
-                                CacheHelper_set(cacheKey, response, cacheTtl);
+                                CacheHelper_set(cacheKey, response, cacheTtl, tags);
                             } else {
                                 MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
                             }
@@ -45,7 +49,7 @@ export class WebsiteApiProvider {
                     MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
                     const response = await this._call(query, variables);
                     if (response) {
-                        CacheHelper_set(cacheKey, response, cacheTtl);
+                        CacheHelper_set(cacheKey, response, cacheTtl, tags);
                     } else {
                         MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
                     }
@@ -70,8 +74,64 @@ export class WebsiteApiProvider {
 
     }
 
+    static _determineQueryType(query: DocumentNode): string {
+        const queryTypeDef = {
+            'story(': 'Story',
+            'config(': 'Config',
+            'node(': 'Node',
+            'author(': 'Author',
+            'stories(': 'Stories',
+            'site(': 'Site',
+            'section(': 'Section',
+        };
 
-    static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache'): Promise<any> {
+        const queryBody = query.loc?.source.body || '';
+        let counterType = 'Unspecified';
+        for (const [queryType, counterName] of Object.entries(queryTypeDef)) {
+            if (queryBody.includes(queryType)) {
+                counterType = counterName;
+                break;
+            }
+        }
+
+        return counterType;
+    }
+
+    static determineQueryTags(query: DocumentNode, variables: any, queryType): string[] {
+        let tags = [];
+        if (variables) {
+            if (queryType === 'Story') {
+                const storyUuid = this._findStoryUuidInQuery(query, variables);
+                if (storyUuid) {
+                    tags.push(`story_${storyUuid}`);
+                }
+            }
+
+            if (queryType === 'Config' && variables.variant) {
+                tags.push(`config_${variables.variant}`);
+            }
+        }
+
+        return tags;
+    }
+
+    static _findStoryUuidInQuery(query: DocumentNode, variables: any): string | null {
+        let storyUuid = null;
+        const potentialVariables = ['storyId', 'storyUUID', 'storyUuid', 'id', 'uuid'];
+        if (variables) {
+            for (const variable of potentialVariables) {
+                if (variables[variable]) {
+                    storyUuid = variables[variable];
+                    break;
+                }
+            }
+        }
+
+        return storyUuid;
+    }
+
+
+    static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache', queryType: 'Unspecified'): Promise<any> {
         try {
             //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
             // console.log('call');
@@ -92,24 +152,8 @@ export class WebsiteApiProvider {
                 `info.WebsitesApiProvider.call.hitApiTimer`
             );
 
-            const queryTypeToCounter = {
-                'story(': 'Story',
-                'node(': 'Node',
-                'author(': 'Author',
-                'stories(': 'Stories',
-                'site(': 'Site',
-                'section(': 'Section',
-            };
 
-            const queryBody = query.loc?.source.body || '';
-            let counterType = 'Unspecified';
-            for (const [queryType, counterName] of Object.entries(queryTypeToCounter)) {
-                if (queryBody.includes(queryType)) {
-                    counterType = counterName;
-                    break;
-                }
-            }
-            MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${counterType}`);
+            MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${queryType}`);
 
             const response = await global.websitesApiApolloClient.query({
                 query,

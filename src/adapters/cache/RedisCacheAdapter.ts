@@ -12,8 +12,8 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
     }
 
 
-    async set(key: any, value: any, TTL: number | null | undefined): Promise<void> {
-        await this.redisProvider.set({key, value, ttl: TTL});
+    async set(key: any, value: any, TTL: number | null | undefined, tags: string[] | null | boolean = null): Promise<void> {
+        await this.redisProvider.set({key, value, ttl: TTL, tags: tags});
     }
 
     async get(key: any): Promise<any> {
@@ -49,6 +49,14 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
 
     async scan(cursor:number, match: string, count?:number) {
         return await this.redisProvider.scan(cursor, match, count);
+    }
+
+    async getKeysByTag(tag: string): Promise<string[]> {
+        return await this.redisProvider.getKeysByTag(tag);
+    }
+
+    async removeTag(tag: string): Promise<void> {
+        return await this.redisProvider.removeTag(tag);
     }
 
 }

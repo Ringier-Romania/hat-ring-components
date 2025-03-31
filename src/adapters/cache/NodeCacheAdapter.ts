@@ -11,7 +11,7 @@ export class NodeCacheAdapter implements CacheAdapterInterface {
         this.cache = myCache;
     }
 
-    async set(key: any, value: any, TTL: number | null | undefined): Promise<void> {
+    async set(key: any, value: any, TTL: number | null | undefined, tags: string[] | null | boolean = null): Promise<void> {
         if (TTL) {
             this.cache.set(key, value, TTL);
             return;

@@ -16,7 +16,7 @@ export function CacheHelper_getCacheAdapter() {
     return cacheAdapter;
 }
 
-export async function CacheHelper_set(key: any, value: any, TTL: null | number | undefined = null) {
+export async function CacheHelper_set(key: any, value: any, TTL: null | number | undefined = null, tags: string[] | null | boolean = null) {
     if (process.env.CACHE_TTL === '0' && !TTL) {
         return;
     }
@@ -27,7 +27,7 @@ export async function CacheHelper_set(key: any, value: any, TTL: null | number |
 
     const ttl = TTL || stdTTL;
     key = JSON.stringify(key);
-    await cacheAdapter.set(key, value, ttl);
+    await cacheAdapter.set(key, value, ttl, tags);
 }
 
 export async function CacheHelper_get(key: any, removeOnExpire = false) {
@@ -65,7 +65,7 @@ export async function CacheHelper_flush() {
     return await cacheAdapter.flushAll();
 }
 
-export async function CacheHelper_clearByPartialKeyByGlob(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?:Array<string>) {
+export async function CacheHelper_clearByPartialKeyByGlob(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?: Array<string>) {
     MonitoringProvider.counter('info.CacheHelper_clearByPartialKey.run');
     let keys: Array<string> = allKeys ? allKeys : await cacheAdapter.keysByGlob('*');
     MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
@@ -116,7 +116,7 @@ export async function CacheHelper_clearByPartialKeyByGlob(partialKey: Array<any>
     return deleteCount;
 }
 
-export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?:Array<string>) {
+export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?: Array<string>) {
     MonitoringProvider.counter('info.CacheHelper_clearByPartialKey.run');
     let keys: Array<string> = allKeys ? allKeys : await cacheAdapter.keys();
     MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
@@ -167,7 +167,7 @@ export async function CacheHelper_clearByPartialKey(partialKey: Array<any>, notI
     return deleteCount;
 }
 
-export async function CacheHelper_clearByPartialKeyWithOutDel(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?:Array<string>) {
+export async function CacheHelper_clearByPartialKeyWithOutDel(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?: Array<string>) {
     MonitoringProvider.counter('info.CacheHelper_clearByPartialKey.run');
     let keys: Array<string> = allKeys ? allKeys : await cacheAdapter.keys();
     MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
@@ -218,7 +218,7 @@ export async function CacheHelper_clearByPartialKeyWithOutDel(partialKey: Array<
     return deleteCount;
 }
 
-export async function CacheHelper_clearByPartialKeyUnlink(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?:Array<string>) {
+export async function CacheHelper_clearByPartialKeyUnlink(partialKey: Array<any>, notInPartialKey: Array<any> = [], searchInValue = false, allKeys?: Array<string>) {
     MonitoringProvider.counter('info.CacheHelper_clearByPartialKey.run');
     let keys: Array<string> = allKeys ? allKeys : await cacheAdapter.keys();
     MonitoringProvider.gauge('info.CacheHelper_clearByPartialKey.totalKeys', keys.length);
@@ -292,6 +292,38 @@ export function CacheHelper_del(keys: any) {
 export function CacheHelper_keys() {
     return cacheAdapter.keys();
 }
+
+
+export async function CacheHelper_getKeysByTag(tag: 'string') {
+    if(!cacheAdapter.getKeysByTag) {
+        console.error('CacheAdapter does not support getKeysByTag');
+        return false;
+    }
+    return await cacheAdapter.getKeysByTag(tag);
+}
+
+
+export async function CacheHelper_clearByTag(tag: 'string') {
+    const keys = await CacheHelper_getKeysByTag(tag);
+
+    if (!keys) {
+        return false;
+    }
+    const deleteCount = {
+        keys: 0,
+        responses: 0,
+    }
+    keys.forEach((key) => {
+        cacheAdapter.del(key);
+        deleteCount.keys++;
+    });
+
+    await cacheAdapter.removeTag(tag);
+
+    return deleteCount;
+}
+
+
 
 export function CacheHelper_keysByGlob(globKey) {
     if (cacheAdapter.keysByGlob) {
