@@ -8,7 +8,7 @@ import {MonitoringProvider} from "./MonitoringProvider";
 if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 
 export class WebsiteApiProvider {
-    static async call(query: DocumentNode, variables, cacheTtl: null | number = null) {
+    static async call(query: DocumentNode, variables, cacheTtl: null | number = null): Promise<any> {
         const cacheKey = {query: query.loc?.source.body, variables};
         const cacheKeyString = JSON.stringify(cacheKey);
         try {
