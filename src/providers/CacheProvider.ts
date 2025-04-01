@@ -6,7 +6,7 @@ import {
 import {UtilsHelper_convertToInt} from "../helpers/UtilsHelper";
 
 interface CacheService {
-    set(key: any, value: any, TTL: null | number | undefined, tags: string[] | null | boolean): void;
+    set(key: any, value: any, TTL: null | number | undefined, tags?: string[] | null | boolean): void;
     get(key: any): void;
     runCallbackIfTimeStampHasExpired(key: any, callback: Function): void;
     getTTL(key: any): number;

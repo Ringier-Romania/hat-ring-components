@@ -303,16 +303,18 @@ export async function CacheHelper_getKeysByTag(tag: string) {
 }
 
 
-export async function CacheHelper_clearByTag(tag: string) {
+export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: number, responses: number } > {
     const keys = await CacheHelper_getKeysByTag(tag);
 
-    if (!keys) {
-        return false;
-    }
+
     const deleteCount = {
         keys: 0,
         responses: 0,
     }
+    if (!keys) {
+        return deleteCount;
+    }
+
     keys.forEach((key) => {
         cacheAdapter.del(key);
         deleteCount.keys++;
