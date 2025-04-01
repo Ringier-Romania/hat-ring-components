@@ -294,7 +294,7 @@ export function CacheHelper_keys() {
 }
 
 
-export async function CacheHelper_getKeysByTag(tag: 'string') {
+export async function CacheHelper_getKeysByTag(tag: string) {
     if(!cacheAdapter.getKeysByTag) {
         console.error('CacheAdapter does not support getKeysByTag');
         return false;
@@ -303,7 +303,7 @@ export async function CacheHelper_getKeysByTag(tag: 'string') {
 }
 
 
-export async function CacheHelper_clearByTag(tag: 'string') {
+export async function CacheHelper_clearByTag(tag: string) {
     const keys = await CacheHelper_getKeysByTag(tag);
 
     if (!keys) {
@@ -318,7 +318,9 @@ export async function CacheHelper_clearByTag(tag: 'string') {
         deleteCount.keys++;
     });
 
-    await cacheAdapter.removeTag(tag);
+    if(cacheAdapter.removeTag) {
+        await cacheAdapter.removeTag(tag);
+    }
 
     return deleteCount;
 }

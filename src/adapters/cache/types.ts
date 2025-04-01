@@ -10,5 +10,5 @@ export interface CacheAdapterInterface {
     scan?(cursor:number, match: string, count?:number): Promise<{keys: Array<any>, cursor: number}>;
     mget(keys: string[]): Promise<{ [p: string]: unknown }>;
     getKeysByTag?(tag: string): Promise<string[]>;
-
+    removeTag?(tag: string): Promise<void>;
 }
