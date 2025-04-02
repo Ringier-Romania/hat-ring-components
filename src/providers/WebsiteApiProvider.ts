@@ -117,7 +117,7 @@ export class WebsiteApiProvider {
 
     static _findStoryUuidInQuery(query: DocumentNode, variables: any): string | null {
         let storyUuid = null;
-        const potentialVariables = ['storyId', 'storyUUID', 'storyUuid', 'id', 'uuid'];
+        const potentialVariables = ['storyId', 'storyID', 'storyUUID', 'storyUuid', 'id', 'ID', 'uuid', 'UUID', 'Uuid'];
         if (variables) {
             for (const variable of potentialVariables) {
                 if (variables[variable]) {
