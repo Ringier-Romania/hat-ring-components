@@ -51,17 +51,17 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
             return _.get(cachedElement[cacheKeyString], 'data.node.config.config.0.data');
         } else {
             global._cache = global._cache || {};
-            if (!cachedElement[cacheKeyString] || !global._cacheTimeStamp[cacheKeyString] || (new Date().getTime() - global._cacheTimeStamp[cacheKeyString]) > (UtilsHelper_convertToInt(process.env.MEM_CACHE_FOR_CONFIG_TTL_MS || 1000))) {
+            if (!global._cache[cacheKeyString] || !global._cacheTimeStamp[cacheKeyString] || (new Date().getTime() - global._cacheTimeStamp[cacheKeyString]) > (UtilsHelper_convertToInt(process.env.MEM_CACHE_FOR_CONFIG_TTL_MS || 1000))) {
                 MonitoringProvider.counter('info.ConfigHelper_getConfigByKey.' + configKey);
                 const response = await WebsiteApiProvider.call(query, variables, process.env.CACHE_TTL_CONFIG ? UtilsHelper_convertToInt(process.env.CACHE_TTL_CONFIG) : 1);
-                cachedElement[cacheKeyString] = response;
+                global._cache[cacheKeyString] = response;
                 global._cacheTimeStamp = global._cacheTimeStamp || {};
                 global._cacheTimeStamp[cacheKeyString] = new Date().getTime();
                 MonitoringProvider.counter('info.ConfigHelper_getConfig.cached');
                 return _.get(response, 'data.node.config.config.0.data');
             }
             MonitoringProvider.counter('info.ConfigHelper_getConfig.nonCached');
-            return _.get(cachedElement[cacheKeyString], 'data.node.config.config.0.data');
+            return _.get(global._cache[cacheKeyString], 'data.node.config.config.0.data');
         }
     } else {
         MonitoringProvider.counter('info.ConfigHelper_getConfigByKey.' + configKey);
