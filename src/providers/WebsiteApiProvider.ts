@@ -17,8 +17,8 @@ export class WebsiteApiProvider {
 
         try {
             return new Promise(async (resolve, reject) => {
-                let cachedResponse = await CacheHelper_get(cacheKey);
-                if (!cachedResponse) {
+                let cachedResponse = await CacheHelper_get(cacheKey, false, true);
+                if (!cachedResponse.data) {
                     if (global.HATCacheInCallInProgress[cacheKeyString]) {
                         await new Promise(() => {
                             const interval = setInterval(async () => {
@@ -33,7 +33,7 @@ export class WebsiteApiProvider {
                     }
                 }
                 try {
-                    if (cachedResponse) {
+                    if (cachedResponse.data) {
                         MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
                         CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
                             const response = await this._call(query, variables, 'no-cache', queryType);
@@ -43,7 +43,7 @@ export class WebsiteApiProvider {
                                 MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
                             }
                             delete global.HATCacheInCallInProgress[cacheKeyString];
-                        });
+                        }, cachedResponse.ttl);
                         return resolve(cachedResponse);
                     }
                     MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');

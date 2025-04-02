@@ -168,9 +168,10 @@ export class RedisProvider {
     }
 
 
-    async get({key}: {
+    async get({key, returnRedisCacheValue = false}: {
         key: string;
-    }): Promise<string | null> {
+        returnRedisCacheValue?: boolean;
+    }): Promise<string | null | RedisCacheValue> {
         if (!this.client) {
             await this.initialize();
         }
@@ -182,6 +183,10 @@ export class RedisProvider {
             }
             const parsedData = this._parseResponse(data, key);
             MonitoringProvider.counter('info.RedisProvider.get');
+
+            if (returnRedisCacheValue) {
+                return parsedData;
+            }
             return parsedData.data;
         } catch (err) {
             MonitoringProvider.counter('error.RedisProvider.get');

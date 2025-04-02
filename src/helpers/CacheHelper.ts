@@ -30,32 +30,46 @@ export async function CacheHelper_set(key: any, value: any, TTL: null | number |
     await cacheAdapter.set(key, value, ttl, tags);
 }
 
-export async function CacheHelper_get(key: any, removeOnExpire = false) {
+export async function CacheHelper_get<T extends boolean = false>(key: any, removeOnExpire = false, returnRedisCacheValue: T = false as T): Promise<T extends true ? {
+    data: any,
+    ttl: number | undefined
+} : any> {
     key = JSON.stringify(key);
-    const value = await cacheAdapter.get(key);
+    const value = await cacheAdapter.get(key, true);
     if (removeOnExpire) {
-        const ttl = await cacheAdapter.getTtl(key);
-        if (!ttl) {
+        if (!value?.ttl) {
+            if (returnRedisCacheValue) {
+                return {
+                    data: value?.data,
+                    ttl: value?.ttl,
+                }
+            }
             return value;
         }
         // @ts-ignore
-        const expired = ttl ? ttl - new Date().getTime() < 0 : true;
+        const expired = value.ttl ? value.ttl - new Date().getTime() < 0 : true;
         if (expired) {
             await cacheAdapter.del(key);
         }
     }
     handleCleanCache();
+    if (returnRedisCacheValue) {
+        return {
+            data: value?.data,
+            ttl: value?.ttl,
+        }
+    }
     return value;
 }
 
-export async function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback: Function) {
+export async function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback: Function, ttl?: number) {
     key = JSON.stringify(key);
-    const ttl = await cacheAdapter.getTtl(key);
+    const _ttl = ttl || await cacheAdapter.getTtl(key);
     if (!ttl) {
         callback();
         return;
     }
-    const expired = ttl ? ttl - new Date().getTime() < 0 : true;
+    const expired = _ttl ? _ttl - new Date().getTime() < 0 : true;
     if (expired) {
         callback();
     }
@@ -295,7 +309,7 @@ export function CacheHelper_keys() {
 
 
 export async function CacheHelper_getKeysByTag(tag: string) {
-    if(!cacheAdapter.getKeysByTag) {
+    if (!cacheAdapter.getKeysByTag) {
         console.error('CacheAdapter does not support getKeysByTag');
         return false;
     }
@@ -303,7 +317,7 @@ export async function CacheHelper_getKeysByTag(tag: string) {
 }
 
 
-export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: number, responses: number } > {
+export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: number, responses: number }> {
     const keys = await CacheHelper_getKeysByTag(tag);
 
 
@@ -320,13 +334,12 @@ export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: numbe
         deleteCount.keys++;
     });
 
-    if(cacheAdapter.removeTag) {
+    if (cacheAdapter.removeTag) {
         await cacheAdapter.removeTag(tag);
     }
 
     return deleteCount;
 }
-
 
 
 export function CacheHelper_keysByGlob(globKey) {

@@ -21,8 +21,8 @@ export class CacheProvider {
         return await CacheHelper_get(key);
     }
 
-    static async runCallbackIfTimeStampHasExpired(key: any, callback: Function) {
-        return await CacheHelper_runCallbackIfTimeStampHasExpired(key, callback);
+    static async runCallbackIfTimeStampHasExpired(key: any, callback: Function, ttl?: number) {
+        return await CacheHelper_runCallbackIfTimeStampHasExpired(key, callback, ttl);
     }
 
     static getTTL(key: any) {

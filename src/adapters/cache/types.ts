@@ -1,6 +1,6 @@
 export interface CacheAdapterInterface {
     set(key: any, value: any, TTL: null | number | undefined, tags?: string[] | null | boolean): Promise<void>;
-    get(key: any): Promise<any>;
+    get(key: any, returnRedisCacheValue?: boolean): Promise<any>;
     del(key: any): Promise<number>;
     unlink?(key: any): Promise<number>;
     getTtl(key: any): Promise<number|undefined>;
