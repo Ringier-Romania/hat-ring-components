@@ -36,7 +36,7 @@ export class WebsiteApiProvider {
                     if (cachedResponse) {
                         MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
                         CacheHelper_runCallbackIfTimeStampHasExpired(cacheKey, async () => {
-                            const response = await this._call(query, variables);
+                            const response = await this._call(query, variables, 'no-cache', queryType);
                             if (response) {
                                 CacheHelper_set(cacheKey, response, cacheTtl, tags);
                             } else {
@@ -47,7 +47,7 @@ export class WebsiteApiProvider {
                         return resolve(cachedResponse);
                     }
                     MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
-                    const response = await this._call(query, variables);
+                    const response = await this._call(query, variables, 'no-cache', queryType);
                     if (response) {
                         CacheHelper_set(cacheKey, response, cacheTtl, tags);
                     } else {
@@ -131,7 +131,7 @@ export class WebsiteApiProvider {
     }
 
 
-    static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache', queryType: 'Unspecified'): Promise<any> {
+    static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache', queryType: string = 'Unspecified'): Promise<any> {
         try {
             //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
             // console.log('call');
