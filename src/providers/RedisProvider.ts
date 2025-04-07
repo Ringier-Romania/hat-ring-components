@@ -321,4 +321,9 @@ export class RedisProvider {
     }
 
 
+    async addTag(tag, key) {
+        await this.client.sAdd('tag:' + tag, key);
+    }
+
+
 }

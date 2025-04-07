@@ -337,11 +337,25 @@ export function CacheHelper_keysByGlob(globKey) {
 }
 
 export function CacheHelper_createParentChildRelation(parentId, childrenIds) {
-    childrenIds.forEach((childrenId) => {
-        if (childrenId) {
-            CacheHelper_set(`parent_${parentId}_child_${childrenId}`, '');
-        }
-    })
+    const getingKeysMode = process.env.GET_KEYS_MODE || 'tags'; //keys
+    switch (getingKeysMode) {
+        case 'tags':
+            childrenIds.forEach((childrenId) => {
+                if (childrenId && cacheAdapter.addTag) {
+                    cacheAdapter.addTag(`story_${childrenId}`, `parent_${parentId}`);
+                } else if(childrenId) { 
+                    CacheHelper_set(`parent_${parentId}_child_${childrenId}`, '');
+                }
+            })
+            break;
+        case 'keys':
+            childrenIds.forEach((childrenId) => {
+                if (childrenId) {
+                    CacheHelper_set(`parent_${parentId}_child_${childrenId}`, '');
+                }
+            })
+            break;
+    }
 }
 
 function handleCleanCache() {
