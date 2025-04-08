@@ -342,8 +342,9 @@ export function CacheHelper_createParentChildRelation(parentId, childrenIds) {
         case 'tags':
             childrenIds.forEach((childrenId) => {
                 if (childrenId && cacheAdapter.addTag) {
+                    cacheAdapter.addTag(`story_${parentId}`, `child_${childrenId}`);
                     cacheAdapter.addTag(`story_${childrenId}`, `parent_${parentId}`);
-                } else if(childrenId) { 
+                } else if(childrenId) {
                     CacheHelper_set(`parent_${parentId}_child_${childrenId}`, '');
                 }
             })
