@@ -325,5 +325,7 @@ export class RedisProvider {
         await this.client.sAdd('tag:' + tag, key);
     }
 
-
+    async flushAllAsync(): Promise<any> {
+        return this.client.sendCommand(['FLUSHALL', 'ASYNC']);
+    }
 }
