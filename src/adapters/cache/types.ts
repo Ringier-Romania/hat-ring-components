@@ -11,4 +11,5 @@ export interface CacheAdapterInterface {
     mget(keys: string[]): Promise<{ [p: string]: unknown }>;
     getKeysByTag?(tag: string): Promise<string[]>;
     removeTag?(tag: string): Promise<void>;
+    addTag?(tag: string, key:string): Promise<void>;
 }
