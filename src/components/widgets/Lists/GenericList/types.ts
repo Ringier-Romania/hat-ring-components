@@ -33,6 +33,7 @@ export interface GenericListWidgetConfig extends AbstractWidgetConfig {
     "headerTag": string,
     "columns": number | string,
     "paginationElements": number | string,
+    "perPageAllItems": number | string,
     "postShift": number | string,
     "customListUuid": string,
     "imageSize": string,

@@ -1,49 +1,62 @@
 ---
+import {WidgetHelper_calculateOffsetForGenericListPagination} from "../../../../helpers/GenericListHelper";
 const {context, widgetConfig, extendableAttributes} = Astro.props;
 
 import React from 'react';
 import _ from 'lodash';
-import {gql} from 'graphql-tag';
-import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import * as ItemParts from "./itemParts";
-import {GenericListParams, GenericListResponse} from "./types";
-import Header from "./generalParts/Header";
-import Items from "./generalParts/Items";
+import {GenericListResponse} from "./types";
 import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper";
 
 import styles from "../../../../../styles/widgets/Lists/GenericList.module.scss";
-import Pagination from "./generalParts/Pagination";
-import {UtilsHelper_convertToInt, UtilsHelper_getQueryParam} from "../../../../helpers/UtilsHelper";
+import {UtilsHelper_getQueryParam} from "../../../../helpers/UtilsHelper";
 import * as GeneralParts from "../../Lists/GenericList/generalParts";
 import {GenericList_getData} from "./GenericListGetData";
-import {GenericListMetaTags} from "./GenericListMetaTags";
 
+let toRender: boolean | string = false;
+const currentPage = parseInt(UtilsHelper_getQueryParam('page', context) || "1");
+const allGeneralParts = GeneralParts;
+let queryFragment = '';
+let response: any = null;
 
-const currentPage = parseInt(UtilsHelper_getQueryParam('page', context) || 1);
-const allGeneralParts =  GeneralParts;
-let queryFragment =  '';
-const response = await GenericList_getData(context, queryFragment, widgetConfig, extendableAttributes, currentPage) as GenericListResponse;
+const isAjaxCall = UtilsHelper_getQueryParam('gridLocationWidgetType', context) === 'genericList';
+const isFirstCall = UtilsHelper_getQueryParam('isFirstCall', context) === '1';
+const offset = WidgetHelper_calculateOffsetForGenericListPagination(widgetConfig, currentPage, isAjaxCall, isFirstCall);
 
+if (offset >= 1000) {
+    toRender = `<script>
+        window.location.href = '/404';
+    </script>`
+}
+if (!toRender) {
+    response = await GenericList_getData(context, queryFragment, widgetConfig, extendableAttributes, currentPage) as GenericListResponse;
+
+    if (offset >= response?.data?.stories?.total) {
+        toRender = `<script>
+            window.location.href = '/404';
+        </script>`
+    }
+}
 
 let cssModules = styles.GenericList;
 ---
 
-
-<div class={WidgetHelper_getWidgetCssClasses('GenericList', widgetConfig, context, [cssModules])}>
-    {widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
-        const Component = allGeneralParts[_.upperFirst(showOption)];
-        if (!Component) {
-            console.error(`No general show option name support ${showOption}`);
-            return WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet');
-        }
-        return (
-                <Component key={index}
-                           context={context}
-                           widgetConfig={widgetConfig}
-                           response={response}
-                           currentPage={currentPage}
-                           extendableAttributes={extendableAttributes}
-                />)
-    })}
-</div>
-
+{toRender ?
+    <Fragment set:html={toRender}/> :
+    <div class={WidgetHelper_getWidgetCssClasses('GenericList', widgetConfig, context, [cssModules])}>
+        {widgetConfig.generalShowOptions && widgetConfig.generalShowOptions.map((showOption, index) => {
+            const Component = allGeneralParts[_.upperFirst(showOption)];
+            if (!Component) {
+                console.error(`No general show option name support ${showOption}`);
+                return WidgetHelper_renderEmptyComponent(showOption, 'not supported, yet');
+            }
+            return (
+                    <Component key={index}
+                               context={context}
+                               widgetConfig={widgetConfig}
+                               response={response}
+                               currentPage={currentPage}
+                               extendableAttributes={extendableAttributes}
+                    />)
+        })}
+    </div>
+    }
