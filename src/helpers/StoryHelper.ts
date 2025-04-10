@@ -143,7 +143,6 @@ export function StoryHelper_getGqlContentFragment(): any {
                             url
                         }
                         image {
-                            description
                             title
                             width
                             height

@@ -38,8 +38,6 @@ const copyright = image?.license?.note || image?.sources.map(source => source.so
     }
     <div class="imgMetaData">
         {title && <span class="caption">{title}</span>}
-        {image.description && <span class="description">{image.description}</span>}
-        {/* TODO add translation */}
         {copyright && <span class="copyright">{copyright}</span>}
     </div>
 </div>
