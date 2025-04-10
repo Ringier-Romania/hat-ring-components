@@ -152,6 +152,9 @@ export function StoryHelper_getGqlContentFragment(): any {
                                     name
                                 }
                             }
+                            license {
+                                note
+                            }
                         }
                         alignment
                     }

@@ -15,6 +15,14 @@ export async function StoryMainImage_getData({widgetConfig, context}: StoryMainI
                         description
                         width
                         height
+                        sources {
+                            source {
+                                name
+                            }
+                        }
+                        license {
+                            note
+                        }
                     }
                 }
             }
