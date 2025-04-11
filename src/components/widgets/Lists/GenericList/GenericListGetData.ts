@@ -8,6 +8,7 @@ import {
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {AppContext, SiteContentType} from "../../../../types/types";
 import _ from "lodash";
+import {WidgetHelper_calculateOffsetForGenericListPagination} from "../../../../helpers/GenericListHelper";
 
 export async function GenericList_getData(context: AppContext, queryNodeFragment, widgetConfig, extendableAttributes, currentPage) {
     const searchPhrase = UtilsHelper_stripHtmlTags(UtilsHelper_getQueryParam(UtilsHelper_getSearchQueryParamKey(), context) || '');
@@ -90,7 +91,10 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
         return flag.excludedFlag
     }) : null;
 
-    const offset = (UtilsHelper_convertToInt(widgetConfig.postShift) || 0) + ((currentPage - 1) * UtilsHelper_convertToInt(widgetConfig.paginationElements));
+    const isAjaxCall = UtilsHelper_getQueryParam('gridLocationWidgetType', context) === 'genericList';
+    const isFirstCall = UtilsHelper_getQueryParam('isFirstCall', context) === '1';
+    const offset = WidgetHelper_calculateOffsetForGenericListPagination(widgetConfig, currentPage, isAjaxCall, isFirstCall);
+
     const variables: any = {
         ...dynamicVariables,
         topicId: topicId,
