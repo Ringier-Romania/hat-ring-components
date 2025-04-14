@@ -1,8 +1,8 @@
 import {gql} from "graphql-tag";
 
 export const RSSGqlQuery = gql`
-    query($categoryId: UUID!, $limit: Int!, $offset: Int!){
-        stories(filter:{category: {in: [$categoryId]}}, limit: $limit, offset: $offset ){
+    query($categoryId: UUID!, $limit: Int!, $offset: Int!, $excludedFlags: [String!]){
+        stories(filter:{category: {in: [$categoryId]}, flag:{notIn:$excludedFlags}}, limit: $limit, offset: $offset ){
             total
             edges {
                 node {
