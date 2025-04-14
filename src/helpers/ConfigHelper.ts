@@ -100,6 +100,7 @@ export async function ConfigHelper_getSeoLanguagesConfig(context) {
 export async function ConfigHelper_getSeoRssDefaultConfig(context): Promise<{
     rssType: string,
     limit: number,
+    excludedFlags?: Array<{excludedFlag: string}>
 }> {
     return ConfigHelper_getConfig(context, 'rssDefault');
 }

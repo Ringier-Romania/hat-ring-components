@@ -25,12 +25,17 @@ export async function RSS({context}: { context: AppContext }) {
     if(!categoryId) return {feed: null, type: null};
     const limit = seoRssConfig.limit || 10;
     const offset = ((page - 1) * UtilsHelper_convertToInt(limit));
+    const excludedFlags = seoRssConfig.excludedFlags ? seoRssConfig.excludedFlags.map(flag => {
+        return flag.excludedFlag
+    }) : null;
 
     const variables = {
         categoryId: categoryId,
         limit: limit,
-        offset
+        offset,
+        excludedFlags
     };
+
 
     const response = await WebsiteApiProvider.call(query, variables, 60 * 10) as {
         data: {
@@ -38,7 +43,7 @@ export async function RSS({context}: { context: AppContext }) {
         },
     };
 
-    const edges = response.data?.stories?.edges || [];
+    const edges = response?.data?.stories?.edges || [];
 
     const feed = new Feed({
         copyright: "",
