@@ -24,6 +24,7 @@ export let GenericListWebsitesConfig
                 "columns": 1,
                 "paginationElements": 10,
                 "postShift": 0,
+                "perPageAllItems": 0,
                 "customListUuid": "",
                 "imageSize": "400x225",
                 "imageSizeMobile": "",
@@ -113,6 +114,11 @@ export let GenericListWebsitesConfig
                     "name": "Elements omission",
                     "description": "(number)",
                     "type": "textfield"
+                },
+                "perPageAllItems": {
+                    "name": "Total items per page (across all generic lists, combined)",
+                    "description": "If left empty, the value from 'paginationElements' will be used as the default number of items per page",
+                    "type": "numberfield"
                 },
                 "customListUuid": {
                     "name": "Custom list/category",
