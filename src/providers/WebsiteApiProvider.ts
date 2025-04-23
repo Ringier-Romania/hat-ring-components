@@ -83,6 +83,7 @@ export class WebsiteApiProvider {
             'stories(': 'Stories',
             'site(': 'Site',
             'section(': 'Section',
+            'sectionGroup(': 'SectionGroup',
         };
 
         const queryBody = query.loc?.source.body || '';
@@ -109,6 +110,10 @@ export class WebsiteApiProvider {
 
             if (queryType === 'Config' && variables.variant) {
                 tags.push(`config_${variables.variant}`);
+            }
+
+            if (queryType === 'Section' || queryType === 'SectionGroup') {
+                tags.push(`section_${variables.codeName}`);
             }
         }
 
