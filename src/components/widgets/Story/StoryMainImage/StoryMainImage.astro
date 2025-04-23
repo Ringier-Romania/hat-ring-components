@@ -16,6 +16,7 @@ import {
     ImageHelper_getImageDimensionsWithAspectRatio
 } from "../../../../helpers/ImageHelper";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
+import StoryMainImageCopyright from "./StoryMainImageCopyright.astro";
 
 const response = await StoryMainImage_getData({widgetConfig, context});
 
@@ -72,6 +73,7 @@ if (imageResizeCropMode === 'contain' && imageWidth !== 0 && imageHeight !== 0) 
                         <StoryMainImageCaption caption={caption}/>}
                 {description &&
                         <StoryMainImageDescription description={description}/>}
+                <StoryMainImageCopyright response={response}/>
             </>
     )}
 </div>

@@ -52,7 +52,10 @@ export interface ImageBlockParams {
                         name: string;
                     }
                 }
-            ]
+            ],
+            license: {
+                note: string;
+            }
         }
     }
     widgetConfig: StoryContentWidgetConfig,

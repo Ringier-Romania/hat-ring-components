@@ -143,7 +143,6 @@ export function StoryHelper_getGqlContentFragment(): any {
                             url
                         }
                         image {
-                            description
                             title
                             width
                             height
@@ -151,6 +150,9 @@ export function StoryHelper_getGqlContentFragment(): any {
                                 source {
                                     name
                                 }
+                            }
+                            license {
+                                note
                             }
                         }
                         alignment

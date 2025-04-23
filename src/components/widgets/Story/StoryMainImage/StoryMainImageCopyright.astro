@@ -1,0 +1,9 @@
+---
+const {response} = Astro.props;
+
+const copyright = response?.data?.story?.image?.image?.license?.note || response?.data?.story?.image?.image?.sources.map(source => source.source?.name).join(', ') ;
+---
+
+<p class="StoryMainImageCopyright">{copyright}</p>
+
+
