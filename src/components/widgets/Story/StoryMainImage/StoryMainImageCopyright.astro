@@ -1,9 +1,16 @@
 ---
 const {response} = Astro.props;
 
-const copyright = response?.data?.story?.image?.image?.license?.note || response?.data?.story?.image?.image?.sources.map(source => source.source?.name).join(', ') ;
+const copyrightNote = response?.data?.story?.image?.image?.license?.note;
+const sources = response?.data?.story?.image?.image?.sources
 ---
 
-<p class="StoryMainImageCopyright">{copyright}</p>
+{copyrightNote && <p class="StoryMainImageCopyright">{copyrightNote}</p>}
 
+{!copyrightNote && sources && sources.length > 0 && <p class="StoryMainImageCopyright">
+    {sources.map((source: any) => {
+        return source.source?.link?.url ?
+                <a class="source" href={source.source?.link?.url}>{source.source?.name}</a> :
+                <span class="source">{source.source?.name}</span>
+    })}</p>}
 

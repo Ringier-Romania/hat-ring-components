@@ -50,6 +50,9 @@ export interface ImageBlockParams {
                 {
                     source: {
                         name: string;
+                        link?: {
+                            url: string
+                        }
                     }
                 }
             ],

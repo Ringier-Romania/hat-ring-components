@@ -149,6 +149,9 @@ export function StoryHelper_getGqlContentFragment(): any {
                             sources {
                                 source {
                                     name
+                                    link {
+                                        url
+                                    }
                                 }
                             }
                             license {

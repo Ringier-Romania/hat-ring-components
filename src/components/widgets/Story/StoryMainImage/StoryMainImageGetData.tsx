@@ -12,12 +12,14 @@ export async function StoryMainImage_getData({widgetConfig, context}: StoryMainI
                     caption
                     image {
                         url
-                        description
                         width
                         height
                         sources {
                             source {
                                 name
+                                link{
+                                    url
+                                }
                             }
                         }
                         license {
