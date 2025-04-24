@@ -1,0 +1,25 @@
+---
+import { WidgetHelper_getWidgetCssClasses } from "../../../../helpers/WidgetHelper";
+import { WidgetHelper_renderEmptyComponent } from "../../../../helpers/WidgetHelper";
+import _ from "lodash";
+
+const { context, widgetConfig } = Astro.props;
+
+let toRender: boolean | JSX.Element | string = false;
+
+const { headerText } = widgetConfig;
+if (!headerText) {
+    toRender = WidgetHelper_renderEmptyComponent("Header");
+}
+const Tag = _.get(widgetConfig, "headerTag", "div");
+---
+
+{
+    toRender ? (
+        <Fragment set:html={toRender} />
+    ) : (
+        <div class={WidgetHelper_getWidgetCssClasses("Header", widgetConfig, context)}>
+            <Tag>{headerText}</Tag>
+        </div>
+    )
+}
