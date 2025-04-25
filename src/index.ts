@@ -55,3 +55,4 @@ export { default as StoryTitleAddons } from "./components/widgets/Story/StoryTit
 export { default as StoryFrame } from "./components/widgets/Story/StoryFrame/StoryFrame.astro"
 export { default as WrapperStart } from "./components/widgets/common/WrapperStart.astro"
 export { default as WrapperEnd } from "./components/widgets/common/WrapperEnd.astro"
+export { default as SimpleHeading } from "./components/widgets/common/SimpleHeading/SimpleHeading.astro"

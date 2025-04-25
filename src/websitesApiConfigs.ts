@@ -35,3 +35,4 @@ export * from "./components/widgets/Story/StoryTitleAddons/StoryTitleAddonsWebsi
 export * from "./components/widgets/Story/StoryFrame/StoryFrameWebsitesConfig";
 export * from "./components/widgets/common/WrapperStartWebsitesConfig";
 export * from "./components/widgets/common/WrapperEndWebsitesConfig";
+export * from "./components/widgets/common/SimpleHeading/SimpleHeadingWebsitesConfig";
