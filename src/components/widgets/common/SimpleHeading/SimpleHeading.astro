@@ -7,19 +7,20 @@ const { context, widgetConfig } = Astro.props;
 
 let toRender: boolean | JSX.Element | string = false;
 
-const { headerText } = widgetConfig;
-if (!headerText) {
-    toRender = WidgetHelper_renderEmptyComponent("Header");
+const { headingText } = widgetConfig;
+if (!headingText) {
+    toRender = WidgetHelper_renderEmptyComponent("SimpleHeading");
 }
-const Tag = _.get(widgetConfig, "headerTag", "div");
+const Tag = _.get(widgetConfig, "headingTag", "div");
+
 ---
 
 {
     toRender ? (
         <Fragment set:html={toRender} />
     ) : (
-        <div class={WidgetHelper_getWidgetCssClasses("Header", widgetConfig, context)}>
-            <Tag>{headerText}</Tag>
+        <div class={WidgetHelper_getWidgetCssClasses("SimpleHeading", widgetConfig, context)}>
+            <Tag>{headingText}</Tag>
         </div>
     )
 }

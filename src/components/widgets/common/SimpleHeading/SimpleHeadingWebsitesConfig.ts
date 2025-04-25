@@ -3,29 +3,29 @@ import {
     AbstractWebsitesWidgetConfigParamsDescription
 } from "../../../../types/abstracts";
 
-export let HeaderWebsitesConfig = {
+export let SimpleHeadingWebsitesConfig = {
     "sections": [],
     "defaultParams": {},
     "paramsDescription": {},
     "modules": {
-        "header_wdg": {
-            "name": "Header",
+        "simpleHeading_wdg": {
+            "name": "Simple Heading",
             "description": "",
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
-                "widgetType": "header",
-                "headerTag": "h2",
+                "widgetType": "simpleHeading",
+                "headingTag": "h2",
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
-                "headerText": {
-                    "name": "Header",
-                    "description": "Header text",
+                "headingText": {
+                    "name": "Heading",
+                    "description": "Heading text",
                     "type": "textfield",
                     "required": false
                 },
-                "headerTag": {
-                    "name": "Header tag",
+                "headingTag": {
+                    "name": "Heading tag",
                     "description": "",
                     "type": "select",
                     "allowBlank": false,
