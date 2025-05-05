@@ -17,6 +17,9 @@ export async function StoryMainImage_getData({widgetConfig, context}: StoryMainI
                         sources {
                             source {
                                 name
+                                link{
+                                    url
+                                }
                             }
                         }
                         license {

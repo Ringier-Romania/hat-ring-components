@@ -24,7 +24,8 @@ if (UtilsHelper_isMobile(context)) {
 const calculatedDimensions = ImageHelper_getImageDimensionsWithAspectRatio(imageWidth, imageHeight, maxImageWidth, maxImageHeight);
 imageWidth = calculatedDimensions.width;
 imageHeight = calculatedDimensions.height;
-const copyright = image?.license?.note || image?.sources.map(source => source.source?.name).join(', ');
+const copyrightNote = image?.license?.note;
+const sources = image?.sources;
 ---
 
 
@@ -38,6 +39,11 @@ const copyright = image?.license?.note || image?.sources.map(source => source.so
     }
     <div class="imgMetaData">
         {title && <span class="caption">{title}</span>}
-        {copyright && <span class="copyright">{copyright}</span>}
+        {copyrightNote && <span class="copyright">{copyrightNote}</span>}
+        {!copyrightNote && sources && sources.length > 0 && <span class="copyright">{sources.map((source: any) => {
+            return source.source?.link?.url ?
+                    <a class="source" href={source.source?.link?.url}>{source.source?.name}</a> :
+                    <span class="source">{source.source?.name}</span>
+        })}</span>}
     </div>
 </div>
