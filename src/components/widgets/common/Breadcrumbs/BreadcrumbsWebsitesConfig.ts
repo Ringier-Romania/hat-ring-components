@@ -15,6 +15,8 @@ export let BreadCrumbpsWebsitesConfig
             "defaultParams": {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "widgetType": "breadcrumbs",
+                "firstLevelText": "",
+                "firstLevelUrl": ""
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -22,6 +24,16 @@ export let BreadCrumbpsWebsitesConfig
                     "name": "Disable 1st level",
                     "description": "breadcrumbs",
                     "type": "checkbox"
+                },
+                "firstLevelText": {
+                    "name": "Custom first level text",
+                    "description": "Text displayed for the first navigation level",
+                    "type": "textfield"
+                },
+                "firstLevelUrl": {
+                    "name": "Custom first level url",
+                    "description": "URL address for the first level navigation item",
+                    "type": "textfield"
                 },
             }
         }
