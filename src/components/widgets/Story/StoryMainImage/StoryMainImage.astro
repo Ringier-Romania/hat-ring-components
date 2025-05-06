@@ -26,7 +26,6 @@ const originalSrc = _.get(response, 'data.story.image.image.url');
 const imgSrc = widgetConfig?.useOriginalImage ? originalSrc : croppedSrc;
 
 const caption = _.get(response, 'data.story.image.caption', "");
-const description = _.get(response, 'data.story.image.image.description');
 const imageResizeCropMode = _.get(widgetConfig, 'imageResizeCropMode', 'cover');
 
 const maxImageWidth = UtilsHelper_convertToInt(imageDimensions.width);
@@ -71,8 +70,6 @@ if (imageResizeCropMode === 'contain' && imageWidth !== 0 && imageHeight !== 0) 
                 )}
                 {caption &&
                         <StoryMainImageCaption caption={caption}/>}
-                {description &&
-                        <StoryMainImageDescription description={description}/>}
                 <StoryMainImageCopyright response={response}/>
             </>
     )}
