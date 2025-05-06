@@ -12,7 +12,7 @@ import {
 } from "../../../../helpers/WidgetHelper";
 const { context, widgetConfig } = Astro.props as {
   context: AppContext;
-  widgetConfig: AbstractWidgetConfig & { disable1stLevel: boolean };
+  widgetConfig: AbstractWidgetConfig & { disable1stLevel: boolean, firstLevelText?: string, firstLevelUrl?: string };
 };
 let toRender: boolean | JSX.Element | string = false;
 const gqlResponse = _.get(context, "hatControllerParams.gqlResponse");
@@ -26,9 +26,19 @@ const breadcrumbs: Breadcrumb[] = _.get(
 );
 
 const createBreadcrumb = (breadcrumbs: Breadcrumb[]): BreadcrumbEntry[] => {
+  if (breadcrumbs.length > 0) {
+      if (widgetConfig.firstLevelText) {
+          breadcrumbs[0].name = widgetConfig.firstLevelText;
+      }
+      if (widgetConfig.firstLevelUrl) {
+          breadcrumbs[0].url = widgetConfig.firstLevelUrl;
+      }
+  }
+
   if (widgetConfig.disable1stLevel) {
     breadcrumbs.shift();
   }
+
   const breadcrumbEntries = breadcrumbs.map((breadcrumb, index) => ({
     href: breadcrumb.url,
     text: breadcrumb?.name,
