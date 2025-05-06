@@ -146,7 +146,7 @@ async function autocompleteByFirstStoryTag(context: AppContext, widgetConfig: St
     let mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
         return `, ${key}: ${dynamicVariablesTypes[key]}`;
     }).join(' ');
-    const excludedIds = result.data.story.stories.map((story) =>  story?.story?.id);
+    const excludedIds = _.get(result, 'data.story.stories', []).map((story) => story?.story?.id);
     const variables: any = {
         ...dynamicVariables,
         topicId: firstTagUuid,
