@@ -70,6 +70,7 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
                 }
                 stories(role: $relatedContentRole){
                     story {
+                        id
                         mainPublicationPoint {
                             url
                         }
@@ -94,8 +95,7 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
 
     res.data.stories.edges = res.data.stories.edges.concat(_.get(result, 'data.story.stories', []).map(story => {
         return {node: story.story}
-    }));
-
+    }));    
     CacheHelper_createParentChildRelation(context.id, res.data.stories.edges.map((edge) => edge?.node?.id));
 
     if (widgetConfig.autocomplete && (widgetConfig.paginationElements || 0) > res.data.stories.edges.length) {
@@ -146,13 +146,13 @@ async function autocompleteByFirstStoryTag(context: AppContext, widgetConfig: St
     let mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
         return `, ${key}: ${dynamicVariablesTypes[key]}`;
     }).join(' ');
-
+    const excludedIds = result.data.story.stories.map((story) =>  story?.story?.id);
     const variables: any = {
         ...dynamicVariables,
         topicId: firstTagUuid,
         limit: UtilsHelper_convertToInt(widgetConfig.paginationElements || 0),
         excludedFlags: excludedFlags,
-        excludedIds: [context.id]
+        excludedIds: [context.id, ...excludedIds],
     };
 
     const query = gql`
