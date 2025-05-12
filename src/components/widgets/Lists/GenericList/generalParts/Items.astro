@@ -25,8 +25,9 @@ import {UtilsHelper_convertToInt} from "../../../../../helpers/UtilsHelper";
 const allItemParts = (extendableAttributes ? extendableAttributes.itemParts : null) || ItemParts;
 const columnsCount = UtilsHelper_convertToInt(widgetConfig.columns) || 1;
 const colNumber = Math.floor(12 / columnsCount);
+const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
 ---
-<div class={['Items'].join(' ')}>
+<div class={['Items', columnsClass].join(' ')}>
     {(response?.data?.stories?.edges.map((edge, itemIndex) => {
         if (!edge.node) return;
         const itemParts = widgetConfig.showOptions && widgetConfig.showOptions.map((showOption, index) => {            
