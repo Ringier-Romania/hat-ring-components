@@ -1,79 +1,80 @@
 ---
 import _ from "lodash";
 import {
-  AbstractWidgetConfig,
-  AppContext,
-  SiteContentType,
+    AbstractWidgetConfig,
+    AppContext,
+    SiteContentType,
 } from "../../../../types/types";
-import { Breadcrumb, BreadcrumbEntry } from "./types";
+import {Breadcrumb, BreadcrumbEntry} from "./types";
 import {
-  WidgetHelper_getWidgetCssClasses,
-  WidgetHelper_renderEmptyComponent,
+    WidgetHelper_getWidgetCssClasses,
+    WidgetHelper_renderEmptyComponent,
 } from "../../../../helpers/WidgetHelper";
-const { context, widgetConfig } = Astro.props as {
-  context: AppContext;
-  widgetConfig: AbstractWidgetConfig & { disable1stLevel: boolean, firstLevelText?: string, firstLevelUrl?: string };
+const {context, widgetConfig} = Astro.props as {
+    context: AppContext;
+    widgetConfig: AbstractWidgetConfig & { disable1stLevel: boolean, firstLevelText?: string, firstLevelUrl?: string };
 };
 let toRender: boolean | JSX.Element | string = false;
 const gqlResponse = _.get(context, "hatControllerParams.gqlResponse");
 
 if (!gqlResponse) {
-  toRender = WidgetHelper_renderEmptyComponent("Breadcrumbs");
+    toRender = WidgetHelper_renderEmptyComponent("Breadcrumbs");
 }
 const breadcrumbs: Breadcrumb[] = _.get(
-  gqlResponse,
-  "data.site.data.node.breadcrumbs"
+    gqlResponse,
+    "data.site.data.node.breadcrumbs"
 );
 
 const createBreadcrumb = (breadcrumbs: Breadcrumb[]): BreadcrumbEntry[] => {
-  if (breadcrumbs.length > 0) {
-      if (widgetConfig.firstLevelText) {
-          breadcrumbs[0].name = widgetConfig.firstLevelText;
-      }
-      if (widgetConfig.firstLevelUrl) {
-          breadcrumbs[0].url = widgetConfig.firstLevelUrl;
-      }
-  }
+    const _breadcrumbs = [...breadcrumbs];
+    if (widgetConfig.disable1stLevel) {
+        _breadcrumbs.shift();
+    }
 
-  if (widgetConfig.disable1stLevel) {
-    breadcrumbs.shift();
-  }
+    if (_breadcrumbs.length > 0) {
+        if (widgetConfig.firstLevelText) {
+            _breadcrumbs[0].name = widgetConfig.firstLevelText;
+        }
+        if (widgetConfig.firstLevelUrl) {
+            _breadcrumbs[0].url = widgetConfig.firstLevelUrl;
+        }
+    }
 
-  const breadcrumbEntries = breadcrumbs.map((breadcrumb, index) => ({
-    href: breadcrumb.url,
-    text: breadcrumb?.name,
-  }));
+    const breadcrumbEntries = _breadcrumbs.map((breadcrumb, index) => ({
+        href: breadcrumb.url,
+        text: breadcrumb?.name,
+    }));
 
-  switch (context.siteContentType) {
-    case SiteContentType.Story:
-      const title: string = _.get(gqlResponse, "data.site.data.content.title");
-      return [...breadcrumbEntries, { text: title }];
-    case SiteContentType.Author:
-      const name: string = _.get(gqlResponse, "data.site.data.content.name");
-      return [...breadcrumbEntries, { text: name }];
-    default:
-      return breadcrumbEntries;
-  }
+    switch (context.siteContentType) {
+        case SiteContentType.Story:
+            const title: string = _.get(gqlResponse, "data.site.data.content.title");
+            return [...breadcrumbEntries, {text: title}];
+        case SiteContentType.Author:
+            const name: string = _.get(gqlResponse, "data.site.data.content.name");
+            return [...breadcrumbEntries, {text: name}];
+        default:
+            return breadcrumbEntries;
+    }
 };
 ---
 
 {
-  toRender ? (
-    <Fragment set:html={toRender} />
-  ) : (
+    toRender ? (
+    <Fragment set:html={toRender}/>
+        ) : (
     <div
-      class={WidgetHelper_getWidgetCssClasses(
-        "Breadcrumb",
-        widgetConfig,
-        context
-      )}
+            class={WidgetHelper_getWidgetCssClasses(
+                "Breadcrumb",
+                widgetConfig,
+                context
+            )}
     >
-      {createBreadcrumb(breadcrumbs).map(({ href, text }, index, arr) => (
-        <span key={index}>
+        {createBreadcrumb(breadcrumbs).map(({href, text}, index, arr) => (
+                <span key={index}>
           {href ? <a href={href}>{text}</a> : <span>{text}</span>}
-          {index < arr.length - 1 && <span>&nbsp;&gt;&nbsp;</span>}
+                    {index < arr.length - 1 && <span>&nbsp;&gt;&nbsp;</span>}
         </span>
-      ))}
+        ))}
     </div>
-  )
-}
+        )
+    }
