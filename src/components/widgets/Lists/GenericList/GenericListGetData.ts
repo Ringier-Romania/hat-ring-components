@@ -1,9 +1,10 @@
 import * as ItemParts from "./itemParts";
 import {gql} from "graphql-tag";
 import {
-    UtilsHelper_convertToInt, UtilsHelper_stripHtmlTags,
+    UtilsHelper_convertToInt,
     UtilsHelper_getQueryParam,
-    UtilsHelper_getSearchQueryParamKey
+    UtilsHelper_getSearchQueryParamKey,
+    UtilsHelper_stripHtmlTags
 } from "../../../../helpers/UtilsHelper";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {AppContext, SiteContentType} from "../../../../types/types";
@@ -72,6 +73,12 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
             }else{
                 contentTypeFilter = 'category: {in: [$topicId]}';
             }
+            break;
+        case SiteContentType.Story:
+            dynamicVariablesTypes.$storyUuid = 'UUID!';
+            dynamicVariables.storyUuid = topicId;
+            topicId = nodeCategoryId;
+            contentTypeFilter = 'category: {in: [$topicId]}, id:{notIn: [$storyUuid]}';
             break;
         default:
             contentTypeFilter = 'category: {in: [$topicId]}';
