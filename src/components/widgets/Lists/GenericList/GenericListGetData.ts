@@ -1,9 +1,10 @@
 import * as ItemParts from "./itemParts";
 import {gql} from "graphql-tag";
 import {
-    UtilsHelper_convertToInt, UtilsHelper_stripHtmlTags,
+    UtilsHelper_convertToInt,
     UtilsHelper_getQueryParam,
-    UtilsHelper_getSearchQueryParamKey
+    UtilsHelper_getSearchQueryParamKey,
+    UtilsHelper_stripHtmlTags
 } from "../../../../helpers/UtilsHelper";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {AppContext, SiteContentType} from "../../../../types/types";
@@ -52,7 +53,7 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
         }
     }).join('\n');
 
-    let topicId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id') || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.id');
+    let contentFilterId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id') || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.id');
     const nodeCategoryId = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.id');
 
     let contentTypeFilter = '';
@@ -67,11 +68,17 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
             if(!widgetConfig.customListUuid){
                 contentTypeFilter = 'category: {in: [$topicId]}, author:{in:[$authorId]}';
                 dynamicVariablesTypes.$authorId = 'UUID!';
-                topicId = nodeCategoryId;
+                contentFilterId = nodeCategoryId;
                 dynamicVariables.authorId = context.id;
             }else{
                 contentTypeFilter = 'category: {in: [$topicId]}';
             }
+            break;
+        case SiteContentType.Story:
+            dynamicVariablesTypes.$storyUuid = 'UUID!';
+            dynamicVariables.storyUuid = contentFilterId;
+            contentFilterId = nodeCategoryId;
+            contentTypeFilter = 'category: {in: [$topicId]}, id:{notIn: [$storyUuid]}';
             break;
         default:
             contentTypeFilter = 'category: {in: [$topicId]}';
@@ -97,7 +104,7 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
 
     const variables: any = {
         ...dynamicVariables,
-        topicId: topicId,
+        topicId: contentFilterId,
         limit: UtilsHelper_convertToInt(widgetConfig.paginationElements),
         offset: offset,
         excludedFlags: excludedFlags,
