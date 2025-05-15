@@ -18,7 +18,6 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
     let dynamicVariables: any = {};
     let dynamicFragmentsNames = '';
 
-
     const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
         const allItemParts = (extendableAttributes ? extendableAttributes.itemParts : null) || ItemParts;
 
@@ -26,13 +25,13 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
 
         if (ItemPart) {
             let getFragment = ItemPart.getFragment;
-            if(!getFragment){
-                const ItemPart = allItemParts[_.upperFirst(showOption)+'_getFragment'];
-                if(ItemPart){
+            if (!getFragment) {
+                const ItemPart = allItemParts[_.upperFirst(showOption) + '_getFragment'];
+                if (ItemPart) {
                     getFragment = ItemPart;
                 }
             }
-            if(getFragment){
+            if (getFragment) {
                 const fragment = getFragment(widgetConfig);
                 if (fragment.variables) {
                     dynamicVariables = {...dynamicVariables, ...fragment.variables}
@@ -46,7 +45,7 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
                     dynamicFragmentsNames += ` ...${fragment.query.definitions[0].name.value} \n`;
                     return `${fragment.query.loc?.source.body}`
                 }
-            }else{
+            } else {
                 console.error(`ItemPart getFragment ${showOption} not found`);
             }
 
@@ -65,12 +64,12 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
             dynamicVariables.nodeCategoryId = nodeCategoryId;
             break;
         case SiteContentType.Author:
-            if(!widgetConfig.customListUuid){
+            if (!widgetConfig.customListUuid) {
                 contentTypeFilter = 'category: {in: [$topicId]}, author:{in:[$authorId]}';
                 dynamicVariablesTypes.$authorId = 'UUID!';
                 contentFilterId = nodeCategoryId;
                 dynamicVariables.authorId = context.id;
-            }else{
+            } else {
                 contentTypeFilter = 'category: {in: [$topicId]}';
             }
             break;
@@ -101,6 +100,7 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
     const isAjaxCall = UtilsHelper_getQueryParam('gridLocationWidgetType', context) === 'genericList';
     const isFirstCall = UtilsHelper_getQueryParam('isFirstCall', context) === '1';
     const offset = WidgetHelper_calculateOffsetForGenericListPagination(widgetConfig, currentPage, isAjaxCall, isFirstCall);
+    const queryForDynamicName = getQueryForDynamicName(context, widgetConfig);
 
     const variables: any = {
         ...dynamicVariables,
@@ -114,9 +114,10 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
         variables.searchPhrase = searchPhrase;
     }
 
+
     const query = gql`
         query($topicId: UUID!, $limit: Int!, $excludedFlags: [String!], $offset: Int! ${mappedDynamicVariablesTypes}){
-            stories(filter:{${contentTypeFilter}, flag: {notIn:$excludedFlags}},limit: $limit, offset: $offset ${searchPhraseFragment} ){
+            stories: stories(filter:{${contentTypeFilter}, flag: {notIn:$excludedFlags}},limit: $limit, offset: $offset ${searchPhraseFragment} ){
                 total
                 genericListReqTotal: total
                 edges {
@@ -133,12 +134,38 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
                     }
                 }
             }
+            ${queryForDynamicName}
         }
         ${dynamicFragments}
     `;
 
-
     //console.log(query.loc?.source.body, JSON.stringify(variables));
     const result = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL);
     return result;
+}
+
+function getQueryForDynamicName(context, widgetConfig) {
+    const isDynamicNameInHeader = (widgetConfig.generalShowOptions || []).includes("header") && widgetConfig.headerText?.includes('{{dynamicName}}');
+
+    if (isDynamicNameInHeader) {
+        switch (context.siteContentType) {
+            case SiteContentType.SiteNode:
+            case SiteContentType.Story:
+            case SiteContentType.Topic:
+                return `
+                        dynamicName: topic(id: $topicId) {
+                            name
+                        }
+                    `;
+            case SiteContentType.Author:
+                return `
+                        dynamicName: author(id: $authorId) {
+                            name
+                        }
+                    `
+            default:
+                return "";
+        }
+    }
+    return "";
 }
