@@ -78,6 +78,9 @@ export interface GenericListResponse {
         stories: {
             total: number,
             edges: Array<{ node: GenericListResponseNode }>
+        },
+        dynamicName?: {
+            name?: string,
         }
     }
 }

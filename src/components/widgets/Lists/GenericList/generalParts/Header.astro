@@ -1,0 +1,35 @@
+---
+const {context, widgetConfig, response} = Astro.props;
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {default as TextReplacer} from "../../../../common/TextReplacer.astro";
+import {
+    UtilsHelper_getQueryParam,
+    UtilsHelper_getSearchQueryParamKey,
+    UtilsHelper_stripHtmlTags
+} from "../../../../../helpers/UtilsHelper";
+
+let headerText = widgetConfig.headerText || '';
+let toRender: boolean | string | JSX.Element = false;
+
+if (!headerText) {
+    toRender = WidgetHelper_renderEmptyComponent('Header');
+} else {
+    const totalItemsString = `${response?.data?.stories?.total || '0'}`;
+    const searchValue = UtilsHelper_getQueryParam(UtilsHelper_getSearchQueryParamKey(), context);
+    const dynamicName = response?.data?.dynamicName?.name || '';
+
+    headerText = headerText
+        .replaceAll('{{totalItems}}', totalItemsString)
+        .replaceAll('{{searchValue}}', UtilsHelper_stripHtmlTags(searchValue || ''))
+        .replaceAll('{{dynamicName}}', dynamicName);
+}
+
+const HeaderTag = (widgetConfig.headerTag && widgetConfig.headerTag !== 'none') ?
+    widgetConfig.headerTag : 'span' as keyof JSX.IntrinsicElements;
+---
+{toRender ?
+    <Fragment set:html={toRender}/> :
+    <div class="Header">
+        <TextReplacer context={context} config={{}} text={headerText} tag={HeaderTag}/>
+    </div>
+}

@@ -77,7 +77,7 @@ export let GenericListWebsitesConfig
                 },
                 "headerText": {
                     "name": "Header text",
-                    "description": "There are dynamic variables that can be used in the header text: {{totalItems}}, {{searchValue}}. Example: {{totalItems}} items for {{searchValue}}",
+                    "description": "There are dynamic variables that can be used in the header text: {{totalItems}}, {{searchValue}}, {{dynamicName}}. Example: {{totalItems}} items for {{searchValue}}",
                     "type": "textfield"
                 },
                 "headerTag": {
