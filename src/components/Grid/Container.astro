@@ -17,7 +17,7 @@ interface GridContainerParams {
 
 };
 let toRender: boolean | JSX.Element = false;
-if(!sectionConfig){
+if(!sectionConfig || sectionConfig.container_hide){
     toRender = null;
 }
 const ContainerTag = sectionConfig ? `${sectionConfig.container_html_tag || 'main'}` : 'main';

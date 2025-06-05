@@ -29,12 +29,6 @@ if (offset >= 1000) {
 }
 if (!toRender) {
     response = await GenericList_getData(context, queryFragment, widgetConfig, extendableAttributes, currentPage) as GenericListResponse;
-
-    if (offset >= response?.data?.stories?.total) {
-        toRender = `<script>
-            window.location.href = '/404';
-        </script>`
-    }
 }
 
 let cssModules = styles.GenericList;

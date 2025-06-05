@@ -100,7 +100,7 @@ export function UtilsHelper_stripHtmlTags(userInput: string): string {
     return userInput.replace(/(<([^>]+)>)/gi, "");
 }
 
-export function UtilsHelper_slugify(slug: String): String {
+export function UtilsHelper_slugify(slug: string): string {
     return slug
       .normalize('NFKD') // split accented characters into their base characters and diacritical marks
       .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
