@@ -8,6 +8,7 @@ import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTaxonomyListResponse} from "./types";
 import {RingLink} from "../../../common/RingLink/RingLink";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {default as TextReplacer} from "../../../common/TextReplacer.astro";
 
 const query = gql`
         query($storyId: UUID){
@@ -55,7 +56,7 @@ const sortedTopics = _.sortBy(filteredTopics, topic => {
 });
 ---
 <div class={WidgetHelper_getWidgetCssClasses('StoryTaxonomyList', widgetConfig, context)}>
-    {widgetConfig.listPrefix && <span class={'listPrefix'}>{widgetConfig.listPrefix}</span>}
+    {widgetConfig.listPrefix && <TextReplacer context={context} config={{}} text={widgetConfig.listPrefix} tag={"span"} props={{class: 'listPrefix'}}/>}
 
     {sortedTopics.map((topic, index) => {
         let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
