@@ -36,8 +36,7 @@ const bigElementsCount = Number(widgetConfig.countBig);
 const colNumber = Math.floor(12 / columnsCount);
 const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
 const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
-
-
+let count = widgetConfig.count ? Number(widgetConfig.count) : 10;
 const processedContent = WidgetHelper_insertComponentAtPattern(elementsToRender, widgetConfig, context);
 ---
 
@@ -47,18 +46,22 @@ const processedContent = WidgetHelper_insertComponentAtPattern(elementsToRender,
         ) : (
     <div class={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
         {processedContent.map((edge, itemIndex) => {
-            if (widgetConfig.count && itemIndex >= widgetConfig.count) {
+            
+            if (count && itemIndex >= count) {
                 return null;
             }
             const isBig = itemIndex < bigElementsCount;
             const colClass = isBig ? `col12` : `col${colNumber}`;
             const bigElementClass = isBig ? `bigElement` : '';
             const {AdditionalComponent, config, customCssClass} = edge as AdditionalComponent;
+            if (AdditionalComponent) {
+                count++;
+            }
             const kind = edge?.node?.originalContent?.kind?.code;
             return AdditionalComponent ? (
-                    <div class={["AdditionalComponent", "Item", colClass, bigElementClass, processedContent.config?.widgetType, customCssClass].join(" ")}>
-                        <AdditionalComponent widgetConfig={config} context={context}/>
-                    </div>
+                <div class={["AdditionalComponent", "Item", colClass, bigElementClass, config?.widgetType, customCssClass].join(" ")}>
+                    <AdditionalComponent widgetConfig={config} context={context}/>
+                </div>
             ) : (
                     <div class={['Item', colClass, bigElementClass, `kind-${kind}`].join(' ')} key={itemIndex}>
                         <div class={'linkOverlay'}>
