@@ -25,8 +25,8 @@ if (!content) {
 }
 
 
-const displayFromInt = widgetConfig.displayFrom ? UtilsHelper_convertToInt(widgetConfig.displayFrom) : null;
-let displayToInt = widgetConfig.displayTo ? UtilsHelper_convertToInt(widgetConfig.displayTo) : null;
+const displayFrom = widgetConfig.displayFrom ? UtilsHelper_convertToInt(widgetConfig.displayFrom) : null;
+let displayTo = widgetConfig.displayTo ? UtilsHelper_convertToInt(widgetConfig.displayTo) : null;
 
 function getBlockType(block) {
     const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
@@ -37,8 +37,14 @@ function getBlockType(block) {
 }
 
 function isBlockWithinDisplayRange(index) {
-    const blockPosition = index + 1;
-    return (!displayFromInt || displayFromInt <= blockPosition) && (!displayToInt || displayToInt >= blockPosition);
+    if (displayFrom && displayFrom > index + 1) {
+        return false;
+    }
+    if (displayTo && displayTo < index + 1) {
+        return false;
+    }
+
+    return true;
 }
 
 function checkAndProcessGroupBlock(block) {
@@ -85,8 +91,8 @@ const processedContent = WidgetHelper_insertComponentAtPattern(content, widgetCo
                 return null;
             }
             if (block?.AdditionalComponent) {
-                if (displayToInt) {
-                    displayToInt += 1;
+                if (displayTo) {
+                    displayTo += 1;
                 }
                 const { AdditionalComponent, config, context, customCssClass } = block;
                 return (
