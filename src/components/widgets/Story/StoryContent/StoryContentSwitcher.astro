@@ -92,7 +92,7 @@ const processedContent = WidgetHelper_insertComponentAtPattern(content, widgetCo
             }
             if (block?.AdditionalComponent) {
                 if (displayTo) {
-                    displayTo += 1;
+                    displayTo++;
                 }
                 const { AdditionalComponent, config, context, customCssClass } = block;
                 return (
