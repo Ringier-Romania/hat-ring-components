@@ -47,7 +47,8 @@ export let StoryAuthorsWebsitesConfig
                         ["linkOverlay","Link"],
                         "tagline",
                         "description",
-                        ["socialProfiles", "Social profiles"]
+                        ["socialProfiles", "Social profiles"],
+                        ["credentials", "Credentials"],
                     ],
                     "required": false
                 },

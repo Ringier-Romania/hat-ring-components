@@ -25,6 +25,16 @@ export const authorGqlFragment = `publicationPoint {
                         tagline
                         image{
                             url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}})
+                        }
+                        credentials {
+                            issuer
+                            issueTime
+                            name
+                            url
+                            role {
+                                code  
+                                name                      
+                            }
                         }`;
 
 const descriptionFragment = widgetConfig.showOptions?.includes(StoryAuthorsShowOptions.Description) ? `description { ${StoryHelper_getGqlContentFragment()} }` : '';

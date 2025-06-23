@@ -33,7 +33,7 @@ const sources = image?.sources;
     {
         <a class={link && link.url ? "withExternalUrl" : ""} href={link ? link.url : url} target="_blank"
            data-pswp-src={url} data-pswp-width={image.width} data-pswp-height={image.height}>
-            <RingImage src={url} alt={title || alt || ''} width={imageWidth} height={imageHeight}
+            <RingImage src={url} alt={alt || title || ''} width={imageWidth} height={imageHeight}
                        transform={TransformType.ResizeCropAuto}/>
         </a>
     }
