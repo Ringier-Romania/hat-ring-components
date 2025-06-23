@@ -11,7 +11,8 @@ import * as BlocksTypes from "./StoryContentBlocks/index";
 import {AppContext} from "../../../../types/types";
 import {StoryContentWidgetConfig, StoryContentSwitcherParams} from "./types";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
-import { WidgetHelper_insertComponentAtPattern } from '../../../../helpers/WidgetHelper';
+import { AdditionalComponentHelper_insertComponentAtPattern } from "../../../../helpers/AdditionalComponentHelper";
+
 let isGroupBlock = false;
 let isIgnoredGroupBlock = false;
 let groupElements: any[] = [];
@@ -74,7 +75,7 @@ function checkAndProcessGroupBlock(block) {
 
     return false;
 }
-const processedContent = WidgetHelper_insertComponentAtPattern(content, widgetConfig, context);
+const processedContent = AdditionalComponentHelper_insertComponentAtPattern(content, widgetConfig, context);
 ---
 
 {

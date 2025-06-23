@@ -11,9 +11,10 @@ import * as ItemParts from "../itemParts";
 import _ from "lodash";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import {
-    WidgetHelper_insertComponentAtPattern,
     WidgetHelper_renderEmptyComponent
 } from "../../../../../helpers/WidgetHelper";
+
+import { AdditionalComponentHelper_insertComponentAtPattern } from "../../../../../helpers/AdditionalComponentHelper";
 interface AdditionalComponent extends SectionItemEdge {
     AdditionalComponent: Function;
     config: {
@@ -37,7 +38,7 @@ const colNumber = Math.floor(12 / columnsCount);
 const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
 const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
 let count = widgetConfig.count ? Number(widgetConfig.count) : 10;
-const processedContent = WidgetHelper_insertComponentAtPattern(elementsToRender, widgetConfig, context);
+const processedContent = AdditionalComponentHelper_insertComponentAtPattern(elementsToRender, widgetConfig, context);
 ---
 
 {
