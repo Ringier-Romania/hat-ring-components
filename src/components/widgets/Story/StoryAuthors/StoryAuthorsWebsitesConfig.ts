@@ -50,6 +50,7 @@ export let StoryAuthorsWebsitesConfig
                         ["socialProfiles", "Social profiles"],
                         ["credentials", "Credentials"],
                         ["associations",' Associations'],
+                        ["awards", "Awards"],
                     ],
                     "required": false
                 },
