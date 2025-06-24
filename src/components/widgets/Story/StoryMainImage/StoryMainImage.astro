@@ -67,9 +67,11 @@ if (imageResizeCropMode === 'contain' && imageWidth !== 0 && imageHeight !== 0) 
                                 width={imageWidth}
                                 height={imageHeight}/>
                 )}
-                {caption &&
+                <div class="imgMetaData">
+                    {caption &&
                         <StoryMainImageCaption caption={caption}/>}
-                <StoryMainImageCopyright response={response}/>
+                    <StoryMainImageCopyright response={response}/>
+                </div>
             </>
     )}
 </div>
