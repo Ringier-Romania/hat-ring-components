@@ -51,6 +51,9 @@ export let StoryAuthorsWebsitesConfig
                         ["credentials", "Credentials"],
                         ["associations",' Associations'],
                         ["awards", "Awards"],
+                        ["books", "Books"],
+                        ["newsletters", "Newsletters"],
+                        ["podcasts", "Podcasts"]
                     ],
                     "required": false
                 },

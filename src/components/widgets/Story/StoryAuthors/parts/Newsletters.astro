@@ -1,0 +1,46 @@
+---
+import {StoryAuthorsWidgetConfig} from "../types";
+const {context, widgetConfig, author} = Astro.props as {
+    context: AppContext,
+    widgetConfig: StoryAuthorsWidgetConfig,
+    author: Author
+};
+import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import _ from "lodash";
+import {AppContext} from "../../../../../types/types";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {TranslationProvider} from "../../../../../providers/TranslationProvider";
+
+let toRender: boolean | JSX.Element | string = false;
+
+const newsletters = _.get(author, 'works', []).filter((work) => {
+    return work?.role?.code === 'newsletter';
+});
+if(!newsletters || !Array.isArray(newsletters) || newsletters.length === 0) {
+    toRender = WidgetHelper_renderEmptyComponent('Newsletter');
+}
+---
+
+{toRender ?
+<Fragment set:html={toRender}/>
+    :
+
+<div class={['Newsletters'].join(' ')}>
+    <h2>{TranslationProvider.translate(context, 'Newsletters')}</h2>
+    {newsletters.map((newsletter) => {
+        return (
+            <div class="newsletter">
+                    {newsletter?.url ?
+                        <a href={newsletter.url} target="_blank" rel="noopener noreferrer">
+                            {_.get(newsletter, 'title', '')}
+                        </a>
+                        :
+                        _.get(newsletter, 'title', '')
+                    }
+            </div>
+        );
+    })}
+</div>
+    }
+
+

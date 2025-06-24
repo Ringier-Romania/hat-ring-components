@@ -7,3 +7,6 @@ export { default as SocialProfiles } from './SocialProfiles';
 export { default as Credentials } from './Credentials.astro';
 export { default as Associations } from './Associations.astro';
 export { default as Awards } from './Awards.astro';
+export { default as Books } from './Books.astro';
+export { default as Podcasts } from './Podcasts.astro';
+export { default as Newsletters } from './Newsletters.astro';
