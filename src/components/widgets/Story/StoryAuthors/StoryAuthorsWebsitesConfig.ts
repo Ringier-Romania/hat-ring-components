@@ -49,6 +49,7 @@ export let StoryAuthorsWebsitesConfig
                         "description",
                         ["socialProfiles", "Social profiles"],
                         ["credentials", "Credentials"],
+                        ["associations",' Associations'],
                     ],
                     "required": false
                 },

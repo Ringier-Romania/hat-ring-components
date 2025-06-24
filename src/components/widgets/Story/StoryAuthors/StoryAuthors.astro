@@ -35,6 +35,10 @@ export const authorGqlFragment = `publicationPoint {
                                 code  
                                 name                      
                             }
+                        }
+                        associations {
+                            name                        
+                            url
                         }`;
 
 const descriptionFragment = widgetConfig.showOptions?.includes(StoryAuthorsShowOptions.Description) ? `description { ${StoryHelper_getGqlContentFragment()} }` : '';
@@ -45,7 +49,7 @@ const query = gql`
                 authors {
                     author {
                         ${descriptionFragment}
-                        ${authorGqlFragment}
+                        ${authorGqlFragment}        
                     }
                 }
             }
