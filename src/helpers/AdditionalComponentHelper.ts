@@ -1,16 +1,7 @@
 import _ from "lodash";
 
-interface ComponentToInsert {
-    position: number;
-    originalIndex: number;
-    component: {
-        AdditionalComponent: any;
-        config: any;
-        context: any;
-        customCssClass?: string;
-    };
-}
 const NTH_CHILD_PATTERN_REGEX = /(\d*)n([+-]?\d+)?/;
+const SIMPLE_NUMBER_PATTERN_REGEX = /^-?\d+$/;
 
 function parseWidgetConfig(config: string | object): any {
     if (typeof config === "string") {
@@ -37,18 +28,42 @@ function calculateInsertPositions(
     const positions: number[] = [];
     let insertedCount = 0;
 
-    for (let originalPosition = 0; originalPosition < sourceLength && insertedCount < maxInserts; originalPosition++) {
-        const elementNumber = originalPosition + 1;
+    for (let elementNumber = 1; elementNumber <= sourceLength && insertedCount < maxInserts; elementNumber++) {
         const calculationValue = (elementNumber - nthChildOffset) % patternMultiplier;
 
-        if (calculationValue === 0) {
-            const insertPosition = nthChildOffset < 0 ? originalPosition : originalPosition + 1;
+        if (calculationValue === 0 && elementNumber - nthChildOffset > 0) {
+            const insertPosition = nthChildOffset < 0 ? elementNumber - 1 : elementNumber;
             positions.push(insertPosition);
             insertedCount++;
         }
     }
 
     return positions;
+}
+function getSimplePatternPositions(pattern: string, sourceLength: number): number[] {
+    const targetPosition = Number(pattern);
+    const targetPositionAbs = Math.abs(targetPosition);
+    if (targetPosition >= 0 && targetPosition <= sourceLength) {
+        return [targetPosition];
+    } else if (targetPosition < 0 && targetPositionAbs <= sourceLength) {
+        const insertPosition = targetPositionAbs - 1;
+        return insertPosition >= 0 ? [insertPosition] : [];
+    }
+    
+    return [];
+}
+
+function getNthChildPatternPositions(pattern: string, sourceLength: number, limit?: string | number): number[] {
+    const nthChildMatch = pattern.match(NTH_CHILD_PATTERN_REGEX);
+    if (!nthChildMatch) return [];
+
+    const patternMultiplier = Number(nthChildMatch[1]) || 1;
+    const nthChildOffset = Number(nthChildMatch[2]) || 0;
+    const maxComponentsToInsert = limit ? Number(limit) : sourceLength;
+    
+    if (patternMultiplier <= 0 || maxComponentsToInsert <= 0) return [];
+
+    return calculateInsertPositions(sourceLength, patternMultiplier, nthChildOffset, maxComponentsToInsert);
 }
 
 export function AdditionalComponentHelper_insertComponentAtPattern(
@@ -60,7 +75,7 @@ export function AdditionalComponentHelper_insertComponentAtPattern(
     if (!widgetConfig?.additionalComponents?.length) return sourceElements;
 
     const isMobile = context?.hatControllerParams?.isMobile ?? false;
-    const componentsToInsert: ComponentToInsert[] = [];
+    const componentsToInsert: { position: number; component: any; originalIndex: number }[] = [];
 
     for (let originalIndex = 0; originalIndex < widgetConfig.additionalComponents.length; originalIndex++) {
         const additionalWidget = widgetConfig.additionalComponents[originalIndex];
@@ -74,59 +89,48 @@ export function AdditionalComponentHelper_insertComponentAtPattern(
             config: rawConfig,
         } = additionalWidget;
 
-        if (!widget?.trim() || !insertionPattern) continue;
-
+        if (
+            !widget?.trim() ||
+            !insertionPattern ||
+            !isPlatformCompatible(isMobile, isMobileEnabled, isDesktopEnabled)
+        ) {
+            continue;
+        }
         const widgetName = _.upperFirst(widget.trim());
         const AdditionalComponent = context?.customData?.widgets?.[widgetName];
-
         if (!AdditionalComponent) continue;
-        if (!isPlatformCompatible(isMobile, isMobileEnabled, isDesktopEnabled)) continue;
-
-        const nthChildMatch = insertionPattern.match(NTH_CHILD_PATTERN_REGEX);
-        if (!nthChildMatch) continue;
-
-        const patternMultiplier = Number(nthChildMatch[1]) || 1;
-        const nthChildOffset = Number(nthChildMatch[2]) || 0;
-        const maxComponentsToInsert = limit ? Number(limit) : sourceElements.length;
-
-        if (patternMultiplier <= 0 || maxComponentsToInsert <= 0) continue;
 
         const config = parseWidgetConfig(rawConfig || {});
+        const component = { AdditionalComponent, config, context, customCssClass };
 
-        const positions = calculateInsertPositions(
-            sourceElements.length,
-            patternMultiplier,
-            nthChildOffset,
-            maxComponentsToInsert
-        );
+        const positions = SIMPLE_NUMBER_PATTERN_REGEX.test(insertionPattern)
+            ? getSimplePatternPositions(insertionPattern, sourceElements.length)
+            : getNthChildPatternPositions(insertionPattern, sourceElements.length, limit);
 
         for (const position of positions) {
-            componentsToInsert.push({
-                position,
-                originalIndex,
-                component: {
-                    AdditionalComponent,
-                    config,
-                    context,
-                    customCssClass,
-                },
-            });
+            componentsToInsert.push({ position, component, originalIndex });
         }
     }
 
     if (componentsToInsert.length === 0) return sourceElements;
 
-    componentsToInsert.sort((a, b) => {
-        if (a.position !== b.position) {
-            return b.position - a.position;
-        }
-        return b.originalIndex - a.originalIndex;
-    });
+    componentsToInsert.sort((a, b) =>
+        a.position !== b.position ? a.position - b.position : a.originalIndex - b.originalIndex
+    );
 
-    const elementsToRender = [...sourceElements];
-    for (const { position, component } of componentsToInsert) {
-        elementsToRender.splice(position, 0, component);
+    const result: any[] = [];
+    let componentIndex = 0;
+
+    for (let i = 0; i <= sourceElements.length; i++) {
+        while (componentIndex < componentsToInsert.length && componentsToInsert[componentIndex].position === i) {
+            result.push(componentsToInsert[componentIndex].component);
+            componentIndex++;
+        }
+
+        if (i < sourceElements.length) {
+            result.push(sourceElements[i]);
+        }
     }
 
-    return elementsToRender;
+    return result;
 }
