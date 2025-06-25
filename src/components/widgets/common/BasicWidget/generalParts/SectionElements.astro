@@ -47,17 +47,16 @@ const processedContent = AdditionalComponentHelper_insertComponentAtPattern(elem
         ) : (
     <div class={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
         {processedContent.map((edge, itemIndex) => {
-            
+            const {AdditionalComponent, config, customCssClass} = edge as AdditionalComponent;
+            if (AdditionalComponent) {
+                count++;
+            }
             if (count && itemIndex >= count) {
                 return null;
             }
             const isBig = itemIndex < bigElementsCount;
             const colClass = isBig ? `col12` : `col${colNumber}`;
             const bigElementClass = isBig ? `bigElement` : '';
-            const {AdditionalComponent, config, customCssClass} = edge as AdditionalComponent;
-            if (AdditionalComponent) {
-                count++;
-            }
             const kind = edge?.node?.originalContent?.kind?.code;
             return AdditionalComponent ? (
                 <div class={["AdditionalComponent", "Item", colClass, bigElementClass, config?.widgetType, customCssClass].join(" ")}>

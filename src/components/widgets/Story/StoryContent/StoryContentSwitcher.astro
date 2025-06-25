@@ -84,13 +84,6 @@ const processedContent = AdditionalComponentHelper_insertComponentAtPattern(cont
     ) : (
         processedContent.map((block, index) => {
             block = { ...block };
-            if (checkAndProcessGroupBlock(block)) {
-                return null;
-            }
-
-            if (!isBlockWithinDisplayRange(index)) {
-                return null;
-            }
             if (block?.AdditionalComponent) {
                 if (displayTo) {
                     displayTo++;
@@ -102,6 +95,14 @@ const processedContent = AdditionalComponentHelper_insertComponentAtPattern(cont
                     </div>
                 );
             }
+            if (checkAndProcessGroupBlock(block)) {
+                return null;
+            }
+
+            if (!isBlockWithinDisplayRange(index)) {
+                return null;
+            }
+           
             const BlockComponent = getBlockType(block);
             return BlockComponent ? (
                 <BlockComponent blockData={block} widgetConfig={widgetConfig} context={context} />
