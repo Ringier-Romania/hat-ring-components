@@ -11,7 +11,8 @@ import * as BlocksTypes from "./StoryContentBlocks/index";
 import {AppContext} from "../../../../types/types";
 import {StoryContentWidgetConfig, StoryContentSwitcherParams} from "./types";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
-import { WidgetHelper_insertComponentAtPattern } from '../../../../helpers/WidgetHelper';
+import { AdditionalComponentHelper_insertComponentAtPattern } from "../../../../helpers/AdditionalComponentHelper";
+
 let isGroupBlock = false;
 let isIgnoredGroupBlock = false;
 let groupElements: any[] = [];
@@ -24,6 +25,10 @@ if (!content) {
     toRender = false;
 }
 
+
+const displayFrom = widgetConfig.displayFrom ? UtilsHelper_convertToInt(widgetConfig.displayFrom) : null;
+let displayTo = widgetConfig.displayTo ? UtilsHelper_convertToInt(widgetConfig.displayTo) : null;
+
 function getBlockType(block) {
     const blockType = block.type ? _.upperFirst(_.camelCase(block.type)) + 'Block' : 'NotHandledBlock';
     if (blockType === 'GroupBlock' && extendableAttributes?.customGroupBlocks?.[block.name]) {
@@ -33,12 +38,9 @@ function getBlockType(block) {
 }
 
 function isBlockWithinDisplayRange(index) {
-    const displayFrom = widgetConfig.displayFrom && UtilsHelper_convertToInt(widgetConfig.displayFrom);
-    const displayTo = widgetConfig.displayTo && UtilsHelper_convertToInt(widgetConfig.displayTo);
     if (displayFrom && displayFrom > index + 1) {
         return false;
     }
-
     if (displayTo && displayTo < index + 1) {
         return false;
     }
@@ -73,28 +75,37 @@ function checkAndProcessGroupBlock(block) {
 
     return false;
 }
-const processedContent = WidgetHelper_insertComponentAtPattern(content, widgetConfig, context);
-
+const processedContent = AdditionalComponentHelper_insertComponentAtPattern(content, widgetConfig, context);
 ---
 
-{toRender ?
-    <Fragment set:html={toRender}/> :
-    processedContent.map((block, index) => {
-        block = {...block};
-        if (checkAndProcessGroupBlock(block)) {
-            return null;
-        }
+{
+    toRender ? (
+        <Fragment set:html={toRender} />
+    ) : (
+        processedContent.map((block, index) => {
+            block = { ...block };
+            if (checkAndProcessGroupBlock(block)) {
+                return null;
+            }
 
-        if (!isBlockWithinDisplayRange(index)) {
-            return null;
-        }
-        if (block?.AdditionalComponent) {
-            const { AdditionalComponent, config, context, customCssClass } = block;
-            return <div class={["AdditionalComponent", customCssClass].join(" ")}>
-                <AdditionalComponent widgetConfig={config} context={context}/>
-            </div>
-        }
-        const BlockComponent = getBlockType(block);
-        return BlockComponent ? (<BlockComponent blockData={block} widgetConfig={widgetConfig} context={context}/>) : null;
-    })
+            if (!isBlockWithinDisplayRange(index)) {
+                return null;
+            }
+            if (block?.AdditionalComponent) {
+                if (displayTo) {
+                    displayTo++;
+                }
+                const { AdditionalComponent, config, context, customCssClass } = block;
+                return (
+                    <div class={["AdditionalComponent", customCssClass].join(" ")}>
+                        <AdditionalComponent widgetConfig={config} context={context} />
+                    </div>
+                );
+            }
+            const BlockComponent = getBlockType(block);
+            return BlockComponent ? (
+                <BlockComponent blockData={block} widgetConfig={widgetConfig} context={context} />
+            ) : null;
+        })
+    )
 }

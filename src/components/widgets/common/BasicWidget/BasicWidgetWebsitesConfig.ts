@@ -365,7 +365,7 @@ export let BasicWidgetWebsitesConfig = {
                         {
                             "name": "pattern",
                             "type": "textfield",
-                            "description": "exmaple paterns: 2n, 3n+1, 5n-2"
+                            "description": "Pattern for elements appearance: 'n' after every element, '2n+1' after every second element, 'n-1' before the first element, 'n+2' after the second element, etc. Use negative numbers to insert before elements. Negative multipliers are not supported."
                         },
                         {
                             "name": "config",
