@@ -82,31 +82,33 @@ const processedContent = AdditionalComponentHelper_insertComponentAtPattern(cont
     toRender ? (
         <Fragment set:html={toRender} />
     ) : (
-        processedContent.map((block, index) => {
-            block = { ...block };
-            if (block?.AdditionalComponent) {
-                if (displayTo) {
-                    displayTo++;
+        (() => {
+            let originalBlockCount = 0;
+            return processedContent.map((block, index) => {
+                block = { ...block };
+                if (block?.AdditionalComponent) {
+                    const { AdditionalComponent, config, context, customCssClass } = block;
+                    return (
+                        <div class={["AdditionalComponent", customCssClass].join(" ")}>
+                            <AdditionalComponent widgetConfig={config} context={context} />
+                        </div>
+                    );
                 }
-                const { AdditionalComponent, config, context, customCssClass } = block;
-                return (
-                    <div class={["AdditionalComponent", customCssClass].join(" ")}>
-                        <AdditionalComponent widgetConfig={config} context={context} />
-                    </div>
-                );
-            }
-            if (checkAndProcessGroupBlock(block)) {
-                return null;
-            }
+                
+                if (checkAndProcessGroupBlock(block)) {
+                    return null;
+                }
 
-            if (!isBlockWithinDisplayRange(index)) {
-                return null;
-            }
-           
-            const BlockComponent = getBlockType(block);
-            return BlockComponent ? (
-                <BlockComponent blockData={block} widgetConfig={widgetConfig} context={context} />
-            ) : null;
-        })
+                originalBlockCount++;
+                if (!isBlockWithinDisplayRange(originalBlockCount - 1)) {
+                    return null;
+                }
+               
+                const BlockComponent = getBlockType(block);
+                return BlockComponent ? (
+                    <BlockComponent blockData={block} widgetConfig={widgetConfig} context={context} />
+                ) : null;
+            });
+        })()
     )
 }
