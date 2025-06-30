@@ -18,9 +18,9 @@ export default function Pagination(
 
     const currentUrl = _.get(context, 'hatControllerParams.urlWithParsedQuery.pathname');
     const total = response.data?.stories.total;
-    const paginationElements = UtilsHelper_convertToInt(widgetConfig.paginationElements);
-    const pages = Math.ceil(total / paginationElements);
-    const lastAllowedPage = Math.ceil(MAX_OFFSET / paginationElements);
+    const perPageAllItems = UtilsHelper_convertToInt(widgetConfig.perPageAllItems) || UtilsHelper_convertToInt(widgetConfig.paginationElements);
+    const pages = Math.ceil(total / perPageAllItems);
+    const lastAllowedPage = Math.ceil((MAX_OFFSET - perPageAllItems) / perPageAllItems);
     const lastPage = Math.min(pages, lastAllowedPage);
 
     if (pages === 1) {
