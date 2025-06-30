@@ -38,8 +38,10 @@ export async function SeoListGridPrevNext(context: AppContext) {
         totalItems = 1000;
     }
 
-    const paginationElements = UtilsHelper_convertToInt(foundGenericList.paginationElements);
-    const pages = Math.ceil(totalItems / paginationElements);
+    const perPageAllItems = UtilsHelper_convertToInt(foundGenericList.perPageAllItems) || UtilsHelper_convertToInt(foundGenericList.paginationElements);
+    const pages = Math.ceil(totalItems / perPageAllItems);
+    const lastAllowedPage = Math.ceil((1000 - perPageAllItems) / perPageAllItems);
+    const lastPage = Math.min(pages, lastAllowedPage);
 
     const currentUrlPath = _.get(context, 'hatControllerParams.urlWithParsedQuery.path');
     const prevUrl = new URL(UtilsHelper_getDomain() + currentUrlPath);
@@ -52,9 +54,10 @@ export async function SeoListGridPrevNext(context: AppContext) {
     if (currentPage != 1) {
         links.push({rel: "prev", href: prevUrl.toString()});
     }
-    if (currentPage < pages) {
+    if (currentPage < lastPage) {
         links.push({rel: "next", href: nextUrl.toString()});
     }
+
     return {
         extend: {
             link: links,
