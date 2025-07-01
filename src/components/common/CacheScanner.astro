@@ -1,0 +1,101 @@
+---
+export interface Props {
+    match: string;
+    pageUrl: string;
+    streamingUrl: string;
+    totalKeysText: string;
+}
+
+const { match, pageUrl, totalKeysText, streamingUrl } = Astro.props;
+const podName = process.env.HOSTNAME;
+---
+
+<div>
+    <div>
+        {podName} pod
+    </div>
+    <div> status:<span id="status">in progress...</span> | cursor: <span id="cursor"></span> | {totalKeysText}: <span id="totalKeys"></span>
+        <br>
+        <button id="toggle">pause/resume rendering</button>
+        <button id="stop">stop script</button>
+    </div>
+    <div id="error"></div>
+    <hr>
+    <div style="display: table; white-space: pre-wrap; word-break:break-all; table-layout: fixed; width: 100%; max-height: 65vh; overflow-y: auto; overflow-x: auto; position: relative; content-visibility: auto; contain: layout paint; will-change: scroll; transform: translateZ(0); backface-visibility: hidden;"
+         id="messages">
+    </div>
+</div>
+<script define:vars={{ match, pageUrl, streamingUrl }}>
+    const statusEl = document.getElementById('status');
+    const messagesEl = document.getElementById('messages');
+    const cursorEl = document.getElementById('cursor');
+    const totalKeysEl = document.getElementById('totalKeys');
+    const errorEl = document.getElementById('error');
+    let evtSource;
+    let paused = false;
+
+    function updateStatus(text) {
+        if (statusEl) {
+            statusEl.innerText = text;
+        }
+    }
+
+    function handleMessage(event) {
+        const data = JSON.parse(event.data).stream;
+
+        if (data.error) {
+            if (errorEl) errorEl.innerHTML = `<pre>${data.error.stack}</pre>`;
+            return;
+        }
+
+        window.requestAnimationFrame(() => {
+            if (cursorEl) {cursorEl.innerText = data.cursor;}
+            if (totalKeysEl) {totalKeysEl.innerText = data.totalKeys;}
+
+            if (parseInt(data.cursor) === 0) {
+                updateStatus('done');
+                evtSource.close();
+            }
+
+            if (messagesEl && data.keys.length > 0) {
+                const fragment = document.createDocumentFragment();
+                const startIndex = messagesEl.children.length;
+                data.keys.forEach((element, index) => {
+                    const pre = document.createElement('pre');
+                    pre.innerHTML = element.replaceAll('\\n', '<br>');
+                    pre.style.cssText = 'padding: 5px; margin: 0;';
+                    if ((startIndex + index) % 2 === 1) {
+                        pre.style.backgroundColor = '#eaeaea';
+                    }
+                    fragment.appendChild(pre);
+                });
+                messagesEl.appendChild(fragment);
+            }
+        });
+    }
+
+    function open() {
+        evtSource = new EventSource(`/${streamingUrl}?match=${match}`);
+        evtSource.onmessage = handleMessage;
+        evtSource.onerror = () => evtSource.close();
+    }
+
+    document.querySelector('#toggle')?.addEventListener('click', () => {
+        paused = !paused;
+        const isRunning = statusEl && !['done', 'stopped'].includes(statusEl.innerText);
+        if (isRunning) {
+            updateStatus(paused ? 'in progress... (rendering stopped)' : 'in progress...');
+        }
+        paused ? evtSource.close() : open();
+    });
+
+    document.querySelector('#stop')?.addEventListener('click', () => {
+        updateStatus('stopped');
+        fetch(`/${pageUrl}?stop=1&match=${match}`);
+        evtSource.close();
+    });
+
+    window.onbeforeunload = () => evtSource?.close();
+
+    open();
+</script>
