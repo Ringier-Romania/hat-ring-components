@@ -13,9 +13,11 @@ export function CacheScannerHelper_createStreamingResponse(match: string): Respo
 
     const stream = new ReadableStream({
         start(controller) {
+            const encoder = new TextEncoder();
             events_listener = (stream) => {
                 const data = `data: ${JSON.stringify({ stream })}\r\n\r\n`;
-                controller.enqueue(data)
+                console.log(encoder.encode(data))
+                controller.enqueue(encoder.encode(data));
             }
             emitter.off('stream', events_listener)
             emitter.on('stream', events_listener)
