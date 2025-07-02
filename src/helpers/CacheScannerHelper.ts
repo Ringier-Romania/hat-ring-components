@@ -5,22 +5,23 @@ interface EmitterState {
     status: 'running' | 'stopping' | null;
 }
 
-const emitters = new Map<string, EmitterState>();
+if (!global['_emitters']) {
+    global['_emitters'] = new Map<string, EmitterState>();
+}
 
 export function CacheScannerHelper_createStreamingResponse(match: string): Response {
     const emitter = CacheScannerHelper_getEmitter(match);
-    let events_listener: (counter: any) => void;
+    let events_listener: (...args: any[]) => void;
 
     const stream = new ReadableStream({
         start(controller) {
             const encoder = new TextEncoder();
+            emitter.removeAllListeners('stream');
             events_listener = (stream) => {
                 const data = `data: ${JSON.stringify({ stream })}\r\n\r\n`;
-                console.log(encoder.encode(data))
                 controller.enqueue(encoder.encode(data));
-            }
-            emitter.off('stream', events_listener)
-            emitter.on('stream', events_listener)
+            };
+            emitter.on('stream', events_listener);
         },
         cancel() {
             emitter.removeListener('stream', events_listener)
@@ -38,13 +39,13 @@ export function CacheScannerHelper_createStreamingResponse(match: string): Respo
 }
 
 function getEmitterState(id: string): EmitterState {
-    if (!emitters.has(id)) {
-        emitters.set(id, {
+    if (!global['_emitters'].has(id)) {
+        global['_emitters'].set(id, {
             emitter: new events.EventEmitter(),
             status: null,
         });
     }
-    return emitters.get(id)!;
+    return global['_emitters'].get(id)!;
 }
 
 export function CacheScannerHelper_getEmitter(id: string): events.EventEmitter {
@@ -52,15 +53,15 @@ export function CacheScannerHelper_getEmitter(id: string): events.EventEmitter {
 }
 
 export function CacheScannerHelper_removeEmitter(id: string) {
-    const state = emitters.get(id);
+    const state = global['_emitters'].get(id);
     if (state) {
         state.emitter.removeAllListeners();
-        emitters.delete(id);
+        global['_emitters'].delete(id);
     }
 }
 
 export function CacheScannerHelper_getStatus(id: string): 'running' | 'stopping' | null {
-    if (!emitters.has(id)) {
+    if (!global['_emitters'].has(id)) {
         return null;
     }
     return getEmitterState(id).status;
@@ -110,9 +111,9 @@ async function scanKeys(
             }
         } while (cursor !== 0);
 
-    } catch (e) {
+    } catch (e: any) {
         console.error(e);
-        CacheScannerHelper_getEmitter(match).emit("stream", { error: { stack: e.stack } });
+        CacheScannerHelper_getEmitter(match).emit("stream", { error: { stack: e?.stack } });
     } finally {
         CacheScannerHelper_setStatus(match, null);
         CacheScannerHelper_removeEmitter(match);
