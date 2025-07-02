@@ -48,6 +48,7 @@ export * from "./helpers/CacheHelper";
 export * from "./helpers/ConfigHelper";
 export * from "./helpers/DateHelper";
 export * from "./helpers/StoryHelper";
+export * from "./helpers/CacheScannerHelper";
 export { default as StoryGroup } from "./components/Story/StoryGroup.astro";
 export { default as Breadcrumbs } from "./components/widgets/common/Breadcrumbs/Breadcrumbs.astro";
 export { default as SearchBox } from "./components/widgets/common/SearchBox/SearchBox.astro";
@@ -56,3 +57,4 @@ export { default as StoryFrame } from "./components/widgets/Story/StoryFrame/Sto
 export { default as WrapperStart } from "./components/widgets/common/WrapperStart.astro"
 export { default as WrapperEnd } from "./components/widgets/common/WrapperEnd.astro"
 export { default as SimpleHeading } from "./components/widgets/common/SimpleHeading/SimpleHeading.astro"
+export { default as CacheScanner } from "./components/common/CacheScanner.astro";
