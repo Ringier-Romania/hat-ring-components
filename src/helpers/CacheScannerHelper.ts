@@ -104,6 +104,7 @@ async function scanKeys(
             }
 
             emitter.emit("stream", { totalKeys, keys: scan.keys, cursor: scan.cursor });
+            console.info('scanKeys', scan.cursor, match, scan.keys.length);
 
             if (cursor !== 0) {
                 await new Promise((resolve) => setTimeout(resolve, sleep));
@@ -119,11 +120,14 @@ async function scanKeys(
     }
 }
 
-export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep ) {
+export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep ) {\
+    console.info('CacheScannerHelper_getAllKeysByScan_start');
     await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, () => {});
+    console.info('CacheScannerHelper_getAllKeysByScan_end');
 }
 
 export async function CacheScannerHelper_clearKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep ) {
+    console.info('CacheScannerHelper_clearKeysByScan_start');
     const process = (keys: string[]) => {
         keys.forEach((key) => {
             if (cacheAdapter.unlink) {
@@ -134,4 +138,5 @@ export async function CacheScannerHelper_clearKeysByScan(cacheAdapter, startCurs
         });
     };
     await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, process);
+    console.info('CacheScannerHelper_clearKeysByScan_end');
 }
