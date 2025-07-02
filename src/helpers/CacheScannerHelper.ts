@@ -120,7 +120,7 @@ async function scanKeys(
     }
 }
 
-export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep ) {\
+export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep ) {
     console.info('CacheScannerHelper_getAllKeysByScan_start');
     await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, () => {});
     console.info('CacheScannerHelper_getAllKeysByScan_end');
