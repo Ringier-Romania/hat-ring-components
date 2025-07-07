@@ -1,0 +1,50 @@
+---
+import {StoryAuthorsWidgetConfig} from "../types";
+const {context, widgetConfig, author} = Astro.props as {
+    context: AppContext,
+    widgetConfig: StoryAuthorsWidgetConfig,
+    author: Author
+};
+import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import _ from "lodash";
+import {AppContext} from "../../../../../types/types";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {TranslationProvider} from "../../../../../providers/TranslationProvider";
+
+let toRender: boolean | JSX.Element | string = false;
+
+const awards = _.get(author, 'awards', []);
+if(!awards || !Array.isArray(awards) || awards.length === 0) {
+    toRender = WidgetHelper_renderEmptyComponent('Awards');
+}
+---
+
+{toRender ?
+<Fragment set:html={toRender}/>
+    :
+
+<div class={['Awards'].join(' ')}>
+    <h2>{TranslationProvider.translate(context, 'Awards')}</h2>
+    {awards.map((award) => {
+        return (
+            <div class="award">
+                <div class="year">{award.issueTime ? award.issueTime.split('-').shift(): '' }</div>
+                <div class="name">{_.get(award, 'name', '')}</div>
+                <div class="issuer">
+                    {award?.url ?
+                        <a href={award.url} target="_blank" rel="noopener noreferrer">
+                            {_.get(award, 'issuer', '')}
+                        </a>
+                        :
+                        _.get(award, 'issuer', '')
+                    }
+                </div>
+
+
+            </div>
+        );
+    })}
+</div>
+    }
+
+

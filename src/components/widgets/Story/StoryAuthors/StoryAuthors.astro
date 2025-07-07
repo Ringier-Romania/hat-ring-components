@@ -25,7 +25,35 @@ export const authorGqlFragment = `publicationPoint {
                         tagline
                         image{
                             url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}})
-                        }`;
+                        }
+                        credentials {
+                            issuer
+                            issueTime
+                            name
+                            url
+                            role {
+                                code  
+                                name                      
+                            }
+                        }
+                        associations {
+                            name                        
+                            url
+                        }
+                        awards {
+                            name
+                            issueTime
+                            issuer
+                            url                        
+                        } 
+                        works{
+                            role {
+                                code                        
+                            }
+                            url
+                            title
+                        } 
+                        `;
 
 const descriptionFragment = widgetConfig.showOptions?.includes(StoryAuthorsShowOptions.Description) ? `description { ${StoryHelper_getGqlContentFragment()} }` : '';
 
@@ -35,7 +63,8 @@ const query = gql`
                 authors {
                     author {
                         ${descriptionFragment}
-                        ${authorGqlFragment}
+                        ${authorGqlFragment} 
+                       
                     }
                 }
             }

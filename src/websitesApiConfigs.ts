@@ -23,6 +23,7 @@ export * from "./components/widgets/Lists/GenericList/GenericListWebsitesConfig"
 export * from "./configs/DeveloperSettingsWebsitesConfig";
 export * from "./configs/GeneralWebsitesConfig";
 export * from "./configs/SEOWebsitesConfig";
+export * from "./configs/TranslationsWebsitesConfig";
 export * from "./components/widgets/Lists/TopicTitle/TopicTitleWebsitesConfig";
 export * from "./components/widgets/analytics/Kropka/KropkaWebsitesConfig";
 export * from "./components/widgets/analytics/RingDataLayer/RingDataLayerWebsitesConfig";
