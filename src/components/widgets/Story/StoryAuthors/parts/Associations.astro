@@ -1,0 +1,46 @@
+---
+import {StoryAuthorsWidgetConfig} from "../types";
+const {context, widgetConfig, author} = Astro.props as {
+    context: AppContext,
+    widgetConfig: StoryAuthorsWidgetConfig,
+    author: Author
+};
+import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import _ from "lodash";
+import {AppContext} from "../../../../../types/types";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import {TranslationProvider} from "../../../../../providers/TranslationProvider";
+
+let toRender: boolean | JSX.Element | string = false;
+
+const associations = _.get(author, 'associations', []);
+if (!associations || !Array.isArray(associations) || associations.length === 0) {
+    toRender = WidgetHelper_renderEmptyComponent('Associations');
+}
+---
+
+{toRender ?
+<Fragment set:html={toRender}/>
+    :
+
+<div class={['Associations'].join(' ')}>
+    <h2>{TranslationProvider.translate(context, 'Associations')}</h2>
+    {associations.map((association) => {
+        return (
+                <div class="association">
+                    <span class="">{TranslationProvider.translate(context, 'Member of')}&nbsp;</span>
+                    <span class="">{association?.url ?
+                            <a href={association.url} target="_blank" rel="noopener noreferrer">
+                                {_.get(association, 'name', '')}
+                            </a>
+                        :
+                        _.get(association, 'name', '')}
+                        </span>
+
+                </div>
+        );
+    })}
+</div>
+    }
+
+

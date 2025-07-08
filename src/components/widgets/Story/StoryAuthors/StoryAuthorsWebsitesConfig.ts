@@ -47,7 +47,13 @@ export let StoryAuthorsWebsitesConfig
                         ["linkOverlay","Link"],
                         "tagline",
                         "description",
-                        ["socialProfiles", "Social profiles"]
+                        ["socialProfiles", "Social profiles"],
+                        ["credentials", "Credentials"],
+                        ["associations",' Associations'],
+                        ["awards", "Awards"],
+                        ["books", "Books"],
+                        ["newsletters", "Newsletters"],
+                        ["podcasts", "Podcasts"]
                     ],
                     "required": false
                 },
