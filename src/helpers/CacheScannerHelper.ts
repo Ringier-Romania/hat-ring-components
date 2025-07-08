@@ -87,16 +87,24 @@ async function scanKeys(
                 break;
             }
 
-            const scan = await cacheAdapter.scan(cursor, match, count);
-            cursor = scan.cursor;
+            if (cacheAdapter.scan) {
+                const scan = await cacheAdapter.scan(cursor, match, count);
+                cursor = scan.cursor;
+                if (scan.keys.length > 0) {
+                    processKeys(scan.keys);
+                    state.keys.push(...scan.keys);
+                }
 
-            if (scan.keys.length > 0) {
-                processKeys(scan.keys);
-                state.keys.push(...scan.keys);
+                state.totalKeys += scan.keys.length;
+                state.cursor = scan.cursor;
+            } else {
+                const keys = await cacheAdapter.keys();
+                processKeys(keys);
+                cursor = 0;
+                state.cursor = 0;
+                state.totalKeys = keys.length;
+                state.keys = keys;
             }
-
-            state.totalKeys += scan.keys.length;
-            state.cursor = scan.cursor;
 
             if (cursor !== 0) {
                 await new Promise((resolve) => setTimeout(resolve, sleep));
@@ -125,7 +133,8 @@ export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCur
 
 export async function CacheScannerHelper_clearKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep) {
     console.info('CacheScannerHelper_clearKeysByScan_start', match);
-    const process = (keys: string[]) => {
+
+    await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, (keys: string[]) => {
         keys.forEach((key) => {
             if (cacheAdapter.unlink) {
                 cacheAdapter.unlink(key);
@@ -133,7 +142,6 @@ export async function CacheScannerHelper_clearKeysByScan(cacheAdapter, startCurs
                 cacheAdapter.del(key);
             }
         });
-    };
-    await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, process);
+    });
     console.info('CacheScannerHelper_clearKeysByScan_end', match);
 }
