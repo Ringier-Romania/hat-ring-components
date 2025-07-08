@@ -1,73 +1,64 @@
-import events from 'events';
-
-interface EmitterState {
-    emitter: events.EventEmitter;
-    status: 'running' | 'stopping' | null;
+interface ScannerState {
+    status: 'running' | 'stopping' | 'done' | 'stopped' | null;
+    keys: string[];
+    totalKeys: number;
+    cursor: any;
+    error: any | null;
 }
 
-if (!global['_emitters']) {
-    global['_emitters'] = new Map<string, EmitterState>();
+if (!global['_scanners']) {
+    global['_scanners'] = new Map<string, ScannerState>();
 }
 
-export function CacheScannerHelper_createStreamingResponse(match: string): Response {
-    const emitter = CacheScannerHelper_getEmitter(match);
-    let events_listener: (...args: any[]) => void;
-
-    const stream = new ReadableStream({
-        start(controller) {
-            const encoder = new TextEncoder();
-            events_listener = (stream) => {
-                const data = `data: ${JSON.stringify({ stream })}\r\n\r\n`;
-                controller.enqueue(encoder.encode(data));
-            };
-            emitter.on('stream', events_listener);
-        },
-        cancel() {
-            emitter.removeListener('stream', events_listener)
-        }
-    });
-
-    return new Response(stream, {
-        status: 200,
-        headers: {
-            'Content-Type': 'text/event-stream',
-            'Connection': 'keep-alive',
-            'Cache-Control': 'no-cache'
-        }
-    });
+export function CacheScannerHelper_getData(match: string) {
+    const state = getScannerState(match);
+    const dataToSend = {
+        keys: [...state.keys],
+        totalKeys: state.totalKeys,
+        cursor: state.cursor,
+        status: state.status,
+        error: state.error
+    };
+    state.keys = [];
+    return dataToSend;
 }
 
-function getEmitterState(id: string): EmitterState {
-    if (!global['_emitters'].has(id)) {
-        global['_emitters'].set(id, {
-            emitter: new events.EventEmitter(),
+function getScannerState(id: string): ScannerState {
+    if (!global['_scanners'].has(id)) {
+        global['_scanners'].set(id, {
             status: null,
+            keys: [],
+            totalKeys: 0,
+            cursor: 0,
+            error: null
         });
     }
-    return global['_emitters'].get(id)!;
+    return global['_scanners'].get(id)!;
 }
 
-export function CacheScannerHelper_getEmitter(id: string): events.EventEmitter {
-    return getEmitterState(id).emitter;
-}
-
-export function CacheScannerHelper_removeEmitter(id: string) {
-    const state = global['_emitters'].get(id);
+export function CacheScannerHelper_removeScanner(id: string) {
+    const state = global['_scanners'].get(id);
     if (state) {
-        state.emitter.removeAllListeners();
-        global['_emitters'].delete(id);
+        global['_scanners'].delete(id);
     }
 }
 
-export function CacheScannerHelper_getStatus(id: string): 'running' | 'stopping' | null {
-    if (!global['_emitters'].has(id)) {
+export function CacheScannerHelper_stopScanning(id: string) {
+    if (CacheScannerHelper_getStatus(id) !== 'stopping') {
+        CacheScannerHelper_setStatus(id, 'stopping');
+        CacheScannerHelper_removeScanner(id);
+    }
+}
+
+export function CacheScannerHelper_getStatus(id: string): 'running' | 'stopping' | 'done' | 'stopped' | null {
+    if (!global['_scanners'].has(id)) {
         return null;
     }
-    return getEmitterState(id).status;
+    return getScannerState(id).status;
 }
 
-export function CacheScannerHelper_setStatus(id: string, status: 'running' | 'stopping' | null) {
-    getEmitterState(id).status = status;
+export function CacheScannerHelper_setStatus(id: string, status: 'running' | 'stopping' | 'done' | 'stopped' | null) {
+    getScannerState(id).status = status;
 }
 
 async function scanKeys(
@@ -82,29 +73,30 @@ async function scanKeys(
     if (CacheScannerHelper_getStatus(match) === 'running') {
         return;
     }
-    let totalKeys = 0;
     CacheScannerHelper_setStatus(match, 'running');
-    const emitter = CacheScannerHelper_getEmitter(match);
+    const state = getScannerState(match);
+    state.totalKeys = 0;
+    state.error = null;
 
     try {
         let cursor = startCursor;
         const startTime = Date.now();
 
         do {
-            if (Date.now() - startTime > timeout || CacheScannerHelper_getStatus(match) === 'stopping') {
+            if (Date.now() - startTime > timeout || ['stopping', null].includes(CacheScannerHelper_getStatus(match))) {
                 break;
             }
 
             const scan = await cacheAdapter.scan(cursor, match, count);
             cursor = scan.cursor;
-            totalKeys += scan.keys.length;
 
             if (scan.keys.length > 0) {
                 processKeys(scan.keys);
+                state.keys.push(...scan.keys);
             }
 
-            emitter.emit("stream", { totalKeys, keys: scan.keys, cursor: scan.cursor });
-            console.info('scanKeys', scan.cursor, match, scan.keys.length);
+            state.totalKeys += scan.keys.length;
+            state.cursor = scan.cursor;
 
             if (cursor !== 0) {
                 await new Promise((resolve) => setTimeout(resolve, sleep));
@@ -113,21 +105,26 @@ async function scanKeys(
 
     } catch (e: any) {
         console.error(e);
-        CacheScannerHelper_getEmitter(match).emit("stream", { error: { stack: e?.stack } });
+        state.error = { stack: e?.stack };
     } finally {
-        CacheScannerHelper_setStatus(match, null);
-        CacheScannerHelper_removeEmitter(match);
+        const currentStatus = CacheScannerHelper_getStatus(match);
+        if (currentStatus === 'running') {
+            CacheScannerHelper_setStatus(match, 'done');
+        } else if (currentStatus === 'stopping') {
+            CacheScannerHelper_setStatus(match, 'stopped');
+        }
     }
 }
 
-export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep ) {
-    console.info('CacheScannerHelper_getAllKeysByScan_start');
-    await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, () => {});
-    console.info('CacheScannerHelper_getAllKeysByScan_end');
+export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep) {
+    console.info('CacheScannerHelper_getAllKeysByScan_start', match);
+    await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, () => {
+    });
+    console.info('CacheScannerHelper_getAllKeysByScan_end', match);
 }
 
-export async function CacheScannerHelper_clearKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep ) {
-    console.info('CacheScannerHelper_clearKeysByScan_start');
+export async function CacheScannerHelper_clearKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep) {
+    console.info('CacheScannerHelper_clearKeysByScan_start', match);
     const process = (keys: string[]) => {
         keys.forEach((key) => {
             if (cacheAdapter.unlink) {
@@ -138,5 +135,5 @@ export async function CacheScannerHelper_clearKeysByScan(cacheAdapter, startCurs
         });
     };
     await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, process);
-    console.info('CacheScannerHelper_clearKeysByScan_end');
+    console.info('CacheScannerHelper_clearKeysByScan_end', match);
 }
