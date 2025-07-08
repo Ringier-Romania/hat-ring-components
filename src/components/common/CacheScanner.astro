@@ -2,11 +2,10 @@
 export interface Props {
     match: string;
     pageUrl: string;
-    streamingUrl: string;
     totalKeysText: string;
 }
 
-const { match, pageUrl, totalKeysText, streamingUrl } = Astro.props;
+const { match, pageUrl, totalKeysText } = Astro.props;
 const podName = process.env.HOSTNAME;
 ---
 
@@ -16,8 +15,8 @@ const podName = process.env.HOSTNAME;
     </div>
     <div> status:<span id="status">in progress...</span> | cursor: <span id="cursor"></span> | {totalKeysText}: <span id="totalKeys"></span>
         <br>
-        <button id="toggle">pause/resume rendering</button>
-        <button id="stop">stop script</button>
+        <button id="toggle">Pause/Resume displaying results</button>
+        <button id="stop">Stop the scan</button>
     </div>
     <div id="error"></div>
     <hr>
@@ -25,13 +24,13 @@ const podName = process.env.HOSTNAME;
          id="messages">
     </div>
 </div>
-<script define:vars={{ match, pageUrl, streamingUrl }}>
+<script define:vars={{ match, pageUrl }}>
     const statusEl = document.getElementById('status');
     const messagesEl = document.getElementById('messages');
     const cursorEl = document.getElementById('cursor');
     const totalKeysEl = document.getElementById('totalKeys');
     const errorEl = document.getElementById('error');
-    let evtSource;
+    let poller;
     let paused = false;
 
     function updateStatus(text) {
@@ -40,21 +39,21 @@ const podName = process.env.HOSTNAME;
         }
     }
 
-    function handleMessage(event) {
-        const data = JSON.parse(event.data).stream;
-
+    function handleData(data) {
         if (data.error) {
             if (errorEl) errorEl.innerHTML = `<pre>${data.error.stack}</pre>`;
+            updateStatus('error');
+            clearInterval(poller);
             return;
         }
 
         window.requestAnimationFrame(() => {
             if (cursorEl) {cursorEl.innerText = data.cursor;}
             if (totalKeysEl) {totalKeysEl.innerText = data.totalKeys;}
+            if (statusEl) {statusEl.innerText = data.status;}
 
-            if (parseInt(data.cursor) === 0) {
-                updateStatus('done');
-                evtSource.close();
+            if (['done', 'stopped'].includes(data.status)) {
+                clearInterval(poller);
             }
 
             if (messagesEl && data.keys.length > 0) {
@@ -74,28 +73,49 @@ const podName = process.env.HOSTNAME;
         });
     }
 
-    function open() {
-        evtSource = new EventSource(`/${streamingUrl}?match=${match}`);
-        evtSource.onmessage = handleMessage;
-        evtSource.onerror = () => evtSource.close();
+    async function poll() {
+        try {
+            const response = await fetch(`/${pageUrl}?match=${match}&json=1`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            handleData(data);
+        } catch (e) {
+            console.error('Polling error:', e);
+            if (errorEl) errorEl.innerText = 'Polling error. See console for details.';
+            clearInterval(poller);
+        }
+    }
+
+    function startPolling() {
+        if (!poller) {
+            poll();
+            poller = setInterval(poll, 1000);
+        }
+    }
+
+    function stopPolling() {
+        clearInterval(poller);
+        poller = null;
     }
 
     document.querySelector('#toggle')?.addEventListener('click', () => {
         paused = !paused;
-        const isRunning = statusEl && !['done', 'stopped'].includes(statusEl.innerText);
+        const isRunning = statusEl && !['done', 'stopped', 'error'].includes(statusEl.innerText);
         if (isRunning) {
-            updateStatus(paused ? 'in progress... (rendering stopped)' : 'in progress...');
+            updateStatus(paused ? 'in progress... (rendering paused)' : 'in progress...');
         }
-        paused ? evtSource.close() : open();
+        paused ? stopPolling() : startPolling();
     });
 
     document.querySelector('#stop')?.addEventListener('click', () => {
         updateStatus('stopped');
         fetch(`/${pageUrl}?stop=1&match=${match}`);
-        evtSource.close();
+        stopPolling();
     });
 
-    window.onbeforeunload = () => evtSource?.close();
+    window.onbeforeunload = () => stopPolling();
 
-    open();
+    startPolling();
 </script>
