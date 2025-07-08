@@ -5,7 +5,7 @@ export interface Props {
     totalKeysText: string;
 }
 
-const { match, pageUrl, totalKeysText } = Astro.props;
+const {match, pageUrl, totalKeysText} = Astro.props;
 const podName = process.env.HOSTNAME;
 ---
 
@@ -13,7 +13,8 @@ const podName = process.env.HOSTNAME;
     <div>
         {podName} pod
     </div>
-    <div> status:<span id="status">in progress...</span> | cursor: <span id="cursor"></span> | {totalKeysText}: <span id="totalKeys"></span>
+    <div> status:<span id="status">in progress...</span> | cursor: <span id="cursor"></span> | {totalKeysText}: <span
+            id="totalKeys"></span>
         <br>
         <button id="toggle">Pause/Resume displaying results</button>
         <button id="stop">Stop the scan</button>
@@ -24,7 +25,7 @@ const podName = process.env.HOSTNAME;
          id="messages">
     </div>
 </div>
-<script define:vars={{ match, pageUrl }}>
+<script define:vars={{match, pageUrl, podName}}>
     const statusEl = document.getElementById('status');
     const messagesEl = document.getElementById('messages');
     const cursorEl = document.getElementById('cursor');
@@ -48,9 +49,15 @@ const podName = process.env.HOSTNAME;
         }
 
         window.requestAnimationFrame(() => {
-            if (cursorEl) {cursorEl.innerText = data.cursor;}
-            if (totalKeysEl) {totalKeysEl.innerText = data.totalKeys;}
-            if (statusEl) {statusEl.innerText = data.status;}
+            if (cursorEl) {
+                cursorEl.innerText = data.cursor;
+            }
+            if (totalKeysEl) {
+                totalKeysEl.innerText = data.totalKeys;
+            }
+            if (statusEl) {
+                statusEl.innerText = data.status;
+            }
 
             if (['done', 'stopped'].includes(data.status)) {
                 clearInterval(poller);
@@ -75,11 +82,15 @@ const podName = process.env.HOSTNAME;
 
     async function poll() {
         try {
-            const response = await fetch(`/${pageUrl}?match=${match}&json=1`);
+            const response = await fetch(`/${pageUrl}?match=${match}&json=1${podName ? `&pod=${podName}` : ''}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            const data = await response.json();
+            const text = await response.text();
+            if (text === 'Wrong pod') {
+                return;
+            }
+            const data = JSON.parse(text);
             handleData(data);
         } catch (e) {
             console.error('Polling error:', e);
@@ -109,10 +120,23 @@ const podName = process.env.HOSTNAME;
         paused ? stopPolling() : startPolling();
     });
 
-    document.querySelector('#stop')?.addEventListener('click', () => {
+    document.querySelector('#stop')?.addEventListener('click', async () => {
         updateStatus('stopped');
-        fetch(`/${pageUrl}?stop=1&match=${match}`);
         stopPolling();
+
+        try {
+            let text;
+            do {
+                const response = await fetch(`/${pageUrl}?stop=1&match=${match}${podName ? `&pod=${podName}` : ''}`);
+                text = await response.text();
+                if (text === 'Wrong pod') {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+            } while (text === 'Wrong pod');
+        } catch (e) {
+            console.error('Error stopping scan:', e);
+            if (errorEl) errorEl.innerText = 'Error stopping scan. See console for details.';
+        }
     });
 
     window.onbeforeunload = () => stopPolling();
