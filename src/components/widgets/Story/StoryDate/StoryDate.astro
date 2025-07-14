@@ -34,16 +34,15 @@ switch (widgetConfig.dateType) {
     case 'lastPublicationDate':
         date = _.get(response, 'data.story.publication.currentPublicationTime')
             || _.get(response, 'data.story.date.modificationTime')
-            || _.get(response, 'response.data.story.date.creationTime')
+            || _.get(response, 'data.story.date.creationTime')
         break;
     case 'modificationTime':
-        date = _.get(response, 'response.data.story.date.modificationTime')
-            || _.get(response, 'response.data.story.date.creationTime')
+        date = _.get(response, 'data.story.date.modificationTime')
+            || _.get(response, 'data.story.date.creationTime')
         break;
     default:
-        date = _.get(response, 'response.data.story.date.creationTime')
+        date = _.get(response, 'data.story.date.creationTime')
 }
-
 if (!date) {
     toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 } else {
