@@ -1,11 +1,14 @@
 ---
 const {context, widgetConfig} = Astro.props;
-
+import _ from "lodash"
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryDateResponse} from "./types";
 import {DateHelper_convertDate} from "../../../../helpers/DateHelper";
-import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {
+    WidgetHelper_getWidgetCssClasses,
+    WidgetHelper_renderEmptyWidget
+} from "../../../../helpers/WidgetHelper";
 const query = gql`
         query($storyId: UUID){
             story(id:$storyId){
@@ -24,25 +27,35 @@ const variables = {
 };
 const dateFormat = widgetConfig.dateFormat;
 const response = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL) as StoryDateResponse;
-let date: string | undefined;
+let date: string | null | undefined;
+let toRender: boolean | JSX.Element | string = false;
+let displayDate = '';
 switch (widgetConfig.dateType) {
     case 'lastPublicationDate':
-        date = response.data.story.publication.currentPublicationTime
-            || response.data.story.date.modificationTime
-            || response.data.story.date.creationTime;
+        date = _.get(response, 'data.story.publication.currentPublicationTime')
+            || _.get(response, 'data.story.date.modificationTime')
+            || _.get(response, 'response.data.story.date.creationTime')
         break;
     case 'modificationTime':
-        date = response.data.story.date.modificationTime
-            || response.data.story.date.creationTime;
+        date = _.get(response, 'response.data.story.date.modificationTime')
+            || _.get(response, 'response.data.story.date.creationTime')
         break;
     default:
-        date = response.data.story.date.creationTime;
+        date = _.get(response, 'response.data.story.date.creationTime')
 }
-const displayDate = await DateHelper_convertDate(context, date, dateFormat);
----
 
-<div class={WidgetHelper_getWidgetCssClasses('StoryDate', widgetConfig, context)}>
-    <time datetime={date}>{displayDate}</time>
-</div>
+if (!date) {
+    toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
+} else {
+    displayDate = await DateHelper_convertDate(context, date, dateFormat);
+}
+---
+{toRender ?
+    <Fragment set:html={toRender}/> :
+    <div class={WidgetHelper_getWidgetCssClasses('StoryDate', widgetConfig, context)}>
+        <time datetime={date}>{displayDate}</time>
+    </div>
+}
+
 
 

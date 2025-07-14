@@ -11,14 +11,14 @@ export interface StoryDateParams extends WidgetParams {
 }
 
 export interface StoryDateResponse {
-    data: {
-        story: {
-            date:{
-                modificationTime: string,
-                creationTime: string
+    data?: {
+        story?: {
+            date?:{
+                modificationTime?: string | null,
+                creationTime?: string | null
             }
-            publication: {
-                currentPublicationTime: string,
+            publication?: {
+                currentPublicationTime: string | null,
             }
         }
     }
