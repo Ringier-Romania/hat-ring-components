@@ -41,7 +41,8 @@ export let StoryDateWebsitesConfig
                     "multiSelect": false,
                     "items": [
                         "modificationTime",
-                        "creationTime"
+                        "creationTime",
+                        "lastPublicationDate",
                     ],
                     "required": true
                 },

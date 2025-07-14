@@ -17,6 +17,9 @@ export interface StoryDateResponse {
                 modificationTime: string,
                 creationTime: string
             }
+            publication: {
+                currentPublicationTime: string,
+            }
         }
     }
 }
