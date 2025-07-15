@@ -1,4 +1,5 @@
 ---
+import {authorGqlFragment} from "../../../../helpers/AuthorsHelper";
 const {widgetConfig, context} = Astro.props;
 import React from 'react';
 import _ from 'lodash';
@@ -12,48 +13,6 @@ import {default as StoryAuthor} from "./StoryAuthor.astro";
 import styles from "../../../../../styles/widgets/Story/StoryAuthors.module.scss";
 import {StoryHelper_getGqlContentFragment} from "../../../../helpers/StoryHelper";
 
-export const authorGqlFragment = `publicationPoint {
-                            url
-                        }
-                        socialProfiles{
-                            url
-                            role {
-                                code
-                            }
-                        }
-                        name
-                        tagline
-                        image{
-                            url(transforms:{resizeCropAuto:{width:$imageWidth,height:$imageHeight}})
-                        }
-                        credentials {
-                            issuer
-                            issueTime
-                            name
-                            url
-                            role {
-                                code  
-                                name                      
-                            }
-                        }
-                        associations {
-                            name                        
-                            url
-                        }
-                        awards {
-                            name
-                            issueTime
-                            issuer
-                            url                        
-                        } 
-                        works{
-                            role {
-                                code                        
-                            }
-                            url
-                            title
-                        } 
-                        `;
 
 const descriptionFragment = widgetConfig.showOptions?.includes(StoryAuthorsShowOptions.Description) ? `description { ${StoryHelper_getGqlContentFragment()} }` : '';
 
@@ -64,7 +23,6 @@ const query = gql`
                     author {
                         ${descriptionFragment}
                         ${authorGqlFragment} 
-                       
                     }
                 }
             }
