@@ -1,7 +1,8 @@
 ---
+import {Author_getData} from "../../../helpers/AuthorsHelper";
 const {context} = Astro.props as { context: AppContext };
 import React from "react"
-import {BreadcrumbList, ListItem, NewsArticle, Organization, Thing, WithContext} from 'schema-dts';
+import {BreadcrumbList, ListItem, NewsArticle, Organization, Person, Thing, WithContext} from 'schema-dts';
 import {AppContext, SiteContentType} from "../../../types/types";
 import {
     SeoHelper_getContactNumber,
@@ -13,6 +14,8 @@ import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
 import {ConfigHelper_currentUrl, ConfigHelper_getHomepageUrl} from "../../../helpers/ConfigHelper";
+import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import {UtilsHelper_slugify} from "../../../helpers/UtilsHelper";
 const isHomePage = SeoHelper_isSeoHomepage(context);
 const isArticle = context.siteContentType === SiteContentType.Story;
 
@@ -167,12 +170,74 @@ export async function getNewsArticleSchema(context: AppContext): Promise<WithCon
     }
 }
 
+export async function getPersonSchema(context): Promise<WithContext<Person> | null>  {
+
+    const response = await Author_getData(context,{cacheTTL: 60});
+
+    const author = response?.data?.author;
+
+    if(!author) {
+        return null;
+    }
+
+    const homepageUrl = await ConfigHelper_getHomepageUrl(context);
+    const organizationName = author.publisher?.name;
+    return {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "@id": `${homepageUrl}/#Person/${UtilsHelper_slugify(author.name)}`,
+        "name": author.name,
+        "url": author.publicationPoint?.url,
+        "image": author.image?.image?.url || '',
+        "gender": author.gender?.name,
+        "jobTitle": author.occupation?.position || '',
+        "description": `${author.name} is a|the ${author.occupation?.position || ''} at ${organizationName}.`,
+        "worksFor": organizationName ? {
+            "@type": "NewsMediaOrganization",
+            "@id": `${homepageUrl}/#Organization/${UtilsHelper_slugify(organizationName)}`,
+            "name": organizationName,
+        }: undefined,
+        "hasCredential": author.credentials?.map(credential => {
+            return {
+                "@type": "EducationalOccupationalCredential",
+                "credentialCategory": credential.role.name,
+                "name": credential.name,
+                "recognizedBy": {
+                    "@type": "Organization",
+                    "name": credential.issuer || '',
+                    "url": credential.url || ''
+                }
+            }
+        }) || [],
+        "award": author.awards?.map(award => {
+            return `${award.name},${award.issuer},${award.issueTime ? award.issueTime.split('-').shift(): '' }`;
+        }) || [],
+        "sameAs": author.socialMedia?.map(social => {
+            return social.url;
+        }) || [],
+        "knowsAbout": author.topics?.map(topic => {
+            return topic.topic.name;
+        }) || [],
+        "memberOf": author.associations?.map(association => {
+            return {
+                "@type": "Organization",
+                "@id": `${homepageUrl}/#Organization/${UtilsHelper_slugify(association.name)}`,
+                "name": association.name,
+
+            }
+        }) || [],
+
+    };
+}
+
 const organizationSchema = isHomePage && await getOrganizationSchema(context);
 const breadcrumbListSchema = !isHomePage && await getBreadcrumbListSchema(context);
 const newsArticleSchema = isArticle && await getNewsArticleSchema(context);
+const personSchema = context.siteContentType === SiteContentType.Author && await getPersonSchema(context);
+
 ---
 
 {organizationSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />}
 {breadcrumbListSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbListSchema)} />}
 {newsArticleSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(newsArticleSchema)} />}
-
+{personSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />}
