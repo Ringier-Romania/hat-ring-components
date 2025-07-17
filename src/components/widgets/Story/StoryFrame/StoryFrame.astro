@@ -9,7 +9,7 @@ import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget} from "
 import {StoryContent_getData} from "../StoryContent/StoryContentGetData";
 import StoryGroup from "../../../Story/StoryGroup.astro";
 let toRender: boolean | string | JSX.Element = false;
-const contentBlocks = await StoryContent_getData(context, widgetConfig);
+const { content: contentBlocks } = await StoryContent_getData(context, widgetConfig);
 const frameCodeName = widgetConfig.frameCodeName;
 const storyFrameHeadding = widgetConfig.storyFrameHeadding;
 
