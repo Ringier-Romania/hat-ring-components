@@ -3,9 +3,11 @@ const {context, widgetConfig, extendableAttributes} = Astro.props;
 import {default as StoryContentSwitcher} from "./StoryContentSwitcher.astro";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {StoryContent_getData} from "./StoryContentGetData";
+import _ from 'lodash';
 
-
-const {content, flags} = await StoryContent_getData(context, widgetConfig);
+const response = await StoryContent_getData(context, widgetConfig);
+const content = _.get(response, 'data.story.content[0].blocks');
+const flags = _.get(response, 'data.story.flags', []).map(flag => flag.code);
 ---
 
 

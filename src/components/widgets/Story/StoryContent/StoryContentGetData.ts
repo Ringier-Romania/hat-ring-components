@@ -22,5 +22,5 @@ export async function StoryContent_getData(context: AppContext, widgetConfig, qu
     };
 
     const response = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL);
-    return {content: _.get(response, 'data.story.content[0].blocks'), flags: _.get(response, 'data.story.flags', []).map(flag => flag.code)};
+    return response;
 }

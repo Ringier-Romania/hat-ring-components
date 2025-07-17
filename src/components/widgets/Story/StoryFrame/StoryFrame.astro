@@ -8,12 +8,15 @@ import {AbstractWidgetConfig} from "../../../../types/types";
 import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget} from "../../../../helpers/WidgetHelper";
 import {StoryContent_getData} from "../StoryContent/StoryContentGetData";
 import StoryGroup from "../../../Story/StoryGroup.astro";
+import _ from "lodash";
+
 let toRender: boolean | string | JSX.Element = false;
-const { content: contentBlocks } = await StoryContent_getData(context, widgetConfig);
+const response = await StoryContent_getData(context, widgetConfig);
+const contentBlocks = _.get(response, 'data.story.content[0].blocks');
 const frameCodeName = widgetConfig.frameCodeName;
 const storyFrameHeadding = widgetConfig.storyFrameHeadding;
 
-if (!contentBlocks.find((block) => block.name === frameCodeName)) {
+if (!contentBlocks || !contentBlocks.find((block) => block.name === frameCodeName)) {
     toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 ---
