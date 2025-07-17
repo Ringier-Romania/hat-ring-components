@@ -5,11 +5,11 @@ import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper
 import {StoryContent_getData} from "./StoryContentGetData";
 
 
-const content = await StoryContent_getData(context, widgetConfig);
+const {content, flags} = await StoryContent_getData(context, widgetConfig);
 ---
 
 
-<div class={WidgetHelper_getWidgetCssClasses('StoryContent', widgetConfig, context)}>
+<div class={WidgetHelper_getWidgetCssClasses('StoryContent', widgetConfig, context, flags)}>
     <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context}
                           extendableAttributes={extendableAttributes}/>
 </div>
