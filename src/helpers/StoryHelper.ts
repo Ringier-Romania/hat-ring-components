@@ -4,7 +4,7 @@ import _ from "lodash";
 import {UtilsHelper_ensureHttps} from "./UtilsHelper";
 import { WebsiteApiProvider } from "../providers/WebsiteApiProvider";
 import { gql } from "@ringpublishing/graphql-api-client";
-
+import { AppContext } from "../types/types";
 export function StoryHelper_generateContentHtml(story: Story): string {
     let base: any = {}
 
@@ -282,4 +282,25 @@ export async function SeoHelper_checkStoryHiddenFlag(context) {
             return flag.code === "hidden"
         }) || false
     return isHiddenFlag
+}
+
+export async function StoryHelper_getStoryFlags(context: AppContext): Promise<{ code: string }[]> {
+    const query = gql`
+        query ($storyId: UUID) {
+            story(id: $storyId) {
+                flags {
+                    code
+                }
+            }
+        }
+    `;
+    const variables = {
+        storyId: context?.id,
+    };
+    if(!variables.storyId) {
+        return [];
+    }
+    const response = await WebsiteApiProvider.call(query, variables)
+
+    return response?.data?.story?.flags || [];
 }
