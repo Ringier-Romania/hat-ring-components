@@ -4,9 +4,11 @@ import _ from "lodash";
 import {UtilsHelper_ensureHttps} from "./UtilsHelper";
 import { WebsiteApiProvider } from "../providers/WebsiteApiProvider";
 import { gql } from "@ringpublishing/graphql-api-client";
+import {ImageHelper_getImageMetaData} from "./ImageHelper";
 
 export function StoryHelper_generateContentHtml(story: Story): string {
     let base: any = {}
+    // TODO: In the future, consider replacing manual HTML generation with Astro components (e\.g\. our existing widgets) and the renderToString function, when it is no longer experimental: https://docs.astro.build/en/reference/container-reference/#rendertostring
 
     base.elements = [];
     story.content[0].blocks.map((block: any, index) => {
@@ -21,28 +23,54 @@ export function StoryHelper_generateContentHtml(story: Story): string {
                 break;
             case "paragraph":
                 base.elements.push({
-                        name: "p", type: "element", elements:
-                            [{
-                                type: "text",
-                                text: block.text
-                            }]
-                    }
-                );
+                    name: "p", type: "element", elements:
+                        [{
+                            type: "text",
+                            text: block.text
+                        }]
+                });
                 break;
             case "image":
-                const caption = _.get(block, "image.title");
+                const width = _.get(block, "image.width");
+                const height = _.get(block, "image.height");
+                const imageMetaData = ImageHelper_getImageMetaData(block);
                 let figureElements: any[] = [{
-                    name: "img", type: "element", attributes: {src: block.url, alt: caption}
+                    name: "img", type: "element", attributes: {src: block.url, alt: imageMetaData.caption, width, height}
                 }];
-                if (caption) {
-                    figureElements.push(
-                        {
-                            name: "figcaption", type: "element", elements: [{
+                if (imageMetaData.caption || imageMetaData.imageCopyrightSources.length > 0) {
+                    const figcaption = {
+                        name: "figcaption", type: "element", elements: [] as any
+                    }
+
+                    if (imageMetaData.caption) {
+                        figcaption.elements.push({
+                            name: "span",
+                            type: "element",
+                            attributes: {class: 'caption'},
+                            elements: [{
                                 type: "text",
-                                text: caption
+                                text: imageMetaData.caption
                             }]
-                        }
-                    )
+                        })
+                    }
+
+                    if (imageMetaData.imageCopyrightSources.length > 0) {
+                        figcaption.elements.push({
+                            name: "span",
+                            type: "element",
+                            attributes: {class: 'copyright'},
+                            elements: [{
+                                type: "text",
+                                text: imageMetaData.imageCopyrightSources.map((credit: any) => {
+                                    return credit.url ?
+                                        `<a href=${credit.url}>${credit.name}</a>` :
+                                        `${credit.name}`
+                                }).join(', ')
+                            }]
+                        })
+                    }
+
+                    figureElements.push(figcaption)
                 }
 
                 base.elements.push({name: "figure", type: "element", elements: figureElements});
@@ -124,7 +152,9 @@ export function StoryHelper_generateContentHtml(story: Story): string {
         }
     });
 
-    return convert.js2xml(base, {compact: false, ignoreComment: true, spaces: 4});
+    return convert.js2xml(base, {compact: false, ignoreComment: true, spaces: 4,  textFn(text) {
+        return text.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+    },});
 }
 
 export function StoryHelper_getLeadBlock(story: Story): any {

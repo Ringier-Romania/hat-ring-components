@@ -1,7 +1,6 @@
 ---
 import {
-    ImageHelper_getImageDimensionsFromObject,
-    ImageHelper_getImageDimensionsWithAspectRatio
+    ImageHelper_getImageDimensionsWithAspectRatio, ImageHelper_getImageMetaData
 } from "../../../../../helpers/ImageHelper";
 const {blockData, widgetConfig, context} = Astro.props as ImageBlockParams;
 import React from "react";
@@ -9,6 +8,9 @@ import {default as RingImage} from "../../../../common/RingImage.astro";
 import {ImageBlockParams} from "../types";
 import {UtilsHelper_convertToInt, UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
 import {TransformType} from "../../../../../helpers/AcceleratorImagesHelper";
+import _ from "lodash";
+import {ImageBlock} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import ImageMetaData from "../../../../common/ImageMetaData.astro";
 const {title, alt, image, url, link} = blockData;
 let imageWidth = image.width;
 let imageHeight = image.height;
@@ -24,10 +26,7 @@ if (UtilsHelper_isMobile(context)) {
 const calculatedDimensions = ImageHelper_getImageDimensionsWithAspectRatio(imageWidth, imageHeight, maxImageWidth, maxImageHeight);
 imageWidth = calculatedDimensions.width;
 imageHeight = calculatedDimensions.height;
-const copyrightNote = image?.license?.note;
-const sources = image?.sources;
 ---
-
 
 <div class={['ImageBlock', 'alignment-' + blockData.alignment].join(' ')}>
     {
@@ -37,13 +36,5 @@ const sources = image?.sources;
                        transform={TransformType.ResizeCropAuto}/>
         </a>
     }
-    <div class="imgMetaData">
-        {title && <span class="caption">{title}</span>}
-        {copyrightNote && <span class="copyright">{copyrightNote}</span>}
-        {!copyrightNote && sources && sources.length > 0 && <span class="copyright">{sources.map((source: any) => {
-            return source.source?.link?.url ?
-                    <a class="source" href={source.source?.link?.url}>{source.source?.name}</a> :
-                    <span class="source">{source.source?.name}</span>
-        })}</span>}
-    </div>
+    <ImageMetaData imageMetaData={ImageHelper_getImageMetaData(blockData as ImageBlock)}/>
 </div>

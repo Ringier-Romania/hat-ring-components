@@ -12,10 +12,27 @@ export const RSSGqlQuery = gql`
                         url
                     }
                     image {
+                        caption
                         url(transforms: {format: {format: PNG}})
-                        image {
+                        crop {
                             width
                             height
+                        }
+                        image {
+                            title
+                            width
+                            height
+                            license {
+                                note
+                            }
+                            sources {
+                                 source {
+                                    name
+                                    link {
+                                        url
+                                    }
+                                }
+                            }
                         }
                     }
                     date {
@@ -50,7 +67,13 @@ export const RSSGqlQuery = gql`
                                     sources {
                                         source {
                                             name
+                                            link {
+                                                url                                    
+                                            }
                                         }
+                                    }
+                                    license {
+                                        note                                
                                     }
                                 }
                                 alignment
