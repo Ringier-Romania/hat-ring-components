@@ -6,16 +6,17 @@ import React from 'react';
 import _ from 'lodash';
 import {StoryMainImageParams, StoryMainImageResponse} from "./types";
 import RingImage from "../../../common/RingImage.astro";
-import {StoryMainImageCaption} from "./StoryMainImageCaption";
 import {
     WidgetHelper_getWidgetCssClasses
 } from "../../../../helpers/WidgetHelper";
 import {
+    ImageHelper_getImageMetaData,
     ImageHelper_getImageDimensionsFromObject,
     ImageHelper_getImageDimensionsWithAspectRatio
 } from "../../../../helpers/ImageHelper";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
-import StoryMainImageCopyright from "./StoryMainImageCopyright.astro";
+import {MainImageReference} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import ImageMetaData from "../../../common/ImageMetaData.astro";
 
 const response = await StoryMainImage_getData({widgetConfig, context});
 
@@ -67,11 +68,7 @@ if (imageResizeCropMode === 'contain' && imageWidth !== 0 && imageHeight !== 0) 
                                 width={imageWidth}
                                 height={imageHeight}/>
                 )}
-                <div class="imgMetaData">
-                    {caption &&
-                        <StoryMainImageCaption caption={caption}/>}
-                    <StoryMainImageCopyright response={response}/>
-                </div>
+                <ImageMetaData imageMetaData={ImageHelper_getImageMetaData(_.get(response, 'data.story.image') as MainImageReference)}/>
             </>
     )}
 </div>

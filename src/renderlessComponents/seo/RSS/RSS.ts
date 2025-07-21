@@ -1,17 +1,16 @@
-import {AppContext, SiteContentType} from "../../../types/types";
-import {Feed} from "feed";
+import {AppContext} from "../../../types/types";
 import {
     ConfigHelper_getGeneralConfig, ConfigHelper_getSeoGeneralConfig,
-    ConfigHelper_getSeoRssDefaultConfig,
+    ConfigHelper_getSeoRssDefaultConfig, ConfigHelper_getSiteDescription,
     ConfigHelper_getSiteName
 } from "../../../helpers/ConfigHelper";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
-import {Story, StoryEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import {ImageBlock, Story, StoryEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import {UtilsHelper_convertToInt} from "../../../helpers/UtilsHelper";
-import {Item} from "feed/src/typings";
 import {RSSGqlQuery} from "./RSSGqlQuery";
 import {StoryHelper_generateContentHtml, StoryHelper_getLeadBlock} from "../../../helpers/StoryHelper";
+import {Feed, Item} from "feed";
 
 export async function RSS({context}: { context: AppContext }) {
     const seoRssConfig = await ConfigHelper_getSeoRssDefaultConfig(context);
@@ -36,7 +35,6 @@ export async function RSS({context}: { context: AppContext }) {
         excludedFlags
     };
 
-
     const response = await WebsiteApiProvider.call(query, variables, 60 * 10) as {
         data: {
             stories: { total: number, edges: StoryEdge[] }
@@ -46,6 +44,7 @@ export async function RSS({context}: { context: AppContext }) {
     const edges = response?.data?.stories?.edges || [];
 
     const feed = new Feed({
+        description: await ConfigHelper_getSiteDescription(context),
         copyright: "",
         id: domain,
         title: await ConfigHelper_getSiteName(context),
@@ -56,15 +55,30 @@ export async function RSS({context}: { context: AppContext }) {
 
     edges.forEach(edge => {
         const story = edge.node as Story;
+        const newStoryObj = {
+            content: [{
+                blocks: [{
+                    type: "image",
+                    url: story.image?.url,
+                    image: {
+                        width: story.image?.crop?.width || story.image?.image?.width,
+                        height: story.image?.crop?.height || story.image?.image?.height,
+                        title: story.image?.caption,
+                        license: {
+                            note: story.image?.image?.license?.note,
+                        },
+                        sources: story.image?.image?.sources
+                    }
+                } as ImageBlock, ...story.content[0].blocks]
+            }]
+        } as Story;
 
         let item: Item = {
             title: story.title,
             guid: story.mainPublicationPoint.url,
             link: story.mainPublicationPoint.url,
             date: new Date(story.date?.creationTime),
-            image: story.image?.url ? {url: story.image?.url, type: 'image/png'} : undefined,
-            content: StoryHelper_generateContentHtml(story),
-            // @TODO: media https://github.com/jpmonette/feed/issues/157
+            content: StoryHelper_generateContentHtml(newStoryObj),
         };
 
         const lead = StoryHelper_getLeadBlock(story);

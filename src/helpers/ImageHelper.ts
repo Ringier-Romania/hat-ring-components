@@ -4,6 +4,9 @@ import {AppContext} from "../types/types";
 import {TransformType} from "./AcceleratorImagesHelper";
 import {RingImageObject} from "../renderlessComponents/common/RingImageObject";
 import {ImageFormat} from "@ringpublishing/accelerator-images";
+import _ from "lodash";
+import {StoryMainImageResponse} from "../components/widgets/Story/StoryMainImage/types";
+import {ImageBlock, MainImageReference} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 
 export async function ImageHelper_getDefaultImageData(context, width, height, transform = TransformType.ResizeCropAuto, format: ImageFormat[] = ['png']) {
 
@@ -70,4 +73,43 @@ export function ImageHelper_getImageDimensionsWithAspectRatio(width: number, hei
         width,
         height
     }
+}
+
+type ImageCopyrightSourceItem = {
+    type: 'Copyright' | 'Source';
+    name: string;
+    url?: string;
+}
+export function ImageHelper_getImageMetaData(image: ImageBlock | MainImageReference) : {
+    caption: string;
+    imageCopyrightSources: Array<ImageCopyrightSourceItem>
+} {
+    const imageCopyrightSources: Array<ImageCopyrightSourceItem> = [];
+    const copyright = _.get(image, 'image.license.note');
+    const sources = _.get(image, 'image.sources');
+    // MainImageReference -> image.caption, ImageBlock -> image.title
+    let caption = _.get(image, 'caption', _.get(image, 'title', ''));
+
+    if (copyright) {
+        imageCopyrightSources.push({
+            type: 'Copyright',
+            name: copyright
+        });
+    } else if (sources && sources.length > 0) {
+        sources.forEach((source: any) => {
+            const src = {
+                type: 'Source',
+                name: source.source?.name,
+            } as ImageCopyrightSourceItem;
+            if (source.source?.link?.url) {
+                src.url = source.source?.link?.url;
+            }
+            imageCopyrightSources.push(src);
+        });
+    }
+
+    return {
+        caption,
+        imageCopyrightSources
+    };
 }

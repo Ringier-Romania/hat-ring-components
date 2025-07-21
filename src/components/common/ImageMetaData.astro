@@ -1,0 +1,15 @@
+---
+const {imageMetaData} = Astro.props;
+---
+<div class="imgMetaData">
+    {imageMetaData.caption ? (<span class="metaData caption" set:html={imageMetaData.caption}></span>) : ''}
+    {imageMetaData.imageCopyrightSources.map((copyright: any) => {
+        if (copyright.type === 'Copyright') {
+            return <span class="metaData copyright">{copyright.name}</span> ;
+        } else if (copyright.type === 'Source') {
+            return copyright.url ?
+                <a class="metaData source" href={copyright.url}>{copyright.name}</a> :
+                <span class="metaData source">{copyright.name}</span>
+        }
+    })}
+</div>
