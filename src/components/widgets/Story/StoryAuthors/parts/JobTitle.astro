@@ -1,0 +1,35 @@
+---
+import { StoryAuthorsWidgetConfig } from "../types";
+const { context, widgetConfig, author } = Astro.props as {
+    context: AppContext;
+    widgetConfig: StoryAuthorsWidgetConfig;
+    author: Author;
+};
+import { Author } from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import _ from "lodash";
+import { AppContext } from "../../../../../types/types";
+import {
+    WidgetHelper_getWidgetCssClasses,
+    WidgetHelper_renderEmptyComponent,
+} from "../../../../../helpers/WidgetHelper";
+import { TranslationProvider } from "../../../../../providers/TranslationProvider";
+
+let toRender: boolean | JSX.Element | string = false;
+
+const jobTitle = _.get(author, "occupation.position", "");
+
+if (!jobTitle || jobTitle.length === 0) {
+    toRender = WidgetHelper_renderEmptyComponent("JobTitle");
+}
+---
+
+{
+    toRender ? (
+        <Fragment set:html={toRender} />
+    ) : (
+        <div class={["JobTitle"].join(" ")}>
+            <h2>{TranslationProvider.translate(context, "Job Title")}</h2>
+            <div class="jobTitle">{jobTitle}</div>
+        </div>
+    )
+}
