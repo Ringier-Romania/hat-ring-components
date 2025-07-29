@@ -45,7 +45,7 @@ export let StoryAuthorsWebsitesConfig
                         "image",
                         "name",
                         ["linkOverlay","Link"],
-                        "position",
+                        ["jobTitle", "Job Title"],
                         "tagline",
                         "description",
                         ["socialProfiles", "Social profiles"],

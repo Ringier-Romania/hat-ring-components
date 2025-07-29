@@ -10,4 +10,4 @@ export { default as Awards } from './Awards.astro';
 export { default as Books } from './Books.astro';
 export { default as Podcasts } from './Podcasts.astro';
 export { default as Newsletters } from './Newsletters.astro';
-export { default as Position } from './Position.astro';
+export { default as JobTitle } from './JobTitle.astro';
