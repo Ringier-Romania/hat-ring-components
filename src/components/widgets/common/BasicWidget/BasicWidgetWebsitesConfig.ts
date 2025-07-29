@@ -41,7 +41,8 @@ export let BasicWidgetWebsitesConfig = {
                 "mobilePreloadImagesCount": 0,
                 "titleAddonsCodeNames": "",
                 "widgetType": "basicWidget",
-                "customTeasers": []
+                "customTeasers": [],
+                "additionalComponents": []
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,

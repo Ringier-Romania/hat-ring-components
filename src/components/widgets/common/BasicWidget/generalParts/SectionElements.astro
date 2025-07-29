@@ -14,14 +14,8 @@ import {
     WidgetHelper_renderEmptyComponent
 } from "../../../../../helpers/WidgetHelper";
 
-import { AdditionalComponentHelper_insertComponentAtPattern } from "../../../../../helpers/AdditionalComponentHelper";
-interface AdditionalComponent extends SectionItemEdge {
-    AdditionalComponent: Function;
-    config: {
-        widgetType: string;
-    };
-    customCssClass: string;
-}
+import {AdditionalComponentHelper_insertComponentAtPattern} from "../../../../../helpers/AdditionalComponentHelper";
+import AdditionalComponentTemplate from "../../../../common/AdditionalComponentTemplate.astro";
 
 let toRender: boolean | JSX.Element | string = false;
 
@@ -37,33 +31,23 @@ const bigElementsCount = Number(widgetConfig.countBig);
 const colNumber = Math.floor(12 / columnsCount);
 const bigElementsClass = bigElementsCount > 0 ? `bigElements${bigElementsCount}` : '';
 const columnsClass = columnsCount > 0 ? `columns${columnsCount}` : '';
-let count = widgetConfig.count ? Number(widgetConfig.count) : 10;
 const processedContent = AdditionalComponentHelper_insertComponentAtPattern(elementsToRender, widgetConfig, context);
 ---
 
 {
     toRender ? (
-    <Fragment set:html={toRender}/>
-        ) : (
-    <div class={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
-        {processedContent.map((edge, itemIndex) => {
-            const {AdditionalComponent, config, customCssClass} = edge as AdditionalComponent;
-            if (AdditionalComponent) {
-                count++;
-            }
-            if (count && itemIndex >= count) {
-                return null;
-            }
-            const isBig = itemIndex < bigElementsCount;
-            const colClass = isBig ? `col12` : `col${colNumber}`;
-            const bigElementClass = isBig ? `bigElement` : '';
-            const kind = edge?.node?.originalContent?.kind?.code;
-            return AdditionalComponent ? (
-                <div class={["AdditionalComponent", "Item", colClass, bigElementClass, config?.widgetType, customCssClass].join(" ")}>
-                    <AdditionalComponent widgetConfig={config} context={context}/>
-                </div>
-            ) : (
-                    <div class={['Item', colClass, bigElementClass, `kind-${kind}`].join(' ')} key={itemIndex}>
+        <Fragment set:html={toRender}/>
+    ) : (
+        <div class={['SectionElements', bigElementsClass, columnsClass].join(' ')}>
+            {processedContent.map((edge, itemIndex) => {
+                const isBig = itemIndex < bigElementsCount;
+                const colClass = isBig ? `col12` : `col${colNumber}`;
+
+                function sectionElementRenderer() {
+                    const bigElementClass = isBig ? `bigElement` : '';
+                    const kind = edge?.node?.originalContent?.kind?.code;
+
+                    return (<div class={['Item', colClass, bigElementClass, `kind-${kind}`].join(' ')} key={itemIndex}>
                         <div class={'linkOverlay'}>
                             <RingLink href={edge.node?.externalUrl || edge.node?.url || '#'}
                                       title={edge.node?.title || ''}>
@@ -78,15 +62,13 @@ const processedContent = AdditionalComponentHelper_insertComponentAtPattern(elem
                                 return <Fragment set:html={WidgetHelper_renderEmptyComponent(_.upperFirst(showOption), "item part not supported, yet")}/>
                             }
 
-                            return (
-                                <Component itemIndex={itemIndex} context={context}
-                                       widgetConfig={widgetConfig}
-                                       data={edge.node}/>
-                            )
+                            return (<Component itemIndex={itemIndex} context={context} widgetConfig={widgetConfig} data={edge.node}/>)
                         })}
-                    </div>
-            );
-        })}
-    </div>
-        )
-    }
+                    </div>)
+                }
+
+                return <AdditionalComponentTemplate edge={edge} classNames={[colClass, "Item"]} defaultRender={sectionElementRenderer} context={context}/>
+            })}
+        </div>
+    )
+}

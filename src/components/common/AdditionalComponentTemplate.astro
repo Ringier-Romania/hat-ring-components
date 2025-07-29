@@ -1,0 +1,14 @@
+---
+import {AbstractAdditionalComponent, AppContext} from "../../types/types";
+const {edge, classNames = [], defaultRender, context} = Astro.props as {
+    edge: AbstractAdditionalComponent,
+    classNames: Array<string>,
+    defaultRender: Function,
+    context: AppContext
+};
+const {AdditionalComponent, config, customCssClass} = edge;
+---
+{(AdditionalComponent ? (
+<div class={["AdditionalComponent", ...classNames, config?.widgetType, customCssClass].join(" ")}>
+    <AdditionalComponent widgetConfig={config} context={context}/>
+</div>) : defaultRender())}

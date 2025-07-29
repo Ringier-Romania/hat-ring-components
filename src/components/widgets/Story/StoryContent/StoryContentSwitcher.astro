@@ -1,4 +1,5 @@
 ---
+import AdditionalComponentTemplate from "../../../common/AdditionalComponentTemplate.astro";
 const {
     content,
     widgetConfig,
@@ -85,29 +86,23 @@ const processedContent = AdditionalComponentHelper_insertComponentAtPattern(cont
         (() => {
             let originalBlockCount = 0;
             return processedContent.map((block, index) => {
-                block = { ...block };
-                if (block?.AdditionalComponent) {
-                    const { AdditionalComponent, config, context, customCssClass } = block;
-                    return (
-                        <div class={["AdditionalComponent", customCssClass].join(" ")}>
-                            <AdditionalComponent widgetConfig={config} context={context} />
-                        </div>
-                    );
-                }
-                
-                if (checkAndProcessGroupBlock(block)) {
-                    return null;
-                }
+                let _block = {...block};
+                function renderBlock() {
+                    if (checkAndProcessGroupBlock(_block)) {
+                        return null;
+                    }
 
-                originalBlockCount++;
-                if (!isBlockWithinDisplayRange(originalBlockCount - 1)) {
-                    return null;
+                    originalBlockCount++;
+                    if (!isBlockWithinDisplayRange(originalBlockCount - 1)) {
+                        return null;
+                    }
+
+                    const BlockComponent = getBlockType(_block);
+                    return BlockComponent ? (
+                        <BlockComponent blockData={_block} widgetConfig={widgetConfig} context={context}/>
+                    ) : null;
                 }
-               
-                const BlockComponent = getBlockType(block);
-                return BlockComponent ? (
-                    <BlockComponent blockData={block} widgetConfig={widgetConfig} context={context} />
-                ) : null;
+                return <AdditionalComponentTemplate edge={_block} classNames={[]} defaultRender={renderBlock} context={context}/>
             });
         })()
     )
