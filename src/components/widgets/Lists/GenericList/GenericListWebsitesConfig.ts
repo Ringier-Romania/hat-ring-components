@@ -39,6 +39,7 @@ export let GenericListWebsitesConfig
                 "moreText": "",
                 "moreUrl": "",
                 "titleAddonsCodeNames": "",
+                "additionalComponents": [],
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
@@ -219,6 +220,50 @@ export let GenericListWebsitesConfig
                     "name": "Use original image",
                     "type": "checkbox",
                     "description": "Use original image without cropping"
+                },
+                "additionalComponents": {
+                    "type": "treeobject",
+                    "name": "Additional Components",
+                    "description": "List of additional components",
+                    "required": false,
+                    "properties": [
+                        {
+                            "name": "widget",
+                            "type": "textfield",
+                            "description": "widget to insert e.g htmlInsert"
+                        },
+                        {
+                            "name": "platformDesktop",
+                            "description": "Desktop",
+                            "type": "checkbox"
+                        },
+                        {
+                            "name": "platformMobile",
+                            "description": "Mobile",
+                            "type": "checkbox"
+                        },
+                        {
+                            "name": "customCssClass",
+                            "description": "custom CSS class",
+                            "type": "textfield"
+                        },
+                        {
+                            "name": "limit",
+                            "type": "textfield",
+                            "description": "limit number of components"
+                        },
+                        {
+                            "name": "pattern",
+                            "type": "textfield",
+                            "description": "Pattern for elements appearance: 'n' after every element, '2n+1' after every second element, 'n-1' before the first element, 'n+2' after the second element, etc. Use negative numbers to insert before elements. Negative multipliers are not supported."
+
+                        },
+                        {
+                            "name": "config",
+                            "type": "code",
+                            "mode": "json"
+                        },
+                    ]
                 },
                 "cacheTTL": {
                     "name": "Cache TTL",

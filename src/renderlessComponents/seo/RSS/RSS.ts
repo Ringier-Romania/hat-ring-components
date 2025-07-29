@@ -60,10 +60,10 @@ export async function RSS({context}: { context: AppContext }) {
                 blocks: [{
                     type: "image",
                     url: story.image?.url,
+                    title: story.image?.caption,
                     image: {
                         width: story.image?.crop?.width || story.image?.image?.width,
                         height: story.image?.crop?.height || story.image?.image?.height,
-                        title: story.image?.caption,
                         license: {
                             note: story.image?.image?.license?.note,
                         },

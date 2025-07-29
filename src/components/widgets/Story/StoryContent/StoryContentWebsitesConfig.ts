@@ -22,6 +22,7 @@ export let StoryContentWebsitesConfig
                 "displayTo": "",
                 "ignoredFrameBlocksNames": "",
                 "widgetType": "detailContent",
+                "additionalComponents": [],
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
