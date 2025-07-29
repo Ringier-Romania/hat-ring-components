@@ -1,9 +1,12 @@
+import _ from "lodash";
+
 interface ScannerState {
     status: 'running' | 'stopping' | 'done' | 'stopped' | null;
     keys: string[];
     totalKeys: number;
     cursor: any;
     error: any | null;
+    values: any;
 }
 
 if (!global['_scanners']) {
@@ -17,9 +20,11 @@ export function CacheScannerHelper_getData(match: string) {
         totalKeys: state.totalKeys,
         cursor: state.cursor,
         status: state.status,
-        error: state.error
+        error: state.error,
+        values: _.cloneDeep(state.values)
     };
     state.keys = [];
+    state.values = {};
     return dataToSend;
 }
 
@@ -30,7 +35,8 @@ function getScannerState(id: string): ScannerState {
             keys: [],
             totalKeys: 0,
             cursor: 0,
-            error: null
+            error: null,
+            values: {}
         });
     }
     return global['_scanners'].get(id)!;
@@ -68,7 +74,7 @@ async function scanKeys(
     count,
     timeout,
     sleep,
-    processKeys: (keys: string[]) => void
+    processKeys:  (keys: string[])  => Promise<void>,
 ) {
     if (CacheScannerHelper_getStatus(match) === 'running') {
         return;
@@ -91,7 +97,7 @@ async function scanKeys(
                 const scan = await cacheAdapter.scan(cursor, match, count);
                 cursor = scan.cursor;
                 if (scan.keys.length > 0) {
-                    processKeys(scan.keys);
+                    await processKeys(scan.keys);
                     state.keys.push(...scan.keys);
                 }
 
@@ -99,7 +105,7 @@ async function scanKeys(
                 state.cursor = scan.cursor;
             } else {
                 const keys = await cacheAdapter.keys();
-                processKeys(keys);
+                await processKeys(keys);
                 cursor = 0;
                 state.cursor = 0;
                 state.totalKeys = keys.length;
@@ -124,9 +130,15 @@ async function scanKeys(
     }
 }
 
-export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep) {
+export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCursor, match, getValue, count, timeout, sleep) {
     console.info('CacheScannerHelper_getAllKeysByScan_start', match);
-    await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, () => {
+    await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, async (keys: string[]) => {
+        if (getValue) {
+            const scannerState = global['_scanners'].get(match);
+            for (const key of keys) {
+                scannerState.values[key] = await cacheAdapter.get(key);
+            }
+        }
     });
     console.info('CacheScannerHelper_getAllKeysByScan_end', match);
 }
@@ -134,7 +146,7 @@ export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCur
 export async function CacheScannerHelper_clearKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep) {
     console.info('CacheScannerHelper_clearKeysByScan_start', match);
 
-    await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, (keys: string[]) => {
+    await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, async (keys: string[]) => {
         keys.forEach((key) => {
             if (cacheAdapter.unlink) {
                 cacheAdapter.unlink(key);
