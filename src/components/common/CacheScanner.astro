@@ -21,7 +21,7 @@ const podName = process.env.HOSTNAME;
     </div>
     <div id="error"></div>
     <hr>
-    <div style="display: table; white-space: pre-wrap; word-break:break-all; table-layout: fixed; width: 100%; max-height: 65vh; overflow-y: auto; overflow-x: auto; position: relative; content-visibility: auto; contain: layout paint; will-change: scroll; transform: translateZ(0); backface-visibility: hidden;"
+    <div style="display: table; white-space: break-spaces; word-break:break-all; table-layout: fixed; width: 100%; max-height: 65vh; overflow-y: auto; overflow-x: auto; position: relative; content-visibility: auto; contain: layout paint; will-change: scroll; transform: translateZ(0); backface-visibility: hidden;"
          id="messages">
     </div>
 </div>
@@ -67,13 +67,21 @@ const podName = process.env.HOSTNAME;
                 const fragment = document.createDocumentFragment();
                 const startIndex = messagesEl.children.length;
                 data.keys.forEach((element, index) => {
-                    const pre = document.createElement('pre');
-                    pre.innerHTML = element.replaceAll('\\n', '<br>');
-                    pre.style.cssText = 'padding: 5px; margin: 0;';
-                    if ((startIndex + index) % 2 === 1) {
-                        pre.style.backgroundColor = '#eaeaea';
+                    const div = document.createElement('div');
+                    const preQuery = document.createElement('pre');
+                    preQuery.textContent = element.replaceAll('\\n', '\r\n');
+                    div.appendChild(preQuery);
+                    if (data?.values[element]) {
+                        const preValue = document.createElement('pre');
+                        preValue.textContent += JSON.stringify(data?.values[element], null, 4);
+                        div.appendChild(document.createElement('hr'));
+                        div.appendChild(preValue)
                     }
-                    fragment.appendChild(pre);
+                    div.style.cssText = 'padding: 5px; margin: 0;';
+                    if ((startIndex + index) % 2 === 1) {
+                        div.style.backgroundColor = '#eaeaea';
+                    }
+                    fragment.appendChild(div);
                 });
                 messagesEl.appendChild(fragment);
             }
