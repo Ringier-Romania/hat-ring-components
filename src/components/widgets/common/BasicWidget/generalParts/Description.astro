@@ -1,0 +1,26 @@
+---
+import type { AppContext } from "../../../../../types/types";
+import type { BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse } from "../types";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import TextReplacer from "../../../../common/TextReplacer.astro";
+
+interface Props {
+    context: AppContext;
+    widgetConfig: BasicWidgetConfig;
+    response: BasicWidgetResponse;
+    extendableAttributes: BasicWidgetExtendableAttributes;
+}
+
+const { context, widgetConfig, response, extendableAttributes } = Astro.props;
+
+let toRender: boolean | JSX.Element = false;
+const descText = widgetConfig.description;
+if (!descText) {
+    toRender = WidgetHelper_renderEmptyComponent('Description');
+}
+---
+
+{toRender ? <Fragment set:html={toRender}/> :
+    <div class="Description">
+        <TextReplacer context={context} config={{}} text={descText} tag={"p"}/>
+    </div>}
