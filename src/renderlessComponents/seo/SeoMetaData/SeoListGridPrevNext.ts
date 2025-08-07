@@ -1,15 +1,16 @@
-import React from "react";
 import {AppContext, SiteContentType} from "../../../types/types";
-import {ConfigHelper_getMetaDataConfig} from "../../../helpers/ConfigHelper";
 import _ from "lodash"
-import {gql} from "graphql-tag";
-import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
-import {UtilsHelper_convertToInt, UtilsHelper_getDomain, UtilsHelper_getQueryParam} from "../../../helpers/UtilsHelper";
+import {UtilsHelper_getDomain, UtilsHelper_getQueryParam} from "../../../helpers/UtilsHelper";
 import {WidgetHelper_findWidgetConfig} from "../../../helpers/WidgetHelper";
 import {GenericList_getData} from "../../../components/widgets/Lists/GenericList/GenericListGetData";
-import {WidgetHelper_calculateOffsetForGenericListPagination} from "../../../helpers/GenericListHelper";
+import {
+    WidgetHelper_calculateOffsetForGenericListPagination,
+    WidgetHelper_getPaginationDataForGenericList,
+} from "../../../helpers/GenericListHelper";
 
 export async function SeoListGridPrevNext(context: AppContext) {
+    //FTS limit is 1000
+    const MAX_OFFSET = 1000;
     const actualPageType = context.siteContentType;
     if (actualPageType !== SiteContentType.SiteNode || context.url === '/') {
         return {};
@@ -20,6 +21,7 @@ export async function SeoListGridPrevNext(context: AppContext) {
         module: "genericList_wdg",
         mainSeoList: true
     }, containers);
+
     if (!foundGenericList) {
         return {};
     }
@@ -28,20 +30,16 @@ export async function SeoListGridPrevNext(context: AppContext) {
     const isFirstCall = UtilsHelper_getQueryParam('isFirstCall', context) === '1';
     const offset = WidgetHelper_calculateOffsetForGenericListPagination(foundGenericList, currentPage, isAjaxCall, isFirstCall);
 
-    if (offset >= 1000) {
+    if (offset >= MAX_OFFSET) {
         return {}
     }
+
     const data = await GenericList_getData(context, '', foundGenericList, {itemParts: []}, currentPage);
     let totalItems = _.get(data, 'data.stories.total', false);
-    //FTS limit is 1000
-    if (totalItems > 1000) {
-        totalItems = 1000;
+    if (totalItems > MAX_OFFSET) {
+        totalItems = MAX_OFFSET;
     }
-
-    const perPageAllItems = UtilsHelper_convertToInt(foundGenericList.perPageAllItems) || UtilsHelper_convertToInt(foundGenericList.paginationElements);
-    const pages = Math.ceil(totalItems / perPageAllItems);
-    const lastAllowedPage = Math.ceil((1000 - perPageAllItems) / perPageAllItems);
-    const lastPage = Math.min(pages, lastAllowedPage);
+    const lastPage = WidgetHelper_getPaginationDataForGenericList(data, totalItems);
 
     const currentUrlPath = _.get(context, 'hatControllerParams.urlWithParsedQuery.path');
     const prevUrl = new URL(UtilsHelper_getDomain() + currentUrlPath);

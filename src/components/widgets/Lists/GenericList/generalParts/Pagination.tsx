@@ -4,8 +4,7 @@ import {GenericListResponse, GenericListWidgetConfig} from "../types";
 import {RingLink} from "../../../../common/RingLink/RingLink";
 import _ from 'lodash';
 import {UtilsHelper_convertToInt} from "../../../../../helpers/UtilsHelper";
-
-const MAX_OFFSET = 1000;
+import {WidgetHelper_getPaginationDataForGenericList} from "../../../../../helpers/GenericListHelper";
 
 export default function Pagination(
     {context, widgetConfig, response, currentPage}:
@@ -20,8 +19,7 @@ export default function Pagination(
     const total = response.data?.stories.total;
     const perPageAllItems = UtilsHelper_convertToInt(widgetConfig.perPageAllItems) || UtilsHelper_convertToInt(widgetConfig.paginationElements);
     const pages = Math.ceil(total / perPageAllItems);
-    const lastAllowedPage = Math.ceil((MAX_OFFSET - perPageAllItems) / perPageAllItems);
-    const lastPage = Math.min(pages, lastAllowedPage);
+    const lastPage = WidgetHelper_getPaginationDataForGenericList(widgetConfig, total);
 
     if (pages === 1) {
         return null;
