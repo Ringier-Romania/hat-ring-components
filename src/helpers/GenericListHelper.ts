@@ -18,3 +18,15 @@ export function WidgetHelper_calculateOffsetForGenericListPagination(widgetConfi
     }
     return offset;
 }
+
+export function WidgetHelper_getPaginationDataForGenericList(widgetConfig: GenericListWidgetConfig, totalItems: number) {
+    const MAX_OFFSET = 1000;
+    const perPageAllItems = UtilsHelper_convertToInt(widgetConfig.perPageAllItems) || UtilsHelper_convertToInt(widgetConfig.paginationElements);
+
+    const pages = Math.ceil(totalItems / perPageAllItems);
+    const lastAllowedPage = Math.ceil((MAX_OFFSET - perPageAllItems) / perPageAllItems);
+    const lastPage = Math.min(pages, lastAllowedPage);
+
+
+    return lastPage;
+}
