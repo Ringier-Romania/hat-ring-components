@@ -114,7 +114,7 @@ if (!toRender) {
                 "Source url": _.get(imageBlock, "url", null),
                 "Source desktop dimensions(eg. 600x300)": imageWidth + "x" + imageHeight,
                 Title: _.get(imageBlock, "title", null),
-                Description: imageBlock.image?.license?.note || imageBlock.image?.sources?.map((source: ImageSourceReference) => {
+                Source: imageBlock.image?.license?.note || imageBlock.image?.sources?.map((source: ImageSourceReference) => {
                     return  source.source?.link?.url ? `<a href="${source.source?.link?.url}">${source.source?.name}</a>`: source.source?.name
                 }),
                 "Link url": "",
