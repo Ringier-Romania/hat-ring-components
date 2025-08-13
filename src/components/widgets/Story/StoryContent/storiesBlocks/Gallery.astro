@@ -8,6 +8,7 @@ import {ImageSourceReference} from "@ringpublishing/graphql-api-client/lib/types
 import {WebsiteApiProvider} from "../../../../../providers/WebsiteApiProvider";
 import {UtilsHelper_convertToInt, UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import { ImageHelper_getImageMetaData } from "../../../../../helpers/ImageHelper";
 
 let toRender: boolean | JSX.Element | string = false;
 
@@ -40,6 +41,7 @@ if (!toRender) {
                         image {
                             width
                             height
+                            description
                             sources {
                                 source {
                                     name
@@ -86,7 +88,7 @@ if (!toRender) {
             const imageBlock = block as ImageBlock;
             let imageWidth = _.get(imageBlock, "image.width", 1920);
             let imageHeight = _.get(imageBlock, "image.height", 1920);
-
+            const {imageCopyrightSources} = ImageHelper_getImageMetaData(imageBlock);
             let maxImageWidth =
                 widgetConfig.standardImageWidth && UtilsHelper_convertToInt(widgetConfig.standardImageWidth);
             let maxImageHeight =
@@ -106,7 +108,6 @@ if (!toRender) {
                 imageWidth = Math.floor(UtilsHelper_convertToInt((maxImageHeight * imageWidth) / imageHeight));
                 imageHeight = maxImageHeight;
             }
-
             return {
                 text: "",
                 children: [],
@@ -114,8 +115,9 @@ if (!toRender) {
                 "Source url": _.get(imageBlock, "url", null),
                 "Source desktop dimensions(eg. 600x300)": imageWidth + "x" + imageHeight,
                 Title: _.get(imageBlock, "title", null),
-                Source: imageBlock.image?.license?.note || imageBlock.image?.sources?.map((source: ImageSourceReference) => {
-                    return  source.source?.link?.url ? `<a href="${source.source?.link?.url}">${source.source?.name}</a>`: source.source?.name
+                Description: _.get(imageBlock, "image.description", null),
+                SourceNote: imageCopyrightSources.map((source) => {
+                    return source?.url ? `<a href="${source.url}">${source.name}</a>` : source.name;
                 }),
                 "Link url": "",
                 isExpanded: true,
