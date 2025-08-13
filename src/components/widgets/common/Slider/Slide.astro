@@ -25,7 +25,7 @@ const dimensions = ImageHelper_getImageDimensionsFromObject(slide, context, "Sou
     }
     {slide['Title'] && <div class={"title"}><ItemsHeaderTag set:html={slide['Title']} /></div>}
     {slide['Description'] && <div class={"description"}><p set:html={slide['Description']}></p></div>}
-    {slide['SourceNote'] && <div class={"sourceNote"}><p set:html={slide['SourceNote']}></p></div>}
+    {slide['SourceNote'] && <div class={"sourceNote"} set:html={slide['SourceNote']}/>}
     {slide['Source url'] && slide['Source type'] === 'Image'
         &&  <div class={"image"}>
                 {isUsedWithLightbox ?

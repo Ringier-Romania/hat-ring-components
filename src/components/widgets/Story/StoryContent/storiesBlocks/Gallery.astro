@@ -117,7 +117,12 @@ if (!toRender) {
                 Title: _.get(imageBlock, "title", null),
                 Description: _.get(imageBlock, "image.description", null),
                 SourceNote: imageCopyrightSources.map((source) => {
-                    return source?.url ? `<a href="${source.url}">${source.name}</a>` : source.name;
+                    if (source.type === 'Copyright') {
+                        return `<p class="copyright">${source.name}</p>`;
+                    } else if (source.type === 'Source') {
+                        return source.url ? `<p class="source"><a href="${source.url}">${source.name}</a></p>` : `<p class="source">${source.name}</p>`;
+                    }
+                    return "";
                 }),
                 "Link url": "",
                 isExpanded: true,
