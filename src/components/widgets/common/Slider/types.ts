@@ -7,9 +7,10 @@ import {Swiper} from "swiper/types";
 export interface SliderElement {
     "Title": string,
     "Text": string,
-    "SourceNote": string,
+    "Description": string,
     "Link url": string,
     "Source url": string,
+    "SourceNote": string,
     "Source type": "Image" | "",
     "Source desktop dimensions(eg. 600x300)": string,
     "Source mobile dimensions(eg. 600x300)": string,
