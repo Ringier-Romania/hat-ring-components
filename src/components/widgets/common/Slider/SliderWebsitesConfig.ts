@@ -67,8 +67,9 @@ export let SliderWebsitesConfig
                             "type": "textfield"
                         },
                         {
-                            "name": "Description",
-                            "type": "textfield"
+                            "name": "SourceNote",
+                            "type": "textfield",
+                            "description": "Note about the source of the image, can be used to display copyright information",
                         },
                         {
                             "name": "Link url",

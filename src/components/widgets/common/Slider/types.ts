@@ -7,7 +7,7 @@ import {Swiper} from "swiper/types";
 export interface SliderElement {
     "Title": string,
     "Text": string,
-    "Description": string,
+    "SourceNote": string,
     "Link url": string,
     "Source url": string,
     "Source type": "Image" | "",

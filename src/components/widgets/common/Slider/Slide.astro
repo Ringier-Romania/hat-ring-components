@@ -20,7 +20,7 @@ const dimensions = ImageHelper_getImageDimensionsFromObject(slide, context, "Sou
 <div class={"item"}>
     {slide['Link url'] &&
         <div class={'linkOverlay'}>
-            <RingLink href={slide['Link url']} title={slide.Title || slide.Text || slide.Description || ''}></RingLink>
+            <RingLink href={slide['Link url']} title={slide.Title || slide.Text || slide.SourceNote || ''}></RingLink>
         </div>
     }
     {slide['Title'] && <div class={"title"}><ItemsHeaderTag set:html={slide['Title']} /></div>}
