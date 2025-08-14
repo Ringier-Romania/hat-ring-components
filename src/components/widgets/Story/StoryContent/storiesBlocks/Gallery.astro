@@ -116,7 +116,7 @@ if (!toRender) {
                 "Source desktop dimensions(eg. 600x300)": imageWidth + "x" + imageHeight,
                 Title: _.get(imageBlock, "title", null),
                 Description: caption,
-                SourceNote: imageCopyrightSources.map((source) => {
+                "Source Note": imageCopyrightSources.map((source) => {
                     if (source.type === 'Copyright') {
                         return `<p class="metaData copyright">${source.name}</p>`;
                     } else if (source.type === 'Source') {
