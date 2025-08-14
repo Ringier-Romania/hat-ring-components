@@ -79,6 +79,10 @@ export let SliderWebsitesConfig
                             "type": "textfield"
                         },
                         {
+                            "name": "Source Node",
+                            "type": "textfield"
+                        },
+                        {
                             "name": "Source type",
                             "description": "Source type",
                             "type": "select",

@@ -10,6 +10,7 @@ export interface SliderElement {
     "Description": string,
     "Link url": string,
     "Source url": string,
+    "Source Node": string,
     "Source type": "Image" | "",
     "Source desktop dimensions(eg. 600x300)": string,
     "Source mobile dimensions(eg. 600x300)": string,
