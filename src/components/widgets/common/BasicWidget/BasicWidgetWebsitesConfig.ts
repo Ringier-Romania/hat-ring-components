@@ -23,7 +23,6 @@ export let BasicWidgetWebsitesConfig = {
                 "offset": 0,
                 "countBig": 0,
                 "columns": 1,
-                "dedicatedStyleForWidget": "none",
                 "labelValue": "",
                 "headerSeoTag": "h2",
                 "labelLink": "",
@@ -85,7 +84,7 @@ export let BasicWidgetWebsitesConfig = {
                     "type": "select",
                     "allowBlank": true,
                     "multiSelect": true,
-                    "items": ["disableCropAuto", "disableCropImage"],
+                    "items": ["hideWhenNoSectionItems"],
                     "required": false
                 },
                 "sectionGroup": {
@@ -174,19 +173,6 @@ export let BasicWidgetWebsitesConfig = {
                     "multiSelect": false,
                     "required": true,
                     "items": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                },
-                "dedicatedStyleForWidget": {
-                    "name": "Dedicated style for for widget",
-                    "description": "Dedicated style for for widget - {selected_option}-{widgetType}.css will be loaded",
-                    "type": "select",
-                    "allowBlank": false,
-                    "multiSelect": false,
-                    "items": [
-                        "none",
-                        "standard",
-                        "project",
-                        "demo"
-                    ]
                 },
                 "labelValue": {
                     "name": "Header",

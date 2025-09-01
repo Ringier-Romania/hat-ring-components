@@ -23,9 +23,6 @@ export enum BasicWidgetShowOptions {
 }
 
 export enum BasicWidgetAdditionalOptions {
-    "UseCroppedImage" = 'useCroppedImage',
-    "DisableCropAuto" = 'disableCropAuto',
-    "DisableCropImage" = 'disableCropImage',
     "HideWhenNoSectionItems" = 'Hide when no section items',
 }
 
