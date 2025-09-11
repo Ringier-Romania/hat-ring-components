@@ -1,0 +1,60 @@
+---
+import type { AbstractWidgetConfig, AppContext } from "../../../../types/types";
+import { UtilsHelper_generateRandomString, UtilsHelper_isMobile } from "../../../../helpers/UtilsHelper";
+import { WidgetHelper_getWidgetCssClasses } from "../../../../helpers/WidgetHelper";
+import { PopupHelper_parsePopupSize } from "./PopupHelper";
+import styles from "../../../../../styles/widgets/common/Popup.module.scss";
+import PopupScript from "./PopupScript.astro";
+
+const { context, widgetConfig } = Astro.props as {
+    context: AppContext;
+    widgetConfig: AbstractWidgetConfig & {
+        querySelector?: string;
+        onClickquerySelector?: string;
+        desktopPopupSize?: string;
+        mobilePopupSize?: string;
+        customPopupBehavior?: string;
+        scrollPercent?: number;
+        oncePerSession?: boolean;
+    };
+};
+
+const targetElement = widgetConfig.querySelector;
+const onClickquerySelector = widgetConfig.onClickquerySelector;
+const desktopPopupSize = widgetConfig.desktopPopupSize;
+const mobilePopupSize = widgetConfig.mobilePopupSize;
+const customPopupBehavior = widgetConfig.customPopupBehavior;
+const scrollPercent = widgetConfig.scrollPercent;
+const oncePerSession = widgetConfig.oncePerSession;
+const uniqueId = UtilsHelper_generateRandomString();
+let cssModules = styles.Popup;
+const desktopSize = PopupHelper_parsePopupSize(desktopPopupSize);
+
+const mobileSize = PopupHelper_parsePopupSize(mobilePopupSize);
+
+const isMobile = UtilsHelper_isMobile(context);
+const sizeToApply = isMobile && mobileSize ? mobileSize : desktopSize;
+
+const hideTargetElementCss = targetElement ? `${targetElement} { display: none }` : "";
+---
+
+{hideTargetElementCss && <style is:inline set:html={hideTargetElementCss} />}
+<div
+    id={uniqueId}
+    class={WidgetHelper_getWidgetCssClasses("Popup", widgetConfig, context, [cssModules])}
+   
+    aria-hidden="true"
+>
+    <button class="popupClose" aria-label="Close"></button>
+    <div class="popupContent"></div>
+</div>
+
+<PopupScript
+    targetElement={targetElement}
+    scrollPercent={scrollPercent}
+    oncePerSession={oncePerSession}
+    uniqueId={uniqueId}
+    onClickquerySelector={onClickquerySelector}
+    customPopupBehavior={customPopupBehavior}
+    sizeToApply={sizeToApply}
+/>

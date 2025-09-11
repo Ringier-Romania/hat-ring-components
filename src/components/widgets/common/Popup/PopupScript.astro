@@ -1,0 +1,154 @@
+---
+const props = Astro.props;
+---
+
+<script
+    define:vars={{
+        targetElement: props.targetElement,
+        scrollPercent: props.scrollPercent,
+        oncePerSession: props.oncePerSession,
+        uniqueId: props.uniqueId,
+        onClickquerySelector: props.onClickquerySelector,
+        customPopupBehavior: props.customPopupBehavior,
+        sizeToApply: props.sizeToApply,
+    }}
+>
+    const POPUP_SESSION_KEY = "popupWidgetShown_" + uniqueId;
+
+    function handleOnClick() {
+        if (!onClickquerySelector) return;
+
+        document.addEventListener("click", (e) => {
+            const target = e.target;
+            if (!(target instanceof Element)) return;
+            if (target.closest(onClickquerySelector)) {
+                e.preventDefault();
+                showPopup();
+            }
+        });
+    }
+
+    function getPopup() {
+        const popup = document.getElementById(uniqueId);
+        return popup instanceof HTMLElement ? popup : null;
+    }
+
+    function movePopupContent() {
+        if (!targetElement) return;
+
+        const popupContent = document.querySelector(targetElement);
+        if (!(popupContent && popupContent instanceof HTMLElement)) return;
+
+        const popup = getPopup();
+        if (!popup) return;
+
+        // Check if the popupContent is already inside the popup
+        if (popupContent === popup || popupContent.contains(popup)) return;
+
+        const contentWrapper = popup.querySelector(".popupContent");
+        if (!(contentWrapper && contentWrapper instanceof HTMLElement)) return;
+
+        const fragment = document.createDocumentFragment();
+        while (popupContent.firstChild) {
+            fragment.appendChild(popupContent.firstChild);
+        }
+        contentWrapper.appendChild(fragment);
+    }
+
+    function showPopup() {
+        const popup = getPopup();
+        if (!popup) return;
+        if (oncePerSession && sessionStorage.getItem(POPUP_SESSION_KEY)) return;
+
+        popup.setAttribute("aria-hidden", "false");
+
+        popup.style.display = "block";
+        popup.style.visibility = "";
+        popup.style.position = "fixed";
+        popup.style.top = "";
+        popup.style.bottom = "1.5rem";
+        popup.style.right = "1.5rem";
+        popup.style.width = sizeToApply?.width || "";
+        popup.style.height = sizeToApply?.height || "";
+
+        const closeBtn = popup.querySelector(".popupClose");
+        if (closeBtn) closeBtn.addEventListener("click", hidePopup, { once: true });
+        if (oncePerSession) sessionStorage.setItem(POPUP_SESSION_KEY, "1");
+    }
+
+    function hidePopup() {
+        const popup = getPopup();
+        if (!popup) return;
+        const closeBtn = popup.querySelector(".popupClose");
+        if (closeBtn) closeBtn.blur();
+        popup.setAttribute("aria-hidden", "true");
+        popup.style.display = "none";
+
+        if (scrollPercent) {
+            insertPopupAtPercent();
+        }
+    }
+
+    function insertPopupAtPercent() {
+
+        const popup = getPopup();
+        if (!popup) return;
+        popup.style.visibility = "hidden";
+        popup.style.position = "absolute";
+        popup.style.top = document.documentElement.scrollHeight * (scrollPercent / 100) + "px";
+        popup.style.right = "1.5rem";
+        popup.style.left = "";
+        popup.style.bottom = "";
+
+    }
+
+    function showPopupOnScrollPercent() {
+        const popup = getPopup();
+        if (!popup) return;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        showPopup();
+                        observer.unobserve(popup);
+                    }
+                });
+            },
+            { threshold: 0,  }
+        );
+        observer.observe(popup);
+    }
+
+    function openPopup() {
+        showPopup();
+    }
+
+    function initPopupOnReady() {
+
+        movePopupContent();
+
+        if (onClickquerySelector) handleOnClick();
+
+        const popup = getPopup();
+
+        if (popup) {
+            if (scrollPercent) {
+                insertPopupAtPercent();
+                showPopupOnScrollPercent();
+            }
+        }
+
+        if (customPopupBehavior) {
+            try {
+                const customBehavior = new Function("openPopup", customPopupBehavior);
+                customBehavior(openPopup);
+            } catch (e) {}
+        }
+    }
+
+    if (document.readyState === "loading") {
+        window.addEventListener("DOMContentLoaded", initPopupOnReady, { once: true });
+    } else {
+        initPopupOnReady();
+    }
+</script>
