@@ -22,7 +22,7 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
     const pageType = await SeoHelper_getSeoCurrentPageType(context);
 
     switch (pageType) {
-        case 'Story':
+        case 'Story':            
             return await prepareStoryTitle();
 
         case 'SiteNode':
@@ -42,6 +42,7 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
                         title
                         role {
                             name
+                            code
                         }
                     }
                 }
@@ -59,8 +60,8 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
     async function prepareStoryTitle() {
         const storyTitles = await getStoryTitles();
         const title = _.get(storyTitles, 'title', '');
-        const seoTitle = _.get(_.get(storyTitles, 'leads', []).find(lead => {return lead.role.name === 'seo'}), 'title'); // TODO: (1)
-        const socialMediaTitle = _.get(_.get(storyTitles, 'leads', []).find(lead => {return lead.role.name === 'social_media_teaser'}), 'title'); // TODO: (1)
+        const seoTitle = _.get(_.get(storyTitles, 'leads', []).find(lead => {return lead.role.code === 'seo'}), 'title'); // TODO: (1)
+        const socialMediaTitle = _.get(_.get(storyTitles, 'leads', []).find(lead => {return lead.role.code === 'social_media_teaser'}), 'title'); // TODO: (1)
 
         switch (place) {
             case 'default':
