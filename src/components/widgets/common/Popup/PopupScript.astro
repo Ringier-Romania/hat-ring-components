@@ -60,7 +60,7 @@ const props = Astro.props;
         if (oncePerSession && sessionStorage.getItem(POPUP_SESSION_KEY)) return;
 
         popup.setAttribute("aria-hidden", "false");
-
+        
         if (sizeToApply?.width) {
             popup.style.width = sizeToApply.width;
         }
@@ -85,7 +85,14 @@ const props = Astro.props;
         if (!scrollPercent) return;
         const sentinel = document.getElementById(uniqueId + "-scroll-sentinel");
         if (!sentinel) return;
-        sentinel.style.top = document.documentElement.scrollHeight * (scrollPercent / 100) + "px";
+        
+        const documentHeight = document.documentElement.scrollHeight;
+        const viewportHeight = window.innerHeight;
+        const maxScrollTop = documentHeight - viewportHeight;
+        const targetScrollPosition = maxScrollTop * (scrollPercent / 100);
+        
+    
+        sentinel.style.top = (targetScrollPosition + viewportHeight) + "px";
     }
 
     function showPopupOnSentinelPosition() {
@@ -101,7 +108,6 @@ const props = Astro.props;
             });
         }, { 
             threshold: 0,
-            rootMargin: "-50% 0px"
         });
         observer.observe(sentinel);
     }

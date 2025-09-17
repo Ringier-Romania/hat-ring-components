@@ -70,8 +70,8 @@
 .popupScrollSentinel {
     position: absolute;
     right: 0;
-    width: 100px;
-    height: 100px;
+    width: 1px;
+    height: 1px;
     pointer-events: none;
     z-index: -1;
     visibility: hidden;

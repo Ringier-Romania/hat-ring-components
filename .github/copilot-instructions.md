@@ -18,17 +18,40 @@ This is an Astro-based component library for Ring Publishing's Head App Template
 - **Environment Toggles**: Features switch based on env vars (`USE_REDIS`, `CACHE_TTL`)
 
 ## Development Workflow
-
-### Build Commands
-```bash
-npm run build    # TypeScript compilation with React JSX
-npm run run      # Watch mode compilation
-```
+`
 
 ### Environment Variables
-- `CACHE_TTL`: Cache expiration time (default: 60 seconds)
-- `USE_REDIS`: Enable Redis cache (set to '1')
+
+#### Cache Configuration
+- `CACHE_CLEAN_INTERVAL`: Interval for cleaning cache in seconds (default: 60)
+- `CACHE_TTL`: Time-To-Live for general cache in seconds, 0 disables cache (default: 60)
+- `CACHE_TTL_CONFIG`: Time-To-Live for configuration cache in seconds (default: 60)
+- `MEM_CACHE_FOR_CONFIG_MODE`: Configuration caching mode ('request', 'none', or 'time')
+- `MEM_CACHE_FOR_CONFIG_TTL_MS`: TTL for in-memory config cache in milliseconds (used with 'time' mode, default: 1000)
+- `USE_REDIS`: Cache implementation (0 for Node.js in-memory, 1 for Redis)
+
+#### Response & API Configuration
+- `RESPONSE_HEADER_CACHE_CONTROL_MAX_AGE`: max-age for Cache-Control header in seconds (default: 60)
+- `HAT_SERVER_WEBSITE_API_TTL`: TTL for site API responses in seconds (default: 60)
+- `HAT_SERVER_SHOW_URLS_IN_CONSOLE`: Display requested URLs in console for debugging (default: false)
+- `GET_KEYS_MODE`: Method for story relationships ('tags' or 'keys', default: 'tags')
+
+#### Service Configuration
 - `CONFIGURATION_TEMPLATE_NAME`: Template identifier for admin interface
+- `OCDN_ACCESS_KEY_ID`: Access key for OCDN bucket authentication
+- `OCDN_SECRET_ACCESS_KEY`: Secret key for OCDN bucket authentication
+- `NEXT_PUBLIC_OCDN_BUCKET_NAME`: OCDN bucket name for asset uploads
+- `WEBSITE_API_PUBLIC`: Public key for websites API authentication
+- `WEBSITE_API_SECRET`: Secret key for websites API authentication
+- `WEBSITE_API_NAMESPACE_ID`: Namespace identifier for website API
+- `NEXT_PUBLIC_WEBSITE_DOMAIN`: Website domain name
+- `NEXT_PUBLIC_WEBSITE_API_VARIANT`: Variant identifier for websites API
+- `NEXT_PUBLIC_ACC_IMAGES_ENDPOINT`: ACC image transformation service URL
+- `NEXT_PUBLIC_ACC_IMAGES_TRANSFORMATION_KEY`: Transformation key for ACC images
+
+#### Server Configuration
+- `PORT`: HAT server port number (default: 4321)
+- `IS_ON_BAMBOO`: Indicates CI/CD environment (GitHub Actions)
 
 ## Coding Patterns & Conventions
 
