@@ -58,3 +58,4 @@ export { default as WrapperStart } from "./components/widgets/common/WrapperStar
 export { default as WrapperEnd } from "./components/widgets/common/WrapperEnd.astro"
 export { default as SimpleHeading } from "./components/widgets/common/SimpleHeading/SimpleHeading.astro"
 export { default as CacheScanner } from "./components/common/CacheScanner.astro";
+export { default as Popup } from "./components/widgets/common/Popup/Popup.astro";
