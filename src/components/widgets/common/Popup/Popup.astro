@@ -48,6 +48,7 @@ const hideTargetElementCss = targetElement ? `${targetElement} { display: none }
     <button class="popupClose" aria-label="Close"></button>
     <div class="popupContent"></div>
 </div>
+{scrollPercent && <div id={uniqueId + "-scroll-sentinel"} class={styles.popupScrollSentinel}></div>}
 
 <PopupScript
     targetElement={targetElement}

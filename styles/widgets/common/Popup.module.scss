@@ -14,7 +14,7 @@
         scrollbar-color: #bbb #f5f5f5;
         transition: opacity .18s ease, transform .18s ease, visibility .18s;
         overflow-anchor: none;
-
+        
         &[aria-hidden="true"] {
             visibility: hidden;
             opacity: 0;
@@ -65,4 +65,14 @@
 
         }
     }
+}
+
+.popupScrollSentinel {
+    position: absolute;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    pointer-events: none;
+    z-index: -1;
+    visibility: hidden;
 }

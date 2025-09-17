@@ -18,13 +18,12 @@ const props = Astro.props;
     function handleOnClick() {
         if (!onClickquerySelector) return;
 
-        document.addEventListener("click", (e) => {
-            const target = e.target;
-            if (!(target instanceof Element)) return;
-            if (target.closest(onClickquerySelector)) {
+        const elements = document.querySelectorAll(onClickquerySelector);
+        elements.forEach(element => {
+            element.addEventListener("click", (e) => {
                 e.preventDefault();
                 showPopup();
-            }
+            });
         });
     }
 
@@ -62,15 +61,13 @@ const props = Astro.props;
 
         popup.setAttribute("aria-hidden", "false");
 
-        popup.style.display = "block";
-        popup.style.visibility = "";
-        popup.style.position = "fixed";
-        popup.style.top = "";
-        popup.style.bottom = "1.5rem";
-        popup.style.right = "1.5rem";
-        popup.style.width = sizeToApply?.width || "";
-        popup.style.height = sizeToApply?.height || "";
-
+        if (sizeToApply?.width) {
+            popup.style.width = sizeToApply.width;
+        }
+        if (sizeToApply?.height) {
+            popup.style.height = sizeToApply.height;
+        }
+        
         const closeBtn = popup.querySelector(".popupClose");
         if (closeBtn) closeBtn.addEventListener("click", hidePopup, { once: true });
         if (oncePerSession) sessionStorage.setItem(POPUP_SESSION_KEY, "1");
@@ -82,45 +79,45 @@ const props = Astro.props;
         const closeBtn = popup.querySelector(".popupClose");
         if (closeBtn) closeBtn.blur();
         popup.setAttribute("aria-hidden", "true");
-        popup.style.display = "none";
-
-        if (scrollPercent) {
-            insertPopupAtPercent();
-        }
     }
 
-    function insertPopupAtPercent() {
-
-        const popup = getPopup();
-        if (!popup) return;
-        popup.style.visibility = "hidden";
-        popup.style.position = "absolute";
-        popup.style.top = document.documentElement.scrollHeight * (scrollPercent / 100) + "px";
-        popup.style.right = "1.5rem";
-        popup.style.left = "";
-        popup.style.bottom = "";
-
+    function insertSentinelAtPercent() {
+        if (!scrollPercent) return;
+        const sentinel = document.getElementById(uniqueId + "-scroll-sentinel");
+        if (!sentinel) return;
+        sentinel.style.top = document.documentElement.scrollHeight * (scrollPercent / 100) + "px";
     }
 
-    function showPopupOnScrollPercent() {
-        const popup = getPopup();
-        if (!popup) return;
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        showPopup();
-                        observer.unobserve(popup);
-                    }
-                });
-            },
-            { threshold: 0,  }
-        );
-        observer.observe(popup);
+    function showPopupOnSentinelPosition() {
+        const sentinel = document.getElementById(uniqueId + "-scroll-sentinel");
+        if (!sentinel) return;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {                    
+                    showPopup();
+                    try { observer.unobserve(sentinel); } catch (e) {}
+                    try { sentinel.remove(); } catch (e) {}
+                }
+            });
+        }, { 
+            threshold: 0,
+            rootMargin: "-50% 0px"
+        });
+        observer.observe(sentinel);
     }
 
     function openPopup() {
         showPopup();
+    }
+
+    let resizeObserver = null;
+    
+    function startResizeObserver() {
+        if (!scrollPercent || resizeObserver) return;
+        console.log("Starting resize observer");
+        
+        resizeObserver = new ResizeObserver(() => insertSentinelAtPercent());
+        resizeObserver.observe(document.body);
     }
 
     function initPopupOnReady() {
@@ -133,8 +130,9 @@ const props = Astro.props;
 
         if (popup) {
             if (scrollPercent) {
-                insertPopupAtPercent();
-                showPopupOnScrollPercent();
+                insertSentinelAtPercent();
+                showPopupOnSentinelPosition();
+                startResizeObserver();
             }
         }
 
