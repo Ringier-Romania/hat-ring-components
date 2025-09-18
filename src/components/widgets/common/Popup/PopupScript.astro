@@ -13,7 +13,7 @@ const props = Astro.props;
         sizeToApply: props.sizeToApply,
     }}
 >
-    const POPUP_SESSION_KEY = "popupWidgetShown_" + uniqueId;
+    const POPUP_SESSION_KEY = "popupWidgetShown_" + (targetElement);
 
     function handleOnClick() {
         if (!onClickquerySelector) return;
