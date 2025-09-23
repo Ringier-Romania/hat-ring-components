@@ -1,90 +1,80 @@
 ---
-const { context, blockData }: TableBlockParams = Astro.props as TableBlockParams;
-import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
+const {context, blockData}: TableBlockParams = Astro.props as TableBlockParams;
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import {LinkReplacerHelper_replaceLinks} from '../../../../../helpers/LinkReplacerHelper';
-import { AppContext } from "../../../../../types/types";
+import {AppContext} from "../../../../../types/types";
 import {UtilsHelper_asyncParallelForEach} from "../../../../../helpers/UtilsHelper";
 
 export interface TableBlockParams {
-  context: AppContext;
-  blockData: {
-    type: string;
-    rows: [
-      {
-        cells: [
-          {
-            alignment: string;
-            classes: string[];
-            colspan: null | number;
-            rowspan: null | number;
-            isHeader: boolean;
-            text: string;
-            link: {
-              url: string;
-            };
-          },
-        ];
-      },
-    ] | [];
-  };
+    context: AppContext;
+    blockData: {
+        type: string;
+        rows: [
+            {
+                cells: [
+                    {
+                        alignment: string;
+                        classes: string[];
+                        colspan: null | number;
+                        rowspan: null | number;
+                        isHeader: boolean;
+                        text: string;
+                        link: {
+                            url: string;
+                        };
+                    },
+                ];
+            },
+        ] | [];
+    };
 }
 let toRender: boolean | JSX.Element = false;
 if (!blockData) {
-  toRender = WidgetHelper_renderEmptyComponent("TableBlock");
+    toRender = WidgetHelper_renderEmptyComponent("TableBlock");
 }
 
 UtilsHelper_asyncParallelForEach(blockData.rows, async (row) => {
-  await UtilsHelper_asyncParallelForEach(row.cells, async (cell) => {
-      if (cell.text) {
-          cell.text = await LinkReplacerHelper_replaceLinks(context, cell.text);
-      }
-  });
+    await UtilsHelper_asyncParallelForEach(row.cells, async (cell) => {
+        if (cell.text) {
+            cell.text = await LinkReplacerHelper_replaceLinks(context, cell.text);
+        }
+    });
 });
 
-const { rows } = blockData;
+const {rows} = blockData;
 ---
 
 {
-  toRender ? (
-    <Fragment set:html={toRender} />
-  ) : (
-    <table class="TableBlock">
-      <tbody>
-        {rows.map((row) => (
-          <tr>
-            {row.cells.map((cell) => {
-              let allCellClasses = cell.alignment
-                ? `align${cell.alignment} `
-                : "";
-              cell.classes.forEach(
-                (cellClass) => allCellClasses + `${cellClass} `
-              );
+    toRender ? (
+    <Fragment set:html={toRender}/>
+        ) : (
+            <table class="TableBlock">
+                <tbody>
+                    {rows.map((row) => (
+                        <tr>
+                            {row.cells.map((cell) => {
+                                const allCellClasses = [
+                                    cell.alignment ? `align${cell.alignment}` : null,
+                                    ...cell.classes
+                                ].filter(Boolean).join(" ");
 
-              return cell.isHeader ? (
-                <th class={allCellClasses}>
-                  {cell.link ? (
-                    <a href={cell.link.url}>{cell.text}</a>
-                  ) : (
-                    cell.text
-                  )}
-                </th>
-              ) : (
-                <td
-                  colSpan={cell.colspan ? cell.colspan : undefined}
-                  rowSpan={cell.rowspan ? cell.rowspan : undefined}
-                  class={allCellClasses}
-                >
-                  {cell.link ? (
-                    <a href={cell.link.url}>{cell.text}</a>
-                  ) : (
-                    cell.text
-                  )}
-                </td>
-              );
-            })}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )
-}
+                                const TableElementTag = cell.isHeader ? 'th' : 'td';
+                                const TableElementText = cell.link ? (<a href={cell.link.url}>{cell.text}</a>
+                                ) : (
+                                    cell.text
+                                )
+
+                                return (
+                                    <TableElementTag class={allCellClasses}
+                                        colspan={cell.colspan ? cell.colspan : undefined}
+                                        rowspan={cell.rowspan ? cell.rowspan : undefined}>
+                                        {TableElementText}
+                                    </TableElementTag>
+                                )
+                            })}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        )
+    }
