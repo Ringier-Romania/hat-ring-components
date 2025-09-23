@@ -1,6 +1,6 @@
 import {AppContext, SiteContentType} from "../../../types/types";
 import _ from "lodash"
-import {UtilsHelper_getDomain, UtilsHelper_getQueryParam} from "../../../helpers/UtilsHelper";
+import {UtilsHelper_convertToInt, UtilsHelper_getDomain, UtilsHelper_getQueryParam} from "../../../helpers/UtilsHelper";
 import {WidgetHelper_findWidgetConfig} from "../../../helpers/WidgetHelper";
 import {GenericList_getData} from "../../../components/widgets/Lists/GenericList/GenericListGetData";
 import {
@@ -25,7 +25,7 @@ export async function SeoListGridPrevNext(context: AppContext) {
     if (!foundGenericList) {
         return {};
     }
-    const currentPage = parseInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
+    const currentPage = UtilsHelper_convertToInt(UtilsHelper_getQueryParam('page', context)) || 1;
     const isAjaxCall = UtilsHelper_getQueryParam('gridLocationWidgetType', context) === 'genericList';
     const isFirstCall = UtilsHelper_getQueryParam('isFirstCall', context) === '1';
     const offset = WidgetHelper_calculateOffsetForGenericListPagination(foundGenericList, currentPage, isAjaxCall, isFirstCall);

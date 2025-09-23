@@ -13,7 +13,7 @@ import {WidgetHelper_calculateOffsetForGenericListPagination} from "../../../../
 
 export async function GenericList_getData(context: AppContext, queryNodeFragment, widgetConfig, extendableAttributes, currentPage) {
     const searchPhrase = UtilsHelper_stripHtmlTags(UtilsHelper_getQueryParam(UtilsHelper_getSearchQueryParamKey(), context) || '');
-
+    currentPage = UtilsHelper_convertToInt(currentPage) || 1;
     let dynamicVariablesTypes: any = {};
     let dynamicVariables: any = {};
     let dynamicFragmentsNames = '';
