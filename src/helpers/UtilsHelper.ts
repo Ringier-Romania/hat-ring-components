@@ -6,6 +6,10 @@ export function UtilsHelper_convertToInt(input: string | number | undefined) {
     return input ? typeof input === "number" ? input : parseInt(input) : 0;
 }
 
+export function UtilsHelper_parsePositiveIntFromString(input: string | number | undefined | null) {
+    return (typeof input === 'string' && /^[1-9]\d*$/.test(input)) ? parseInt(input, 10) : 0;
+}
+
 export function UtilsHelper_getValueIfExists(value, defaultValue) {
     return _.isNil(value) ? defaultValue : value;
 }

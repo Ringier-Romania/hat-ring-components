@@ -3,7 +3,7 @@ import {gql} from "graphql-tag";
 import {
     UtilsHelper_convertToInt,
     UtilsHelper_getQueryParam,
-    UtilsHelper_getSearchQueryParamKey,
+    UtilsHelper_getSearchQueryParamKey, UtilsHelper_parsePositiveIntFromString,
     UtilsHelper_stripHtmlTags
 } from "../../../../helpers/UtilsHelper";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
@@ -13,7 +13,7 @@ import {WidgetHelper_calculateOffsetForGenericListPagination} from "../../../../
 
 export async function GenericList_getData(context: AppContext, queryNodeFragment, widgetConfig, extendableAttributes, currentPage) {
     const searchPhrase = UtilsHelper_stripHtmlTags(UtilsHelper_getQueryParam(UtilsHelper_getSearchQueryParamKey(), context) || '');
-
+    currentPage = UtilsHelper_parsePositiveIntFromString(currentPage) || 1;
     let dynamicVariablesTypes: any = {};
     let dynamicVariables: any = {};
     let dynamicFragmentsNames = '';
