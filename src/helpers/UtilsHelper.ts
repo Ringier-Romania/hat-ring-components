@@ -3,6 +3,10 @@ import _ from 'lodash';
 import {AppContext, SiteContentType} from "../types/types";
 
 export function UtilsHelper_convertToInt(input: string | number | undefined | null) {
+    return input ? typeof input === "number" ? input : parseInt(input) : 0;
+}
+
+export function UtilsHelper_parsePositiveIntFromString(input: string | number | undefined | null) {
     return (typeof input === 'string' && /^[1-9]\d*$/.test(input)) ? parseInt(input, 10) : 0;
 }
 

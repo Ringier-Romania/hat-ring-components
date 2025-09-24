@@ -1,10 +1,10 @@
-import {UtilsHelper_convertToInt} from "./UtilsHelper";
+import {UtilsHelper_convertToInt, UtilsHelper_parsePositiveIntFromString} from "./UtilsHelper";
 import {GenericListWidgetConfig} from "../components/widgets/Lists/GenericList/types";
 
 export function WidgetHelper_calculateOffsetForGenericListPagination(widgetConfig: GenericListWidgetConfig, currentPage: number, isAjaxCall: boolean, isFirstCall: boolean) {
     const perPageAllItems = UtilsHelper_convertToInt(widgetConfig?.perPageAllItems) || UtilsHelper_convertToInt(widgetConfig?.paginationElements);
     const postShiftValue = UtilsHelper_convertToInt(widgetConfig?.postShift) || 0;
-    currentPage = UtilsHelper_convertToInt(currentPage) || 1;
+    currentPage = UtilsHelper_parsePositiveIntFromString(currentPage) || 1;
     const totalItemsBefore = perPageAllItems * (currentPage - 1);
     let offset = 0;
     if (isAjaxCall) {
