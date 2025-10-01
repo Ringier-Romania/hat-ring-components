@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 const response = await StoryContent_getData(context, widgetConfig);
 const content = _.get(response, 'data.story.content[0].blocks');
-const flags = _.get(response, 'data.story.flags', []).map(flag => flag.code);
+const flags = _.get(response, 'data.story.flags', []).map(flag => `_ ${flag.code}`);
 ---
 
 
