@@ -6,7 +6,7 @@ import ListElementImage from "./ListElementImage";
 import {AppContext} from "../../../../../../types/types";
 import {BasicWidgetConfig, ListElementsData} from "../../types";
 import _ from "lodash";
-import {RingLink} from "../../../../../common/RingLink/RingLink";
+import RingLink from "../../../../../common/RingLink.astro";
 import {ImageHelper_getImageDimensionsFromObject} from "../../../../../../helpers/ImageHelper";
 
 
@@ -42,15 +42,13 @@ import {ImageHelper_getImageDimensionsFromObject} from "../../../../../../helper
     {
         data['Link url'] &&
             <div class={'linkOverlay'}>
-                <RingLink href={data['Link url']} title={data.Title || ''}></RingLink>
+                <RingLink context={context} href={data['Link url']} title={data.Title || ''}></RingLink>
             </div>
     }
     {data['Image src'] && <ListElementImage context={context} widgetConfig={widgetConfig} data={imageProps}/>}
 
     {data.Title && <TextReplacer props={{class: 'title'}} context={context} config={{}} tag={ItemHeaderTag} text={data.Title}/>}
-    {/* @ts-expect-error Server Component */}
     {data.Description && <TextReplacer props={{class: 'description'}} context={context} config={{}} tag={'p'} text={data.Description}/>}
-    {/* @ts-expect-error Server Component */}
     {data.Text && <TextReplacer props={{class: 'text'}} context={context} config={{}} tag={'div'}  text={data.Text}/>}
 
     {(data.children && data.children.length > 0) && <div class={['listElementChildren'].join(' ')}>

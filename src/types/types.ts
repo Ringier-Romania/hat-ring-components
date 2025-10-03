@@ -21,6 +21,7 @@ export interface AppContext {
     hatControllerParams: any,
     cssModules?: any,
     websiteManagerVariant: string
+    domain: string
 }
 
 export interface ComponentParams {

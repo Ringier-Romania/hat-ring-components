@@ -1,0 +1,165 @@
+---
+import {AppContext} from "../../../../../types/types";
+import {GenericListResponse, GenericListWidgetConfig} from "../types";
+import RingLink from "../../../../common/RingLink.astro";
+import _ from 'lodash';
+import {UtilsHelper_convertToInt} from "../../../../../helpers/UtilsHelper";
+import {WidgetHelper_getPaginationDataForGenericList} from "../../../../../helpers/GenericListHelper";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+
+export interface Props {
+    context: AppContext;
+    widgetConfig: GenericListWidgetConfig;
+    response: GenericListResponse;
+    currentPage: number;
+}
+
+const {context, widgetConfig, response, currentPage} = Astro.props;
+let toRender: boolean | string | JSX.Element = false;
+
+const currentUrl = _.get(context, 'hatControllerParams.urlWithParsedQuery.pathname');
+const total = response.data?.stories.total;
+const perPageAllItems = UtilsHelper_convertToInt(widgetConfig.perPageAllItems) || UtilsHelper_convertToInt(widgetConfig.paginationElements);
+const pages = Math.ceil(total / perPageAllItems);
+const lastPage = WidgetHelper_getPaginationDataForGenericList(widgetConfig, total);
+
+if (pages === 1) {
+    toRender = WidgetHelper_renderEmptyComponent('Taxonomies', '', true);
+}
+
+// Generate pagination buttons
+const buttons = [];
+
+// Previous page and early pages
+if (currentPage > 1) {
+    // Previous button
+    buttons.push({
+        type: 'prev',
+        page: currentPage - 1,
+        content: '&#60;',
+        rel: 'prev'
+    });
+
+    // First few pages
+    for (let i = 1; i < Math.min(3, currentPage); i++) {
+        buttons.push({
+            type: 'page',
+            page: i,
+            content: i.toString()
+        });
+    }
+
+    // Ellipsis if needed
+    if (currentPage > 4) {
+        buttons.push({
+            type: 'ellipsis',
+            content: '...'
+        });
+    }
+
+    // Pages before current
+    for (let i = Math.max(3, currentPage - 1); i < currentPage; i++) {
+        buttons.push({
+            type: 'page',
+            page: i,
+            content: i.toString()
+        });
+    }
+}
+
+// Current page
+buttons.push({
+    type: 'current',
+    page: currentPage,
+    content: currentPage.toString()
+});
+
+// Next pages and next button
+if (currentPage < lastPage) {
+    // Pages after current
+    for (let i = currentPage + 1; i <= Math.min(currentPage + 1, lastPage); i++) {
+        buttons.push({
+            type: 'page',
+            page: i,
+            content: i.toString()
+        });
+    }
+
+    // Ellipsis if needed
+    if (currentPage + 3 < lastPage) {
+        buttons.push({
+            type: 'ellipsis',
+            content: '...'
+        });
+    }
+
+    // Last few pages
+    for (let i = Math.max(currentPage + 2, lastPage - 1); i <= lastPage; i++) {
+        buttons.push({
+            type: 'page',
+            page: i,
+            content: i.toString()
+        });
+    }
+
+    // Next button
+    buttons.push({
+        type: 'next',
+        page: currentPage + 1,
+        content: '&#62;',
+        rel: 'next'
+    });
+}
+---
+
+{toRender ?
+<Fragment set:html={toRender}/>
+    :
+    <ul class="Pagination">
+        {buttons.map((button, index) => {
+            if (button.type === 'ellipsis') {
+                return <li>...</li>;
+            } else if (button.type === 'current') {
+                return (
+                    <li class="active">
+                        <RingLink context={context} href={`${currentUrl}?page=${button.page}`}>
+                            {button.content}
+                        </RingLink>
+                    </li>
+                );
+            } else if (button.type === 'prev') {
+                return (
+                    <li class="prev">
+                        <RingLink
+                            context={context}
+                            rel={button.rel}
+                            href={`${currentUrl}?page=${button.page}`}
+                        >
+                            <Fragment set:html={button.content} />
+                        </RingLink>
+                    </li>
+                );
+            } else if (button.type === 'next') {
+                return (
+                    <li class="next">
+                        <RingLink
+                            context={context}
+                            rel={button.rel}
+                            href={`${currentUrl}?page=${button.page}`}
+                        >
+                            <Fragment set:html={button.content} />
+                        </RingLink>
+                    </li>
+                );
+            } else {
+                return (
+                    <li>
+                        <RingLink context={context} href={`${currentUrl}?page=${button.page}`}>
+                            {button.content}
+                        </RingLink>
+                    </li>
+                );
+            }
+        })}
+    </ul>
+}

@@ -1,0 +1,20 @@
+---
+import {AppContext} from "../../../../../types/types";
+import {StoryAuthorsWidgetConfig} from "../types";
+import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import RingLink from "../../../../common/RingLink.astro";
+
+interface Props {
+    context: AppContext;
+    widgetConfig: StoryAuthorsWidgetConfig;
+    author: Author;
+}
+
+const {context, widgetConfig, author} = Astro.props as Props;
+---
+<div class={["LinkOverlay"].join(' ')}>
+    {author?.publicationPoint?.url && (
+            <RingLink context={context} href={author.publicationPoint?.url || '#'} title={author.name}/>
+    )}
+</div>
+

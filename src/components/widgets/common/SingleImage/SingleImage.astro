@@ -1,0 +1,63 @@
+---
+import RingLink from "../../../common/RingLink.astro";
+import RingImage from "../../../common/RingImage.astro";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget} from "../../../../helpers/WidgetHelper";
+import {ImageParams} from "./types";
+import styles from '../../../../../styles/widgets/common/SingleImage.module.scss';
+import {UtilsHelper_getValueIfExists} from "../../../../helpers/UtilsHelper";
+import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
+
+const {widgetConfig, context} = Astro.props as ImageParams;
+let toRender: boolean | JSX.Element | string = false;
+
+const additionalCssClasses = [styles.SingleImage];
+const {
+    width,
+    height
+} = ImageHelper_getImageDimensionsFromObject(widgetConfig, context, 'imageSize', 'mobileImageSize', '0x0');
+
+const additionalOptions = UtilsHelper_getValueIfExists(widgetConfig.additionalOptions, []);
+const desktopSrc = UtilsHelper_getValueIfExists(widgetConfig.imageSrc, '');
+const src = context.hatControllerParams.isMobile ? UtilsHelper_getValueIfExists(widgetConfig.mobileImageSrc, desktopSrc) : desktopSrc;
+const urlLink = UtilsHelper_getValueIfExists(widgetConfig.linkUrl, false);
+
+if (!src) {
+    toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
+}
+
+const ringImageProps: any = {
+    src,
+    width,
+    height,
+    transform: TransformType.ResizeCropAuto,
+    alt: UtilsHelper_getValueIfExists(widgetConfig.imageAlt, ''),
+    priority: additionalOptions.includes('preloadImage')
+};
+
+if (!Number(width) || !Number(height)) {
+    delete ringImageProps.width;
+    delete ringImageProps.height;
+    delete ringImageProps.transform;
+    additionalCssClasses.push("imageFill");
+}
+
+const cssClasses = WidgetHelper_getWidgetCssClasses('SingleImage', widgetConfig, context, additionalCssClasses);
+---
+{toRender ?
+    <Fragment set:html={toRender}/> :
+    <div class={cssClasses}>
+        {urlLink ? (
+            <RingLink
+                href={urlLink}
+                target={additionalOptions.includes('openLinkInNewTab') ? '_blank' : undefined}
+                rel={additionalOptions.includes('openLinkAsExternal') ? 'nofollow' : undefined}
+                context={context}>
+                <RingImage {...ringImageProps}/>
+            </RingLink>
+        ) : (
+            <RingImage {...ringImageProps}/>
+        )}
+    </div>
+}
+

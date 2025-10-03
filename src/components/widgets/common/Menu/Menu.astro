@@ -1,0 +1,88 @@
+---
+import _ from 'lodash';
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {ImageHelper_getImageDimensionsFromObject} from "../../../../helpers/ImageHelper";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
+import styles from "../../../../../styles/widgets/common/Menu.module.scss";
+import RingLink from "../../../common/RingLink.astro";
+import RingImage from "../../../common/RingImage.astro";
+import type {AppContext, AbstractWidgetConfig, WidgetParams} from "../../../../types/types";
+
+interface MenuElement {
+    "text": string;
+    "children": Array<MenuElement>;
+    "url": string;
+    "image url": string;
+    "image dimensions (eg. 200x200)": string;
+    "custom css class": string;
+    "hidden": boolean;
+    "open in new tab": boolean;
+}
+
+interface MenuConfig extends AbstractWidgetConfig {
+    "overrideMenuElements": Array<MenuElement>;
+    "textColor": string;
+}
+
+interface MenuParams extends WidgetParams {
+    widgetConfig: MenuConfig;
+}
+
+const {widgetConfig, context} = Astro.props as { widgetConfig: MenuConfig, context: AppContext };
+---
+<div class={WidgetHelper_getWidgetCssClasses('Menu', widgetConfig, context, [styles.Menu])}>
+    <ul>
+        {(() => {
+            const currentUrl = _.get(context, 'hatControllerParams.urlWithParsedQuery.pathname') || (context as any).url;
+
+            const renderMenuElement = (menuElement: MenuElement, index: number) => {
+                if (menuElement.hidden) return null;
+
+                const imageDimensions = ImageHelper_getImageDimensionsFromObject(
+                    menuElement,
+                    context,
+                    "image dimensions (eg. 200x200)"
+                );
+                const isActive = currentUrl == menuElement.url;
+
+                const content = (
+                    <>
+                        <span class="text">{menuElement.text}</span>
+                        {menuElement["image url"] && menuElement["image dimensions (eg. 200x200)"] && (
+                            <RingImage
+                                src={menuElement["image url"]}
+                                alt={menuElement.text}
+                                width={imageDimensions.width}
+                                height={imageDimensions.height}
+                                transform={TransformType.ResizeCropAuto}
+                            />
+                        )}
+                    </>
+                );
+
+                return (
+                    <li class={[menuElement["custom css class"], isActive ? 'active' : ''].join(' ')}>
+                        {menuElement.url ? (
+                            <RingLink
+                                context={context}
+                                href={menuElement.url}
+                                title={menuElement.text}
+                                target={menuElement["open in new tab"] ? '_blank' : undefined}
+                            >
+                                {content}
+                            </RingLink>
+                        ) : content}
+                        {menuElement.children && menuElement.children.length > 0 && (
+                            <ul>
+                                {menuElement.children.map((child, i) => renderMenuElement(child, i))}
+                            </ul>
+                        )}
+                    </li>
+                );
+            };
+
+            return widgetConfig.overrideMenuElements.map(renderMenuElement);
+        })()}
+    </ul>
+</div>
+

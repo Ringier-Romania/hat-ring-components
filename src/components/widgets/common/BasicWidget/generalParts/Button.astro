@@ -1,0 +1,26 @@
+---
+import {AppContext} from "../../../../../types/types";
+import {BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse} from "../types";
+import RingLink from "../../../../common/RingLink.astro";
+
+interface Props {
+    context: AppContext;
+    widgetConfig: BasicWidgetConfig;
+    response: BasicWidgetResponse;
+    extendableAttributes: BasicWidgetExtendableAttributes;
+}
+
+const {context, widgetConfig} = Astro.props as Props;
+const moreText = widgetConfig.moreText || '';
+const moreUrl = widgetConfig.moreUrl || '';
+---
+<div class={["Button"].join(' ')}>
+    {moreUrl ? (
+        <RingLink context={context} href={moreUrl} title={moreText}>
+            {moreText}
+        </RingLink>
+    ) : (
+        <button type="button" title={moreText}>{moreText}</button>
+    )}
+</div>
+

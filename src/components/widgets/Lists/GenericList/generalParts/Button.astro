@@ -1,0 +1,23 @@
+---
+import {AppContext} from "../../../../../types/types";
+import {GenericListResponse, GenericListWidgetConfig} from "../types";
+import RingLink from "../../../../common/RingLink.astro";
+
+interface Props {
+    context: AppContext;
+    widgetConfig: GenericListWidgetConfig;
+    response: GenericListResponse;
+}
+
+const {context, widgetConfig, response} = Astro.props as Props;
+---
+
+<div class="Button">
+    {widgetConfig.moreUrl ? (
+        <RingLink context={context} href={widgetConfig.moreUrl} title={widgetConfig.moreText}>
+            {widgetConfig.moreText}
+        </RingLink>
+    ) : (
+        <button type="button" title={widgetConfig.moreText}>{widgetConfig.moreText}</button>
+    )}
+</div>

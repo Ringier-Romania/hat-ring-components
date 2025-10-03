@@ -1,0 +1,25 @@
+---
+import {AppContext} from "../../../../../types/types";
+import {StoryAuthorsWidgetConfig} from "../types";
+import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import RingLink from "../../../../common/RingLink.astro";
+
+interface Props {
+    context: AppContext;
+    widgetConfig: StoryAuthorsWidgetConfig;
+    author: Author;
+}
+
+const {context, widgetConfig, author} = Astro.props as Props;
+const profiles = author?.socialProfiles || [];
+---
+<div class={["SocialProfiles"].join(' ')}>
+    {profiles.map(profile => (
+        profile?.url && profile?.role?.code ?
+                <RingLink context={context} class={profile.role.code} href={profile.url} title={profile.role.code}>
+                    {profile.role.code}
+                </RingLink>
+            : null
+    ))}
+</div>
+

@@ -1,0 +1,60 @@
+---
+import {AppContext} from "../../../../../types/types";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import gql from "graphql-tag";
+import RingLink from "../../../../common/RingLink.astro";
+import {BasicWidgetConfig, BasicWidgetResponseNode} from "../types";
+
+interface Props {
+  context: AppContext;
+  widgetConfig: BasicWidgetConfig;
+  data: BasicWidgetResponseNode;
+}
+
+const {context, widgetConfig, data} = Astro.props as Props;
+let toRender: boolean | string | JSX.Element = false;
+
+const topics = data?.originalContent?.topics?.map(obj => obj.topic) || [];
+if (!topics || topics.length === 0) {
+  toRender = WidgetHelper_renderEmptyComponent('Taxonomies','', true);
+}
+
+export const getFragment = () => {
+  return {
+    variables: {},
+    query: gql`fragment BasicWidgetTopicsSectionFragment on SectionItem {
+      originalContent {
+        ... on Story {
+          topics {
+            topic {
+              name
+              kind { code }
+              publicationPoint { url }
+            }
+          }
+        }
+      }
+    }`
+  };
+};
+---
+{toRender ?
+  <Fragment set:html={toRender} />
+  :
+  <div class={["Taxonomies"].join(' ')}>
+    {topics.map(topic => {
+      if (!topic) return null;
+      const url = topic?.publicationPoint?.url || false;
+      return (
+        <div class="topic" data-kind={topic?.kind?.code}>
+          {url ?
+            <RingLink context={context} href={url} title={topic?.name}>
+              <span>{topic?.name}</span>
+            </RingLink>
+            :
+            <span>{topic?.name}</span>
+          }
+        </div>
+      );
+    })}
+

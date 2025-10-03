@@ -1,6 +1,6 @@
 ---
 import {SliderElement, SliderFrontParams} from "./types";
-import { RingLink } from "../../../common/RingLink/RingLink";
+import RingLink from "../../../common/RingLink.astro";
 import RingImage from "../../../common/RingImage.astro";
 import { ImageHelper_getImageDimensionsFromObject } from "../../../../helpers/ImageHelper";
 import _ from "lodash";
@@ -20,7 +20,7 @@ const dimensions = ImageHelper_getImageDimensionsFromObject(slide, context, "Sou
 <div class={"item"}>
     {slide['Link url'] &&
         <div class={'linkOverlay'}>
-            <RingLink href={slide['Link url']} title={slide.Title || slide.Text || slide.Description || ''}></RingLink>
+            <RingLink context={context} href={slide['Link url']} title={slide.Title || slide.Text || slide.Description || ''}></RingLink>
         </div>
     }
     {slide['Title'] && <div class={"title"}><ItemsHeaderTag set:html={slide['Title']} /></div>}

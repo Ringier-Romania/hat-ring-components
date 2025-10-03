@@ -4,7 +4,6 @@ import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
 import _ from "lodash";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import gql from "graphql-tag";
-import {RingLink} from "../../../../common/RingLink/RingLink";
 import {DateHelper_convertDate} from "../../../../../helpers/DateHelper";
 import {StoryHelper_getLeadBlock} from "../../../../../helpers/StoryHelper";
 import {Story} from "@ringpublishing/graphql-api-client/lib/types/websites-api";

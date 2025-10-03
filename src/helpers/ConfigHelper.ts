@@ -216,7 +216,7 @@ export async function ConfigHelper_getHomepageUrl(context) {
 }
 
 export async function ConfigHelper_currentUrl(context) {
-    return `${UtilsHelper_getDomain()}${context.url}`;
+    return `${UtilsHelper_getDomain(context)}${context.url}`;
 }
 
 export async function ConfigHelper_getMainCategoryUuid(context) {
