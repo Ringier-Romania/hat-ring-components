@@ -13,8 +13,9 @@ let toRender: boolean | string | JSX.Element = false;
 
 
 const data = await StoryRelatedContent_getData(context, widgetConfig);
-const ifStoriesExists = _.get(data, 'data.stories.edges', []).length > 0;
-if (!ifStoriesExists) {
+const ifStoriesExists = _.get(data, 'data.stories.edges', []).filter((edge) => edge.node);
+
+if (ifStoriesExists.length === 0) {
     toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 
