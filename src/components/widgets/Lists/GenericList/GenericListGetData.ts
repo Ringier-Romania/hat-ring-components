@@ -113,7 +113,7 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
     if (searchPhrase) {
         variables.searchPhrase = searchPhrase;
     }
-
+    
 
     const query = gql`
         query($topicId: UUID!, $limit: Int!, $excludedFlags: [String!], $offset: Int! ${mappedDynamicVariablesTypes}){
@@ -140,7 +140,7 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
     `;
 
     //console.log(query.loc?.source.body, JSON.stringify(variables));
-    const result = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL);
+    const result = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL);    
     return result;
 }
 

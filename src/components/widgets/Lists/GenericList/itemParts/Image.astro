@@ -48,7 +48,7 @@ const originalImageWidth = UtilsHelper_convertToInt(_.get(data, 'image.image.wid
 const originalImageHeight = UtilsHelper_convertToInt(_.get(data, 'image.image.height', 0));
 let imageWidth = originalImageWidth;
 let imageHeight = originalImageHeight;
-customTeaserImageUrl = await WidgetHelper_getAppropriateTeaserImage(widgetConfig, context, data.leads || []);
+customTeaserImageUrl = await WidgetHelper_getAppropriateTeaserImage(widgetConfig, context, data?.leads || []);
 
 if (imageResizeCropMode === 'contain' && imageWidth !== 0 && imageHeight !== 0) {
     const calculatedDimensions = ImageHelper_getImageDimensionsWithAspectRatio(imageWidth, imageHeight, sizes.width, sizes.height);
@@ -61,7 +61,7 @@ if (imageResizeCropMode === 'contain' && imageWidth !== 0 && imageHeight !== 0) 
 
 const ringImageProps = {
     src: customTeaserImageUrl || imgSrc,
-    alt: (image && image.caption) || data.title || '',
+    alt: (image && image.caption) || data?.title || '',
     width: imageWidth,
     height: imageHeight,
     priority: isPriority
