@@ -43,7 +43,7 @@ const processedContent = AdditionalComponentHelper_insertComponentAtPattern(elem
                                    data={edge.node}/>;
             });
 
-            return (<div class={['Item', colClass, `kind-${edge.node.kind?.code}`].join(' ')}>
+            return (<div class={['Item', colClass, `kind-${edge.node?.kind?.code}`].join(' ')}>
                 <div class={'linkOverlay'}>
                     <RingLink href={edge.node?.mainPublicationPoint?.url || '#'} title={edge.node?.title}>
                         {widgetConfig.linkLabel}
