@@ -21,9 +21,9 @@ const {displayTitleCodeName} = await ConfigHelper_getDeveloperSettingsConfig(con
 
 if (displayTitleCodeName && displayTitleCodeName !== '') {
     const displayTitleFound = data?.titles?.find((title) => title?.role?.code === displayTitleCodeName);
-    title = displayTitleFound ? displayTitleFound.text : data.title;
+    title = displayTitleFound ? displayTitleFound.text : data?.title;
 } else {
-    title = data.title;
+    title = data?.title;
 }
 
 if (!title) {
