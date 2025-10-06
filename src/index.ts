@@ -49,6 +49,7 @@ export * from "./helpers/ConfigHelper";
 export * from "./helpers/DateHelper";
 export * from "./helpers/StoryHelper";
 export * from "./helpers/CacheScannerHelper";
+export * from "./helpers/PageHelper";
 export { default as StoryGroup } from "./components/Story/StoryGroup.astro";
 export { default as Breadcrumbs } from "./components/widgets/common/Breadcrumbs/Breadcrumbs.astro";
 export { default as SearchBox } from "./components/widgets/common/SearchBox/SearchBox.astro";

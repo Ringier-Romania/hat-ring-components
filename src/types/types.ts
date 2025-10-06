@@ -1,4 +1,5 @@
 import React, {ComponentState} from "react";
+import {UrlWithParsedQuery} from "url";
 
 export enum SiteContentType {
     Search = "Search",
@@ -18,10 +19,20 @@ export interface AppContext {
     siteNodeId: string | undefined | null,
     url: string,
     customData: any,
-    hatControllerParams: any,
+    hatControllerParams: HatControllerParams,
     cssModules?: any,
     websiteManagerVariant: string
     domain: string
+}
+
+export interface HatControllerParams {
+    gqlResponse: any;
+    customData: any;
+    urlWithParsedQuery: UrlWithParsedQuery
+    isMobile: boolean
+    websiteManagerVariant: string
+    domain: string
+    ringDataLayer: any
 }
 
 export interface ComponentParams {
