@@ -49,7 +49,7 @@ import {ImageHelper_getImageDimensionsFromObject} from "../../../../../../helper
 
     {data.Title && <TextReplacer props={{class: 'title'}} context={context} config={{}} tag={ItemHeaderTag} text={data.Title}/>}
     {data.Description && <TextReplacer props={{class: 'description'}} context={context} config={{}} tag={'p'} text={data.Description}/>}
-    {data.Text && <TextReplacer props={{class: 'text'}} context={context} config={{}} tag={'div'}  text={data.Text}/>}
+    {data.Text && <TextReplacer props={{class: 'text'}} context={context} config={{}} tag={'div'} text={data.Text}/>}
 
     {(data.children && data.children.length > 0) && <div class={['listElementChildren'].join(' ')}>
         {data.children.map((element, index) => {

@@ -24,7 +24,7 @@ const pages = Math.ceil(total / perPageAllItems);
 const lastPage = WidgetHelper_getPaginationDataForGenericList(widgetConfig, total);
 
 if (pages === 1) {
-    toRender = WidgetHelper_renderEmptyComponent('Taxonomies', '', true);
+    toRender = WidgetHelper_renderEmptyComponent('Pagination', '', true);
 }
 
 // Generate pagination buttons

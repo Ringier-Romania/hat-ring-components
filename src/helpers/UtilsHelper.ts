@@ -7,7 +7,12 @@ export function UtilsHelper_convertToInt(input: string | number | undefined) {
 }
 
 export function UtilsHelper_parsePositiveIntFromString(input: string | number | undefined | null) {
-    return (/^[1-9]\d*$/.test(<string>input)) ? parseInt(<string>input, 10) : 0;
+    if (typeof input === "number") {
+        return Number.isInteger(input) && input > 0 ? input : 0;
+    }
+    if (typeof input === "string") {
+        return (/^[1-9]\d*$/.test(input)) ? parseInt(input, 10) : 0;
+    }
 }
 
 export function UtilsHelper_getValueIfExists(value, defaultValue) {
