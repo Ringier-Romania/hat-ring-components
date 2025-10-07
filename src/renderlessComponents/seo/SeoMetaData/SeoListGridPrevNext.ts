@@ -45,10 +45,10 @@ export async function SeoListGridPrevNext(context: AppContext) {
     const lastPage = WidgetHelper_getPaginationDataForGenericList(data, totalItems);
 
     const currentUrlPath = _.get(context, 'hatControllerParams.urlWithParsedQuery.path');
-    const prevUrl = new URL(UtilsHelper_getDomain() + currentUrlPath);
+    const prevUrl = new URL(UtilsHelper_getDomain(context) + currentUrlPath);
     prevUrl.searchParams.set('page', `${currentPage - 1}`);
 
-    const nextUrl = new URL(UtilsHelper_getDomain() + currentUrlPath);
+    const nextUrl = new URL(UtilsHelper_getDomain(context) + currentUrlPath);
     nextUrl.searchParams.set('page', `${currentPage + 1}`);
 
     var links: any = [];

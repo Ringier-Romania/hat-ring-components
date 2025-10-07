@@ -9,7 +9,7 @@ const {
 
 import * as ItemParts from "../itemParts";
 import _ from "lodash";
-import {RingLink} from "../../../../common/RingLink/RingLink";
+import RingLink from "../../../../common/RingLink.astro";
 import {
     WidgetHelper_renderEmptyComponent
 } from "../../../../../helpers/WidgetHelper";
@@ -49,7 +49,7 @@ const processedContent = AdditionalComponentHelper_insertComponentAtPattern(elem
 
                     return (<div class={['Item', colClass, bigElementClass, `kind-${kind}`].join(' ')} key={itemIndex}>
                         <div class={'linkOverlay'}>
-                            <RingLink href={edge.node?.externalUrl || edge.node?.url || '#'}
+                            <RingLink context={context} href={edge.node?.externalUrl || edge.node?.url || '#'}
                                       title={edge.node?.title || ''}>
                                 {widgetConfig.linkLabel}
                             </RingLink>

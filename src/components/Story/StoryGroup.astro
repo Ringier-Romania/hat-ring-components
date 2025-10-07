@@ -9,6 +9,5 @@ const blocks = StoryHelper_getGroupContent(contentBlocks, groupName);
 ---
 
 <div class={WidgetHelper_getWidgetCssClasses('StoryGroup',{}, context, [groupName])  }>
-    {/* @ts-expect-error Server Component */}
     <StoryContentSwitcher content={blocks} widgetConfig={{}} context={context} extendableAttributes={{}}/>
 </div>

@@ -17,6 +17,5 @@ export interface GroupBlockParams {
 ---
 
 <section class={`GroupBlock align${blockData.alignment} ${blockData.name}`}>
-    {/* @ts-expect-error Server Component */}
     <StoryContentSwitcher content={blockData.elements} widgetConfig={widgetConfig} context={context}/>
 </section>

@@ -22,10 +22,10 @@ export async function AlternateLinksFromNode(context: AppContext, seoConfig: obj
     alternateLinks = [];
 
     for (let i = 0; i < customAlternativesLength; i++) {
-        alternateLinks.push({hrefLang: customAlternatives[i]['Language code'], href: UtilsHelper_getDomain() + customAlternatives[i]['Alternative href']})
+        alternateLinks.push({hrefLang: customAlternatives[i]['Language code'], href: UtilsHelper_getDomain(context) + customAlternatives[i]['Alternative href']})
 
         if (customAlternatives[i]['Default language'] === 'on') {
-            xDefault = UtilsHelper_getDomain() + customAlternatives[i]['Alternative href'];
+            xDefault = UtilsHelper_getDomain(context) + customAlternatives[i]['Alternative href'];
         }
     }
 
@@ -34,7 +34,7 @@ export async function AlternateLinksFromNode(context: AppContext, seoConfig: obj
     }
 
     if (!alternateLinks.find((link) => link.hrefLang === curentLanguage)) {
-        alternateLinks.push({hrefLang: curentLanguage, href: UtilsHelper_getDomain() + context.url});
+        alternateLinks.push({hrefLang: curentLanguage, href: UtilsHelper_getDomain(context) + context.url});
     }
 
     return alternateLinks;

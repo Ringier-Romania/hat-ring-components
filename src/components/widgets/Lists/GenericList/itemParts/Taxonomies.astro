@@ -1,0 +1,71 @@
+---
+import {AppContext} from "../../../../../types/types";
+import {GenericListResponseNode, GenericListWidgetConfig} from "../types";
+import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
+import gql from "graphql-tag";
+import RingLink from "../../../../common/RingLink.astro";
+
+type Props = {
+    context: AppContext,
+    widgetConfig: GenericListWidgetConfig,
+    data: GenericListResponseNode,
+};
+
+const {context, widgetConfig, data} = Astro.props as Props;
+let toRender: boolean | string | JSX.Element = false;
+
+const topics = data?.topics || [];
+if (!topics || topics.length === 0) {
+    toRender = WidgetHelper_renderEmptyComponent('Taxonomies', '', true);
+}
+
+export const getFragment = () => {
+    return {
+        variables: {},
+        query: gql`fragment GenericListTopicsStoryFragment on Story {
+            topics{
+                topic {
+                    id
+                    nodeReference {
+                        node {
+                            breadcrumbs {
+                                url
+                            }
+                        }
+                    }
+                    kind {
+                        code
+                    }
+                    name
+                    publicationPoint {
+                        url
+                    }
+                }
+            }
+        }`
+    };
+};
+---
+{toRender ?
+    <Fragment set:html={toRender}/>
+        :
+        <div class={["Taxonomies"].join(' ')}>
+            {topics.map((topic, index) => {
+                if (!topic) return null;
+                const breadcrumbs = topic.topic?.nodeReference?.node.breadcrumbs;
+                const breadcrumbUrl = breadcrumbs && breadcrumbs[breadcrumbs.length - 1];
+                const url = breadcrumbUrl?.url || topic.topic?.publicationPoint?.url;
+                return (
+                        <div class="topic" data-kind={topic.topic?.kind.code}>
+                            {url ?
+                                    <RingLink context={context} href={url}>
+                                        <span>{topic.topic?.name}</span>
+                                    </RingLink>
+                                :
+                                    <span>{topic.topic?.name}</span>
+                            }
+                        </div>
+                );
+            })}
+        </div>
+    }

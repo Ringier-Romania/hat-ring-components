@@ -1,16 +1,14 @@
 ---
 const {context, widgetConfig, response} = Astro.props;
 import React from 'react';
-import {AppContext} from "../../../../../types/types";
 import {BasicWidgetConfig, BasicWidgetExtendableAttributes, BasicWidgetResponse} from "../types";
-import * as ItemParts from "../itemParts";
 import _ from "lodash";
-import {RingLink} from "../../../../common/RingLink/RingLink";
+import RingLink from "../../../../common/RingLink.astro";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import {default as TextReplacer} from "../../../../common/TextReplacer.astro";
 
 const headerText = widgetConfig.labelValue;
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | string | JSX.Element = false;
 if (!headerText) {
     toRender = WidgetHelper_renderEmptyComponent('Header');
 }
@@ -23,7 +21,7 @@ const headerUrl = widgetConfig.labelLink;
 {toRender ? <Fragment set:html={toRender}/> :
 <div class={['Header'].join(' ')}>
 
-    {headerUrl ? <RingLink href={headerUrl}>
+    {headerUrl ? <RingLink context={context} href={headerUrl}>
         <TextReplacer context={context} config={{}} text={headerText} tag={HeaderTag}/>
             </RingLink> :
         <TextReplacer context={context} config={{}} text={headerText} tag={HeaderTag}/>

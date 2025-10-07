@@ -7,7 +7,7 @@ import {
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
 import {ImageBlock, Story, StoryEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {UtilsHelper_convertToInt} from "../../../helpers/UtilsHelper";
+import {UtilsHelper_convertToInt, UtilsHelper_getDomain} from "../../../helpers/UtilsHelper";
 import {RSSGqlQuery} from "./RSSGqlQuery";
 import {StoryHelper_generateContentHtml, StoryHelper_getLeadBlock} from "../../../helpers/StoryHelper";
 import {Feed, Item} from "feed";
@@ -16,7 +16,7 @@ export async function RSS({context}: { context: AppContext }) {
     const seoRssConfig = await ConfigHelper_getSeoRssDefaultConfig(context);
     const generalConfig = await ConfigHelper_getGeneralConfig(context);
     const seoGeneralConfig = await ConfigHelper_getSeoGeneralConfig(context);
-    const domain = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN as string;
+    const domain = UtilsHelper_getDomain(context, true)
     const page = UtilsHelper_convertToInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
 
     const query = RSSGqlQuery;

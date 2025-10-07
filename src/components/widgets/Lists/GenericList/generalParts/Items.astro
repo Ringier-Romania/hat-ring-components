@@ -4,20 +4,20 @@ const {
     context,
     widgetConfig,
     response,
-    extendableAttributes
-}: {
+    extendableAttributes,
+} = Astro.props as {
     context: AppContext,
     widgetConfig: GenericListWidgetConfig,
-    response: GenericListResponse
-    extendableAttributes: any
-} = Astro.props;
+    response: GenericListResponse,
+    extendableAttributes: any,
+};
 
 import {AppContext} from "../../../../../types/types";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
 import {GenericListResponse, GenericListWidgetConfig} from "../types";
 import * as ItemParts from "./../itemParts";
 import _ from "lodash";
-import {RingLink} from "../../../../common/RingLink/RingLink";
+import RingLink from "../../../../common/RingLink.astro";
 import {UtilsHelper_convertToInt} from "../../../../../helpers/UtilsHelper";
 import AdditionalComponentTemplate from "../../../../common/AdditionalComponentTemplate.astro";
 const allItemParts = (extendableAttributes ? extendableAttributes.itemParts : null) || ItemParts;
@@ -45,7 +45,7 @@ const processedContent = AdditionalComponentHelper_insertComponentAtPattern(elem
 
             return (<div class={['Item', colClass, `kind-${edge.node?.kind?.code}`].join(' ')}>
                 <div class={'linkOverlay'}>
-                    <RingLink href={edge.node?.mainPublicationPoint?.url || '#'} title={edge.node?.title}>
+                    <RingLink context={context} href={edge.node?.mainPublicationPoint?.url || '#'} title={edge.node?.title}>
                         {widgetConfig.linkLabel}
                     </RingLink>
                 </div>

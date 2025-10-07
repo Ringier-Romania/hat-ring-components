@@ -6,7 +6,7 @@ import React from 'react';
 import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTaxonomyListResponse} from "./types";
-import {RingLink} from "../../../common/RingLink/RingLink";
+import RingLink from "../../../common/RingLink.astro";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {default as TextReplacer} from "../../../common/TextReplacer.astro";
 
@@ -62,9 +62,9 @@ const sortedTopics = _.sortBy(filteredTopics, topic => {
         let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
         let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
         return url && widgetConfig.links ?
-            <RingLink key={index} href={url}>
+            <RingLink context={context} href={url}>
                 <span class={`topic kind-${topic.topic.kind.code}`}>{topic.topic.name}</span>
-            </RingLink> : <span key={index} class={`topic kind-${topic.topic.kind.code}`}>{topic.topic.name}</span>
+            </RingLink> : <span class={`topic kind-${topic.topic.kind.code}`}>{topic.topic.name}</span>
         }
     )}
 </div>

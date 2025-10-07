@@ -8,6 +8,7 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 import {gql} from "graphql-tag";
 import _ from "lodash";
 import {SeoHelper_getSeoCurrentPageType} from "./SeoHelper";
+import {UtilsHelper_getDomain} from "../UtilsHelper";
 
 /**
  * Helper for handling titles according to the SEO requirements based on the placement of the usage
@@ -106,7 +107,7 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
         `;
 
         const nodeResponse = await WebsiteApiProvider.call(nodeQuery, {
-            url: process.env.NEXT_PUBLIC_WEBSITE_DOMAIN + context.url,
+            url: UtilsHelper_getDomain(context, true) + context.url,
             variant: context.websiteManagerVariant,
         });
 

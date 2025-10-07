@@ -1,0 +1,32 @@
+---
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import RingLink from "../../../common/RingLink.astro";
+import RingImage from "../../../common/RingImage.astro";
+import {TransformType} from "../../../../helpers/AcceleratorImagesHelper";
+import type {LogoParams} from "./types";
+import styles from "../../../../../styles/widgets/common/Logo.module.scss";
+import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
+
+const {widgetConfig, context} = Astro.props as LogoParams;
+
+// TODO: Get logo src from general config
+const logoSrc = widgetConfig.logoLinkLight || '';
+// TODO: Get service name from general config
+const logoTitle = widgetConfig.overrideTitle || '';
+// TODO: Get service homepage url from general config
+const logoHref = widgetConfig.overrideLink || '/';
+---
+<div class={WidgetHelper_getWidgetCssClasses('Logo', widgetConfig, context, [styles.Logo])}>
+    {logoSrc && (
+        <RingLink context={context} href={logoHref} title={logoTitle}>
+            <RingImage
+                src={logoSrc}
+                alt={logoTitle}
+                width={UtilsHelper_convertToInt(widgetConfig.imageWidth || 200)}
+                height={UtilsHelper_convertToInt(widgetConfig.imageHeight || 200)}
+                transform={TransformType.ResizeCropAuto}
+            />
+        </RingLink>
+    )}
+</div>
+

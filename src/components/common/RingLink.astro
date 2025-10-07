@@ -1,0 +1,30 @@
+---
+import {UtilsHelper_getDomain, UtilsHelper_isDevelopmentMode} from "../../helpers/UtilsHelper";
+import type {AppContext} from "../../types/types";
+
+export interface Props {
+    href?: string;
+    class?: string;
+    target?: string;
+    rel?: string;
+    title?: string;
+    context: AppContext;
+    [key: string]: any;
+}
+
+const {href: originalHref, context, ...rest} = Astro.props;
+
+let href = originalHref;
+const domain = UtilsHelper_getDomain(context, true);
+if (originalHref && domain && UtilsHelper_isDevelopmentMode()) {
+    if (typeof originalHref === 'string') {
+        href = originalHref.replace(domain, '');
+    }
+}
+---
+
+<a href={href} {...rest}>
+    <slot />
+</a>
+
+
