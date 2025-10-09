@@ -144,13 +144,11 @@ export class WebsiteApiProvider {
             const secretKey = process.env.WEBSITE_API_SECRET!;
             const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
-            if (!global.websitesApiApolloClient) {
-                global.websitesApiApolloClient = new WebsitesApiClientBuilder({
-                    accessKey,
-                    secretKey,
-                    spaceUuid
-                }).buildApolloClient();
-            }
+            const websitesApiApolloClient = new WebsitesApiClientBuilder({
+                accessKey,
+                secretKey,
+                spaceUuid
+            }).buildApolloClient();
 
             const currentTime = new Date().getTime();
             const timer = MonitoringProvider.timer(
@@ -160,12 +158,12 @@ export class WebsiteApiProvider {
 
             MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${queryType}`);
 
-            const response = await global.websitesApiApolloClient.query({
+            const response = await websitesApiApolloClient.query({
                 query,
-                variables,
-                fetchPolicy
+                variables
             });
 
+            websitesApiApolloClient.cache.gc();
             if (timer) {
                 timer.done();
             }

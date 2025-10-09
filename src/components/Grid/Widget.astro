@@ -17,7 +17,8 @@ let toRender: boolean | JSX.Element = false;
 const availableWidgets = context.customData.widgets;
 const widgetName = _.upperFirst(widgetConfig.widgetType)
 const Component = availableWidgets[widgetName] as AbstractWidget;
-widgetConfig.gridLocation = WidgetHelper_buildWidgetLocation(sectionName, boxName, index);
+const widgetConfig2 = _.cloneDeep(widgetConfig) as AbstractWidgetConfig & WidgetParams & {gridLocation: string};
+widgetConfig2.gridLocation = WidgetHelper_buildWidgetLocation(sectionName, boxName, index);
 
 const cssClasses: Array<string> = ['gridWidget']
 
@@ -25,27 +26,28 @@ if(WidgetHelper_shouldHideWidget(widgetConfig, context)) {
     toRender =  WidgetHelper_renderEmptyComponent(`gridWidget gridWidgetType${_.upperFirst(widgetConfig.widgetType)}`);
 }
 
-if (widgetConfig.widgetType) {
+if (widgetConfig2.widgetType) {
     cssClasses.push(`gridWidgetType${_.upperFirst(widgetConfig.widgetType)}`);
 }
 
-if (widgetConfig.customWidth && widgetConfig.customWidth !== 'none') {
+if (widgetConfig2.customWidth && widgetConfig2.customWidth !== 'none') {
     cssClasses.push(`gridWidth${widgetConfig.customWidth}`);
 }
 
-if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
+if (widgetConfig2.customPosition && widgetConfig2.customPosition !== 'none') {
     cssClasses.push(`gridPosition${_.upperFirst(widgetConfig.customPosition)}`);
 }
 
-if (['wrapperStart'].includes(widgetConfig.widgetType)) {
-    widgetConfig.customClass = `${cssClasses.join(' ')} ${widgetConfig.customClass}`;
+if (['wrapperStart'].includes(widgetConfig2.widgetType)) {
+    //@ts-ignore
+    widgetConfig2.customClass = `${cssClasses.join(' ')} ${widgetConfig.customClass}`;
 }
 
 ---
 
 {toRender ? <Fragment set:html={toRender}/> :
-    ['wrapperStart', 'wrapperEnd'].includes(widgetConfig.widgetType) ? <Component widgetConfig={widgetConfig} context={context}/>
-    : <div id={widgetConfig.gridLocation} class={cssClasses.join(' ')}>
-        {Component && <Component widgetConfig={widgetConfig} context={context}/>}
+    ['wrapperStart', 'wrapperEnd'].includes(widgetConfig.widgetType) ? <Component widgetConfig={widgetConfig2} context={context}/>
+    : <div id={widgetConfig2.gridLocation} class={cssClasses.join(' ')}>
+        {Component && <Component widgetConfig={widgetConfig2} context={context}/>}
     </div>
 }
