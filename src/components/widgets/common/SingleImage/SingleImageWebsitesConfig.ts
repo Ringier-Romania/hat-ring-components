@@ -30,7 +30,8 @@ export let SingleImageWebsitesConfig = {
                 "imageSize": {
                     "name": "Image resolution",
                     "type": "textfield",
-                    "description": "Image resolution (empty = original), example: 600x330"
+                    "description": "Image resolution, example: 600x330",
+                    "required": true
                 },
                 "mobileImageSrc": {
                     "name": "Mobile image src",
@@ -40,7 +41,7 @@ export let SingleImageWebsitesConfig = {
                 "mobileImageSize": {
                     "name": "Mobile image resolution",
                     "type": "textfield",
-                    "description": "Image resolution (empty = original), example: 600x330"
+                    "description": "Image resolution, example: 600x330"
                 },
                 "imageAlt": {
                     "name": "Image alt attribute",

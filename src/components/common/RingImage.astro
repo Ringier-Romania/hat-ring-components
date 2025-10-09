@@ -1,47 +1,43 @@
 ---
-import React, {ImgHTMLAttributes} from "react";
-const props = Astro.props;
-import { Image } from 'astro:assets';
+const props = Astro.props as RingImageProps;
+import {Image, LocalImageProps, RemoteImageProps} from 'astro:assets';
 
 import styles from "../../../styles/common/RingImage.module.scss";
 import {UtilsHelper_getExtension} from "../../helpers/UtilsHelper";
 import {AcceleratorImagesHelper_getUrl, TransformType} from "../../helpers/AcceleratorImagesHelper";
 import {RingImagePreload} from "./RingImagePreload";
+import {WidgetHelper_renderEmptyComponent} from "../../helpers/WidgetHelper";
 
-export interface RingImageProps extends ImgHTMLAttributes<any> {
-    transform?: TransformType,
-    priority?: boolean,
-}
+export type RingImageProps = LocalImageProps & RemoteImageProps & {
+    transform?: TransformType;
+    priority?: boolean;
+};
 
-function getPlaceholderData(width, height) {
-    const _width = `width='${width || 16}'`;
-
-    const _height = `height='${height || 9}'`;
-    const svg = `<svg xmlns='http://www.w3.org/2000/svg' ${_width} ${_height}></svg>`;
-
-    return `data:image/svg+xml;charset=utf8,${encodeURIComponent(svg)}`;
-}
-
-var src = props.src;
+let src = props.src;
 let transform = props.transform || TransformType.None;
 
-let loading = 'lazy';
-let fetchpriority: string | null = null;
-
-if (props.priority) {
-    loading = 'eager';
-    fetchpriority = 'high';
-}
-const ext = UtilsHelper_getExtension(src as string);
+let toRender: boolean | string | JSX.Element = false;
+const ext = UtilsHelper_getExtension(src);
 const isResizeable = ext != 'svg';
 
 if (isResizeable && transform !== TransformType.None) {
     src = AcceleratorImagesHelper_getUrl(src, props.width, props.height, props.transform);
 }
 
+if (!src) {
+    toRender = WidgetHelper_renderEmptyComponent('RingImage', 'Missing `src` value');
+}
+
+if (!props.width || !props.height) {
+    toRender = WidgetHelper_renderEmptyComponent('RingImage', 'Missing `width` or `height` value');
+}
+
 ---
-{src &&
-<picture>
-    <Image {...props} alt={props.alt || ""} loading={loading} fetchpriority={fetchpriority} src={src} class={['RingImage', styles.RingImage, props.class].join(' ')}/>
-</picture>}
-{loading === 'eager' && <RingImagePreload src={src}/>}
+{toRender ? <div set:html={toRender}/> : (
+    <Fragment>
+        <picture>
+            <Image {...props} alt={props.alt || ""} src={src} class={['RingImage', styles.RingImage, props.class].join(' ')}/>
+        </picture>
+        {props.priority && <RingImagePreload src={src}/>}
+    </Fragment>
+)}
