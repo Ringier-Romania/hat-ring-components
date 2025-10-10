@@ -15,6 +15,8 @@ export class WebsiteApiProvider {
         const queryType = this._determineQueryType(query);
         const tags = this.determineQueryTags(query, variables, queryType);
 
+        //log length of global.HATCacheInCallInProgress
+        MonitoringProvider.gauge('info.HATCacheInCallInProgress.count', Object.keys(global.HATCacheInCallInProgress).length);
         try {
             return new Promise(async (resolve, reject) => {
                 let cachedResponse = await CacheHelper_get(cacheKey);
