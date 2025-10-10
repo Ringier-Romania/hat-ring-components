@@ -1,4 +1,5 @@
 import {WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
+import {gql, WebsitesApiClient} from '@ringpublishing/graphql-api-client-got';
 import {DocumentNode} from "graphql/language/ast";
 import {
     CacheHelper_get,
@@ -145,23 +146,11 @@ export class WebsiteApiProvider {
             const secretKey = process.env.WEBSITE_API_SECRET!;
             const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
-            const websitesApiApolloClient = new WebsitesApiClientBuilder({
+            const websitesApiApolloClient = new WebsitesApiClient({
                 accessKey: accessKey,
                 secretKey: secretKey,
                 spaceUuid: spaceUuid
-            }).setTimeout(10000).setApolloClientAdditionalOptions({
-                queryDeduplication: true,
-                ssrMode: true,
-                devtools: {
-                    enabled: false
-                },
-                defaultOptions: {
-                    watchQuery: {fetchPolicy: "no-cache"},
-                    query: {fetchPolicy: "no-cache"},
-                }
-            }).setCache(new InMemoryCache({
-                resultCaching: false,
-            })).buildApolloClient();
+            });
 
             const currentTime = new Date().getTime();
             const timer = MonitoringProvider.timer(
@@ -171,12 +160,11 @@ export class WebsiteApiProvider {
 
             MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${queryType}`);
 
-            const response = await websitesApiApolloClient.query({
+            const response = await websitesApiApolloClient.query(
                 query,
                 variables
-            });
+            );
 
-            websitesApiApolloClient.cache.gc();
             if (timer) {
                 timer.done();
             }
