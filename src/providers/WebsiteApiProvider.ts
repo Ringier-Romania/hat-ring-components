@@ -5,6 +5,7 @@ import {
     CacheHelper_set, CacheHelper_runCallbackIfTimeStampHasExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
+import {InMemoryCache} from '@apollo/client/core';
 
 if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 
@@ -145,10 +146,22 @@ export class WebsiteApiProvider {
             const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
             const websitesApiApolloClient = new WebsitesApiClientBuilder({
-                accessKey,
-                secretKey,
-                spaceUuid
-            }).buildApolloClient();
+                accessKey: accessKey,
+                secretKey: secretKey,
+                spaceUuid: spaceUuid
+            }).setTimeout(10000).setApolloClientAdditionalOptions({
+                queryDeduplication: true,
+                ssrMode: true,
+                devtools: {
+                    enabled: false
+                },
+                defaultOptions: {
+                    watchQuery: {fetchPolicy: "no-cache"},
+                    query: {fetchPolicy: "no-cache"},
+                }
+            }).setCache(new InMemoryCache({
+                resultCaching: false,
+            })).buildApolloClient();
 
             const currentTime = new Date().getTime();
             const timer = MonitoringProvider.timer(

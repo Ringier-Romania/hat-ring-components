@@ -30,7 +30,8 @@
 		"node-cache": "^5.1.2",
 		"redis": "4.7.0",
 		"schema-dts": "^1.1.2",
-		"xml-js": "^1.6.11"
+		"xml-js": "^1.6.11",
+        "@apollo/client": "3.12.6"
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.17.15",
