@@ -50,6 +50,7 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
             MonitoringProvider.counter('info.ConfigHelper_getConfig.cached');
             return _.get(cachedElement[cacheKeyString], 'data.node.config.config.0.data');
         } else {
+
             global._cache = global._cache || {};
             if (!global._cache[cacheKeyString] || !global._cacheTimeStamp[cacheKeyString] || (new Date().getTime() - global._cacheTimeStamp[cacheKeyString]) > (UtilsHelper_convertToInt(process.env.MEM_CACHE_FOR_CONFIG_TTL_MS || 1000))) {
                 MonitoringProvider.counter('info.ConfigHelper_getConfigByKey.' + configKey);
@@ -61,6 +62,8 @@ export async function ConfigHelper_getConfig(context: AppContext, configKey) {
                 return _.get(response, 'data.node.config.config.0.data');
             }
             MonitoringProvider.counter('info.ConfigHelper_getConfig.cached');
+            MonitoringProvider.gauge('info.ConfigHelper_getConfig._cacheLength', Object.keys(global._cache).length);
+            MonitoringProvider.gauge('info.ConfigHelper_getConfig._cacheTimeStamp', Object.keys(global._cacheTimeStamp).length);
             return _.get(global._cache[cacheKeyString], 'data.node.config.config.0.data');
         }
     } else {
