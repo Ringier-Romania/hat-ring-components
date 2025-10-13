@@ -48,6 +48,10 @@ export async function SeoListGridPrevNext(context: AppContext) {
     const prevUrl = new URL(UtilsHelper_getDomain(context) + currentUrlPath);
     prevUrl.searchParams.set('page', `${currentPage - 1}`);
 
+    if (currentPage - 1 === 1) {
+        prevUrl.searchParams.delete('page');
+    }
+
     const nextUrl = new URL(UtilsHelper_getDomain(context) + currentUrlPath);
     nextUrl.searchParams.set('page', `${currentPage + 1}`);
 
