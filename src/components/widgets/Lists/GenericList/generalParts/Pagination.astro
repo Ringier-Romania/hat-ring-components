@@ -22,20 +22,22 @@ const total = response.data?.stories.total;
 const perPageAllItems = UtilsHelper_convertToInt(widgetConfig.perPageAllItems) || UtilsHelper_convertToInt(widgetConfig.paginationElements);
 const pages = Math.ceil(total / perPageAllItems);
 const lastPage = WidgetHelper_getPaginationDataForGenericList(widgetConfig, total);
-
+const getHref = (pageNum: number) => {
+    return pageNum === 1 ? currentUrl : `${currentUrl}?page=${pageNum}`;
+};
 if (pages === 1) {
     toRender = WidgetHelper_renderEmptyComponent('Pagination', '', true);
 }
 
 // Generate pagination buttons
-const buttons = [];
+const buttons: any[] = [];
 
 // Previous page and early pages
 if (currentPage > 1) {
     // Previous button
     buttons.push({
         type: 'prev',
-        page: currentPage - 1,
+        href: getHref(currentPage - 1),
         content: '&#60;',
         rel: 'prev'
     });
@@ -44,7 +46,7 @@ if (currentPage > 1) {
     for (let i = 1; i < Math.min(3, currentPage); i++) {
         buttons.push({
             type: 'page',
-            page: i,
+            href: getHref(i),
             content: i.toString()
         });
     }
@@ -61,7 +63,7 @@ if (currentPage > 1) {
     for (let i = Math.max(3, currentPage - 1); i < currentPage; i++) {
         buttons.push({
             type: 'page',
-            page: i,
+            href: getHref(i),
             content: i.toString()
         });
     }
@@ -70,7 +72,7 @@ if (currentPage > 1) {
 // Current page
 buttons.push({
     type: 'current',
-    page: currentPage,
+    href: getHref(currentPage),
     content: currentPage.toString()
 });
 
@@ -80,7 +82,7 @@ if (currentPage < lastPage) {
     for (let i = currentPage + 1; i <= Math.min(currentPage + 1, lastPage); i++) {
         buttons.push({
             type: 'page',
-            page: i,
+            href: getHref(i),
             content: i.toString()
         });
     }
@@ -97,7 +99,7 @@ if (currentPage < lastPage) {
     for (let i = Math.max(currentPage + 2, lastPage - 1); i <= lastPage; i++) {
         buttons.push({
             type: 'page',
-            page: i,
+            href: getHref(i),
             content: i.toString()
         });
     }
@@ -105,7 +107,7 @@ if (currentPage < lastPage) {
     // Next button
     buttons.push({
         type: 'next',
-        page: currentPage + 1,
+        href: getHref(currentPage + 1),
         content: '&#62;',
         rel: 'next'
     });
@@ -122,7 +124,7 @@ if (currentPage < lastPage) {
             } else if (button.type === 'current') {
                 return (
                     <li class="active">
-                        <RingLink context={context} href={`${currentUrl}?page=${button.page}`}>
+                        <RingLink context={context} href={button.href}>
                             {button.content}
                         </RingLink>
                     </li>
@@ -133,7 +135,7 @@ if (currentPage < lastPage) {
                         <RingLink
                             context={context}
                             rel={button.rel}
-                            href={`${currentUrl}?page=${button.page}`}
+                            href={button.href}
                         >
                             <Fragment set:html={button.content} />
                         </RingLink>
@@ -145,7 +147,7 @@ if (currentPage < lastPage) {
                         <RingLink
                             context={context}
                             rel={button.rel}
-                            href={`${currentUrl}?page=${button.page}`}
+                            href={button.href}
                         >
                             <Fragment set:html={button.content} />
                         </RingLink>
@@ -154,7 +156,7 @@ if (currentPage < lastPage) {
             } else {
                 return (
                     <li>
-                        <RingLink context={context} href={`${currentUrl}?page=${button.page}`}>
+                        <RingLink context={context} href={button.href} >
                             {button.content}
                         </RingLink>
                     </li>
@@ -163,3 +165,4 @@ if (currentPage < lastPage) {
         })}
     </ul>
 }
+
