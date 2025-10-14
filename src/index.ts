@@ -19,6 +19,7 @@ export { default as Slider } from "./components/widgets/common/Slider/Slider.ast
 export { default as StoryDate } from "./components/widgets/Story/StoryDate/StoryDate.astro";
 export { default as TextReplacer } from "./components/common/TextReplacer.astro";
 export { default as TopicTitle } from "./components/widgets/Lists/TopicTitle/TopicTitle.astro";
+export { default as TopicDescription } from "./components/widgets/Lists/TopicDescription/TopicDescription.astro";
 export { default as SingleImage } from "./components/widgets/common/SingleImage/SingleImage.astro";
 export { default as Kropka } from "./components/widgets/analytics/Kropka/Kropka.astro";
 // export * from "./components/widgets/analytics/RingDataLayer/RingDataLayer";
