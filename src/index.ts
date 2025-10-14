@@ -60,3 +60,4 @@ export { default as WrapperEnd } from "./components/widgets/common/WrapperEnd.as
 export { default as SimpleHeading } from "./components/widgets/common/SimpleHeading/SimpleHeading.astro"
 export { default as CacheScanner } from "./components/common/CacheScanner.astro";
 export { default as Popup } from "./components/widgets/common/Popup/Popup.astro";
+export * from "./providers/MonitoringProvider";

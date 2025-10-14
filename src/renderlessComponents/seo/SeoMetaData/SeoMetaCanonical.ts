@@ -19,7 +19,9 @@ import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
  */
 export async function SeoMetaCanonical(context: AppContext) {
     const pageType = UtilsHelper_getCurrentPageType(context);
-    let canonicalToReturn = (await ConfigHelper_currentUrl(context) || '').split('?')[0];
+    const currentUrl = await ConfigHelper_currentUrl(context);
+    const searchParams = _.get(context, 'hatControllerParams.urlWithParsedQuery.search', '');
+    let canonicalToReturn = `${currentUrl}${searchParams}`;
 
     if (pageType === SiteContentType.Story) {
         const canonicalQuery = gql`
