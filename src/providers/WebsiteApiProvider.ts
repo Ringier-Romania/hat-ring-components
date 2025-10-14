@@ -5,6 +5,7 @@ import {
     CacheHelper_set, CacheHelper_runCallbackIfTimeStampHasExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
+import gql from "graphql-tag";
 
 if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 
@@ -159,7 +160,6 @@ export class WebsiteApiProvider {
                 `info.WebsitesApiProvider.call.hitApiTimer`
             );
 
-
             MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${queryType}`);
 
             const response = await global.websitesApiApolloClient.query({
@@ -168,6 +168,7 @@ export class WebsiteApiProvider {
                 fetchPolicy
             });
 
+            gql.resetCaches();
             if (timer) {
                 timer.done();
             }
