@@ -113,8 +113,8 @@ if (!toRender) {
                 "Source type": "Image",
                 "Source url": _.get(imageBlock, "url", null),
                 "Source desktop dimensions(eg. 600x300)": imageWidth + "x" + imageHeight,
-                Title: _.get(imageBlock, "title", null),
-                Description: caption,
+                Title: caption,
+                Description: "",
                 "Source Node": imageCopyrightSources.map((source) => {
                     if (source.type === 'Copyright') {
                         return `<p class="metaData copyright">${source.name}</p>`;
