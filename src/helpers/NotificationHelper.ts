@@ -97,7 +97,7 @@ async function handleNotification(context) {
     }
 
     if (req.notificationType === NotificationType.variantConfigurationChanged && req.variantName) {
-        const timer = MonitoringProvider.timer(`info.NotificationHandler.variantConfigurationChanged_CacheHelper_clearByPartialKey`);
+        const timer = MonitoringProvider.timer(`info.NotificationHandler.variantConfigurationChanged_CacheHelper_clearByTag`);
         let cacheCleaner = {keys: 0, responses: 0};
         cacheCleaner = await CacheHelper_clearByTag('config_' + req.variantName);
 
@@ -144,7 +144,7 @@ async function handleNotification(context) {
                     }
 
                     if (objectType === 'Story') {
-                        const timer = MonitoringProvider.timer(`info.NotificationHandler.contentApiStory_clearStoryParentsByTags`);
+                        const timer = MonitoringProvider.timer(`info.NotificationHandler.contentApiStory_clearStoryParentsByTag`);
                         const cacheParentCleaner = await clearStoryParentsByTag('story_' + resourceId);
                         deleteCount.keys += cacheParentCleaner.keys;
                         if (timer) {
@@ -152,7 +152,7 @@ async function handleNotification(context) {
                         }
                     }
 
-                    const timer = MonitoringProvider.timer(`info.NotificationHandler.contentApiStory_CacheHelper_clearByPartialKey`);
+                    const timer = MonitoringProvider.timer(`info.NotificationHandler.contentApiStory_CacheHelper_clearByTag`);
                     let cacheCleaner = await CacheHelper_clearByTag('story_' + resourceId);
                     deleteCount.keys += cacheCleaner.keys;
 
@@ -164,7 +164,7 @@ async function handleNotification(context) {
                     for (const publicationPoint of publicationPoints) {
                         const arrUrl = publicationPoint.url.split('/');
                         const pubId = arrUrl[arrUrl.length - 1];
-                        const timer2 = MonitoringProvider.timer(`info.NotificationHandler.contentApiStory_pubPoint_CacheHelper_clearByPartialKeyUnlink`);
+                        const timer2 = MonitoringProvider.timer(`info.NotificationHandler.contentApiStory_pubPoint_CacheHelper_clearByTag`);
 
                         const pubPointsCacheCleaner = await CacheHelper_clearByTag('pubId_' + `${pubId}`);
                         if (timer2) {
@@ -175,7 +175,7 @@ async function handleNotification(context) {
                         const url = `${publicationPoint.url}?antyCache=${UtilsHelper_generateRandomString()}`;
                         fetch(url, { method: 'HEAD', headers: { 'User-Agent': userAgent, } }).catch(err => {
                             console.error('notification handler fetch error', err);
-                            MonitoringProvider.counter('info.NotificationHandler.contentApiStory_pubPoint_CacheHelper_clearByPartialKeyUnlink_fetch_error');
+                            MonitoringProvider.counter('info.NotificationHandler.contentApiStory_pubPoint_CacheHelper_clearByTag_fetch_error');
 
                             setTimeout(async () => {
                                 fetch(url, {
@@ -185,7 +185,7 @@ async function handleNotification(context) {
                                     }
                                 }).catch((err) => {
                                     console.error('notification handler fetch error catch', err);
-                                    MonitoringProvider.counter('info.NotificationHandler.contentApiStory_pubPoint_CacheHelper_clearByPartialKeyUnlink_fetch_error_catch');
+                                    MonitoringProvider.counter('info.NotificationHandler.contentApiStory_pubPoint_CacheHelper_clearByTag_fetch_error_catch');
                                 })
                             }, 1000 * 70);
                         })
