@@ -1,0 +1,65 @@
+---
+const { widgetConfig, context } = Astro.props as {
+    widgetConfig: TopicDescriptionWidgetConfig;
+    context: AppContext;
+};
+import _ from "lodash";
+import { WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent } from "../../../../helpers/WidgetHelper";
+import { TopicDescriptionWidgetConfig, TopicDescriptionResponse } from "./types";
+import { gql } from "graphql-tag";
+import { WebsiteApiProvider } from "../../../../providers/WebsiteApiProvider";
+import { AppContext } from "../../../../types/types";
+import StoryContentSwitcher from "../../Story/StoryContent/StoryContentSwitcher.astro";
+let toRender: boolean | JSX.Element | string = false;
+
+const query = gql`
+    query ($id: UUID) {
+        topic(id: $id) {
+            description {
+                content {
+                    blocks {
+                        ... on ParagraphBlock {
+                            type
+                            text
+                        }
+                    }
+                }
+            }
+        }
+    }
+`;
+
+const categoryId =
+    _.get(context, "hatControllerParams.gqlResponse.data.site.data.content.category.id") ||
+    _.get(context, "hatControllerParams.gqlResponse.data.site.data.content.id");
+
+const variables = {
+    id: categoryId,
+};
+
+let response = widgetConfig?.response;
+if (!response) {
+    response = (await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL)) as TopicDescriptionResponse;
+}
+
+const content = _.get(response, "data.topic.description.content[0].blocks", []);
+
+if (!content) {
+    toRender = WidgetHelper_renderEmptyComponent("TopicDescription");
+}
+---
+
+{
+    toRender ? (
+        <Fragment set:html={toRender} />
+    ) : (
+        <div class={WidgetHelper_getWidgetCssClasses("TopicDescription", widgetConfig, context)}>
+            <StoryContentSwitcher
+                content={content}
+                widgetConfig={widgetConfig}
+                context={context}
+                extendableAttributes={{}}
+            />
+        </div>
+    )
+}
