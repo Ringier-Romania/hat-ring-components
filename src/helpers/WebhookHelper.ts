@@ -70,9 +70,9 @@ interface Event {
 const podName = process.env.HOSTNAME;
 const userAgent = 'RingPublishing HatBot'
 
-export async function NotificationHelper_POST(context: APIContext) {
+export async function WebhookHelper_POST(context: APIContext) {
     handleNotification(context)
-    MonitoringProvider.counter(`info.NotificationHandler.response_send_200`);
+    MonitoringProvider.counter(`info.WebhookHelper.response_send_200`);
     return new Response('ok ' + podName, {});
 }
 
@@ -80,13 +80,13 @@ async function handleNotification(context) {
     let thisUrl = context.url.href;
     let origin = context.url.origin;
 
-    const timer0 = MonitoringProvider.timer(`info.NotificationHandler.requestJson`);
+    const timer0 = MonitoringProvider.timer(`info.WebhookHelper.requestJson`);
     let req: any = null;
     try {
         req = await context.request.json() as NotificationWebsiteApi & NotificationContentApi & HatDone;
     } catch (e) {
-        MonitoringProvider.counter(`info.NotificationHandler.response_send_500`);
-        console.error('error parsing notification request', e);
+        MonitoringProvider.counter(`info.WebhookHelper.response_send_500`);
+        console.error('WebhookHelper: error parsing request', e);
         console.info(context.request.body);
     }
     if (timer0) {
@@ -97,7 +97,7 @@ async function handleNotification(context) {
     }
 
     if (req.notificationType === NotificationType.variantConfigurationChanged && req.variantName) {
-        const timer = MonitoringProvider.timer(`info.NotificationHandler.variantConfigurationChanged_CacheHelper_clearByTag`);
+        const timer = MonitoringProvider.timer(`info.WebhookHelper.variantConfigurationChanged_CacheHelper_clearByTag`);
         let cacheCleaner = {keys: 0, responses: 0};
         cacheCleaner = await CacheHelper_clearByTag('config_' + req.variantName);
 
@@ -105,7 +105,7 @@ async function handleNotification(context) {
             timer.done();
         }
 
-        MonitoringProvider.gauge('info.NotificationHandler.variantConfigurationChanged', cacheCleaner.keys);
+        MonitoringProvider.gauge('info.WebhookHelper.variantConfigurationChanged', cacheCleaner.keys);
 
         if (!req.hatDone) {
             req.hatDone = true;
@@ -144,7 +144,7 @@ async function handleNotification(context) {
                     }
 
                     if (objectType === 'Story') {
-                        const timer = MonitoringProvider.timer(`info.NotificationHandler.contentApiStory_clearStoryParentsByTag`);
+                        const timer = MonitoringProvider.timer(`info.WebhookHelper.contentApiStory_clearStoryParentsByTag`);
                         const cacheParentCleaner = await clearStoryParentsByTag('story_' + resourceId);
                         deleteCount.keys += cacheParentCleaner.keys;
                         if (timer) {
@@ -152,7 +152,7 @@ async function handleNotification(context) {
                         }
                     }
 
-                    const timer = MonitoringProvider.timer(`info.NotificationHandler.contentApiStory_CacheHelper_clearByTag`);
+                    const timer = MonitoringProvider.timer(`info.WebhookHelper.contentApiStory_CacheHelper_clearByTag`);
                     let cacheCleaner = await CacheHelper_clearByTag('story_' + resourceId);
                     deleteCount.keys += cacheCleaner.keys;
 
@@ -160,11 +160,11 @@ async function handleNotification(context) {
                         timer.done();
                     }
 
-                    MonitoringProvider.gauge('info.NotificationHandler.publicationPoints', publicationPoints.length);
+                    MonitoringProvider.gauge('info.WebhookHelper.publicationPoints', publicationPoints.length);
                     for (const publicationPoint of publicationPoints) {
                         const arrUrl = publicationPoint.url.split('/');
                         const pubId = arrUrl[arrUrl.length - 1];
-                        const timer2 = MonitoringProvider.timer(`info.NotificationHandler.contentApiStory_pubPoint_CacheHelper_clearByTag`);
+                        const timer2 = MonitoringProvider.timer(`info.WebhookHelper.contentApiStory_pubPoint_CacheHelper_clearByTag`);
 
                         const pubPointsCacheCleaner = await CacheHelper_clearByTag('pubId_' + `${pubId}`);
                         if (timer2) {
@@ -174,8 +174,8 @@ async function handleNotification(context) {
 
                         const url = `${publicationPoint.url}?antyCache=${UtilsHelper_generateRandomString()}`;
                         fetch(url, { method: 'HEAD', headers: { 'User-Agent': userAgent, } }).catch(err => {
-                            console.error('notification handler fetch error', err);
-                            MonitoringProvider.counter('info.NotificationHandler.contentApiStory_pubPoint_CacheHelper_clearByTag_fetch_error');
+                            console.error('WebhookHelper: fetch error', err);
+                            MonitoringProvider.counter('info.WebhookHelper.contentApiStory_pubPoint_CacheHelper_clearByTag_fetch_error');
 
                             setTimeout(async () => {
                                 fetch(url, {
@@ -184,13 +184,13 @@ async function handleNotification(context) {
                                         'User-Agent': userAgent,
                                     }
                                 }).catch((err) => {
-                                    console.error('notification handler fetch error catch', err);
-                                    MonitoringProvider.counter('info.NotificationHandler.contentApiStory_pubPoint_CacheHelper_clearByTag_fetch_error_catch');
+                                    console.error('WebhookHelper: fetch error catch', err);
+                                    MonitoringProvider.counter('info.WebhookHelper.contentApiStory_pubPoint_CacheHelper_clearByTag_fetch_error_catch');
                                 })
                             }, 1000 * 70);
                         })
                     }
-                    MonitoringProvider.gauge('info.NotificationHandler.contentApiStory', deleteCount.keys);
+                    MonitoringProvider.gauge('info.WebhookHelper.contentApiStory', deleteCount.keys);
 
                     if (!req.hatDone) {
                         req.hatDone = true;
@@ -207,11 +207,11 @@ async function handleNotification(context) {
                 }
 
             } catch (e) {
-                console.error('notification handler error RING::ContentAPI ', e);
+                console.error('WebhookHelper: error RING::ContentAPI ', e);
             }
         }
     }
-    MonitoringProvider.counter(`info.NotificationHandler.${req.hatDone ? 'request_for_repeat_end' : 'request_normal_end'}`);
+    MonitoringProvider.counter(`info.WebhookHelper.${req.hatDone ? 'request_for_repeat_end' : 'request_normal_end'}`);
 }
 
 async function repeatRequest(req: any, thisUrl: string, origin: string) {
@@ -226,21 +226,21 @@ async function repeatRequest(req: any, thisUrl: string, origin: string) {
                 }
             }
             fetch(thisUrl, options).catch(err => {
-                console.error('notification handler fetch error repeatRequest', err);
-                MonitoringProvider.counter('info.NotificationHandler.repeatRequest_fetch_error');
+                console.error('WebhookHelper: fetch error repeatRequest', err);
+                MonitoringProvider.counter('info.WebhookHelper.repeatRequest_fetch_error');
 
                 setTimeout(async () => {
                     fetch(thisUrl, options).catch(err => {
-                        console.error('notification handler fetch error repeatRequest catch', err);
-                        MonitoringProvider.counter('info.NotificationHandler.repeatRequest_fetch_error_catch');
+                        console.error('WebhookHelper: fetch error repeatRequest catch', err);
+                        MonitoringProvider.counter('info.WebhookHelper.repeatRequest_fetch_error_catch');
                     });
                 }, 1000 * 70);
             })
         } catch (e) {
-            console.error('notification handler error repeatRequest ', e);
-            MonitoringProvider.counter(`info.NotificationHandler.repeatRequest_error`);
+            console.error('WebhookHelper: error repeatRequest ', e);
+            MonitoringProvider.counter(`info.WebhookHelper.repeatRequest_error`);
         }
-        MonitoringProvider.counter('info.NotificationHandler.repeat_done');
+        MonitoringProvider.counter('info.WebhookHelper.repeat_done');
     }
 }
 
@@ -259,7 +259,7 @@ async function clearStoryParentsByTag(tag) {
                     const res = await CacheHelper_clearByTag('story_' + `${splitKey[1]}`);
                     deleteCount.keys += res.keys;
                 } catch (e) {
-                    console.error('clearStoryParentsByTag error parent', e);
+                    console.error('WebhookHelper: clearStoryParentsByTag error parent', e);
                 }
             }
         }
