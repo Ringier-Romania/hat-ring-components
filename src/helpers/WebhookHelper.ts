@@ -68,7 +68,7 @@ interface Event {
 }
 
 const podName = process.env.HOSTNAME;
-const userAgent = 'RingPublishing HatBot'
+const userAgent = 'RingPublishing HatBot';
 
 export async function WebhookHelper_POST(context: APIContext) {
     handleNotification(context)
@@ -76,7 +76,7 @@ export async function WebhookHelper_POST(context: APIContext) {
     return new Response('ok ' + podName, {});
 }
 
-async function handleNotification(context) {
+async function handleNotification(context: APIContext) {
     let thisUrl = context.url.href;
     let origin = context.url.origin;
 
@@ -214,8 +214,8 @@ async function handleNotification(context) {
     MonitoringProvider.counter(`info.WebhookHelper.${req.hatDone ? 'request_for_repeat_end' : 'request_normal_end'}`);
 }
 
-async function repeatRequest(req: any, thisUrl: string, origin: string) {
-    if (thisUrl && !req.hatDone) {
+async function repeatRequest(req: string, thisUrl: string, origin: string) {
+    if (thisUrl) {
         try {
             const options = {
                 method: "POST",
@@ -244,7 +244,7 @@ async function repeatRequest(req: any, thisUrl: string, origin: string) {
     }
 }
 
-async function clearStoryParentsByTag(tag) {
+async function clearStoryParentsByTag(tag: string) { 
     const keys = await CacheHelper_getKeysByTag(tag);
 
     const deleteCount = {
