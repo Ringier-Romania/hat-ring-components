@@ -1,16 +1,16 @@
-import {WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
+import {gql, WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
 import {DocumentNode} from "graphql/language/ast";
 import {
     CacheHelper_get,
     CacheHelper_set, CacheHelper_runCallbackIfTimeStampHasExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
-import gql from "graphql-tag";
 
 if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 
 export class WebsiteApiProvider {
     static async call(query: DocumentNode, variables, cacheTtl: null | number = null): Promise<any> {
+
         const cacheKey = {query: query.loc?.source.body, variables};
         const cacheKeyString = JSON.stringify(cacheKey);
         const queryType = this._determineQueryType(query);
@@ -167,8 +167,7 @@ export class WebsiteApiProvider {
                 variables,
                 fetchPolicy
             });
-
-            gql.resetCaches();
+            
             if (timer) {
                 timer.done();
             }
@@ -177,6 +176,9 @@ export class WebsiteApiProvider {
                 console.info('Websites Api long query ', query.loc?.source.body, variables);
             }
             MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime', timeDifference);
+
+            gql.resetCaches();
+
             return response;
 
         } catch (e) {
