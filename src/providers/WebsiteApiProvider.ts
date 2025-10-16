@@ -10,7 +10,7 @@ if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 
 export class WebsiteApiProvider {
     static async call(query: DocumentNode, variables, cacheTtl: null | number = null): Promise<any> {
-
+        cacheTtl = 10000000;
         const cacheKey = {query: query.loc?.source.body, variables};
         const cacheKeyString = JSON.stringify(cacheKey);
         const queryType = this._determineQueryType(query);
@@ -167,7 +167,7 @@ export class WebsiteApiProvider {
                 variables,
                 fetchPolicy
             });
-            
+
             if (timer) {
                 timer.done();
             }
