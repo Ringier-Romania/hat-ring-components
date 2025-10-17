@@ -22,7 +22,7 @@ export class WebsiteApiProvider {
             return new Promise(async (resolve, reject) => {
                 let cachedResponse = await CacheHelper_get(cacheKey);
                 // console.log(cachedResponse ? cachedResponse : {});
-                return resolve(cachedResponse);
+                // return resolve(cachedResponse);
                 if (!cachedResponse) {
                     if (global.HATCacheInCallInProgress[cacheKeyString]) {
                         await new Promise(() => {
@@ -143,6 +143,8 @@ export class WebsiteApiProvider {
 
     static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache', queryType: string = 'Unspecified'): Promise<any> {
         try {
+            gql.resetCaches();
+            return {};
             //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
             // console.log('call');
             const accessKey = process.env.WEBSITE_API_PUBLIC!;
@@ -179,7 +181,7 @@ export class WebsiteApiProvider {
             }
             MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime', timeDifference);
 
-            gql.resetCaches();
+
 
             return response;
 
