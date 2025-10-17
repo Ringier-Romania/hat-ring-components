@@ -143,7 +143,7 @@ export class WebsiteApiProvider {
 
     static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache', queryType: string = 'Unspecified'): Promise<any> {
         try {
-            gql.resetCaches();
+            //gql.resetCaches();
             //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
             // console.log('call');
             const accessKey = process.env.WEBSITE_API_PUBLIC!;
