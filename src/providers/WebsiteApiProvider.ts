@@ -21,6 +21,8 @@ export class WebsiteApiProvider {
         try {
             return new Promise(async (resolve, reject) => {
                 let cachedResponse = await CacheHelper_get(cacheKey);
+                // console.log(cachedResponse ? cachedResponse : {});
+                return resolve(cachedResponse);
                 if (!cachedResponse) {
                     if (global.HATCacheInCallInProgress[cacheKeyString]) {
                         await new Promise(() => {
