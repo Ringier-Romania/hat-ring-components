@@ -1,4 +1,5 @@
 import {gql, WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
+import {WebsitesApiClient} from '@ringpublishing/graphql-api-client-got';
 import {DocumentNode} from "graphql/language/ast";
 import {
     CacheHelper_get,
@@ -10,7 +11,6 @@ if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 
 export class WebsiteApiProvider {
     static async call(query: DocumentNode, variables, cacheTtl: null | number = null): Promise<any> {
-        cacheTtl = 10000000;
         const cacheKey = {query: query.loc?.source.body, variables};
         const cacheKeyString = JSON.stringify(cacheKey);
         const queryType = this._determineQueryType(query);
@@ -143,21 +143,19 @@ export class WebsiteApiProvider {
 
     static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache', queryType: string = 'Unspecified'): Promise<any> {
         try {
-            gql.resetCaches();
-            return {};
             //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
             // console.log('call');
             const accessKey = process.env.WEBSITE_API_PUBLIC!;
             const secretKey = process.env.WEBSITE_API_SECRET!;
             const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
-            if (!global.websitesApiApolloClient) {
-                global.websitesApiApolloClient = new WebsitesApiClientBuilder({
+            // if (!global.websitesApiApolloClient) {
+                const websitesApiApolloClient = new WebsitesApiClient({
                     accessKey,
                     secretKey,
                     spaceUuid
-                }).buildApolloClient();
-            }
+                });
+            // }
 
             const currentTime = new Date().getTime();
             const timer = MonitoringProvider.timer(
@@ -166,11 +164,10 @@ export class WebsiteApiProvider {
 
             MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${queryType}`);
 
-            const response = await global.websitesApiApolloClient.query({
+            const response = await websitesApiApolloClient.query(
                 query,
-                variables,
-                fetchPolicy
-            });
+                variables
+                );
 
             if (timer) {
                 timer.done();
