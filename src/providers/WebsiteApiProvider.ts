@@ -104,7 +104,7 @@ export class WebsiteApiProvider {
     }
 
     static determineQueryTags(query: DocumentNode, variables: any, queryType): string[] {
-        let tags = [];
+        let tags: any = [];
         if (variables) {
             if (queryType === 'Story') {
                 const storyUuid = this._findStoryUuidInQuery(query, variables);
@@ -143,20 +143,20 @@ export class WebsiteApiProvider {
 
     static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache', queryType: string = 'Unspecified'): Promise<any> {
         try {
-            //gql.resetCaches();
+            gql.resetCaches();
             //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
             // console.log('call');
             const accessKey = process.env.WEBSITE_API_PUBLIC!;
             const secretKey = process.env.WEBSITE_API_SECRET!;
             const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
-            // if (!global.websitesApiApolloClient) {
-                const websitesApiApolloClient = new WebsitesApiClient({
+            if (!global.websitesApiGotClient) {
+                global.websitesApiGotClient = new WebsitesApiClient({
                     accessKey,
                     secretKey,
                     spaceUuid
                 });
-            // }
+            }
 
             const currentTime = new Date().getTime();
             const timer = MonitoringProvider.timer(
@@ -165,20 +165,20 @@ export class WebsiteApiProvider {
 
             MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${queryType}`);
 
-            const response = await websitesApiApolloClient.query(
+            const response = await global.websitesApiGotClient.query(
                 query,
                 variables
-                );
+            );
 
             if (timer) {
                 timer.done();
             }
             const timeDifference = new Date().getTime() - currentTime;
+
             if (timeDifference > 4000) {
                 console.info('Websites Api long query ', query.loc?.source.body, variables);
             }
             MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime', timeDifference);
-
 
 
             return response;
