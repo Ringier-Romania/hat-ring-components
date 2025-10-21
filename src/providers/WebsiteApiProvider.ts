@@ -1,4 +1,5 @@
-import {WebsitesApiClientBuilder} from '@ringpublishing/graphql-api-client';
+import {gql} from '@ringpublishing/graphql-api-client';
+import {WebsitesApiClient} from '@ringpublishing/graphql-api-client-got';
 import {DocumentNode} from "graphql/language/ast";
 import {
     CacheHelper_get,
@@ -99,7 +100,7 @@ export class WebsiteApiProvider {
     }
 
     static determineQueryTags(query: DocumentNode, variables: any, queryType): string[] {
-        let tags = [];
+        let tags: any = [];
         if (variables) {
             if (queryType === 'Story') {
                 const storyUuid = this._findStoryUuidInQuery(query, variables);
@@ -138,18 +139,19 @@ export class WebsiteApiProvider {
 
     static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache', queryType: string = 'Unspecified'): Promise<any> {
         try {
+            gql.resetCaches();
             //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
             // console.log('call');
             const accessKey = process.env.WEBSITE_API_PUBLIC!;
             const secretKey = process.env.WEBSITE_API_SECRET!;
             const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
 
-            if (!global.websitesApiApolloClient) {
-                global.websitesApiApolloClient = new WebsitesApiClientBuilder({
+            if (!global.websitesApiGotClient) {
+                global.websitesApiGotClient = new WebsitesApiClient({
                     accessKey,
                     secretKey,
                     spaceUuid
-                }).buildApolloClient();
+                });
             }
 
             const currentTime = new Date().getTime();
@@ -160,11 +162,7 @@ export class WebsiteApiProvider {
 
             MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${queryType}`);
 
-            const response = await global.websitesApiApolloClient.query({
-                query,
-                variables,
-                fetchPolicy
-            });
+            const response = await global.websitesApiGotClient.query(query, variables);
 
             if (timer) {
                 timer.done();
