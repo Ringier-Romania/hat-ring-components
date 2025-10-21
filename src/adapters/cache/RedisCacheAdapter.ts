@@ -43,6 +43,11 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
         return data;
     }
 
+    async getExpirationTimestamp(key: any): Promise<number | undefined> {
+        const data = await this.redisProvider.getExpirationTimestamp(key);
+        return data;
+    }
+
     async keysByGlob(globKey: string): Promise<string[]> {
         return await this.redisProvider.keysByGlob(globKey);
     }

@@ -11,17 +11,18 @@ export class NodeCacheAdapter implements CacheAdapterInterface {
         this.cache = myCache;
     }
 
-    async set(key: any, value: any, TTL: number | null | undefined, tags: string[] | null | boolean = null): Promise<void> {
-        if (TTL) {
-            this.cache.set(key, value, TTL);
+    async set(key: any, value: any, ttl: number | null | undefined, tags: string[] | null | boolean = null): Promise<void> {
+        if (ttl) {
+            this.cache.set(key, {value, ttl}, ttl);
             return;
         } else {
-            this.cache.set(key, value);
+            this.cache.set(key, {value, ttl: undefined});
         }
     }
 
     get(key: any): any {
-        return this.cache.get(key);
+        // @ts-ignore
+        return this.cache.get(key)?.value;
     }
 
     async flushAll(): Promise<void> {
@@ -41,8 +42,11 @@ export class NodeCacheAdapter implements CacheAdapterInterface {
     }
 
     async getTtl(key: any): Promise<number | undefined> {
-        return this.cache.getTtl(key);
+        // @ts-ignore
+        return this.cache.get(key)?.ttl;
     }
 
-
+    async getExpirationTimestamp(key: any): Promise<number | undefined> {
+        return this.cache.getTtl(key);
+    }
 }
