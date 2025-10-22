@@ -165,6 +165,7 @@ export function StoryHelper_getLeadBlock(story: Story): any {
 export function StoryHelper_getGqlContentFragment(): any {
     return `content {
                 blocks {
+                    __typename
                     ... on ImageBlock {
                         type
                         title
