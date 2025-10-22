@@ -48,9 +48,14 @@ export async function CacheHelper_get(key: any, removeOnExpire = false) {
     return value;
 }
 
-export async function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, callback: Function) {
+export async function CacheHelper_getDecoratedCachedObject(key: any): Promise<{ttl: number | undefined, value: any, expirationTimestamp: number | undefined}> {
     key = JSON.stringify(key);
-    const expirationTimestamp = await cacheAdapter.getExpirationTimestamp(key);
+    const value = await cacheAdapter.getDecoratedCachedObject(key);
+    return value;
+}
+
+export async function CacheHelper_runCallbackIfTimeStampHasExpired(rawCachedObject: { ttl: number | undefined, value: any, expirationTimestamp: number | undefined }, callback: Function, ttl: number | null) {
+    const expirationTimestamp = rawCachedObject.expirationTimestamp;
     if (!expirationTimestamp) {
         callback();
         return;
@@ -58,11 +63,24 @@ export async function CacheHelper_runCallbackIfTimeStampHasExpired(key: any, cal
     const expired = expirationTimestamp ? expirationTimestamp - new Date().getTime() < 0 : true;
     if (expired) {
         callback();
+        return;
+    }
+    const ttlHasChanged = (ttl == null || rawCachedObject.ttl == null) ? true : ttl !== rawCachedObject.ttl;
+    if (ttlHasChanged) {
+        callback();
     }
 }
 
 export async function CacheHelper_flush() {
     return await cacheAdapter.flushAll();
+}
+
+export async function CacheHelper_getTtl(key) {
+    return await cacheAdapter.getTtl(key);
+}
+
+export async function CacheHelper_getExpirationTimestamp(key) {
+    return await cacheAdapter.getExpirationTimestamp(key);
 }
 
 export function CacheHelper_del(keys: any) {

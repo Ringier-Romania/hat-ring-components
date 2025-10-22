@@ -191,6 +191,28 @@ export class RedisProvider {
 
     }
 
+    async getDecoratedCachedObject({key}: {
+        key: string;
+    }): Promise<RedisCacheValue | null> {
+        if (!this.client) {
+            await this.initialize();
+        }
+
+        try {
+            const data = await this.client.get(key);
+            if (!data) {
+                return null;
+            }
+            const parsedData = this._parseResponse(data, key);
+            MonitoringProvider.counter('info.RedisProvider.getDecoratedCachedObject');
+            return parsedData;
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.getDecoratedCachedObject');
+            return null;
+        }
+
+    }
+
     async del(key: string): Promise<number> {
         if (!this.client) {
             await this.initialize();
@@ -277,14 +299,14 @@ export class RedisProvider {
             return parsedData.ttl && parsedData.data ? parsedData : {
                 data: parsedData,
                 ttl: undefined,
-                expirationDate: undefined,
+                expirationTimestamp: undefined,
             };
         } catch (e) {
             console.error('Redis Error parsing data for key: ', key, data);
             return {
                 data: data,
                 ttl: undefined,
-                expirationDate: undefined,
+                expirationTimestamp: undefined,
             }
         }
     }

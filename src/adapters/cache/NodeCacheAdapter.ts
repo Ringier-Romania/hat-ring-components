@@ -1,6 +1,7 @@
 import {CacheAdapterInterface} from "./types";
 import NodeCache from "node-cache";
 import {UtilsHelper_convertToInt} from "../../helpers/UtilsHelper";
+import _ from "lodash"
 
 export class NodeCacheAdapter implements CacheAdapterInterface {
     private cache: NodeCache;
@@ -20,9 +21,17 @@ export class NodeCacheAdapter implements CacheAdapterInterface {
         }
     }
 
-    get(key: any): any {
-        // @ts-ignore
-        return this.cache.get(key)?.value;
+    async get(key: any): Promise<any> {
+        return _.get(await this.cache.get(key),'value', undefined);
+    }
+
+    async getDecoratedCachedObject(key: any): Promise<{ttl: number | undefined, value: any, expirationTimestamp: number | undefined}> {
+        const data = await this.cache.get(key);
+        return {
+            ttl: _.get(data,'ttl', undefined),
+            value: _.get(data,'value', undefined),
+            expirationTimestamp: _.get(data,'expirationTimestamp', undefined),
+        };
     }
 
     async flushAll(): Promise<void> {
@@ -42,8 +51,7 @@ export class NodeCacheAdapter implements CacheAdapterInterface {
     }
 
     async getTtl(key: any): Promise<number | undefined> {
-        // @ts-ignore
-        return this.cache.get(key)?.ttl;
+        return _.get(this.cache.get(key),'ttl', undefined);
     }
 
     async getExpirationTimestamp(key: any): Promise<number | undefined> {

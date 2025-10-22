@@ -1,6 +1,6 @@
 import {CacheAdapterInterface} from "./types";
-import NodeCache from "node-cache";
 import {RedisProvider} from "../../providers/RedisProvider";
+import _ from "lodash";
 
 export class RedisCacheAdapter implements CacheAdapterInterface {
     private redisProvider: RedisProvider;
@@ -19,7 +19,15 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
     async get(key: any): Promise<any> {
         const data = await this.redisProvider.get({key});
         return data;
+    }
 
+    async getDecoratedCachedObject(key: any): Promise<{ttl: number | undefined, value: any, expirationTimestamp: number | undefined}> {
+        const data = await this.redisProvider.get({key});
+        return {
+            ttl: _.get(data,'ttl', undefined),
+            value: _.get(data,'value', undefined),
+            expirationTimestamp: _.get(data,'expirationTimestamp', undefined),
+        };
     }
 
     async flushAll(): Promise<void> {
