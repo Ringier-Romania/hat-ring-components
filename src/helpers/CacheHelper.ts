@@ -54,21 +54,27 @@ export async function CacheHelper_getDecoratedCachedObject(key: any): Promise<{t
     return value;
 }
 
-export async function CacheHelper_runCallbackIfTimeStampHasExpired(rawCachedObject: { ttl: number | undefined, value: any, expirationTimestamp: number | undefined }, callback: Function, ttl: number | null) {
-    const expirationTimestamp = rawCachedObject.expirationTimestamp;
+export function CacheHelper_isExpired(
+    rawCachedObject: { ttl: number | undefined, value: any, expirationTimestamp: number | undefined },
+    currentTtl?: number | null
+): boolean {
+    const { expirationTimestamp, ttl: cachedTtl } = rawCachedObject;
+
     if (!expirationTimestamp) {
-        callback();
-        return;
+        return true;
     }
-    const expired = expirationTimestamp ? expirationTimestamp - new Date().getTime() < 0 : true;
-    if (expired) {
-        callback();
-        return;
+
+    const timeExpired = expirationTimestamp - new Date().getTime() < 0;
+    if (timeExpired) {
+        return true;
     }
-    const ttlHasChanged = (ttl == null || rawCachedObject.ttl == null) ? true : ttl !== rawCachedObject.ttl;
-    if (ttlHasChanged) {
-        callback();
+
+    if (currentTtl !== undefined && currentTtl !== null) {
+        const ttlChanged = cachedTtl == null || currentTtl !== cachedTtl;
+        return ttlChanged;
     }
+
+    return false;
 }
 
 export async function CacheHelper_flush() {

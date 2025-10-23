@@ -2,7 +2,7 @@ import {gql} from '@ringpublishing/graphql-api-client';
 import {WebsitesApiClient} from '@ringpublishing/graphql-api-client-got';
 import {DocumentNode} from "graphql/language/ast";
 import {
-    CacheHelper_set, CacheHelper_runCallbackIfTimeStampHasExpired, CacheHelper_getDecoratedCachedObject
+    CacheHelper_set, CacheHelper_getDecoratedCachedObject, CacheHelper_isExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
 
@@ -35,15 +35,20 @@ export class WebsiteApiProvider {
                 try {
                     if (decoratedObject.value) {
                         MonitoringProvider.counter('info.WebsitesApiProvider.call.cachedResponse');
-                        CacheHelper_runCallbackIfTimeStampHasExpired(decoratedObject, async () => {
-                            const response = await this._call(query, variables, 'no-cache', queryType);
-                            if (response) {
-                                CacheHelper_set(cacheKey, response, cacheTtl, tags);
-                            } else {
-                                MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
-                            }
-                            delete global.HATCacheInCallInProgress[cacheKeyString];
-                        }, cacheTtl);
+                        if (CacheHelper_isExpired(decoratedObject, cacheTtl)) {
+                            this._call(query, variables, 'no-cache', queryType).then((response) => {
+                                if (response) {
+                                    CacheHelper_set(cacheKey, response, cacheTtl, tags);
+                                } else {
+                                    MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
+                                }
+                            }).catch((e) => {
+                                console.error(e)
+                                MonitoringProvider.counter('error.WebsitesApiProvider.call.catch');
+                            }).finally(() => {
+                                delete global.HATCacheInCallInProgress[cacheKeyString];
+                            });
+                        }
                         return resolve(decoratedObject.value);
                     }
                     MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
