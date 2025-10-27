@@ -5,9 +5,9 @@ import {
 
 interface CacheService {
     set(key: any, value: any, TTL: null | number | undefined, tags?: string[] | null | boolean): void;
-    get(key: any): void;
-    getDecoratedCachedObject(key: any): {ttl: number | undefined, value: any, expirationTimestamp: number | undefined};
-    isExpired(rawCachedObject: {ttl: number | undefined, value: any, expirationTimestamp: number | undefined}, callback: Function, ttl: number | null): void;
+    get(key: any): any;
+    getDecoratedCachedObject(key: any): Promise<{ttl: number | undefined, value: any, expirationTimestamp: number | undefined}>;
+    isExpired(rawCachedObject: {ttl: number | undefined, value: any, expirationTimestamp: number | undefined}, ttl: number | null): boolean;
     getTTL(key: any): number | undefined;
     getExpirationTimestamp(key: any): number | undefined;
 }
@@ -25,8 +25,8 @@ export class CacheProvider {
         return await CacheHelper_getDecoratedCachedObject(key);
     }
 
-    static async isExpired(rawCachedObject: {ttl: number | undefined, value: any, expirationTimestamp: number | undefined}, callback : Function, ttl: number | null) {
-        return await CacheHelper_isExpired(rawCachedObject, callback, ttl);
+    static isExpired(rawCachedObject: {ttl: number | undefined, value: any, expirationTimestamp: number | undefined}, ttl: number | null) {
+        return CacheHelper_isExpired(rawCachedObject, ttl);
     }
 
     static getTTL(key: any) {
