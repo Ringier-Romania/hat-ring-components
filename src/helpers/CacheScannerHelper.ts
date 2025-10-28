@@ -136,7 +136,7 @@ export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCur
         if (getValue) {
             const scannerState = global['_scanners'].get(match);
             for (const key of keys) {
-                scannerState.values[key] = await cacheAdapter.get(key);
+                scannerState.values[key] = await cacheAdapter.getDecoratedCachedObject(key);
             }
         }
     });
