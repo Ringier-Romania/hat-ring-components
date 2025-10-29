@@ -22,10 +22,11 @@ export class RedisCacheAdapter implements CacheAdapterInterface {
     }
 
     async getDecoratedCachedObject(key: any): Promise<{ttl: number | undefined, value: any, expirationTimestamp: number | undefined}> {
-        const data = await this.redisProvider.get({key});
+        const data = await this.redisProvider.getDecoratedCachedObject({key});
+
         return {
             ttl: _.get(data,'ttl', undefined),
-            value: _.get(data,'value', undefined),
+            value: _.get(data,'data', undefined),
             expirationTimestamp: _.get(data,'expirationTimestamp', undefined),
         };
     }

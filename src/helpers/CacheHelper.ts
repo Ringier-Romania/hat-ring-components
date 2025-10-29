@@ -26,12 +26,16 @@ export async function CacheHelper_set(key: any, value: any, TTL: null | number |
     }
 
     const ttl = TTL || stdTTL;
-    key = JSON.stringify(key);
+    if (typeof key !== 'string') {
+        key = JSON.stringify(key);
+    }
     await cacheAdapter.set(key, value, ttl, tags);
 }
 
 export async function CacheHelper_get(key: any, removeOnExpire = false) {
-    key = JSON.stringify(key);
+    if (typeof key !== 'string') {
+        key = JSON.stringify(key);
+    }
     const value = await cacheAdapter.get(key);
     if (removeOnExpire) {
         const expirationTimestamp = await cacheAdapter.getExpirationTimestamp(key);
@@ -49,7 +53,9 @@ export async function CacheHelper_get(key: any, removeOnExpire = false) {
 }
 
 export async function CacheHelper_getDecoratedCachedObject(key: any): Promise<{ttl: number | undefined, value: any, expirationTimestamp: number | undefined}> {
-    key = JSON.stringify(key);
+    if (typeof key !== 'string') {
+        key = JSON.stringify(key);
+    }
     const value = await cacheAdapter.getDecoratedCachedObject(key);
     return value;
 }
@@ -138,7 +144,6 @@ function handleCleanCache() {
 
     const TTL = process.env.CACHE_CLEAN_INTERVAL ? UtilsHelper_convertToInt(process.env.CACHE_CLEAN_INTERVAL) : 60;
     if (currentTime - global.lastHATCacheClean > (TTL * 1000)) {
-        global.HATCacheInCallInProgress = {};
         MonitoringProvider.counter('info.CacheHelper_handleCleanCache.CacheHelper_flush');
         CacheHelper_flush();
         global.lastHATCacheClean = currentTime;
