@@ -48,6 +48,7 @@ export class WebsiteApiProvider {
             }
 
             if (global.HATCacheInCallInProgress[cacheKeyString]) {
+                MonitoringProvider.counter('info.WebsitesApiProvider.call.staleResponseRefreshingInProgress');
                 return await global.HATCacheInCallInProgress[cacheKeyString];
             }
 
