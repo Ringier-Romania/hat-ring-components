@@ -5,13 +5,18 @@ import {
     CacheHelper_set, CacheHelper_getDecoratedCachedObject, CacheHelper_isExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
+if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
+let k = 0;
+let l = 0;
 
 export class WebsiteApiProvider {
     static async call(query: DocumentNode, variables, cacheTtl: null | number = null): Promise<any> {
         const cacheKey = {query: query.loc?.source.body, variables};
         const cacheKeyString = JSON.stringify(cacheKey);
         const queryType = this._determineQueryType(query);
-        const tags = this.determineQueryTags(query, variables, queryType);
+        const tags = this.determineQueryTags(query, variables, queryType)
+        k += 1;
+        console.log('call', k)
 
         try {
             return new Promise(async (resolve, reject) => {
@@ -32,6 +37,25 @@ export class WebsiteApiProvider {
                             })
                         }
                         return resolve(decoratedObject.value);
+                    } else {
+                        if (global.HATCacheInCallInProgress[cacheKeyString]) {
+                            const inFlight = global.HATCacheInCallInProgress[cacheKeyString];
+                            const response = await inFlight;
+                            return resolve(response);
+                        } else {
+                            global.HATCacheInCallInProgress[cacheKeyString] = this._call(query, variables).then((response) => {
+                                MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
+                                if (response) {
+                                    CacheHelper_set(cacheKeyString, response, cacheTtl);
+                                } else {
+                                    MonitoringProvider.counter('error.WebsitesApiProvider.call.emptyResponse');
+                                }
+                                delete global.HATCacheInCallInProgress[cacheKeyString];
+                                return response;
+                            });
+
+                            return resolve(global.HATCacheInCallInProgress[cacheKeyString])
+                        }
                     }
                     MonitoringProvider.counter('info.WebsitesApiProvider.call.nonCachedResponse');
                     const response = await this._call(query, variables, 'no-cache', queryType);
@@ -119,6 +143,8 @@ export class WebsiteApiProvider {
 
     static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache', queryType: string = 'Unspecified'): Promise<any> {
         try {
+            l += 1;
+            console.log('__call', l, Object.keys(global.HATCacheInCallInProgress).length)
             gql.resetCaches();
             //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
             // console.log('call');

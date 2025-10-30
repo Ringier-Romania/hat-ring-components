@@ -30,7 +30,7 @@ export class NodeCacheAdapter implements CacheAdapterInterface {
         return {
             ttl: _.get(data,'ttl', undefined),
             value: _.get(data,'value', undefined),
-            expirationTimestamp: _.get(data,'expirationTimestamp', undefined),
+            expirationTimestamp: this.cache.getTtl(key),
         };
     }
 
