@@ -76,7 +76,7 @@ export function CacheHelper_isExpired(
     }
 
     if (currentTtl !== undefined && currentTtl !== null) {
-        const ttlChanged = cachedTtl == null || currentTtl !== cachedTtl;
+        const ttlChanged = cachedTtl === null || cachedTtl === undefined || currentTtl !== cachedTtl;
         return ttlChanged;
     }
 

@@ -41,7 +41,7 @@ export class WebsiteApiProvider {
                         });
 
                     global.HATCacheInCallInProgress[cacheKeyString] = refreshPromise;
-                    MonitoringProvider.gauge('info.WebsitesApiProvider.call.HATCacheInCallInProgressLength', Object.keys(global.HATCacheInCallInProgress[cacheKeyString]).length);
+                    MonitoringProvider.gauge('info.WebsitesApiProvider.call.HATCacheInCallInProgressLength', Object.keys(global.HATCacheInCallInProgress).length);
                 }
 
                 return decoratedObject.value;

@@ -291,7 +291,7 @@ export class RedisProvider {
     }
 
     _parseResponse(data: any, key?: string): RedisCacheValue {
-        var parsedData = data;
+        let parsedData = data;
         try {
             if (typeof data === 'string') {
                 parsedData = JSON.parse(data);
