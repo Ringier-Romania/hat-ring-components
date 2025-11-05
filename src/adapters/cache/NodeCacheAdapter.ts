@@ -22,7 +22,7 @@ export class NodeCacheAdapter implements CacheAdapterInterface {
     }
 
     async get(key: any): Promise<any> {
-        return _.get(await this.cache.get(key),'value', undefined);
+        return _.get(await this.cache.get(key), 'value', undefined);
     }
 
     async getDecoratedCachedObject(key: any): Promise<{ttl: number | undefined, value: any, expirationTimestamp: number | undefined}> {
@@ -51,7 +51,7 @@ export class NodeCacheAdapter implements CacheAdapterInterface {
     }
 
     async getTtl(key: any): Promise<number | undefined> {
-        return _.get(this.cache.get(key),'ttl', undefined);
+        return _.get(this.cache.get(key), 'ttl', undefined);
     }
 
     async getExpirationTimestamp(key: any): Promise<number | undefined> {

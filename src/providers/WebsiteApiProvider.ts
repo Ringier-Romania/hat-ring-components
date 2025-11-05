@@ -160,10 +160,14 @@ export class WebsiteApiProvider {
                 `info.WebsitesApiProvider.call.hitApiTimer`
             );
 
-
             MonitoringProvider.counter(`info.WebsitesApiProvider.call.apiCall_${queryType}`);
 
             const response = await global.websitesApiGotClient.query(query, variables);
+
+            if (response.errors) {
+                console.error('Websites Api _call error:',  query.loc?.source.body, variables, response.errors);
+                return null;
+            }
 
             if (timer) {
                 timer.done();

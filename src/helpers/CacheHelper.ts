@@ -87,11 +87,11 @@ export async function CacheHelper_flush() {
     return await cacheAdapter.flushAll();
 }
 
-export async function CacheHelper_getTtl(key) {
+export async function CacheHelper_getTtl(key: any) {
     return await cacheAdapter.getTtl(key);
 }
 
-export async function CacheHelper_getExpirationTimestamp(key) {
+export async function CacheHelper_getExpirationTimestamp(key: any) {
     return await cacheAdapter.getExpirationTimestamp(key);
 }
 
@@ -147,6 +147,7 @@ function handleCleanCache() {
         MonitoringProvider.counter('info.CacheHelper_handleCleanCache.CacheHelper_flush');
         CacheHelper_flush();
         global.lastHATCacheClean = currentTime;
+        global.HATCacheInCallInProgress = {};
     }
 }
 
