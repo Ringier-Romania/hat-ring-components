@@ -296,11 +296,13 @@ export class RedisProvider {
             if (typeof data === 'string') {
                 parsedData = JSON.parse(data);
             }
-            return parsedData.ttl && parsedData.data ? parsedData : {
-                data: parsedData,
-                ttl: undefined,
-                expirationTimestamp: undefined,
-            };
+            return (parsedData && typeof parsedData === 'object' && 'data' in parsedData)
+                ? parsedData
+                : {
+                    data: parsedData,
+                    ttl: undefined,
+                    expirationTimestamp: undefined,
+                };
         } catch (e) {
             console.error('Redis Error parsing data for key: ', key, data);
             return {
