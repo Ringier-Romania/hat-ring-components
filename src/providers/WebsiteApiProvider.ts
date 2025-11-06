@@ -164,9 +164,13 @@ export class WebsiteApiProvider {
 
             const response = await global.websitesApiGotClient.query(query, variables);
 
-            if (response.errors) {
-                console.error('Websites Api _call error:',  query.loc?.source.body, variables, response.errors);
-                return response;
+            if (response.errors || response.error) {
+                console.error('Websites Api _call error:',  query.loc?.source.body, variables, response.errors, response.error);
+
+                if (response.data) {
+                    return response;
+                }
+                return null;
             }
 
             if (timer) {
