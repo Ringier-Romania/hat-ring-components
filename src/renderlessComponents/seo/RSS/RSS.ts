@@ -13,6 +13,13 @@ import {StoryHelper_generateContentHtml, StoryHelper_getLeadBlock} from "../../.
 import {Feed, Item} from "feed";
 
 export async function RSS({context}: { context: AppContext }) {
+    if(!context.id) {
+        console.warn('RSS: siteNodeId is not defined for url:', context.url);
+        return {
+            feed: null,
+            type: null
+        };
+    }
     const seoRssConfig = await ConfigHelper_getSeoRssDefaultConfig(context);
     const generalConfig = await ConfigHelper_getGeneralConfig(context);
     const seoGeneralConfig = await ConfigHelper_getSeoGeneralConfig(context);

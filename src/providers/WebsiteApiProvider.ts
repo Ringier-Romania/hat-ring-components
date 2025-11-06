@@ -166,7 +166,7 @@ export class WebsiteApiProvider {
 
             if (response.errors) {
                 console.error('Websites Api _call error:',  query.loc?.source.body, variables, response.errors);
-                return null;
+                return response;
             }
 
             if (timer) {
