@@ -1,9 +1,17 @@
 export interface AlternateLinksResponse {
     data: {
         story: {
-            stories:{
-                url: string,
-            }
-        }
-    }
+            stories: {
+                story: {
+                    id: string;
+                    publicationPoint: {
+                        url: string;
+                    };
+                };
+                role: {
+                    code: string;
+                };
+            }[];
+        };
+    };
 }
