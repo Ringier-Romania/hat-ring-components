@@ -67,11 +67,11 @@ export async function AlternateLinksFromStory(context: AppContext, seoConfig: ob
 
                 if (storyUrl) {
                     alternateLinks.push({
-                        hrefLang: languageConfig['Language code'],
+                        hrefLang: _.get(languageConfig, 'Language code'),
                         href: storyUrl
                     });
 
-                    if (languageConfig['Default language'] === 'on') {
+                    if (_.get(languageConfig, 'Default language') === 'on') {
                         xDefault = storyUrl;
                     }
                 }
