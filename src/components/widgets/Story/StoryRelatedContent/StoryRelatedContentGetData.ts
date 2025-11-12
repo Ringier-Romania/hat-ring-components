@@ -11,6 +11,11 @@ import {ConfigHelper_getMainCategoryUuid} from "../../../../helpers/ConfigHelper
 import {CacheHelper_createParentChildRelation} from "../../../../helpers/CacheHelper";
 
 export async function StoryRelatedContent_getData(context: AppContext, widgetConfig: StoryRelatedContentWidgetConfig): Promise<GenericListResponse> {
+    if (!context.id) {
+        console.warn('StoryRelatedContent_getData: siteNodeId is not defined for url:', context.url);
+        return {data: {stories: {edges: [], total: 0}}};
+    }
+
     let dynamicVariablesTypes: any = {};
     let dynamicVariables: any = {};
     let dynamicFragmentsNames = '';

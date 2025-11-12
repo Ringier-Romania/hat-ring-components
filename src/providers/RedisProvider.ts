@@ -11,6 +11,7 @@ import {ScanReply} from "@redis/client/dist/lib/commands/SCAN";
 interface RedisCacheValue {
     data: string;
     ttl: number | undefined;
+    expirationTimestamp: number | undefined;
 }
 
 export class RedisProvider {
@@ -149,11 +150,11 @@ export class RedisProvider {
             await this.initialize();
         }
 
-        var expirationTimestamp: null | number = null;
+        let expirationTimestamp: null | number = null;
         if (ttl) {
             expirationTimestamp = Date.now() + ttl * 1000;
         }
-        const setValue = JSON.stringify({data: value, ttl: expirationTimestamp} as RedisCacheValue);
+        const setValue = JSON.stringify({data: value, ttl, expirationTimestamp} as RedisCacheValue);
         try {
             await this.client.set(key, setValue);
             if (tags && typeof tags === 'object') {
@@ -185,6 +186,28 @@ export class RedisProvider {
             return parsedData.data;
         } catch (err) {
             MonitoringProvider.counter('error.RedisProvider.get');
+            return null;
+        }
+
+    }
+
+    async getDecoratedCachedObject({key}: {
+        key: string;
+    }): Promise<RedisCacheValue | null> {
+        if (!this.client) {
+            await this.initialize();
+        }
+
+        try {
+            const data = await this.client.get(key);
+            if (!data) {
+                return null;
+            }
+            const parsedData = this._parseResponse(data, key);
+            MonitoringProvider.counter('info.RedisProvider.getDecoratedCachedObject');
+            return parsedData;
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.getDecoratedCachedObject');
             return null;
         }
 
@@ -255,21 +278,37 @@ export class RedisProvider {
 
     }
 
+    async getExpirationTimestamp(key: string): Promise<number | undefined> {
+        if (!this.client) {
+            await this.initialize();
+        }
+        MonitoringProvider.counter('info.RedisProvider.getExpirationTimestamp');
+        const data = await this.client.get(key);
+        const parsedData = this._parseResponse(data, key);
+
+        return parsedData.expirationTimestamp;
+
+    }
+
     _parseResponse(data: any, key?: string): RedisCacheValue {
-        var parsedData = data;
+        let parsedData = data;
         try {
             if (typeof data === 'string') {
                 parsedData = JSON.parse(data);
             }
-            return parsedData.ttl && parsedData.data ? parsedData : {
-                data: parsedData,
-                ttl: undefined,
-            };
+            return (parsedData && typeof parsedData === 'object' && 'data' in parsedData)
+                ? parsedData
+                : {
+                    data: parsedData,
+                    ttl: undefined,
+                    expirationTimestamp: undefined,
+                };
         } catch (e) {
             console.error('Redis Error parsing data for key: ', key, data);
             return {
                 data: data,
                 ttl: undefined,
+                expirationTimestamp: undefined,
             }
         }
     }
