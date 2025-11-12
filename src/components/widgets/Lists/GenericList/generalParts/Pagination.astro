@@ -26,7 +26,7 @@ const getHref = (pageNum: number) => {
     return pageNum === 1 ? currentUrl : `${currentUrl}?page=${pageNum}`;
 };
 if (pages === 1) {
-    toRender = WidgetHelper_renderEmptyComponent('Pagination', '', true);
+    toRender = WidgetHelper_renderEmptyComponent('Pagination', '', false);
 }
 
 // Generate pagination buttons
