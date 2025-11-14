@@ -1,0 +1,25 @@
+.StoryContent {
+    :global {
+        .TableBlock {
+            .alignLEFT {
+                text-align: left;
+            }
+
+            .alignCENTER {
+                text-align: center;
+            }
+
+            .alignRIGHT {
+                text-align: right;
+            }
+
+            .bold {
+                font-weight: bold;
+            }
+
+            .italic {
+                font-style: italic;
+            }
+        }
+    }
+}
