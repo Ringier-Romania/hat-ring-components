@@ -3,74 +3,58 @@ export let HeaderFooterWebsitesConfig = {
         {
             "title": "Header, Footer",
             "keys": [
-                "header",
                 "headerWidgets",
-                "footer",
                 "footerWidgets"
             ],
             "groups": {
-                "header": {
-                    "type": "group",
-                    "name": "HEADER",
-                    "fields": [
-                        // "header.customClass"
-                    ]
-                },
                 "headerWidgets": {
                     "type": "group",
                     "name": "Header widgets",
                     "fields": [
+                        "headerWidgets.container_classes",
                         "headerWidgets.widgets_above_content",
                         "headerWidgets.widgets_middle_content",
-                        "headerWidgets.widgets_below_content"
-                    ]
-                },
-                "footer": {
-                    "type": "group",
-                    "name": "Footer",
-                    "fields": [
-                        // "footer.customClass"
+                        "headerWidgets.widgets_below_content",
+                        "headerWidgets.widgets_additional_box",
                     ]
                 },
                 "footerWidgets": {
                     "type": "group",
                     "name": "Footer widgets",
                     "fields": [
+                        "footerWidgets.container_classes",
                         "footerWidgets.widgets_above_content",
                         "footerWidgets.widgets_middle_content",
-                        "footerWidgets.widgets_under_content"
+                        "footerWidgets.widgets_under_content",
+                        "footerWidgets.widgets_additional_box",
                     ]
                 }
             }
         }
     ],
     "defaultParams": {
-        "header": {
-            // "customClass": ""
-        },
         "headerWidgets": {
+            "container_classes": "",
             "widgets_above_content": [],
             "widgets_middle_content": [],
-            "widgets_below_content": []
-        },
-        "footer": {
-            // "customClass": ""
+            "widgets_below_content": [],
+            "widgets_additional_box": [],
         },
         "footerWidgets": {
+            "container_classes": "",
             "widgets_above_content": [],
             "widgets_middle_content": [],
-            "widgets_under_content": []
-        }
+            "widgets_under_content": [],
+            "widgets_additional_box": [],
+        },
     },
     "paramsDescription": {
-        "header": {
-            // "customClass": {
-            //     "name": "custom CSS class",
-            //     "description": "custom CSS class",
-            //     "type": "textfield"
-            // }
-        },
         "headerWidgets": {
+            "container_classes": {
+                "name": "custom CSS class",
+                "description": "custom CSS class",
+                "type": "textfield"
+            },
             "widgets_above_content": {
                 "type": "modules",
                 "ordered": true,
@@ -91,16 +75,21 @@ export let HeaderFooterWebsitesConfig = {
                 "editable": true,
                 "modules_list": "GULP-HEADER-MODULES-LIST",
                 "name": "Bottom widget box (desktop & mobile)"
+            },
+            "widgets_additional_box": {
+                "type": "modules",
+                "ordered": true,
+                "editable": true,
+                "modules_list": "GULP-HEADER-MODULES-LIST",
+                "name": "Additional widget box (desktop & mobile)"
             }
         },
-        "footer": {
-            // "customClass": {
-            //     "name": "custom CSS class",
-            //     "description": "custom CSS class",
-            //     "type": "textfield"
-            // }
-        },
         "footerWidgets": {
+            "container_classes": {
+                "name": "custom CSS class",
+                "description": "custom CSS class",
+                "type": "textfield"
+            },
             "widgets_above_content": {
                 "type": "modules",
                 "ordered": true,
@@ -121,7 +110,14 @@ export let HeaderFooterWebsitesConfig = {
                 "editable": true,
                 "modules_list": "GULP-FOOTER-MODULES-LIST",
                 "name": "Bottom widget box (desktop & mobile)"
+            },
+            "widgets_additional_box": {
+                "type": "modules",
+                "ordered": true,
+                "editable": true,
+                "modules_list": "GULP-FOOTER-MODULES-LIST",
+                "name": "Additional widget box (desktop & mobile)"
             }
-        }
+        },
     }
 }
