@@ -4,6 +4,7 @@ import {default as StoryContentSwitcher} from "./StoryContentSwitcher.astro";
 import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {StoryContent_getData} from "./StoryContentGetData";
 import _ from 'lodash';
+import styles from "../../../../../styles/widgets/Story/StoryContent.module.scss";
 
 const response = await StoryContent_getData(context, widgetConfig);
 const content = _.get(response, 'data.story.content[0].blocks');
@@ -11,7 +12,7 @@ const flags = _.get(response, 'data.story.flags', []).map(flag => `flag_${flag.c
 ---
 
 
-<div class={WidgetHelper_getWidgetCssClasses('StoryContent', widgetConfig, context, flags)}>
+<div class={WidgetHelper_getWidgetCssClasses('StoryContent', widgetConfig, context, [...flags, styles.StoryContent])}>
     <StoryContentSwitcher content={content} widgetConfig={widgetConfig} context={context}
                           extendableAttributes={extendableAttributes}/>
 </div>
