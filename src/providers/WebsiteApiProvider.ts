@@ -166,10 +166,6 @@ export class WebsiteApiProvider {
 
             if (response.errors || response.error) {
                 console.error('Websites Api _call error:',  query.loc?.source.body, variables, response.errors, response.error);
-
-                if (response.data) {
-                    return response;
-                }
                 return null;
             }
 
