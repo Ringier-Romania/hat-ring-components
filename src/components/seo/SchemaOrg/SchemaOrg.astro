@@ -16,7 +16,7 @@ import _ from "lodash";
 import {ConfigHelper_currentUrl, ConfigHelper_getHomepageUrl} from "../../../helpers/ConfigHelper";
 import {Author} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
 import {UtilsHelper_slugify} from "../../../helpers/UtilsHelper";
-const isHomePage = SeoHelper_isSeoHomepage(context);
+const isHomePage = await SeoHelper_isSeoHomepage(context);
 const isArticle = context.siteContentType === SiteContentType.Story;
 
 

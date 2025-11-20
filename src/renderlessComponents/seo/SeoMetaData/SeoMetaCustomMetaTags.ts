@@ -22,7 +22,7 @@ export async function SeoMetaCustomMetaTags(context: AppContext) {
     const config = await ConfigHelper_getMetaDataConfig(context);
     if(!config) return {};
     const other: any = [];
-    const isHomePage = SeoHelper_isSeoHomepage(context);
+    const isHomePage = await SeoHelper_isSeoHomepage(context);
     const actualPageType = context.siteContentType;
     const actualTopicUuid = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id', null);
     const notDynamicTypes = ['all', 'homepage', ...Object.keys(SiteContentType)];
@@ -31,6 +31,7 @@ export async function SeoMetaCustomMetaTags(context: AppContext) {
     const isDynamicTypeInCustomTags = config.customMetaTags.some((tagObject) => {
         return (_.split(_.get(tagObject, 'siteContentType', 'all'), ',') || []).some(type => !notDynamicTypes.includes(type));
     });
+
     let topicsOfStory: Array<string> = [];
 
     if (actualPageType === SiteContentType.Story && isDynamicTypeInCustomTags) {
