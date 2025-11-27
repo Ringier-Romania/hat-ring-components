@@ -39,6 +39,12 @@ if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
 
 if (['wrapperStart'].includes(widgetConfig.widgetType)) {
     widgetConfig.customClass = `${cssClasses.join(' ')} ${widgetConfig.customClass}`;
+} else if (!['wrapperEnd'].includes(widgetConfig.widgetType)) {
+    if (widgetConfig.customClass) {
+        widgetConfig.customClass.split(' ').forEach((customClass: string) => {
+            cssClasses.push(`gridParent-${customClass}`);
+        })
+    }
 }
 
 ---
