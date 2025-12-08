@@ -7,12 +7,15 @@ import {
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
 import {ImageBlock, Story, StoryEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {UtilsHelper_convertToInt, UtilsHelper_getDomain} from "../../../helpers/UtilsHelper";
+import {
+    UtilsHelper_convertToInt, UtilsHelper_getDomain, UtilsHelper_getQueryParam,
+    UtilsHelper_parsePositiveIntFromString
+} from "../../../helpers/UtilsHelper";
 import {RSSGqlQuery} from "./RSSGqlQuery";
 import {StoryHelper_generateContentHtml, StoryHelper_getLeadBlock} from "../../../helpers/StoryHelper";
 import {Feed, Item} from "feed";
 
-export async function RSS({context}: { context: AppContext }) {
+export async function RSS({context, feedDecorator, blockDecorator}: { context: AppContext, feedDecorator?: Function, blockDecorator?: Function }) {
     if(!context.id) {
         console.warn('RSS: siteNodeId is not defined for url:', context.url);
         return {
@@ -24,7 +27,7 @@ export async function RSS({context}: { context: AppContext }) {
     const generalConfig = await ConfigHelper_getGeneralConfig(context);
     const seoGeneralConfig = await ConfigHelper_getSeoGeneralConfig(context);
     const domain = UtilsHelper_getDomain(context, true)
-    const page = UtilsHelper_convertToInt(_.get(context, 'hatControllerParams.urlWithParsedQuery.query.page', 1));
+    const page = UtilsHelper_parsePositiveIntFromString(UtilsHelper_getQueryParam('page', context)) || 1;
 
     const query = RSSGqlQuery;
     const categoryId = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id');
@@ -60,32 +63,29 @@ export async function RSS({context}: { context: AppContext }) {
         link: domain + context.url,
     });
 
-    edges.forEach(edge => {
+    for (const edge of edges) {
         const story = edge.node as Story;
-        const newStoryObj = {
-            content: [{
-                blocks: [{
-                    type: "image",
-                    url: story.image?.url,
-                    title: story.image?.caption,
-                    image: {
-                        width: story.image?.crop?.width || story.image?.image?.width,
-                        height: story.image?.crop?.height || story.image?.image?.height,
-                        license: {
-                            note: story.image?.image?.license?.note,
-                        },
-                        sources: story.image?.image?.sources
-                    }
-                } as ImageBlock, ...story.content[0].blocks]
-            }]
-        } as Story;
+        const newStoryObj = _.cloneDeep(story);
+        newStoryObj.content[0].blocks = [{
+            type: "image",
+            url: story.image?.url,
+            title: story.image?.caption,
+            image: {
+                width: story.image?.crop?.width || story.image?.image?.width,
+                height: story.image?.crop?.height || story.image?.image?.height,
+                license: {
+                    note: story.image?.image?.license?.note,
+                },
+                sources: story.image?.image?.sources
+            }
+        } as ImageBlock, ...story.content[0].blocks]
 
         let item: Item = {
             title: story.title,
             guid: story.mainPublicationPoint.url,
             link: story.mainPublicationPoint.url,
             date: new Date(story.date?.creationTime),
-            content: StoryHelper_generateContentHtml(newStoryObj),
+            content: await StoryHelper_generateContentHtml({story: newStoryObj, blockDecorator}),
         };
 
         const lead = StoryHelper_getLeadBlock(story);
@@ -118,7 +118,11 @@ export async function RSS({context}: { context: AppContext }) {
         }
 
         feed.addItem(item);
-    })
+    }
+
+    if (feedDecorator) {
+        await feedDecorator(feed);
+    }
 
     switch (seoRssConfig.rssType) {
         case 'RSS Atom 1.0 feed':
