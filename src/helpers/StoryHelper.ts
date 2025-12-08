@@ -142,7 +142,7 @@ function processBlock(block: ContentBlock) {
                     }
                     row.cells.forEach(cell => {
                         rowElement.elements.push({
-                            name: cell.isHEader ? "th" : "td",
+                            name: cell.isHeader ? "th" : "td",
                             type: "element",
                             attributes: {
                                 rowspan: cell.rowspan ? cell.rowspan : 1
