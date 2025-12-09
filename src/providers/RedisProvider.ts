@@ -23,6 +23,7 @@ export class RedisProvider {
     username: string;
     maxReInitialize: number;
     currentReInitialize: number;
+    isReconnecting: boolean;
 
     constructor() {
         this.url = process.env.REDIS_RW;
@@ -32,6 +33,7 @@ export class RedisProvider {
         this.service = 'elasticache';
         this.maxReInitialize = 10;
         this.currentReInitialize = 0;
+        this.isReconnecting = false;
 
         setInterval(async () => {
             if (!this.client) {
@@ -79,21 +81,70 @@ export class RedisProvider {
             MonitoringProvider.counter(`error.redis.onError`);
             console.error(`Redis Client Error: ${error}`);
 
-            if (error.message.toString().includes('ECONNRESET')) {
-                if (this.currentReInitialize < this.maxReInitialize) {
-                    this.currentReInitialize += 1;
-                    MonitoringProvider.counter('info.RedisProvider.reinitialize_started');
-                    await this.client.disconnect();
-                    await this.createRedisClient();
-                    this.attachRedisErrorsHandler();
-                    await this.client.connect();
-                    MonitoringProvider.counter('info.RedisProvider.reinitialize_ended');
-                } else {
-                    MonitoringProvider.counter('error.RedisProvider.reachedMaxReinitialize');
-                    process.exit(1);
-                }
+            const errorMessage = error.message?.toString() || '';
+            const shouldReconnect = errorMessage.includes('ECONNRESET') ||
+                                    errorMessage.includes('The client is closed') ||
+                                    errorMessage.includes('Socket closed unexpectedly');
+
+            if (shouldReconnect) {
+                await this.handleReconnect('error');
             }
         });
+
+        this.client.on('end', async () => {
+            MonitoringProvider.counter('info.redis.onEnd');
+            console.info('Redis connection ended');
+            await this.handleReconnect('end');
+        });
+    }
+
+    async handleReconnect(reason: string): Promise<void> {
+        if (this.isReconnecting) {
+            return;
+        }
+
+        if (this.currentReInitialize >= this.maxReInitialize) {
+            MonitoringProvider.counter('error.RedisProvider.reachedMaxReinitialize');
+            process.exit(1);
+            return;
+        }
+
+        this.isReconnecting = true;
+        this.currentReInitialize += 1;
+        MonitoringProvider.counter(`info.RedisProvider.reinitialize_started.${reason}`);
+
+        try {
+            if (this.client) {
+                try {
+                    await this.client.disconnect();
+                } catch (disconnectErr) {
+                    console.log('Redis disconnect warning (can be ignored):', disconnectErr);
+                }
+            }
+
+            await this.createRedisClient();
+            this.attachRedisErrorsHandler();
+            await this.client.connect();
+
+            this.currentReInitialize = 0;
+            MonitoringProvider.counter(`info.RedisProvider.reinitialize_ended.${reason}`);
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.reinitialize_failed');
+            console.error('Redis reinitialize failed:', err);
+        } finally {
+            this.isReconnecting = false;
+        }
+    }
+
+    async ensureConnected(): Promise<boolean> {
+        if (!this.client || !this.client.isOpen) {
+            if (this.isReconnecting) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                return this.client?.isOpen || false;
+            }
+            await this.initialize();
+        }
+        return this.client?.isOpen || false;
     }
 
     async initialize() {
