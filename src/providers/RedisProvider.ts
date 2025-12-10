@@ -129,12 +129,12 @@ export class RedisProvider {
 
             this.currentReInitialize = 0;
             MonitoringProvider.counter(`info.RedisProvider.reinitialize_ended_${reason}`);
+            console.info('Redis connection reconnected');
         } catch (err) {
             MonitoringProvider.counter('error.RedisProvider.reinitialize_failed');
             console.error('Redis reinitialize failed:', err);
         } finally {
             this.isReconnecting = false;
-            console.info('Redis connection reconnected');
         }
     }
 
