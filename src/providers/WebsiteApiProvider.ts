@@ -166,10 +166,12 @@ export class WebsiteApiProvider {
 
             if (response.errors || response.error) {
                 console.error('Websites Api _call error:',  query.loc?.source.body, variables, response.errors, response.error);
+                MonitoringProvider.counter('error.WebsitesApiProvider.call.apiCallError');
 
                 if (response.data) {
                     return response;
                 }
+                MonitoringProvider.counter('error.WebsitesApiProvider.call.apiCallNoDataInResponse');
 
                 return null;
             }
@@ -186,6 +188,7 @@ export class WebsiteApiProvider {
 
         } catch (e) {
             console.error('Websites Api _call error:', variables, e);
+            MonitoringProvider.counter('error.WebsitesApiProvider.call.apiCallCatchError');
             return null;
         }
     }
