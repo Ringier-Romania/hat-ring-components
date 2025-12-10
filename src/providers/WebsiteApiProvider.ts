@@ -1,4 +1,4 @@
-import {gql} from '@ringpublishing/graphql-api-client';
+import {gql} from '@ringpublishing/graphql-api-client-got';
 import {WebsitesApiClient} from '@ringpublishing/graphql-api-client-got';
 import {DocumentNode} from "graphql/language/ast";
 import {
