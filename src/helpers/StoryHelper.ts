@@ -1,9 +1,9 @@
-import {ContentBlock, Story} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import {ContentBlock, Story} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
 import * as convert from "xml-js";
 import _ from "lodash";
 import {UtilsHelper_ensureHttps} from "./UtilsHelper";
 import { WebsiteApiProvider } from "../providers/WebsiteApiProvider";
-import { gql } from "@ringpublishing/graphql-api-client";
+import { gql } from "@ringpublishing/graphql-api-client-got";
 import { AppContext } from "../types/types";
 import {ImageHelper_getImageMetaData} from "./ImageHelper";
 
