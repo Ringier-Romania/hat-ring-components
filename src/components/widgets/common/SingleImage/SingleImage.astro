@@ -32,7 +32,7 @@ const ringImageProps: any = {
     height,
     transform: TransformType.ResizeCropAuto,
     alt: UtilsHelper_getValueIfExists(widgetConfig.imageAlt, ''),
-    priority: additionalOptions.includes('preloadImage')
+    priority: context.hatControllerParams.isMobile ? additionalOptions.includes('mobilePreloadImage') : additionalOptions.includes('desktopPreloadImage')
 };
 
 if (!Number(width) || !Number(height)) {

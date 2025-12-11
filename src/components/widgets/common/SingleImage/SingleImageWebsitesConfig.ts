@@ -62,7 +62,8 @@ export let SingleImageWebsitesConfig = {
                     "items": [
                         ["openLinkAsExternal", "Open link as external"],
                         ["openLinkInNewTab", "Open link in new a tab"],
-                        ["preloadImage", "Preload image"]
+                        ["desktopPreloadImage", "Desktop preload image"],
+                        ["mobilePreloadImage", "Mobile preload image"]
                     ],
                     "required": false
                 },
