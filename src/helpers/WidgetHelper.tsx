@@ -9,18 +9,19 @@ import {BasicWidgetConfig} from "../components/widgets/common/BasicWidget/types"
 import {GenericListWidgetConfig} from "../components/widgets/Lists/GenericList/types";
 
 export function WidgetHelper_shouldHideWidget(widgetConfig, context) {
+    const isMobile = UtilsHelper_isMobile(context);
     const gridLocationParam = UtilsHelper_getQueryParam('gridLocation', context);
     if (gridLocationParam !== null && gridLocationParam !== widgetConfig.gridLocation) {
         return true;
     }
 
-    if (typeof context.hatControllerParams.isMobile === 'boolean'
+    if (typeof isMobile === 'boolean'
         && typeof widgetConfig.platformDesktop === 'boolean'
         && typeof widgetConfig.platformMobile === 'boolean'
     ) {
         return !(
-            (context.hatControllerParams.isMobile && widgetConfig.platformMobile)
-            || (!context.hatControllerParams.isMobile && widgetConfig.platformDesktop)
+            (isMobile && widgetConfig.platformMobile)
+            || (!isMobile && widgetConfig.platformDesktop)
         );
     }
     return false;

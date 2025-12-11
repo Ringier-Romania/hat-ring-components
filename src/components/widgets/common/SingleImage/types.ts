@@ -7,7 +7,7 @@ export interface ImageConfig extends AbstractWidgetConfig {
     mobileImageSize: string,
     imageAlt: string,
     linkUrl: string,
-    additionalOptions: ['openLinkAsExternal' | 'openLinkInNewTab']
+    additionalOptions: ('openLinkAsExternal' | 'openLinkInNewTab' | 'desktopPreloadImage' | 'mobilePreloadImage')[]
 }
 
 export interface ImageParams extends WidgetParams {
