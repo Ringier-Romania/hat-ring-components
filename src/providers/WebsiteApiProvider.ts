@@ -6,6 +6,8 @@ import {
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
 if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
+let gqlResetCachesTimestamp = new Date().getTime();
+const GQL_CACHE_RESET_INTERVAL_SECONDS = Number(process.env.GQL_CACHE_RESET_INTERVAL_SECONDS) || 300;
 
 export class WebsiteApiProvider {
     static async call(query: DocumentNode, variables, cacheTtl: null | number = null): Promise<any> {
@@ -140,7 +142,10 @@ export class WebsiteApiProvider {
 
     static async _call(query: DocumentNode, variables, fetchPolicy = 'no-cache', queryType: string = 'Unspecified'): Promise<any> {
         try {
-            gql.resetCaches();
+            if (gqlResetCachesTimestamp < new Date().getTime()) {
+                gql.resetCaches();
+                gqlResetCachesTimestamp = new Date().getTime() + GQL_CACHE_RESET_INTERVAL_SECONDS * 1000;
+            }
             //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
             // console.log('call');
             const accessKey = process.env.WEBSITE_API_PUBLIC!;
