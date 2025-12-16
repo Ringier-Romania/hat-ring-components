@@ -28,7 +28,7 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 export async function SeoHelper_currentTitle(context, place: string) {
     const seoTitlesSettings = await ConfigHelper_getSeoTitlesAndDescriptionConfig(context);
     const pageType = await SeoHelper_getSeoCurrentPageType(context);
-    const withNumeration = UtilsHelper_parsePositiveIntFromString(UtilsHelper_getQueryParam('page', context)) || 1;
+    const withNumeration = !!UtilsHelper_parsePositiveIntFromString(UtilsHelper_getQueryParam('page', context));
     let pattern= null;
 
     switch (pageType) {
