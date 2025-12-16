@@ -4,7 +4,11 @@ import _ from "lodash";
 
 // Helpers
 import {ConfigHelper_currentUrl,} from "../../../helpers/ConfigHelper";
-import {UtilsHelper_getCurrentPageType, UtilsHelper_getQueryParam} from "../../../helpers/UtilsHelper";
+import {
+    UtilsHelper_getCurrentPageType,
+    UtilsHelper_getQueryParam,
+    UtilsHelper_parsePositiveIntFromString
+} from "../../../helpers/UtilsHelper";
 
 // Types
 import {AppContext, SiteContentType} from "../../../types/types";
@@ -19,7 +23,7 @@ import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
  */
 export async function SeoMetaCanonical(context: AppContext) {
     const pageType = UtilsHelper_getCurrentPageType(context);
-    const page = UtilsHelper_getQueryParam('page', context);
+    const page = UtilsHelper_parsePositiveIntFromString(UtilsHelper_getQueryParam('page', context));
     let canonicalToReturn = await ConfigHelper_currentUrl(context);
 
     if ([SiteContentType.Search, SiteContentType.Topic, SiteContentType.SiteNode, SiteContentType.Author].includes(pageType) && page) {
