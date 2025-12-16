@@ -98,7 +98,11 @@ export function UtilsHelper_generateRandomString(length = 8) {
     return Math.random().toString(20).substr(2, length);
 }
 export function UtilsHelper_getQueryParam(param: string, context: AppContext): string | null {
-    return _.get(context, ['hatControllerParams', 'urlWithParsedQuery', 'query', param], null);
+    let val = _.get(context, ['hatControllerParams', 'urlWithParsedQuery', 'query', param], null) as string | null;
+    if (val && typeof val === 'string') {
+        val = UtilsHelper_stripHtmlTags(val);
+    }
+    return val;
 }
 
 export function UtilsHelper_getSearchQueryParamKey(): string {

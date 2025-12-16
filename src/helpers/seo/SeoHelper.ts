@@ -18,7 +18,7 @@ import {
     UtilsHelper_getCurrentNodeName,
     UtilsHelper_getQueryParam,
     UtilsHelper_getSearchQueryParamKey,
-    UtilsHelper_isHomepage
+    UtilsHelper_isHomepage, UtilsHelper_parsePositiveIntFromString
 } from "../UtilsHelper";
 import _ from "lodash";
 import {SiteContentType} from "../../types/types";
@@ -28,7 +28,7 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 export async function SeoHelper_currentTitle(context, place: string) {
     const seoTitlesSettings = await ConfigHelper_getSeoTitlesAndDescriptionConfig(context);
     const pageType = await SeoHelper_getSeoCurrentPageType(context);
-    const withNumeration = !!UtilsHelper_getQueryParam('page', context);
+    const withNumeration = UtilsHelper_parsePositiveIntFromString(UtilsHelper_getQueryParam('page', context)) || 1;
     let pattern= null;
 
     switch (pageType) {
@@ -72,7 +72,7 @@ export async function SeoHelper_currentTitle(context, place: string) {
 export async function SeoHelper_currentDescription(context, place: string) {
     const seoDescriptionSettings = await ConfigHelper_getSeoTitlesAndDescriptionConfig(context);
     const pageType = await SeoHelper_getSeoCurrentPageType(context);
-    const withNumeration = !!UtilsHelper_getQueryParam('page', context);
+    const withNumeration = UtilsHelper_parsePositiveIntFromString(UtilsHelper_getQueryParam('page', context))  || 1;
     let pattern= null;
 
     switch (pageType) {
@@ -215,7 +215,7 @@ async function mapPatternVariables(context, place: string, fieldToCheck: string 
     }
 
     if (fieldToCheck.includes('{{number}}')) {
-        dynamicPatternMap['{{number}}'] = () => {return UtilsHelper_getQueryParam('page', context)}
+        dynamicPatternMap['{{number}}'] = () => {return UtilsHelper_parsePositiveIntFromString(UtilsHelper_getQueryParam('page', context)) || 1}
     }
 
     if (fieldToCheck.includes('{{searchPhrase}}')) {
