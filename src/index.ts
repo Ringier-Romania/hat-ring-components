@@ -63,3 +63,4 @@ export { default as CacheScanner } from "./components/common/CacheScanner.astro"
 export { default as Popup } from "./components/widgets/common/Popup/Popup.astro";
 export * from "./providers/MonitoringProvider";
 export * from "./helpers/WebhookHelper";
+export * from './tests';
