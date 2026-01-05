@@ -8,9 +8,9 @@
   "module": "src/index.ts",
   "source": "src/index.ts",
   "types": "src/index.ts",
-  "dist": {
-    "src": "./src",
-    "outDir": "./dist"
+  "exports": {
+    "./tests/*": "./dist/tests/*",
+    "./src/*": "./src/*"
   },
   "engines": {
     "node": "^22"
