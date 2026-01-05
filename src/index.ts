@@ -63,3 +63,6 @@ export { default as CacheScanner } from "./components/common/CacheScanner.astro"
 export { default as Popup } from "./components/widgets/common/Popup/Popup.astro";
 export * from "./providers/MonitoringProvider";
 export * from "./helpers/WebhookHelper";
+export { default as Grid } from "./components/Grid/Grid.astro";
+export { default as Box } from "./components/Grid/Box.astro";
+export { default as Container } from "./components/Grid/Container.astro";
