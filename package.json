@@ -8,6 +8,10 @@
   "module": "src/index.ts",
   "source": "src/index.ts",
   "types": "src/index.ts",
+  "dist": {
+    "src": "./src",
+    "outDir": "./dist"
+  },
   "engines": {
     "node": "^22"
   },
