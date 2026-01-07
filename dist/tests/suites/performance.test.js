@@ -1,4 +1,8 @@
-export function PerformanceTest_imagesLoadingStrategy(playwrightTest) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PerformanceTest_imagesLoadingStrategy = PerformanceTest_imagesLoadingStrategy;
+exports.PerformanceTest_visibleIframesLazyLoading = PerformanceTest_visibleIframesLazyLoading;
+function PerformanceTest_imagesLoadingStrategy(playwrightTest) {
     const { test, expect } = playwrightTest;
     test('images should have lazy-loading or preload', async ({ page }) => {
         const images = await page.locator('img').all();
@@ -19,7 +23,7 @@ export function PerformanceTest_imagesLoadingStrategy(playwrightTest) {
         expect(lazyLoadedCount + preloadCount).toBe(images.length);
     });
 }
-export function PerformanceTest_visibleIframesLazyLoading(playwrightTest) {
+function PerformanceTest_visibleIframesLazyLoading(playwrightTest) {
     const { test, expect } = playwrightTest;
     test('visible iframes should have lazy-loading', async ({ page }) => {
         await page.evaluate(() => { window.scrollTo(0, document.body.scrollHeight); });

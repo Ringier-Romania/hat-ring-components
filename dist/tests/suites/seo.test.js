@@ -1,5 +1,15 @@
-import { TestsHelper_getMetaContent, TestsHelper_getStructuredData } from '../../helpers/TestsHelper';
-export function SeoTest_pageTitle(playwrightTest, expectedValue) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SeoTest_pageTitle = SeoTest_pageTitle;
+exports.SeoTest_pageDescription = SeoTest_pageDescription;
+exports.SeoTest_pageRobots = SeoTest_pageRobots;
+exports.SeoTest_canonical = SeoTest_canonical;
+exports.SeoTest_htmlLangAttribute = SeoTest_htmlLangAttribute;
+exports.SeoTest_schemaOrg = SeoTest_schemaOrg;
+exports.SeoTest_imageAlts = SeoTest_imageAlts;
+exports.SeoTest_paginationLinks = SeoTest_paginationLinks;
+const TestsHelper_1 = require("../../helpers/TestsHelper.js");
+function SeoTest_pageTitle(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have valid title tag', async ({ page }) => {
         const title = await page.title();
@@ -8,26 +18,26 @@ export function SeoTest_pageTitle(playwrightTest, expectedValue) {
         expect(await page.title()).toBe(expectedValue);
     });
 }
-export function SeoTest_pageDescription(playwrightTest, expectedValue) {
+function SeoTest_pageDescription(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have meta description', async ({ page }) => {
         test.skip(!expectedValue);
-        const description = await TestsHelper_getMetaContent(page, 'meta[name="description"]');
+        const description = await (0, TestsHelper_1.TestsHelper_getMetaContent)(page, 'meta[name="description"]');
         expect(description).toBeTruthy();
         expect(description).not.toMatch(/undefined|null|NaN/);
         expect(description).toBe(expectedValue);
     });
 }
-export function SeoTest_pageRobots(playwrightTest, expectedValue) {
+function SeoTest_pageRobots(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have robots meta tag', async ({ page }) => {
-        const robots = await TestsHelper_getMetaContent(page, 'meta[name="robots"]');
+        const robots = await (0, TestsHelper_1.TestsHelper_getMetaContent)(page, 'meta[name="robots"]');
         expect(robots).toBeTruthy();
         expect(robots).not.toMatch(/undefined|null|NaN/);
         expect(robots).toBe(expectedValue);
     });
 }
-export function SeoTest_canonical(playwrightTest, expectedValue) {
+function SeoTest_canonical(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have canonical URL', async ({ page }) => {
         const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
@@ -36,7 +46,7 @@ export function SeoTest_canonical(playwrightTest, expectedValue) {
         expect(canonical).toBe(expectedValue);
     });
 }
-export function SeoTest_htmlLangAttribute(playwrightTest, expectedValue) {
+function SeoTest_htmlLangAttribute(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have lang attribute', async ({ page }) => {
         const lang = await page.locator('html').getAttribute('lang');
@@ -45,14 +55,14 @@ export function SeoTest_htmlLangAttribute(playwrightTest, expectedValue) {
         expect(lang).toBe(expectedValue);
     });
 }
-export function SeoTest_schemaOrg(playwrightTest, expectedValue) {
+function SeoTest_schemaOrg(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have Schema.org structured data', async ({ page }) => {
-        const schemas = await TestsHelper_getStructuredData(page);
+        const schemas = await (0, TestsHelper_1.TestsHelper_getStructuredData)(page);
         expect(schemas).toEqual(expectedValue);
     });
 }
-export function SeoTest_imageAlts(playwrightTest) {
+function SeoTest_imageAlts(playwrightTest) {
     const { test, expect } = playwrightTest;
     test('images should have alt', async ({ page }) => {
         const images = await page.locator('img').all();
@@ -62,7 +72,7 @@ export function SeoTest_imageAlts(playwrightTest) {
         }
     });
 }
-export function SeoTest_paginationLinks(playwrightTest, expectedValue) {
+function SeoTest_paginationLinks(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have next/prev links', async ({ page }) => {
         if (expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.next) {

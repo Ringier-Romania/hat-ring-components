@@ -1,7 +1,11 @@
-export async function TestsHelper_getMetaContent(page, selector) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TestsHelper_getMetaContent = TestsHelper_getMetaContent;
+exports.TestsHelper_getStructuredData = TestsHelper_getStructuredData;
+async function TestsHelper_getMetaContent(page, selector) {
     return await page.locator(selector).getAttribute('content');
 }
-export async function TestsHelper_getStructuredData(page) {
+async function TestsHelper_getStructuredData(page) {
     const scripts = await page.locator('script[type="application/ld+json"]').all();
     const data = [];
     for (const script of scripts) {

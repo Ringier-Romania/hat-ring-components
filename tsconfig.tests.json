@@ -4,7 +4,8 @@
     "noEmit": false,
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "module": "CommonJS"
   },
   "include": [
     "./src/tests/**/*.ts",
@@ -12,6 +13,14 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "tsc-alias": {
+    "verbose": false,
+    "resolveFullPaths": true,
+    "fileExtensions": {
+      "inputGlob": "{js,jsx,mjs}",
+      "outputCheck": ["js", "json", "jsx", "mjs"]
+    }
+  }
 }
 
