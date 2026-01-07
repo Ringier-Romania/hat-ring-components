@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SocialMediaTest_openGraphAndTwitterCards = SocialMediaTest_openGraphAndTwitterCards;
-const TestsHelper_1 = require("../../helpers/TestsHelper.js");
+const TestsHelper_1 = require("../../helpers/TestsHelper");
 function SocialMediaTest_openGraphAndTwitterCards(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have title og tag', async ({ page }) => {

@@ -1,5 +1,5 @@
 import {TestsHelper_getMetaContent, TestsHelper_getStructuredData} from '../../helpers/TestsHelper';
-import {PlaywrightTest} from "../types";
+import {PlaywrightTest} from "../types.js";
 
 export function SeoTest_pageTitle(playwrightTest: PlaywrightTest, expectedValue: string) {
     const {test, expect} = playwrightTest;

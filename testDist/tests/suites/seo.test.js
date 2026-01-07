@@ -8,7 +8,7 @@ exports.SeoTest_htmlLangAttribute = SeoTest_htmlLangAttribute;
 exports.SeoTest_schemaOrg = SeoTest_schemaOrg;
 exports.SeoTest_imageAlts = SeoTest_imageAlts;
 exports.SeoTest_paginationLinks = SeoTest_paginationLinks;
-const TestsHelper_1 = require("../../helpers/TestsHelper.js");
+const TestsHelper_1 = require("../../helpers/TestsHelper");
 function SeoTest_pageTitle(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have valid title tag', async ({ page }) => {

@@ -37,7 +37,6 @@
     "@types/node": "^12.12.21",
     "@types/react": "^18.2.38",
     "@types/react-dom": "^18.2.17",
-    "tsc-alias": "^1.8.16",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
@@ -46,7 +45,7 @@
   },
   "scripts": {
     "build": "tsc --jsx react-jsx",
-    "build:tests": "tsc --project tsconfig.tests.json && tsc-alias -p tsconfig.tests.json",
+    "build:tests": "tsc --project tsconfig.tests.json",
     "run": "tsc -w --jsx react-jsx -p ."
   }
 }

@@ -1,4 +1,4 @@
-import { PlaywrightTest } from "../types";
+import { PlaywrightTest } from "../types.js";
 export declare function SeoTest_pageTitle(playwrightTest: PlaywrightTest, expectedValue: string): void;
 export declare function SeoTest_pageDescription(playwrightTest: PlaywrightTest, expectedValue: string): void;
 export declare function SeoTest_pageRobots(playwrightTest: PlaywrightTest, expectedValue: string): void;
