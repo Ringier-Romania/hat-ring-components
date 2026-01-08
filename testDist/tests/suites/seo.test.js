@@ -55,11 +55,16 @@ function SeoTest_htmlLangAttribute(playwrightTest, expectedValue) {
         expect(lang).toBe(expectedValue);
     });
 }
-function SeoTest_schemaOrg(playwrightTest, expectedValue) {
+function SeoTest_schemaOrg(playwrightTest, expectedValue, compareMode = 'exact') {
     const { test, expect } = playwrightTest;
     test('should have Schema.org structured data', async ({ page }) => {
         const schemas = await (0, TestsHelper_1.TestsHelper_getStructuredData)(page);
-        expect(schemas).toEqual(expectedValue);
+        if (compareMode === 'exact') {
+            expect(schemas).toEqual(expectedValue);
+        }
+        else {
+            expect(schemas).toEqual(expect.arrayContaining(expectedValue.map((item) => expect.objectContaining(item))));
+        }
     });
 }
 function SeoTest_imageAlts(playwrightTest) {

@@ -52,11 +52,15 @@ export function SeoTest_htmlLangAttribute(playwrightTest: PlaywrightTest, expect
     });
 }
 
-export function SeoTest_schemaOrg(playwrightTest: PlaywrightTest, expectedValue: any) {
+export function SeoTest_schemaOrg(playwrightTest: PlaywrightTest, expectedValue: any, compareMode: 'exact' | 'contains' = 'exact') {
     const {test, expect} = playwrightTest;
     test('should have Schema.org structured data', async ({page}) => {
         const schemas = await TestsHelper_getStructuredData(page);
-        expect(schemas).toEqual(expectedValue);
+        if (compareMode === 'exact') {
+            expect(schemas).toEqual(expectedValue);
+        } else {
+            expect(schemas).toEqual(expect.arrayContaining(expectedValue.map((item: any) => expect.objectContaining(item))));
+        }
     });
 }
 
