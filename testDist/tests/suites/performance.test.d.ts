@@ -1,3 +1,3 @@
 import { PlaywrightTest } from "../types";
-export declare function PerformanceTest_imagesLoadingStrategy(playwrightTest: PlaywrightTest): void;
-export declare function PerformanceTest_visibleIframesLazyLoading(playwrightTest: PlaywrightTest): void;
+export declare function TestPerformance_imagesLoadingStrategy(playwrightTest: PlaywrightTest, imageSrcToSkip?: string[]): void;
+export declare function TestPerformance_visibleIframesLazyLoading(playwrightTest: PlaywrightTest, iframeSrcToSkip?: string[]): void;

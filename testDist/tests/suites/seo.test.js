@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SeoTest_pageTitle = SeoTest_pageTitle;
-exports.SeoTest_pageDescription = SeoTest_pageDescription;
-exports.SeoTest_pageRobots = SeoTest_pageRobots;
-exports.SeoTest_canonical = SeoTest_canonical;
-exports.SeoTest_htmlLangAttribute = SeoTest_htmlLangAttribute;
-exports.SeoTest_schemaOrg = SeoTest_schemaOrg;
-exports.SeoTest_imageAlts = SeoTest_imageAlts;
-exports.SeoTest_paginationLinks = SeoTest_paginationLinks;
+exports.TestSeo_pageTitle = TestSeo_pageTitle;
+exports.TestSeo_pageDescription = TestSeo_pageDescription;
+exports.TestSeo_pageRobots = TestSeo_pageRobots;
+exports.TestSeo_canonical = TestSeo_canonical;
+exports.TestSeo_htmlLangAttribute = TestSeo_htmlLangAttribute;
+exports.TestSeo_schemaOrg = TestSeo_schemaOrg;
+exports.TestSeo_imageAlts = TestSeo_imageAlts;
+exports.TestSeo_paginationLinks = TestSeo_paginationLinks;
 const TestsHelper_1 = require("../../helpers/TestsHelper");
-function SeoTest_pageTitle(playwrightTest, expectedValue) {
+function TestSeo_pageTitle(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have valid title tag', async ({ page }) => {
         const title = await page.title();
@@ -18,7 +18,7 @@ function SeoTest_pageTitle(playwrightTest, expectedValue) {
         expect(await page.title()).toBe(expectedValue);
     });
 }
-function SeoTest_pageDescription(playwrightTest, expectedValue) {
+function TestSeo_pageDescription(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have meta description', async ({ page }) => {
         test.skip(!expectedValue);
@@ -28,7 +28,7 @@ function SeoTest_pageDescription(playwrightTest, expectedValue) {
         expect(description).toBe(expectedValue);
     });
 }
-function SeoTest_pageRobots(playwrightTest, expectedValue) {
+function TestSeo_pageRobots(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have robots meta tag', async ({ page }) => {
         const robots = await (0, TestsHelper_1.TestsHelper_getMetaContent)(page, 'meta[name="robots"]');
@@ -37,7 +37,7 @@ function SeoTest_pageRobots(playwrightTest, expectedValue) {
         expect(robots).toBe(expectedValue);
     });
 }
-function SeoTest_canonical(playwrightTest, expectedValue) {
+function TestSeo_canonical(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have canonical URL', async ({ page }) => {
         const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
@@ -46,7 +46,7 @@ function SeoTest_canonical(playwrightTest, expectedValue) {
         expect(canonical).toBe(expectedValue);
     });
 }
-function SeoTest_htmlLangAttribute(playwrightTest, expectedValue) {
+function TestSeo_htmlLangAttribute(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have lang attribute', async ({ page }) => {
         const lang = await page.locator('html').getAttribute('lang');
@@ -55,29 +55,39 @@ function SeoTest_htmlLangAttribute(playwrightTest, expectedValue) {
         expect(lang).toBe(expectedValue);
     });
 }
-function SeoTest_schemaOrg(playwrightTest, expectedValue, compareMode = 'exact') {
+function TestSeo_schemaOrg(playwrightTest, expectedValue, compareMode = 'exact') {
     const { test, expect } = playwrightTest;
     test('should have Schema.org structured data', async ({ page }) => {
         const schemas = await (0, TestsHelper_1.TestsHelper_getStructuredData)(page);
         if (compareMode === 'exact') {
-            expect(schemas).toEqual(expectedValue);
+            expect(schemas, `Expected exact match but got:\n${JSON.stringify(schemas, null, 2)}\nExpected:\n${JSON.stringify(expectedValue, null, 2)}`).toEqual(expectedValue);
         }
         else {
-            expect(schemas).toEqual(expect.arrayContaining(expectedValue.map((item) => expect.objectContaining(item))));
+            expect(schemas, `Expected array containing items but got mismatch:\nActual:\n${JSON.stringify(schemas, null, 2)}\nExpected to contain:\n${JSON.stringify(expectedValue, null, 2)}`).toEqual(expect.arrayContaining(expectedValue.map((item) => expect.objectContaining(item))));
         }
     });
 }
-function SeoTest_imageAlts(playwrightTest) {
+function TestSeo_imageAlts(playwrightTest, imageSrcToSkip = []) {
     const { test, expect } = playwrightTest;
     test('images should have alt', async ({ page }) => {
         const images = await page.locator('img').all();
+        let skippedCount = 0;
+        const imagesWithoutAlt = [];
         for (const img of images) {
+            const src = await img.getAttribute('src');
+            if (src && imageSrcToSkip.some(skipSrc => src.includes(skipSrc))) {
+                skippedCount++;
+                continue;
+            }
             const alt = await img.getAttribute('alt');
-            expect(alt).not.toBeNull();
+            if (alt === null) {
+                imagesWithoutAlt.push(`img with src="${src || 'no src'}" has no alt attribute`);
+            }
         }
+        expect(imagesWithoutAlt.length, `Found ${images.length} images (${skippedCount} skipped), but ${imagesWithoutAlt.length} are missing alt attribute.\nImages without alt:\n${imagesWithoutAlt.join('\n')}`).toBe(0);
     });
 }
-function SeoTest_paginationLinks(playwrightTest, expectedValue) {
+function TestSeo_paginationLinks(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have next/prev links', async ({ page }) => {
         if (expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.next) {

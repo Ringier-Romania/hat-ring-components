@@ -1,4 +1,5 @@
 import {Page} from 'playwright/test';
+import {PlaywrightTest} from "../tests/types.js";
 
 export async function TestsHelper_getMetaContent(page: Page, selector: string): Promise<string | null> {
     return await page.locator(selector).getAttribute('content');
@@ -32,4 +33,22 @@ export function TestsHelper_getUrl(url: string): string {
     }
 
     return url;
+}
+
+export function TestsHelper_elementExists(playwrightTest: PlaywrightTest, description: string, selector: string): void {
+    playwrightTest.test(description, async ({ page }) => {
+        playwrightTest.expect(await page.locator(selector).count()).toBeGreaterThan(0);
+    })
+}
+
+export function TestsHelper_elementNotEmpty(playwrightTest: PlaywrightTest, description: string, selector: string): void {
+    playwrightTest.test(description, async ({ page }) => {
+        await playwrightTest.expect(page.locator(selector)).not.toBeEmpty();
+    })
+}
+
+export function TestsHelper_elementContainsText(playwrightTest: PlaywrightTest, description: string, selector: string, expectedText: string): void {
+    playwrightTest.test(description, async ({ page }) => {
+        await playwrightTest.expect(page.locator(selector)).toHaveText(expectedText);
+    })
 }

@@ -1,7 +1,7 @@
 import {PlaywrightTest} from "../types";
 import {TestsHelper_getMetaContent} from "../../helpers/TestsHelper";
 
-export function SocialMediaTest_openGraphAndTwitterCards(playwrightTest: PlaywrightTest, expectedValue: {
+export function TestSocialMedia_openGraphAndTwitterCards(playwrightTest: PlaywrightTest, expectedValue: {
     ogTitle?: string
     ogDescription?: string
     ogImage?: string
@@ -9,12 +9,14 @@ export function SocialMediaTest_openGraphAndTwitterCards(playwrightTest: Playwri
     ogType?: string
     ogSiteName?: string
     ogImageUrl?: string
+    ogImageSecureUrl?: string
     ogImageType?: string
     ogImageWidth?: string
     ogImageHeight?: string
     ogLocale?: string
     twitterCard?: string
     twitterTitle?: string
+    twitterDescription?: string
 }) {
     const {test, expect} = playwrightTest;
 
@@ -66,6 +68,12 @@ export function SocialMediaTest_openGraphAndTwitterCards(playwrightTest: Playwri
         expect(ogImageUrl).toBeTruthy();
         expect(ogImageUrl).toBe(expectedValue?.ogImageUrl);
     });
+    test('should have image:secure_url og tag', async ({page}) => {
+        test.skip(!expectedValue?.ogImageSecureUrl);
+        const ogImageSecureUrl = await TestsHelper_getMetaContent(page, 'meta[property="og:image:secure_url"]');
+        expect(ogImageSecureUrl).toBeTruthy();
+        expect(ogImageSecureUrl).toBe(expectedValue?.ogImageSecureUrl);
+    });
     test('should have image:type og tag', async ({page}) => {
         test.skip(!expectedValue?.ogImageType);
         const ogImageType = await TestsHelper_getMetaContent(page, 'meta[property="og:image:type"]');
@@ -96,5 +104,11 @@ export function SocialMediaTest_openGraphAndTwitterCards(playwrightTest: Playwri
         const twitterTitle = await TestsHelper_getMetaContent(page, 'meta[name="twitter:title"]');
         expect(twitterTitle).toBeTruthy();
         expect(twitterTitle).toBe(expectedValue?.twitterTitle);
+    });
+    test('should have twitter description meta tag', async ({page}) => {
+        test.skip(!expectedValue?.twitterDescription);
+        const twitterDescription = await TestsHelper_getMetaContent(page, 'meta[name="twitter:description"]');
+        expect(twitterDescription).toBeTruthy();
+        expect(twitterDescription).toBe(expectedValue?.twitterDescription);
     });
 }

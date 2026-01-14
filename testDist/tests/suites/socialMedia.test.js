@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SocialMediaTest_openGraphAndTwitterCards = SocialMediaTest_openGraphAndTwitterCards;
+exports.TestSocialMedia_openGraphAndTwitterCards = TestSocialMedia_openGraphAndTwitterCards;
 const TestsHelper_1 = require("../../helpers/TestsHelper");
-function SocialMediaTest_openGraphAndTwitterCards(playwrightTest, expectedValue) {
+function TestSocialMedia_openGraphAndTwitterCards(playwrightTest, expectedValue) {
     const { test, expect } = playwrightTest;
     test('should have title og tag', async ({ page }) => {
         test.skip(!(expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.ogTitle));
@@ -52,6 +52,12 @@ function SocialMediaTest_openGraphAndTwitterCards(playwrightTest, expectedValue)
         expect(ogImageUrl).toBeTruthy();
         expect(ogImageUrl).toBe(expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.ogImageUrl);
     });
+    test('should have image:secure_url og tag', async ({ page }) => {
+        test.skip(!(expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.ogImageSecureUrl));
+        const ogImageSecureUrl = await (0, TestsHelper_1.TestsHelper_getMetaContent)(page, 'meta[property="og:image:secure_url"]');
+        expect(ogImageSecureUrl).toBeTruthy();
+        expect(ogImageSecureUrl).toBe(expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.ogImageSecureUrl);
+    });
     test('should have image:type og tag', async ({ page }) => {
         test.skip(!(expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.ogImageType));
         const ogImageType = await (0, TestsHelper_1.TestsHelper_getMetaContent)(page, 'meta[property="og:image:type"]');
@@ -81,6 +87,12 @@ function SocialMediaTest_openGraphAndTwitterCards(playwrightTest, expectedValue)
         const twitterTitle = await (0, TestsHelper_1.TestsHelper_getMetaContent)(page, 'meta[name="twitter:title"]');
         expect(twitterTitle).toBeTruthy();
         expect(twitterTitle).toBe(expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.twitterTitle);
+    });
+    test('should have twitter description meta tag', async ({ page }) => {
+        test.skip(!(expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.twitterDescription));
+        const twitterDescription = await (0, TestsHelper_1.TestsHelper_getMetaContent)(page, 'meta[name="twitter:description"]');
+        expect(twitterDescription).toBeTruthy();
+        expect(twitterDescription).toBe(expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.twitterDescription);
     });
 }
 //# sourceMappingURL=socialMedia.test.js.map

@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TestsHelper_getMetaContent = TestsHelper_getMetaContent;
 exports.TestsHelper_getStructuredData = TestsHelper_getStructuredData;
 exports.TestsHelper_getUrl = TestsHelper_getUrl;
+exports.TestsHelper_elementExists = TestsHelper_elementExists;
+exports.TestsHelper_elementNotEmpty = TestsHelper_elementNotEmpty;
+exports.TestsHelper_elementContainsText = TestsHelper_elementContainsText;
 async function TestsHelper_getMetaContent(page, selector) {
     return await page.locator(selector).getAttribute('content');
 }
@@ -32,5 +35,20 @@ function TestsHelper_getUrl(url) {
         return urlObj.href;
     }
     return url;
+}
+function TestsHelper_elementExists(playwrightTest, description, selector) {
+    playwrightTest.test(description, async ({ page }) => {
+        playwrightTest.expect(await page.locator(selector).count()).toBeGreaterThan(0);
+    });
+}
+function TestsHelper_elementNotEmpty(playwrightTest, description, selector) {
+    playwrightTest.test(description, async ({ page }) => {
+        await playwrightTest.expect(page.locator(selector)).not.toBeEmpty();
+    });
+}
+function TestsHelper_elementContainsText(playwrightTest, description, selector, expectedText) {
+    playwrightTest.test(description, async ({ page }) => {
+        await playwrightTest.expect(page.locator(selector)).toHaveText(expectedText);
+    });
 }
 //# sourceMappingURL=TestsHelper.js.map
