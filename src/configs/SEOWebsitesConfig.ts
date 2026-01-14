@@ -368,8 +368,8 @@ export let SEOWebsitesConfig
                         "type": "textfield"
                     },
                     {
-                        "name": "rel Attribute",
-                        "description": "rel attribute value for this domain (leave empty for default)",
+                        "name": "Rel attribute",
+                        "description": "Rel attribute value for this domain (leave empty for default), e.g., noreferrer, noopener",
                         "type": "textfield"
                     }
                 ]
