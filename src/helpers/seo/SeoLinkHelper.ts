@@ -1,5 +1,5 @@
-import { AppContext } from "../types/types";
-import { ConfigHelper_getContentLinksConfig } from "./ConfigHelper";
+import { AppContext } from "../../types/types";
+import { ConfigHelper_getContentLinksConfig } from "../ConfigHelper";
 
 export async function SeoLinkHelper_processLinks(context: AppContext, text: string): Promise<string> {
     if (!text) {
@@ -49,7 +49,7 @@ export async function SeoLinkHelper_processLinks(context: AppContext, text: stri
 
                 if (matchWithWhitelist) {
                     currentRelAttributes = currentRelAttributes.filter(
-                        (attr) => attr !== "nofollow" && attr !== "noindex"
+                        (attr) => attr !== "nofollow"
                     );
 
                     if (matchWithWhitelist.relAttribute) {
@@ -63,9 +63,6 @@ export async function SeoLinkHelper_processLinks(context: AppContext, text: stri
                 } else {
                     if (!currentRelAttributes.includes("nofollow")) {
                         currentRelAttributes.push("nofollow");
-                    }
-                    if (!currentRelAttributes.includes("noindex")) {
-                        currentRelAttributes.push("noindex");
                     }
                 }
 

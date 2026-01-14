@@ -132,8 +132,8 @@ export let SEOWebsitesConfig
             "customMetaTags": []
         },
         "contentLinks": {
-             "enableDomainWhitelist": false,
-             "whitelistedDomains": []
+            "enableDomainWhitelist": false,
+            "whitelistedDomains": []
         }
     },
     "paramsDescription": {
@@ -360,7 +360,7 @@ export let SEOWebsitesConfig
             "whitelistedDomains": {
                 "type": "treeobject",
                 "name": "Whitelisted domains",
-                "description": "List of whitelisted domains. All links from content outside this list will have 'noindex nofollow'.",
+                "description": "List of whitelisted domains. All links from content outside this list will have 'nofollow'.",
                 "properties": [
                     {
                         "name": "domain",
@@ -368,7 +368,7 @@ export let SEOWebsitesConfig
                         "type": "textfield"
                     },
                     {
-                        "name": "Rel attribute",
+                        "name": "relAttribute",
                         "description": "Rel attribute value for this domain (leave empty for default), e.g., noreferrer, noopener",
                         "type": "textfield"
                     }
