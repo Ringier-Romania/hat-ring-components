@@ -45,8 +45,8 @@
   },
   "scripts": {
     "build": "tsc --jsx react-jsx",
-    "build:tests": "tsc --project tsconfig.tests.json --clean",
+    "build:tests": "tsc --project tsconfig.tests.json",
     "run": "tsc -w --jsx react-jsx -p .",
-    "run:tests": "tsc -w --project tsconfig.tests.json --clean"
+    "run:tests": "tsc -w --project tsconfig.tests.json"
   }
 }

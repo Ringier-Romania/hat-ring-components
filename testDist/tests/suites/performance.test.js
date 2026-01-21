@@ -40,7 +40,9 @@ function TestPerformance_imagesLoadingStrategy(playwrightTest, imageSrcToSkip = 
 function TestPerformance_visibleIframesLazyLoading(playwrightTest, iframeSrcToSkip = []) {
     const { test, expect } = playwrightTest;
     test('visible iframes should have lazy-loading', async ({ page }) => {
-        await page.evaluate(() => { window.scrollTo(0, document.body.scrollHeight); });
+        await page.evaluate(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+        });
         const iframes = await page.locator('iframe').all();
         const filteredIframes = [];
         for (const ifr of iframes) {

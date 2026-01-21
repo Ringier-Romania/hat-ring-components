@@ -1,4 +1,5 @@
 import {PlaywrightTest} from "../types";
+import {Locator} from "playwright";
 
 export function TestPerformance_imagesLoadingStrategy(playwrightTest: PlaywrightTest, imageSrcToSkip: string[] = []) {
     const {test, expect} = playwrightTest;
@@ -9,7 +10,7 @@ export function TestPerformance_imagesLoadingStrategy(playwrightTest: Playwright
         let lazyLoadedCount = 0;
         let preloadCount = 0;
         let skippedCount = 0;
-                const imagesWithoutStrategy: string[] = [];
+        const imagesWithoutStrategy: string[] = [];
 
         for (const img of images) {
             const src = await img.getAttribute('src');
@@ -21,14 +22,14 @@ export function TestPerformance_imagesLoadingStrategy(playwrightTest: Playwright
             const loading = await img.getAttribute('loading');
             if (loading === 'lazy') {
                 lazyLoadedCount++;
-                    } else if (loading === 'eager') {
-                        const isPreloaded = await page.locator(`link[rel="preload"][as="image"][imagesrcset="${src}"]`).count();
+            } else if (loading === 'eager') {
+                const isPreloaded = await page.locator(`link[rel="preload"][as="image"][imagesrcset="${src}"]`).count();
                 if (isPreloaded) {
                     preloadCount++;
-                        } else {
-                            imagesWithoutStrategy.push(`img with src="${src || 'no src'}" has loading="eager" but no preload`);
+                } else {
+                    imagesWithoutStrategy.push(`img with src="${src || 'no src'}" has loading="eager" but no preload`);
                 }
-                    } else {
+            } else {
                 imagesWithoutStrategy.push(`img with src="${src || 'no src'}" has loading="${loading}"`);
             }
         }
@@ -41,10 +42,12 @@ export function TestPerformance_imagesLoadingStrategy(playwrightTest: Playwright
 export function TestPerformance_visibleIframesLazyLoading(playwrightTest: PlaywrightTest, iframeSrcToSkip: string[] = []) {
     const {test, expect} = playwrightTest;
     test('visible iframes should have lazy-loading', async ({page}) => {
-        await page.evaluate(() => { window.scrollTo(0, document.body.scrollHeight); });
+        await page.evaluate(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+        });
 
         const iframes = await page.locator('iframe').all();
-        const filteredIframes: any = [];
+        const filteredIframes: Locator[] = [];
 
         for (const ifr of iframes) {
             const box = await ifr.boundingBox();

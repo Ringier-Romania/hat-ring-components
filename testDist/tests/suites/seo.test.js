@@ -15,7 +15,7 @@ function TestSeo_pageTitle(playwrightTest, expectedValue) {
         const title = await page.title();
         expect(title).toBeTruthy();
         expect(title).not.toMatch(/undefined|null|NaN/);
-        expect(await page.title()).toBe(expectedValue);
+        expect(title).toBe(expectedValue);
     });
 }
 function TestSeo_pageDescription(playwrightTest, expectedValue) {
