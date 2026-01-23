@@ -46,7 +46,7 @@ export class RedisProvider {
             }
 
             await this.client.auth({
-                username: 'iam-user',
+                username: process.env.REDIS_USERNAME ||'iam-user',
                 password: token,
             });
 
