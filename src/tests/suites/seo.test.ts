@@ -1,24 +1,27 @@
 import {TestsHelper_getMetaContent, TestsHelper_getStructuredData} from '../../helpers/TestsHelper';
 import {PlaywrightTest} from "../types.js";
 
-export function TestSeo_pageTitle(playwrightTest: PlaywrightTest, expectedValue: string) {
+export function TestSeo_pageTitle(playwrightTest: PlaywrightTest, expectedValue?: string) {
     const {test, expect} = playwrightTest;
     test('should have valid title tag', async ({page}) => {
         const title = await page.title();
         expect(title).toBeTruthy();
         expect(title).not.toMatch(/undefined|null|NaN/);
-        expect(title).toBe(expectedValue)
+        if(expectedValue) {
+            expect(title).toBe(expectedValue)
+        }
     });
 }
 
-export function TestSeo_pageDescription(playwrightTest: PlaywrightTest, expectedValue: string) {
+export function TestSeo_pageDescription(playwrightTest: PlaywrightTest, expectedValue?: string) {
     const {test, expect} = playwrightTest;
     test('should have meta description', async ({page}) => {
-        test.skip(!expectedValue);
         const description = await TestsHelper_getMetaContent(page, 'meta[name="description"]');
         expect(description).toBeTruthy();
         expect(description).not.toMatch(/undefined|null|NaN/);
-        expect(description).toBe(expectedValue)
+        if(expectedValue) {
+            expect(description).toBe(expectedValue)
+        }
     });
 }
 
@@ -28,27 +31,33 @@ export function TestSeo_pageRobots(playwrightTest: PlaywrightTest, expectedValue
         const robots = await TestsHelper_getMetaContent(page, 'meta[name="robots"]');
         expect(robots).toBeTruthy();
         expect(robots).not.toMatch(/undefined|null|NaN/);
-        expect(robots).toBe(expectedValue)
+        if (expectedValue) {
+            expect(robots).toBe(expectedValue)
+        }
     });
 }
 
-export function TestSeo_canonical(playwrightTest: PlaywrightTest, expectedValue: string) {
+export function TestSeo_canonical(playwrightTest: PlaywrightTest, expectedValue?: string) {
     const {test, expect} = playwrightTest;
     test('should have canonical URL', async ({page}) => {
         const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
         expect(canonical).toBeTruthy();
         expect(canonical).not.toMatch(/undefined|null|NaN/);
-        expect(canonical).toBe(expectedValue);
+        if (expectedValue) {
+            expect(canonical).toBe(expectedValue);
+        }
     });
 }
 
-export function TestSeo_htmlLangAttribute(playwrightTest: PlaywrightTest, expectedValue: string) {
+export function TestSeo_htmlLangAttribute(playwrightTest: PlaywrightTest, expectedValue?: string) {
     const {test, expect} = playwrightTest;
     test('should have lang attribute', async ({page}) => {
         const lang = await page.locator('html').getAttribute('lang');
         expect(lang).toBeTruthy();
         expect(lang).not.toMatch(/undefined|null|NaN/);
-        expect(lang).toBe(expectedValue);
+        if (expectedValue) {
+            expect(lang).toBe(expectedValue);
+        }
     });
 }
 

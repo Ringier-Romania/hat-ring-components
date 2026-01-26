@@ -25,10 +25,10 @@ async function TestsHelper_getStructuredData(page) {
     }
     return data;
 }
-function TestsHelper_getUrl(url) {
+function TestsHelper_getUrl(url, withoutPort) {
     const urlObj = new URL(url);
     if (process.env.NODE_ENV !== 'production') {
-        return urlObj.href.replace(urlObj.origin, 'http://localhost:4321');
+        return urlObj.href.replace(urlObj.origin, `${withoutPort ? 'http://localhost' : 'http://localhost:4321'}`);
     }
     if (process.env.ACCELERATOR_VARIANT_BASE64) {
         urlObj.searchParams.set('__acc_variant', process.env.ACCELERATOR_VARIANT_BASE64);
@@ -36,19 +36,19 @@ function TestsHelper_getUrl(url) {
     }
     return url;
 }
-function TestsHelper_elementExists(playwrightTest, description, selector) {
+function TestsHelper_elementExists(playwrightTest, description, selector, locatorOptions) {
     playwrightTest.test(description, async ({ page }) => {
-        playwrightTest.expect(await page.locator(selector).count()).toBeGreaterThan(0);
+        playwrightTest.expect(await page.locator(selector, locatorOptions).count()).toBeGreaterThan(0);
     });
 }
-function TestsHelper_elementNotEmpty(playwrightTest, description, selector) {
+function TestsHelper_elementNotEmpty(playwrightTest, description, selector, locatorOptions) {
     playwrightTest.test(description, async ({ page }) => {
-        await playwrightTest.expect(page.locator(selector)).not.toBeEmpty();
+        await playwrightTest.expect(await page.locator(selector, locatorOptions)).not.toBeEmpty();
     });
 }
-function TestsHelper_elementContainsText(playwrightTest, description, selector, expectedText) {
+function TestsHelper_elementContainsText(playwrightTest, description, selector, expectedText, locatorOptions) {
     playwrightTest.test(description, async ({ page }) => {
-        await playwrightTest.expect(page.locator(selector)).toHaveText(expectedText);
+        await playwrightTest.expect(await page.locator(selector, locatorOptions)).toHaveText(expectedText);
     });
 }
 //# sourceMappingURL=TestsHelper.js.map

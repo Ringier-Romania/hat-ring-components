@@ -1,4 +1,4 @@
-import {Page} from 'playwright/test';
+import {Page, Locator} from 'playwright/test';
 import {PlaywrightTest} from "../tests/types.js";
 
 export async function TestsHelper_getMetaContent(page: Page, selector: string): Promise<string | null> {
@@ -21,10 +21,10 @@ export async function TestsHelper_getStructuredData(page: Page): Promise<any[]> 
     return data;
 }
 
-export function TestsHelper_getUrl(url: string): string {
+export function TestsHelper_getUrl(url: string, withoutPort?: false): string {
     const urlObj = new URL(url);
     if (process.env.NODE_ENV !== 'production') {
-        return urlObj.href.replace(urlObj.origin, 'http://localhost:4321');
+        return urlObj.href.replace(urlObj.origin, `${withoutPort ? 'http://localhost' : 'http://localhost:4321'}`);
     }
 
     if (process.env.ACCELERATOR_VARIANT_BASE64) {
@@ -35,20 +35,35 @@ export function TestsHelper_getUrl(url: string): string {
     return url;
 }
 
-export function TestsHelper_elementExists(playwrightTest: PlaywrightTest, description: string, selector: string): void {
+export function TestsHelper_elementExists(playwrightTest: PlaywrightTest, description: string, selector: string, locatorOptions?: {
+    has?: Locator;
+    hasNot?: Locator;
+    hasNotText?: string|RegExp;
+    hasText?: string|RegExp;
+}): void {
     playwrightTest.test(description, async ({ page }) => {
-        playwrightTest.expect(await page.locator(selector).count()).toBeGreaterThan(0);
+        playwrightTest.expect(await page.locator(selector, locatorOptions).count()).toBeGreaterThan(0);
     })
 }
 
-export function TestsHelper_elementNotEmpty(playwrightTest: PlaywrightTest, description: string, selector: string): void {
+export function TestsHelper_elementNotEmpty(playwrightTest: PlaywrightTest, description: string, selector: string, locatorOptions?: {
+    has?: Locator;
+    hasNot?: Locator;
+    hasNotText?: string|RegExp;
+    hasText?: string|RegExp;
+}): void {
     playwrightTest.test(description, async ({ page }) => {
-        await playwrightTest.expect(page.locator(selector)).not.toBeEmpty();
+        await playwrightTest.expect(await page.locator(selector, locatorOptions)).not.toBeEmpty();
     })
 }
 
-export function TestsHelper_elementContainsText(playwrightTest: PlaywrightTest, description: string, selector: string, expectedText: string): void {
+export function TestsHelper_elementContainsText(playwrightTest: PlaywrightTest, description: string, selector: string, expectedText: string, locatorOptions?: {
+    has?: Locator;
+    hasNot?: Locator;
+    hasNotText?: string|RegExp;
+    hasText?: string|RegExp;
+}): void {
     playwrightTest.test(description, async ({ page }) => {
-        await playwrightTest.expect(page.locator(selector)).toHaveText(expectedText);
+        await playwrightTest.expect(await page.locator(selector, locatorOptions)).toHaveText(expectedText);
     })
 }
