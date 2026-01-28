@@ -1,7 +1,7 @@
 import {PlaywrightTest} from "../types";
 import {Locator} from "playwright";
 
-export function TestPerformance_imagesLoadingStrategy(playwrightTest: PlaywrightTest, imageSrcToSkip: string[] = []) {
+export function TestPerformance_imagesLoadingStrategy({playwrightTest, imageSrcToSkip = []} : {playwrightTest: PlaywrightTest, imageSrcToSkip?: string[]}) {
     const {test, expect} = playwrightTest;
 
     test('images should have lazy-loading or preload', async ({page}) => {
@@ -39,7 +39,7 @@ export function TestPerformance_imagesLoadingStrategy(playwrightTest: Playwright
     });
 }
 
-export function TestPerformance_visibleIframesLazyLoading(playwrightTest: PlaywrightTest, iframeSrcToSkip: string[] = []) {
+export function TestPerformance_visibleIframesLazyLoading({playwrightTest, iframeSrcToSkip = []} : {playwrightTest: PlaywrightTest, iframeSrcToSkip?: string[]}) {
     const {test, expect} = playwrightTest;
     test('visible iframes should have lazy-loading', async ({page}) => {
         await page.waitForLoadState("domcontentloaded");

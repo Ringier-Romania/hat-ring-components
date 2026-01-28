@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TestSocialMedia_openGraphAndTwitterCards = TestSocialMedia_openGraphAndTwitterCards;
 const TestsHelper_1 = require("../../helpers/TestsHelper");
-function TestSocialMedia_openGraphAndTwitterCards(playwrightTest, expectedValue) {
+function TestSocialMedia_openGraphAndTwitterCards({ playwrightTest, expectedValue }) {
     const { test, expect } = playwrightTest;
     test('should have title og tag', async ({ page }) => {
         test.skip(!(expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.ogTitle));

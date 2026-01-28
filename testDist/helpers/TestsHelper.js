@@ -25,7 +25,7 @@ async function TestsHelper_getStructuredData(page) {
     }
     return data;
 }
-function TestsHelper_getUrl(url, withoutPort) {
+function TestsHelper_getUrl({ url, withoutPort = false }) {
     const urlObj = new URL(url);
     if (process.env.NODE_ENV !== 'production') {
         return urlObj.href.replace(urlObj.origin, `${withoutPort ? 'http://localhost' : 'http://localhost:4321'}`);
@@ -36,17 +36,17 @@ function TestsHelper_getUrl(url, withoutPort) {
     }
     return url;
 }
-function TestsHelper_elementExists(playwrightTest, description, selector, locatorOptions) {
+function TestsHelper_elementExists({ playwrightTest, locatorOptions, selector, description }) {
     playwrightTest.test(description, async ({ page }) => {
-        playwrightTest.expect(await page.locator(selector, locatorOptions).count()).toBeGreaterThan(0);
+        await playwrightTest.expect(await page.locator(selector, locatorOptions).count()).toBeGreaterThan(0);
     });
 }
-function TestsHelper_elementNotEmpty(playwrightTest, description, selector, locatorOptions) {
+function TestsHelper_elementNotEmpty({ playwrightTest, description, selector, locatorOptions }) {
     playwrightTest.test(description, async ({ page }) => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions)).not.toBeEmpty();
     });
 }
-function TestsHelper_elementContainsText(playwrightTest, description, selector, expectedText, locatorOptions) {
+function TestsHelper_elementContainsText({ playwrightTest, description, selector, locatorOptions, expectedText }) {
     playwrightTest.test(description, async ({ page }) => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions)).toHaveText(expectedText);
     });

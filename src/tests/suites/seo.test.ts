@@ -1,7 +1,7 @@
 import {TestsHelper_getMetaContent, TestsHelper_getStructuredData} from '../../helpers/TestsHelper';
 import {PlaywrightTest} from "../types.js";
 
-export function TestSeo_pageTitle(playwrightTest: PlaywrightTest, expectedValue?: string) {
+export function TestSeo_pageTitle({playwrightTest, expectedValue} : {playwrightTest: PlaywrightTest, expectedValue?: string}) {
     const {test, expect} = playwrightTest;
     test('should have valid title tag', async ({page}) => {
         const title = await page.title();
@@ -13,7 +13,7 @@ export function TestSeo_pageTitle(playwrightTest: PlaywrightTest, expectedValue?
     });
 }
 
-export function TestSeo_pageDescription(playwrightTest: PlaywrightTest, expectedValue?: string) {
+export function TestSeo_pageDescription({playwrightTest, expectedValue} : {playwrightTest: PlaywrightTest, expectedValue?: string}) {
     const {test, expect} = playwrightTest;
     test('should have meta description', async ({page}) => {
         const description = await TestsHelper_getMetaContent(page, 'meta[name="description"]');
@@ -25,7 +25,7 @@ export function TestSeo_pageDescription(playwrightTest: PlaywrightTest, expected
     });
 }
 
-export function TestSeo_pageRobots(playwrightTest: PlaywrightTest, expectedValue: string) {
+export function TestSeo_pageRobots({playwrightTest, expectedValue} : {playwrightTest: PlaywrightTest, expectedValue?: string}) {
     const {test, expect} = playwrightTest;
     test('should have robots meta tag', async ({page}) => {
         const robots = await TestsHelper_getMetaContent(page, 'meta[name="robots"]');
@@ -37,7 +37,7 @@ export function TestSeo_pageRobots(playwrightTest: PlaywrightTest, expectedValue
     });
 }
 
-export function TestSeo_canonical(playwrightTest: PlaywrightTest, expectedValue?: string) {
+export function TestSeo_canonical({playwrightTest, expectedValue} : {playwrightTest: PlaywrightTest, expectedValue?: string}) {
     const {test, expect} = playwrightTest;
     test('should have canonical URL', async ({page}) => {
         const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
@@ -49,7 +49,7 @@ export function TestSeo_canonical(playwrightTest: PlaywrightTest, expectedValue?
     });
 }
 
-export function TestSeo_htmlLangAttribute(playwrightTest: PlaywrightTest, expectedValue?: string) {
+export function TestSeo_htmlLangAttribute({playwrightTest, expectedValue} : {playwrightTest: PlaywrightTest, expectedValue?: string}) {
     const {test, expect} = playwrightTest;
     test('should have lang attribute', async ({page}) => {
         const lang = await page.locator('html').getAttribute('lang');
@@ -61,7 +61,7 @@ export function TestSeo_htmlLangAttribute(playwrightTest: PlaywrightTest, expect
     });
 }
 
-export function TestSeo_schemaOrg(playwrightTest: PlaywrightTest, expectedValue: any, compareMode: 'exact' | 'contains' = 'exact') {
+export function TestSeo_schemaOrg({playwrightTest, expectedValue, compareMode = 'exact'} : {playwrightTest: PlaywrightTest, expectedValue: any, compareMode?: 'exact' | 'contains'}) {
     const {test, expect} = playwrightTest;
     test('should have Schema.org structured data', async ({page}) => {
         const schemas = await TestsHelper_getStructuredData(page);
@@ -74,7 +74,7 @@ export function TestSeo_schemaOrg(playwrightTest: PlaywrightTest, expectedValue:
     });
 }
 
-export function TestSeo_imageAlts(playwrightTest: PlaywrightTest, imageSrcToSkip: string[] = []) {
+export function TestSeo_imageAlts({playwrightTest, imageSrcToSkip = []} : {playwrightTest: PlaywrightTest, imageSrcToSkip?: string[]}) {
     const {test, expect} = playwrightTest;
     test('images should have alt', async ({page}) => {
         const images = await page.locator('img').all();
@@ -97,7 +97,7 @@ export function TestSeo_imageAlts(playwrightTest: PlaywrightTest, imageSrcToSkip
     });
 }
 
-export function TestSeo_paginationLinks(playwrightTest: PlaywrightTest, expectedValue: {next?: string, prev?: string}) {
+export function TestSeo_paginationLinks({playwrightTest, expectedValue} : {playwrightTest: PlaywrightTest, expectedValue: {next?: string, prev?: string}}) {
     const {test, expect} = playwrightTest;
     test('should have next/prev links', async ({page}) => {
         if (expectedValue?.next) {

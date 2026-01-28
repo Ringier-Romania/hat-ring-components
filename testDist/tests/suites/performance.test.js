@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TestPerformance_imagesLoadingStrategy = TestPerformance_imagesLoadingStrategy;
 exports.TestPerformance_visibleIframesLazyLoading = TestPerformance_visibleIframesLazyLoading;
-function TestPerformance_imagesLoadingStrategy(playwrightTest, imageSrcToSkip = []) {
+function TestPerformance_imagesLoadingStrategy({ playwrightTest, imageSrcToSkip = [] }) {
     const { test, expect } = playwrightTest;
     test('images should have lazy-loading or preload', async ({ page }) => {
         const images = await page.locator('img').all();
@@ -37,7 +37,7 @@ function TestPerformance_imagesLoadingStrategy(playwrightTest, imageSrcToSkip = 
         expect(lazyLoadedCount + preloadCount, `Found ${images.length} images (${skippedCount} skipped), but only ${lazyLoadedCount + preloadCount} have proper loading strategy.\nImages without proper strategy:\n${imagesWithoutStrategy.join('\n')}`).toBe(expectedCount);
     });
 }
-function TestPerformance_visibleIframesLazyLoading(playwrightTest, iframeSrcToSkip = []) {
+function TestPerformance_visibleIframesLazyLoading({ playwrightTest, iframeSrcToSkip = [] }) {
     const { test, expect } = playwrightTest;
     test('visible iframes should have lazy-loading', async ({ page }) => {
         await page.waitForLoadState("domcontentloaded");

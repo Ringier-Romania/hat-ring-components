@@ -1,7 +1,7 @@
 import {PlaywrightTest} from "../types";
 import {TestsHelper_getMetaContent} from "../../helpers/TestsHelper";
 
-export function TestSocialMedia_openGraphAndTwitterCards(playwrightTest: PlaywrightTest, expectedValue: {
+export function TestSocialMedia_openGraphAndTwitterCards({playwrightTest, expectedValue} : {playwrightTest: PlaywrightTest, expectedValue: {
     ogTitle?: string
     ogDescription?: string
     ogImage?: string
@@ -17,7 +17,7 @@ export function TestSocialMedia_openGraphAndTwitterCards(playwrightTest: Playwri
     twitterCard?: string
     twitterTitle?: string
     twitterDescription?: string
-}) {
+}}) {
     const {test, expect} = playwrightTest;
 
     test('should have title og tag', async ({page}) => {

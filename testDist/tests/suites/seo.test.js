@@ -9,7 +9,7 @@ exports.TestSeo_schemaOrg = TestSeo_schemaOrg;
 exports.TestSeo_imageAlts = TestSeo_imageAlts;
 exports.TestSeo_paginationLinks = TestSeo_paginationLinks;
 const TestsHelper_1 = require("../../helpers/TestsHelper");
-function TestSeo_pageTitle(playwrightTest, expectedValue) {
+function TestSeo_pageTitle({ playwrightTest, expectedValue }) {
     const { test, expect } = playwrightTest;
     test('should have valid title tag', async ({ page }) => {
         const title = await page.title();
@@ -20,7 +20,7 @@ function TestSeo_pageTitle(playwrightTest, expectedValue) {
         }
     });
 }
-function TestSeo_pageDescription(playwrightTest, expectedValue) {
+function TestSeo_pageDescription({ playwrightTest, expectedValue }) {
     const { test, expect } = playwrightTest;
     test('should have meta description', async ({ page }) => {
         const description = await (0, TestsHelper_1.TestsHelper_getMetaContent)(page, 'meta[name="description"]');
@@ -31,7 +31,7 @@ function TestSeo_pageDescription(playwrightTest, expectedValue) {
         }
     });
 }
-function TestSeo_pageRobots(playwrightTest, expectedValue) {
+function TestSeo_pageRobots({ playwrightTest, expectedValue }) {
     const { test, expect } = playwrightTest;
     test('should have robots meta tag', async ({ page }) => {
         const robots = await (0, TestsHelper_1.TestsHelper_getMetaContent)(page, 'meta[name="robots"]');
@@ -42,7 +42,7 @@ function TestSeo_pageRobots(playwrightTest, expectedValue) {
         }
     });
 }
-function TestSeo_canonical(playwrightTest, expectedValue) {
+function TestSeo_canonical({ playwrightTest, expectedValue }) {
     const { test, expect } = playwrightTest;
     test('should have canonical URL', async ({ page }) => {
         const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
@@ -53,7 +53,7 @@ function TestSeo_canonical(playwrightTest, expectedValue) {
         }
     });
 }
-function TestSeo_htmlLangAttribute(playwrightTest, expectedValue) {
+function TestSeo_htmlLangAttribute({ playwrightTest, expectedValue }) {
     const { test, expect } = playwrightTest;
     test('should have lang attribute', async ({ page }) => {
         const lang = await page.locator('html').getAttribute('lang');
@@ -64,7 +64,7 @@ function TestSeo_htmlLangAttribute(playwrightTest, expectedValue) {
         }
     });
 }
-function TestSeo_schemaOrg(playwrightTest, expectedValue, compareMode = 'exact') {
+function TestSeo_schemaOrg({ playwrightTest, expectedValue, compareMode = 'exact' }) {
     const { test, expect } = playwrightTest;
     test('should have Schema.org structured data', async ({ page }) => {
         const schemas = await (0, TestsHelper_1.TestsHelper_getStructuredData)(page);
@@ -76,7 +76,7 @@ function TestSeo_schemaOrg(playwrightTest, expectedValue, compareMode = 'exact')
         }
     });
 }
-function TestSeo_imageAlts(playwrightTest, imageSrcToSkip = []) {
+function TestSeo_imageAlts({ playwrightTest, imageSrcToSkip = [] }) {
     const { test, expect } = playwrightTest;
     test('images should have alt', async ({ page }) => {
         const images = await page.locator('img').all();
@@ -96,7 +96,7 @@ function TestSeo_imageAlts(playwrightTest, imageSrcToSkip = []) {
         expect(imagesWithoutAlt.length, `Found ${images.length} images (${skippedCount} skipped), but ${imagesWithoutAlt.length} are missing alt attribute.\nImages without alt:\n${imagesWithoutAlt.join('\n')}`).toBe(0);
     });
 }
-function TestSeo_paginationLinks(playwrightTest, expectedValue) {
+function TestSeo_paginationLinks({ playwrightTest, expectedValue }) {
     const { test, expect } = playwrightTest;
     test('should have next/prev links', async ({ page }) => {
         if (expectedValue === null || expectedValue === void 0 ? void 0 : expectedValue.next) {
