@@ -3,6 +3,7 @@ const { context, blockData }: UnorderedListBlockParams =
   Astro.props as UnorderedListBlockParams;
 import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
 import {LinkReplacerHelper_replaceLinks} from '../../../../../helpers/LinkReplacerHelper';
+import { SeoLinkWhitelistHelper_processLinks } from "../../../../../helpers/seo/SeoLinkWhitelistHelper";
 import { AppContext } from "../../../../../types/types";
 
 export interface UnorderedListBlockParams {
@@ -14,14 +15,15 @@ export interface UnorderedListBlockParams {
     styleType: string;
   };
 }
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | JSX.Element | String  = false;
 
-if (!blockData) {
+if (!blockData?.entries?.length) {
   toRender = WidgetHelper_renderEmptyComponent("UnorderedListBlock");
 }
 
 blockData.entries = await Promise.all(blockData.entries.map(async (entry) => {
-  return LinkReplacerHelper_replaceLinks(context, entry);
+  let processed = await LinkReplacerHelper_replaceLinks(context, entry);
+  return SeoLinkWhitelistHelper_processLinks(context, processed);
 }));
 ---
 
