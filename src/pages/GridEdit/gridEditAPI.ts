@@ -54,13 +54,14 @@ export function createGridEditAPI(options: GridEditAPIOptions = {}) {
             const variables = {
               nodeID: nodeId,
               variant: variant,
+              containerCodeName: container,
             };
 
             const query = gql`
-              query($nodeID: ID!, $variant:ID!){
+              query($nodeID: ID!, $variant:ID!, $containerCodeName: String!){
                 node(id: $nodeID){
                   config(variantId: $variant){
-                    config(codeName: "${container}"){
+                    config(codeName: $containerCodeName){
                       data
                     }
                   }
@@ -95,16 +96,19 @@ export function createGridEditAPI(options: GridEditAPIOptions = {}) {
             }
 
             const vars = {
-              configuration: configData
+              configuration: configData,
+              nodeId: nodeId,
+              variantId: variant,
+              moduleCodeName: container,
             };
 
             const mutation = gql`
-              mutation ($configuration: JSONObject!) {
+              mutation ($configuration: JSONObject!, $nodeId: ID!, $variantId: ID!, $moduleCodeName: String!) {
                 setModuleConfiguration(
                   configuration: $configuration
-                  nodeId: "${nodeId}"
-                  variantId: "${variant}"
-                  moduleCodeName: "${container}"
+                  nodeId: $nodeId
+                  variantId: $variantId
+                  moduleCodeName: $moduleCodeName
                 ) {
                   status
                 }
@@ -128,20 +132,20 @@ export function createGridEditAPI(options: GridEditAPIOptions = {}) {
 
         const findConfigNodeId = async (currentNodeId: string): Promise<string> => {
           const detQuery = gql`
-            query($nodeID: ID!, $variant: ID!) {
+            query($nodeID: ID!, $variant: ID!, $containerCodeName: String!) {
               node(id: $nodeID) {
                 id
                 parent {
                   id
                   config(variantId: $variant) {
-                    config(codeName: "${containerName}") {
+                    config(codeName: $containerCodeName) {
                       data
                       name
                     }
                   }
                 }
                 config(variantId: $variant) {
-                  config(codeName: "${containerName}") {
+                  config(codeName: $containerCodeName) {
                     data
                     name
                   }
@@ -150,7 +154,7 @@ export function createGridEditAPI(options: GridEditAPIOptions = {}) {
             }
           `;
 
-          const detRes = await WebsiteApiProvider.call(detQuery, { nodeID: currentNodeId, variant: detVariant }, 0);
+          const detRes = await WebsiteApiProvider.call(detQuery, { nodeID: currentNodeId, variant: detVariant, containerCodeName: containerName }, 0);
           const node = detRes?.data?.node;
           if (!node) {
             return currentNodeId;
