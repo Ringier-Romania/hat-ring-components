@@ -122,8 +122,7 @@ export function createGridEditAPI(options: GridEditAPIOptions = {}) {
         const containerName = reqBody.containerName;
 
         if (!detNodeId || !detVariant || !containerName) {
-          responseString = JSON.stringify({ error: 'Missing nodeId, variant or containerName' });
-          break;
+          return new Response(JSON.stringify({ error: 'Missing nodeId, variant or containerName' }));
         }
 
         const findConfigNodeId = async (currentNodeId: string): Promise<string> => {
