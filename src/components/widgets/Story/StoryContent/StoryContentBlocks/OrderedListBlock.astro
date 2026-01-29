@@ -16,15 +16,16 @@ export interface OrderedListBlockParams {
     startValue: number;
   };
 }
-let toRender: boolean | JSX.Element | String  = false;
+let toRender: boolean | JSX.Element | string  = false;
 if (!blockData?.entries?.length) {
   toRender = WidgetHelper_renderEmptyComponent("OrderedListBlock");
+} else {
+    blockData.entries = await Promise.all(blockData.entries.map(async (entry) => {
+      let processed = await LinkReplacerHelper_replaceLinks(context, entry);
+      return SeoLinkWhitelistHelper_processLinks(context, processed);
+    }));
 }
 
-blockData.entries = await Promise.all(blockData.entries.map(async (entry) => {
-  let processed = await LinkReplacerHelper_replaceLinks(context, entry);
-  return SeoLinkWhitelistHelper_processLinks(context, processed);
-}));
 ---
 
 {
