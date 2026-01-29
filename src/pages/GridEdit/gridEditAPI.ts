@@ -3,6 +3,7 @@ import { WebsiteApiProvider } from "../../providers/WebsiteApiProvider";
 import { gql } from "@ringpublishing/graphql-api-client-got";
 import _ from "lodash";
 import { generateConfig } from "../HatAdmin/generateConfig";
+import { UtilsHelper_isDevelopmentMode } from "../../helpers/UtilsHelper";
 
 export interface GridEditAPIOptions {
   websiteManagerConfigs?: any;
@@ -206,7 +207,12 @@ export function createGridEditAPI(options: GridEditAPIOptions = {}) {
 
           responseString = JSON.stringify({ containerToSection });
         } catch (error) {
-          console.error('[getContainerSections] Error:', error);
+          // Only log detailed error information in development to avoid exposing sensitive data in production
+          if (UtilsHelper_isDevelopmentMode()) {
+            console.error('[getContainerSections] Error:', error);
+          } else {
+            console.error('[getContainerSections] Error occurred');
+          }
           responseString = JSON.stringify({ error: 'Failed to get container sections', containerToSection: {} });
         }
         break;
