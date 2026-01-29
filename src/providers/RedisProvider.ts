@@ -28,8 +28,8 @@ export class RedisProvider {
     constructor() {
         this.url = process.env.REDIS_RW;
         this.replicationGroupId = process.env.REDIS_REPLICATION_GROUP_ID;
-        this.username = 'iam-user';
-        this.region = 'eu-central-1';
+        this.username = process.env.REDIS_USERNAME ||'iam-user';
+        this.region = process.env.REDIS_REGION || 'eu-central-1';
         this.service = 'elasticache';
         this.maxReInitialize = 10;
         this.currentReInitialize = 0;
@@ -46,7 +46,7 @@ export class RedisProvider {
             }
 
             await this.client.auth({
-                username: 'iam-user',
+                username: process.env.REDIS_USERNAME ||'iam-user',
                 password: token,
             });
 
