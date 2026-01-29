@@ -103,7 +103,7 @@ export function createGridEditAPI(options: GridEditAPIOptions = {}) {
             };
 
             const mutation = gql`
-              mutation ($configuration: JSONObject!, $nodeId: ID!, $variantId: ID!, $moduleCodeName: String!) {
+              mutation ($configuration: JSONObject!, $nodeId: UUID!, $variantId: ID!, $moduleCodeName: String!) {
                 setModuleConfiguration(
                   configuration: $configuration
                   nodeId: $nodeId
@@ -115,7 +115,7 @@ export function createGridEditAPI(options: GridEditAPIOptions = {}) {
               }
             `;
 
-            await WebsiteApiProvider.call(mutation, vars, 0);
+            const res = await WebsiteApiProvider.call(mutation, vars, 0);
           }
         }
         break;
