@@ -6,7 +6,7 @@ export function TestSeo_pageTitle({playwrightTest, expectedValue} : {playwrightT
     test('should have valid title tag', async ({page}) => {
         const title = await page.title();
         expect(title).toBeTruthy();
-        expect(title).not.toMatch(/undefined|null|NaN/);
+        expect(title).not.toMatch(/\b(?:undefined|null|NaN)\b/);
         if(expectedValue) {
             expect(title).toBe(expectedValue)
         }
@@ -18,7 +18,7 @@ export function TestSeo_pageDescription({playwrightTest, expectedValue} : {playw
     test('should have meta description', async ({page}) => {
         const description = await TestsHelper_getMetaContent(page, 'meta[name="description"]');
         expect(description).toBeTruthy();
-        expect(description).not.toMatch(/undefined|null|NaN/);
+        expect(description).not.toMatch(/\b(?:undefined|null|NaN)\b/);
         if(expectedValue) {
             expect(description).toBe(expectedValue)
         }
@@ -30,7 +30,7 @@ export function TestSeo_pageRobots({playwrightTest, expectedValue} : {playwright
     test('should have robots meta tag', async ({page}) => {
         const robots = await TestsHelper_getMetaContent(page, 'meta[name="robots"]');
         expect(robots).toBeTruthy();
-        expect(robots).not.toMatch(/undefined|null|NaN/);
+        expect(robots).not.toMatch(/\b(?:undefined|null|NaN)\b/);
         if (expectedValue) {
             expect(robots).toBe(expectedValue)
         }
@@ -42,7 +42,7 @@ export function TestSeo_canonical({playwrightTest, expectedValue} : {playwrightT
     test('should have canonical URL', async ({page}) => {
         const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
         expect(canonical).toBeTruthy();
-        expect(canonical).not.toMatch(/undefined|null|NaN/);
+        expect(canonical).not.toMatch(/\b(?:undefined|null|NaN)\b/);
         if (expectedValue) {
             expect(canonical).toBe(expectedValue);
         }
@@ -54,7 +54,7 @@ export function TestSeo_htmlLangAttribute({playwrightTest, expectedValue} : {pla
     test('should have lang attribute', async ({page}) => {
         const lang = await page.locator('html').getAttribute('lang');
         expect(lang).toBeTruthy();
-        expect(lang).not.toMatch(/undefined|null|NaN/);
+        expect(lang).not.toMatch(/\b(?:undefined|null|NaN)\b/);
         if (expectedValue) {
             expect(lang).toBe(expectedValue);
         }
@@ -103,13 +103,13 @@ export function TestSeo_paginationLinks({playwrightTest, expectedValue} : {playw
         if (expectedValue?.next) {
             const nextLink = await page.locator('link[rel="next"]').getAttribute('href');
             expect(nextLink).toBeTruthy();
-            expect(nextLink).not.toMatch(/undefined|null|NaN/);
+            expect(nextLink).not.toMatch(/\b(?:undefined|null|NaN)\b/);
             expect(nextLink).toBe(expectedValue.next);
         }
         if (expectedValue?.prev) {
             const prevLink = await page.locator('link[rel="prev"]').getAttribute('href');
             expect(prevLink).toBeTruthy();
-            expect(prevLink).not.toMatch(/undefined|null|NaN/);
+            expect(prevLink).not.toMatch(/\b(?:undefined|null|NaN)\b/);
             expect(prevLink).toBe(expectedValue.prev);
         }
     });
