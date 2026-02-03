@@ -1,6 +1,6 @@
 {
     "name": "hat-ring-components",
-    "version": "4.5.0",
+    "version": "4.6.0",
     "description": "Head App Template - RING components",
     "license": "MIT",
     "repository": {},
@@ -39,8 +39,14 @@
         "@types/react-dom": "^18.2.17",
         "typescript": "^5.2.2"
     },
+    "peerDependencies": {
+        "@playwright/test": "^1.57.0",
+        "playwright": "^1.57.0"
+    },
     "scripts": {
         "build": "tsc --jsx react-jsx",
-        "run": "tsc -w --jsx react-jsx -p ."
+        "build:tests": "tsc --project tsconfig.tests.json",
+        "run": "tsc -w --jsx react-jsx -p .",
+        "run:tests": "tsc -w --project tsconfig.tests.json"
     }
 }
