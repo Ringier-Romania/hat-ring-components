@@ -51,6 +51,12 @@ export function UtilsHelper_getCurrentPageType(context) {
     return isHomePage ? SiteContentType.Homepage : (context.siteContentType || null);
 }
 
+export function UtilsHelper_formatSlugToTitle(slug: string): string {
+    if (!slug) return '';
+    const formattedSlug = slug.replaceAll('-', ' ');
+    return formattedSlug.charAt(0).toUpperCase() + formattedSlug.slice(1);
+}
+
 export function UtilsHelper_getCurrentNodeName(context) {
     try {
         const content = context?.hatControllerParams?.gqlResponse?.data?.site?.data?.content;
@@ -59,8 +65,8 @@ export function UtilsHelper_getCurrentNodeName(context) {
 
             if (pageType === SiteContentType.SiteNode) {
                 // @TODO: getting name for sitenode/category in HAT Server?
-                const slug = content.slug?.replaceAll('-', ' ') || '';
-                return (slug.charAt(0).toUpperCase() + slug.slice(1)) || '';
+                const slug = content.slug || '';
+                return UtilsHelper_formatSlugToTitle(slug);
             } else if (pageType === SiteContentType.Story) {
                 return content.title || '';
             } else if (pageType === SiteContentType.CustomAction) {

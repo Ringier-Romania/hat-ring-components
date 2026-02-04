@@ -8,7 +8,7 @@ import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 import {gql} from "graphql-tag";
 import _ from "lodash";
 import {SeoHelper_getSeoCurrentPageType} from "./SeoHelper";
-import {UtilsHelper_getDomain} from "../UtilsHelper";
+import {UtilsHelper_getDomain, UtilsHelper_formatSlugToTitle} from "../UtilsHelper";
 
 /**
  * Helper for handling titles according to the SEO requirements based on the placement of the usage
@@ -95,6 +95,7 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
                 site(url:$url, variantId: $variant){
                     data {
                         node {
+                            slug
                             category {
                                 data{
                                     name
@@ -111,7 +112,11 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
             variant: context.websiteManagerVariant,
         });
 
-        return _.get(nodeResponse, 'data.site.data.node.category.data.name', '');
+        const categoryName = _.get(nodeResponse, 'data.site.data.node.category.data.name', '');
+        if (categoryName) return categoryName;
+        
+        const slug = _.get(nodeResponse, 'data.site.data.node.slug', '');
+        return UtilsHelper_formatSlugToTitle(slug);
     }
 
     async function prepareCategoryTitle() {
