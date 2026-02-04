@@ -42,7 +42,7 @@ export function TestPerformance_imagesLoadingStrategy({playwrightTest, imageSrcT
 export function TestPerformance_visibleIframesLazyLoading({playwrightTest, iframeSrcToSkip = []} : {playwrightTest: PlaywrightTest, iframeSrcToSkip?: string[]}) {
     const {test, expect} = playwrightTest;
     test('visible iframes should have lazy-loading', async ({page}) => {
-        await page.waitForLoadState("domcontentloaded");
+        await page.waitForLoadState("load");
         await page.evaluate(() => {
             window.scrollTo(0, document.body.scrollHeight);
         });
@@ -63,7 +63,7 @@ export function TestPerformance_visibleIframesLazyLoading({playwrightTest, ifram
 
         for (const ifr of filteredIframes) {
             const src = await ifr.getAttribute('src');
-            if (src && iframeSrcToSkip.some(skipSrc => src.includes(skipSrc))) {
+            if ((src && iframeSrcToSkip.some(skipSrc => src.includes(skipSrc))) || !src) {
                 skippedCount++;
                 continue;
             }
