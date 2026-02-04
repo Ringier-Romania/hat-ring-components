@@ -63,7 +63,11 @@ export function TestPerformance_visibleIframesLazyLoading({playwrightTest, ifram
 
         for (const ifr of filteredIframes) {
             const src = await ifr.getAttribute('src');
-            if ((src && iframeSrcToSkip.some(skipSrc => src.includes(skipSrc))) || !src) {
+            if (!src) {
+                skippedCount++;
+                continue;
+            }
+            if (iframeSrcToSkip.some(skipSrc => src.includes(skipSrc))) {
                 skippedCount++;
                 continue;
             }
@@ -72,7 +76,7 @@ export function TestPerformance_visibleIframesLazyLoading({playwrightTest, ifram
             if (loading === 'lazy') {
                 lazyLoadedCount++;
             } else {
-                iframesWithoutLazy.push(`iframe with src="${src || 'no src'}" has loading="${loading}"`);
+                iframesWithoutLazy.push(`iframe with src="${src}" has loading="${loading}"`);
             }
         }
 
