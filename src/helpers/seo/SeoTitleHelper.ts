@@ -27,7 +27,7 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
             return await prepareStoryTitle();
 
         case 'SiteNode':
-            return await prepareCategoryTitle();
+            return await prepareCategoryTitle(context);
 
         case 'Homepage':
         default:
@@ -89,7 +89,10 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
         }
     }
 
-    async function getCategoryName() {
+    async function getCategoryName(context) {
+        const categoryNameFromContext = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.data.name', "");
+        if (categoryNameFromContext) return categoryNameFromContext;
+
         const nodeQuery = gql`
             query($url: URL!, $variant:ID!){
                 site(url:$url, variantId: $variant){
@@ -114,13 +117,16 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
 
         const categoryName = _.get(nodeResponse, 'data.site.data.node.category.data.name', '');
         if (categoryName) return categoryName;
-        
+
+        const slugFromContext = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.slug') || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.slug');
+        if (slugFromContext) return UtilsHelper_formatSlugToTitle(slugFromContext);
+
         const slug = _.get(nodeResponse, 'data.site.data.node.slug', '');
         return UtilsHelper_formatSlugToTitle(slug);
     }
 
-    async function prepareCategoryTitle() {
-        const categoryName = await getCategoryName();
+    async function prepareCategoryTitle(context) {
+        const categoryName = await getCategoryName(context);
 
         switch (place) {
             case 'default':
