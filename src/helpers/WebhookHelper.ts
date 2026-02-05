@@ -78,6 +78,7 @@ export async function WebhookHelper_POST(context: APIContext) {
 
 async function handleNotification(context: APIContext) {
     let thisUrl = context.url.href;
+    console.info('handleNotification thisUrl ',thisUrl);
     let origin = context.url.origin;
 
     // Fix for reverse proxy - use X-Forwarded-Proto header or force HTTPS in production
