@@ -27,7 +27,7 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
             return await prepareStoryTitle();
 
         case 'SiteNode':
-            return await prepareCategoryTitle(context);
+            return await prepareCategoryTitle();
 
         case 'Homepage':
         default:
@@ -35,6 +35,17 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
     }
 
     async function getStoryTitles() {
+        const dataContent = context?.hatControllerParams?.gqlResponse?.data?.site?.data?.content;
+        const titleFromContext = _.get(dataContent, 'title', '');
+        const leadsFromContext = _.get(dataContent, 'leads', []);
+        
+        if (titleFromContext && leadsFromContext.length) {
+            return {
+                title: titleFromContext,
+                leads: leadsFromContext
+            };
+        }
+
         const storyQuery = gql`
             query($storyId: UUID){
                 story(id:$storyId){
@@ -89,8 +100,8 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
         }
     }
 
-    async function getCategoryName(context) {
-        const categoryNameFromContext = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.data.name', "");
+    async function getCategoryName() {
+        const categoryNameFromContext = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.data.name', '');
         if (categoryNameFromContext) return categoryNameFromContext;
 
         const nodeQuery = gql`
@@ -118,15 +129,12 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
         const categoryName = _.get(nodeResponse, 'data.site.data.node.category.data.name', '');
         if (categoryName) return categoryName;
 
-        const slugFromContext = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.slug') || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.slug');
-        if (slugFromContext) return UtilsHelper_formatSlugToTitle(slugFromContext);
-
         const slug = _.get(nodeResponse, 'data.site.data.node.slug', '');
         return UtilsHelper_formatSlugToTitle(slug);
     }
 
-    async function prepareCategoryTitle(context) {
-        const categoryName = await getCategoryName(context);
+    async function prepareCategoryTitle() {
+        const categoryName = await getCategoryName();
 
         switch (place) {
             case 'default':
