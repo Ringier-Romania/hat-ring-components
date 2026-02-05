@@ -217,10 +217,12 @@ async function handleNotification(context: APIContext) {
 async function repeatRequest(req: string, thisUrl: string, origin: string) {
     if (thisUrl) {
         try {
-            const options = {
+            const options: RequestInit = {
                 method: "POST",
                 body: req,
+                redirect: "manual",
                 headers: {
+                    'Content-Type': 'application/json',
                     origin: origin,
                     'User-Agent': userAgent,
                 }
@@ -244,7 +246,7 @@ async function repeatRequest(req: string, thisUrl: string, origin: string) {
     }
 }
 
-async function clearStoryParentsByTag(tag: string) { 
+async function clearStoryParentsByTag(tag: string) {
     const keys = await CacheHelper_getKeysByTag(tag);
 
     const deleteCount = {
