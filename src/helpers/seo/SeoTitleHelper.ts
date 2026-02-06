@@ -35,17 +35,6 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
     }
 
     async function getStoryTitles() {
-        const dataContent = context?.hatControllerParams?.gqlResponse?.data?.site?.data?.content;
-        const titleFromContext = _.get(dataContent, 'title', '');
-        const leadsFromContext = _.get(dataContent, 'leads', []);
-        
-        if (titleFromContext && leadsFromContext.length) {
-            return {
-                title: titleFromContext,
-                leads: leadsFromContext
-            };
-        }
-
         const storyQuery = gql`
             query($storyId: UUID){
                 story(id:$storyId){
