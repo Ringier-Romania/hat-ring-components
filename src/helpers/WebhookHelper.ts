@@ -1,6 +1,6 @@
 import {APIContext} from "astro";
 import {MonitoringProvider} from "../providers/MonitoringProvider";
-import { UtilsHelper_generateRandomString} from "./UtilsHelper";
+import { UtilsHelper_generateRandomString, UtilsHelper_getCurrentUrl} from "./UtilsHelper";
 import {CacheHelper_clearByTag, CacheHelper_getKeysByTag} from "./CacheHelper";
 
 enum NotificationType {
@@ -78,21 +78,8 @@ export async function WebhookHelper_POST(context: APIContext) {
 
 async function handleNotification(context: APIContext) {
     // Build thisUrl from forwarded headers (reverse proxy) or fallback to context.url
-    const forwardedProto = context.request.headers.get('x-forwarded-proto') || context.url.protocol.replace(':', '');
-    const forwardedHost = context.request.headers.get('x-forwarded-host') || context.url.host;
-    const forwardedUri = context.request.headers.get('x-forwarded-uri') || context.url.pathname;
-
-    let thisUrl = `${forwardedProto}://${forwardedHost}${forwardedUri}`;
-    let origin = `${forwardedProto}://${forwardedHost}`;
-
-    console.info('handleNotification', {
-        thisUrl,
-        origin,
-        forwardedProto,
-        forwardedHost,
-        forwardedUri,
-        originalUrl: context.url.href
-    });
+    const thisUrl = UtilsHelper_getCurrentUrl(context);
+    const origin = new URL(thisUrl).origin;
 
     const timer0 = MonitoringProvider.timer(`info.WebhookHelper.requestJson`);
     let req: any = null;
