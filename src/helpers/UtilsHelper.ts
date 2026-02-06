@@ -51,11 +51,6 @@ export function UtilsHelper_getCurrentPageType(context) {
     return isHomePage ? SiteContentType.Homepage : (context.siteContentType || null);
 }
 
-export function UtilsHelper_formatSlugToTitle(slug: string): string {
-    if (!slug) return '';
-    const formattedSlug = slug.replaceAll('-', ' ');
-    return formattedSlug.charAt(0).toUpperCase() + formattedSlug.slice(1);
-}
 
 export function UtilsHelper_getCurrentNodeName(context) {
     try {
@@ -66,7 +61,7 @@ export function UtilsHelper_getCurrentNodeName(context) {
                 const categoryName = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.data.name', '');
                 if (categoryName) return categoryName;
                 const slug = content.slug || '';
-                return UtilsHelper_formatSlugToTitle(slug);
+                return _.capitalize(UtilsHelper_slugify(slug));
             } else if (pageType === SiteContentType.Story) {
                 return content.title || '';
             } else if (pageType === SiteContentType.CustomAction) {
