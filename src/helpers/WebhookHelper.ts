@@ -77,19 +77,22 @@ export async function WebhookHelper_POST(context: APIContext) {
 }
 
 async function handleNotification(context: APIContext) {
-    let thisUrl = context.url.href;
-    console.info('handleNotification thisUrl ',thisUrl);
-    console.info('handleNotification request ',context.request);
-    console.info('handleNotification context.url ',context.url);
+    // Build thisUrl from forwarded headers (reverse proxy) or fallback to context.url
+    const forwardedProto = context.request.headers.get('x-forwarded-proto') || context.url.protocol.replace(':', '');
+    const forwardedHost = context.request.headers.get('x-forwarded-host') || context.url.host;
+    const forwardedUri = context.request.headers.get('x-forwarded-uri') || context.url.pathname;
 
-    let origin = context.url.origin;
+    let thisUrl = `${forwardedProto}://${forwardedHost}${forwardedUri}`;
+    let origin = `${forwardedProto}://${forwardedHost}`;
 
-    // Fix for reverse proxy - use X-Forwarded-Proto header or force HTTPS in production
-    const forwardedProto = context.request.headers.get('x-forwarded-proto');
-    if (forwardedProto === 'https' && thisUrl.startsWith('http://')) {
-        thisUrl = thisUrl.replace('http://', 'https://');
-        origin = origin.replace('http://', 'https://');
-    }
+    console.info('handleNotification', {
+        thisUrl,
+        origin,
+        forwardedProto,
+        forwardedHost,
+        forwardedUri,
+        originalUrl: context.url.href
+    });
 
     const timer0 = MonitoringProvider.timer(`info.WebhookHelper.requestJson`);
     let req: any = null;
