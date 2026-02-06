@@ -79,6 +79,7 @@ export async function WebhookHelper_POST(context: APIContext) {
 async function handleNotification(context: APIContext) {
     // Build thisUrl from forwarded headers (reverse proxy) or fallback to context.url
     const thisUrl = UtilsHelper_getCurrentUrl(context);
+    console.info(`WebhookHelper: received notification at ${thisUrl} with href:`, context.url.href);
     const origin = new URL(thisUrl).origin;
 
     const timer0 = MonitoringProvider.timer(`info.WebhookHelper.requestJson`);
