@@ -36,18 +36,18 @@ function TestsHelper_getUrl({ url, withoutPort = false }) {
     }
     return url;
 }
-function TestsHelper_elementExists({ playwrightTest, locatorOptions, selector, description }) {
-    playwrightTest.test(description, async ({ page }) => {
+async function TestsHelper_elementExists({ page, playwrightTest, locatorOptions, selector, description }) {
+    await playwrightTest.test.step(description, async () => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions).count()).toBeGreaterThan(0);
     });
 }
-function TestsHelper_elementNotEmpty({ playwrightTest, description, selector, locatorOptions }) {
-    playwrightTest.test(description, async ({ page }) => {
+async function TestsHelper_elementNotEmpty({ page, playwrightTest, description, selector, locatorOptions }) {
+    await playwrightTest.test.step(description, async () => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions)).not.toBeEmpty();
     });
 }
-function TestsHelper_elementContainsText({ playwrightTest, description, selector, locatorOptions, expectedText }) {
-    playwrightTest.test(description, async ({ page }) => {
+async function TestsHelper_elementContainsText({ page, playwrightTest, description, selector, locatorOptions, expectedText }) {
+    await playwrightTest.test.step(description, async () => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions)).toHaveText(expectedText);
     });
 }

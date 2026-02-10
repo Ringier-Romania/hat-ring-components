@@ -35,35 +35,35 @@ export function TestsHelper_getUrl({url, withoutPort = false} : {url: string, wi
     return url;
 }
 
-export function TestsHelper_elementExists({playwrightTest, locatorOptions, selector, description} :{playwrightTest: PlaywrightTest, description: string, selector: string, locatorOptions?: {
+export async function TestsHelper_elementExists({page, playwrightTest, locatorOptions, selector, description} :{page: Page, playwrightTest: PlaywrightTest, description: string, selector: string, locatorOptions?: {
     has?: Locator;
     hasNot?: Locator;
     hasNotText?: string|RegExp;
     hasText?: string|RegExp;
-}}): void {
-    playwrightTest.test(description, async ({ page }) => {
+}}): Promise<void> {
+    await playwrightTest.test.step(description, async () => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions).count()).toBeGreaterThan(0);
     })
 }
 
-export function TestsHelper_elementNotEmpty({playwrightTest, description, selector, locatorOptions} : {playwrightTest: PlaywrightTest, description: string, selector: string, locatorOptions?: {
+export async function TestsHelper_elementNotEmpty({page, playwrightTest, description, selector, locatorOptions} : {page: Page, playwrightTest: PlaywrightTest, description: string, selector: string, locatorOptions?: {
         has?: Locator;
         hasNot?: Locator;
         hasNotText?: string|RegExp;
         hasText?: string|RegExp;
-    }}): void {
-    playwrightTest.test(description, async ({ page }) => {
+    }}): Promise<void> {
+    await playwrightTest.test.step(description, async () => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions)).not.toBeEmpty();
     })
 }
 
-export function TestsHelper_elementContainsText({playwrightTest, description, selector, locatorOptions, expectedText}: {playwrightTest: PlaywrightTest, description: string, selector: string, expectedText: string, locatorOptions?: {
-    has?: Locator;
-    hasNot?: Locator;
-    hasNotText?: string|RegExp;
-    hasText?: string|RegExp;
-}}): void {
-    playwrightTest.test(description, async ({ page }) => {
+export async function TestsHelper_elementContainsText({page, playwrightTest, description, selector, locatorOptions, expectedText}: {page: Page, playwrightTest: PlaywrightTest, description: string, selector: string, expectedText: string, locatorOptions?: {
+        has?: Locator;
+        hasNot?: Locator;
+        hasNotText?: string|RegExp;
+        hasText?: string|RegExp;
+    }}): Promise<void> {
+    await playwrightTest.test.step(description, async () => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions)).toHaveText(expectedText);
     })
 }

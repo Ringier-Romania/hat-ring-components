@@ -6,7 +6,8 @@ export declare function TestsHelper_getUrl({ url, withoutPort }: {
     url: string;
     withoutPort?: boolean;
 }): string;
-export declare function TestsHelper_elementExists({ playwrightTest, locatorOptions, selector, description }: {
+export declare function TestsHelper_elementExists({ page, playwrightTest, locatorOptions, selector, description }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     description: string;
     selector: string;
@@ -16,8 +17,9 @@ export declare function TestsHelper_elementExists({ playwrightTest, locatorOptio
         hasNotText?: string | RegExp;
         hasText?: string | RegExp;
     };
-}): void;
-export declare function TestsHelper_elementNotEmpty({ playwrightTest, description, selector, locatorOptions }: {
+}): Promise<void>;
+export declare function TestsHelper_elementNotEmpty({ page, playwrightTest, description, selector, locatorOptions }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     description: string;
     selector: string;
@@ -27,8 +29,9 @@ export declare function TestsHelper_elementNotEmpty({ playwrightTest, descriptio
         hasNotText?: string | RegExp;
         hasText?: string | RegExp;
     };
-}): void;
-export declare function TestsHelper_elementContainsText({ playwrightTest, description, selector, locatorOptions, expectedText }: {
+}): Promise<void>;
+export declare function TestsHelper_elementContainsText({ page, playwrightTest, description, selector, locatorOptions, expectedText }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     description: string;
     selector: string;
@@ -39,4 +42,4 @@ export declare function TestsHelper_elementContainsText({ playwrightTest, descri
         hasNotText?: string | RegExp;
         hasText?: string | RegExp;
     };
-}): void;
+}): Promise<void>;
