@@ -1,6 +1,6 @@
 import {APIContext} from "astro";
 import {MonitoringProvider} from "../providers/MonitoringProvider";
-import { UtilsHelper_generateRandomString} from "./UtilsHelper";
+import { UtilsHelper_generateRandomString, UtilsHelper_getCurrentUrl} from "./UtilsHelper";
 import {CacheHelper_clearByTag, CacheHelper_getKeysByTag} from "./CacheHelper";
 
 enum NotificationType {
@@ -77,8 +77,10 @@ export async function WebhookHelper_POST(context: APIContext) {
 }
 
 async function handleNotification(context: APIContext) {
-    let thisUrl = context.url.href;
-    let origin = context.url.origin;
+    // Build thisUrl from forwarded headers (reverse proxy) or fallback to context.url
+    const thisUrl = UtilsHelper_getCurrentUrl(context);
+    // console.info(`WebhookHelper: received notification at ${thisUrl} with href:`, context.url.href);
+    const origin = new URL(thisUrl).origin;
 
     const timer0 = MonitoringProvider.timer(`info.WebhookHelper.requestJson`);
     let req: any = null;
@@ -217,10 +219,12 @@ async function handleNotification(context: APIContext) {
 async function repeatRequest(req: string, thisUrl: string, origin: string) {
     if (thisUrl) {
         try {
-            const options = {
+            const options: RequestInit = {
                 method: "POST",
                 body: req,
+                redirect: "manual",
                 headers: {
+                    'Content-Type': 'application/json',
                     origin: origin,
                     'User-Agent': userAgent,
                 }
@@ -244,7 +248,7 @@ async function repeatRequest(req: string, thisUrl: string, origin: string) {
     }
 }
 
-async function clearStoryParentsByTag(tag: string) { 
+async function clearStoryParentsByTag(tag: string) {
     const keys = await CacheHelper_getKeysByTag(tag);
 
     const deleteCount = {
