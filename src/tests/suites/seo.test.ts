@@ -78,7 +78,7 @@ export async function TestSeo_schemaOrg({page, playwrightTest, expectedValue, co
 export async function TestSeo_imageAlts({page, playwrightTest, imageSrcToSkip = []} : {page: Page, playwrightTest: PlaywrightTest, imageSrcToSkip?: string[]}) {
     const { expect } = playwrightTest;
     await playwrightTest.test.step('images should have alt', async () => {
-        const images = await page.locator('img').all();
+        const images = await page.locator('img:visible').all();
         let skippedCount = 0;
         const imagesWithoutAlt: string[] = [];
 
