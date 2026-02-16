@@ -1,4 +1,4 @@
-import {Page, Locator} from 'playwright/test';
+import {Page, Locator, TestType} from 'playwright/test';
 import {PlaywrightTest} from "../tests/types.js";
 
 export async function TestsHelper_getMetaContent(page: Page, selector: string): Promise<string | null> {
@@ -65,5 +65,13 @@ export async function TestsHelper_elementContainsText({page, playwrightTest, des
     }}): Promise<void> {
     await playwrightTest.test.step(description, async () => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions)).toHaveText(expectedText);
+    })
+}
+
+export function TestsHelper_attachDOMAtFailedTests({playwrightTest}: { playwrightTest: PlaywrightTest }) {
+    playwrightTest.test.afterEach(async ({ page }) => {
+        if (playwrightTest.test.info().error) {
+            await playwrightTest.test.info().attach("DOM", {body: await page.content(), contentType: "text/html"});
+        }
     })
 }

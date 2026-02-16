@@ -43,3 +43,6 @@ export declare function TestsHelper_elementContainsText({ page, playwrightTest, 
         hasText?: string | RegExp;
     };
 }): Promise<void>;
+export declare function TestsHelper_attachDOMAtFailedTests({ playwrightTest }: {
+    playwrightTest: PlaywrightTest;
+}): void;

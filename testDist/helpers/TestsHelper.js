@@ -6,6 +6,7 @@ exports.TestsHelper_getUrl = TestsHelper_getUrl;
 exports.TestsHelper_elementExists = TestsHelper_elementExists;
 exports.TestsHelper_elementNotEmpty = TestsHelper_elementNotEmpty;
 exports.TestsHelper_elementContainsText = TestsHelper_elementContainsText;
+exports.TestsHelper_attachDOMAtFailedTests = TestsHelper_attachDOMAtFailedTests;
 async function TestsHelper_getMetaContent(page, selector) {
     return await page.locator(selector).getAttribute('content');
 }
@@ -49,6 +50,13 @@ async function TestsHelper_elementNotEmpty({ page, playwrightTest, description, 
 async function TestsHelper_elementContainsText({ page, playwrightTest, description, selector, locatorOptions, expectedText }) {
     await playwrightTest.test.step(description, async () => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions)).toHaveText(expectedText);
+    });
+}
+function TestsHelper_attachDOMAtFailedTests({ playwrightTest }) {
+    playwrightTest.test.afterEach(async ({ page }) => {
+        if (playwrightTest.test.info().error) {
+            await playwrightTest.test.info().attach("DOM", { body: await page.content(), contentType: "text/html" });
+        }
     });
 }
 //# sourceMappingURL=TestsHelper.js.map
