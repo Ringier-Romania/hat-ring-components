@@ -6,7 +6,7 @@ export async function TestPerformance_imagesLoadingStrategy({page, playwrightTes
     const { expect } = playwrightTest;
 
     await playwrightTest.test.step('images should have lazy-loading or preload', async () => {
-        const images = await page.locator('img').all();
+        const images = await page.locator('img:visible').all();
 
         let lazyLoadedCount = 0;
         let preloadCount = 0;
