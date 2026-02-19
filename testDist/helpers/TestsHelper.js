@@ -6,6 +6,7 @@ exports.TestsHelper_getUrl = TestsHelper_getUrl;
 exports.TestsHelper_elementExists = TestsHelper_elementExists;
 exports.TestsHelper_elementNotEmpty = TestsHelper_elementNotEmpty;
 exports.TestsHelper_elementContainsText = TestsHelper_elementContainsText;
+exports.TestsHelper_attachDOMAtFailedTests = TestsHelper_attachDOMAtFailedTests;
 async function TestsHelper_getMetaContent(page, selector) {
     return await page.locator(selector).getAttribute('content');
 }
@@ -36,19 +37,26 @@ function TestsHelper_getUrl({ url, withoutPort = false }) {
     }
     return url;
 }
-function TestsHelper_elementExists({ playwrightTest, locatorOptions, selector, description }) {
-    playwrightTest.test(description, async ({ page }) => {
+async function TestsHelper_elementExists({ page, playwrightTest, locatorOptions, selector, description }) {
+    await playwrightTest.test.step(description, async () => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions).count()).toBeGreaterThan(0);
     });
 }
-function TestsHelper_elementNotEmpty({ playwrightTest, description, selector, locatorOptions }) {
-    playwrightTest.test(description, async ({ page }) => {
+async function TestsHelper_elementNotEmpty({ page, playwrightTest, description, selector, locatorOptions }) {
+    await playwrightTest.test.step(description, async () => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions)).not.toBeEmpty();
     });
 }
-function TestsHelper_elementContainsText({ playwrightTest, description, selector, locatorOptions, expectedText }) {
-    playwrightTest.test(description, async ({ page }) => {
+async function TestsHelper_elementContainsText({ page, playwrightTest, description, selector, locatorOptions, expectedText }) {
+    await playwrightTest.test.step(description, async () => {
         await playwrightTest.expect(await page.locator(selector, locatorOptions)).toHaveText(expectedText);
+    });
+}
+function TestsHelper_attachDOMAtFailedTests({ playwrightTest }) {
+    playwrightTest.test.afterEach(async ({ page }) => {
+        if (playwrightTest.test.info().error) {
+            await playwrightTest.test.info().attach("DOM", { body: await page.content(), contentType: "text/html" });
+        }
     });
 }
 //# sourceMappingURL=TestsHelper.js.map

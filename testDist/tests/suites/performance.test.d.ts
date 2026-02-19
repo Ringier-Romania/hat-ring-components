@@ -1,9 +1,12 @@
 import { PlaywrightTest } from "../types";
-export declare function TestPerformance_imagesLoadingStrategy({ playwrightTest, imageSrcToSkip }: {
+import type { Page } from "playwright/test";
+export declare function TestPerformance_imagesLoadingStrategy({ page, playwrightTest, imageSrcToSkip }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     imageSrcToSkip?: string[];
-}): void;
-export declare function TestPerformance_visibleIframesLazyLoading({ playwrightTest, iframeSrcToSkip }: {
+}): Promise<void>;
+export declare function TestPerformance_visibleIframesLazyLoading({ page, playwrightTest, iframeSrcToSkip }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     iframeSrcToSkip?: string[];
-}): void;
+}): Promise<void>;

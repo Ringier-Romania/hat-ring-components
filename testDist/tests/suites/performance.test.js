@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TestPerformance_imagesLoadingStrategy = TestPerformance_imagesLoadingStrategy;
 exports.TestPerformance_visibleIframesLazyLoading = TestPerformance_visibleIframesLazyLoading;
-function TestPerformance_imagesLoadingStrategy({ playwrightTest, imageSrcToSkip = [] }) {
-    const { test, expect } = playwrightTest;
-    test('images should have lazy-loading or preload', async ({ page }) => {
+async function TestPerformance_imagesLoadingStrategy({ page, playwrightTest, imageSrcToSkip = [] }) {
+    const { expect } = playwrightTest;
+    await playwrightTest.test.step('images should have lazy-loading or preload', async () => {
         const images = await page.locator('img').all();
         let lazyLoadedCount = 0;
         let preloadCount = 0;
@@ -37,9 +37,9 @@ function TestPerformance_imagesLoadingStrategy({ playwrightTest, imageSrcToSkip 
         expect(lazyLoadedCount + preloadCount, `Found ${images.length} images (${skippedCount} skipped), but only ${lazyLoadedCount + preloadCount} have proper loading strategy.\nImages without proper strategy:\n${imagesWithoutStrategy.join('\n')}`).toBe(expectedCount);
     });
 }
-function TestPerformance_visibleIframesLazyLoading({ playwrightTest, iframeSrcToSkip = [] }) {
-    const { test, expect } = playwrightTest;
-    test('visible iframes should have lazy-loading', async ({ page }) => {
+async function TestPerformance_visibleIframesLazyLoading({ page, playwrightTest, iframeSrcToSkip = [] }) {
+    const { expect } = playwrightTest;
+    await playwrightTest.test.step('visible iframes should have lazy-loading', async () => {
         await page.waitForLoadState("load");
         await page.evaluate(() => {
             window.scrollTo(0, document.body.scrollHeight);

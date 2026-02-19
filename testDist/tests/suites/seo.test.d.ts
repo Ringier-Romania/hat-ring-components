@@ -1,37 +1,46 @@
 import { PlaywrightTest } from "../types.js";
-export declare function TestSeo_pageTitle({ playwrightTest, expectedValue }: {
+import type { Page } from "playwright/test";
+export declare function TestSeo_pageTitle({ page, playwrightTest, expectedValue }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     expectedValue?: string;
-}): void;
-export declare function TestSeo_pageDescription({ playwrightTest, expectedValue }: {
+}): Promise<void>;
+export declare function TestSeo_pageDescription({ page, playwrightTest, expectedValue }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     expectedValue?: string;
-}): void;
-export declare function TestSeo_pageRobots({ playwrightTest, expectedValue }: {
+}): Promise<void>;
+export declare function TestSeo_pageRobots({ page, playwrightTest, expectedValue }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     expectedValue?: string;
-}): void;
-export declare function TestSeo_canonical({ playwrightTest, expectedValue }: {
+}): Promise<void>;
+export declare function TestSeo_canonical({ page, playwrightTest, expectedValue }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     expectedValue?: string;
-}): void;
-export declare function TestSeo_htmlLangAttribute({ playwrightTest, expectedValue }: {
+}): Promise<void>;
+export declare function TestSeo_htmlLangAttribute({ page, playwrightTest, expectedValue }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     expectedValue?: string;
-}): void;
-export declare function TestSeo_schemaOrg({ playwrightTest, expectedValue, compareMode }: {
+}): Promise<void>;
+export declare function TestSeo_schemaOrg({ page, playwrightTest, expectedValue, compareMode }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     expectedValue: any;
     compareMode?: 'exact' | 'contains';
-}): void;
-export declare function TestSeo_imageAlts({ playwrightTest, imageSrcToSkip }: {
+}): Promise<void>;
+export declare function TestSeo_imageAlts({ page, playwrightTest, imageSrcToSkip }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     imageSrcToSkip?: string[];
-}): void;
-export declare function TestSeo_paginationLinks({ playwrightTest, expectedValue }: {
+}): Promise<void>;
+export declare function TestSeo_paginationLinks({ page, playwrightTest, expectedValue }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     expectedValue: {
         next?: string;
         prev?: string;
     };
-}): void;
+}): Promise<void>;

@@ -1,5 +1,7 @@
 import { PlaywrightTest } from "../types";
-export declare function TestSocialMedia_openGraphAndTwitterCards({ playwrightTest, expectedValue }: {
+import type { Page } from "playwright/test";
+export declare function TestSocialMedia_openGraphAndTwitterCards({ page, playwrightTest, expectedValue }: {
+    page: Page;
     playwrightTest: PlaywrightTest;
     expectedValue: {
         ogTitle?: string;
@@ -18,4 +20,4 @@ export declare function TestSocialMedia_openGraphAndTwitterCards({ playwrightTes
         twitterTitle?: string;
         twitterDescription?: string;
     };
-}): void;
+}): Promise<void>;
