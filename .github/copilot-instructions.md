@@ -1,181 +1,141 @@
-# AI Coding Guidelines for hat-ring-components
+# Copilot Instructions — hat-ring-components
 
-## Project Overview
-This is an Astro-based component library for Ring Publishing's Head App Template (HAT) system. It provides reusable UI components, widgets, and utilities for building publishing websites with features like stories, grids, SEO optimization, and caching.
+## Overview
 
-## Architecture Patterns
+This is the **shared component library** for the HAT (Headless Application Template) ecosystem by RING Publishing. It is consumed as a dependency by website projects built on the HAT Boilerplate — it is **not a standalone application**. It provides Astro/React UI components (widgets), GraphQL data-fetching providers, multi-layer caching, SEO utilities, helper functions, reusable Playwright test suites, and Website Manager configuration schemas.
 
-### Component Structure
-- **Astro Components**: Use `.astro` files with TypeScript frontmatter for server-side rendering
-- **Widget System**: Extend `BasicWidget.astro` for data-driven components with platform-specific rendering
-- **Grid Layout**: Use `Grid.astro` with containers and boxes for responsive layouts
-- **Helper Functions**: Pure utility functions in `/helpers/` for shared logic
+The broader HAT ecosystem consists of:
+- **hat-ring-components** (this repo) — shared components, helpers, providers, configs
+- **hat-server** — custom Astro server handling headers, Websites API requests, redirects, device detection, Ring Data Layer, health checks, and middleware
+- **hat-boilerplate** — project skeleton for new websites
+- **hat-cli** — CLI for project setup and profile/env management
 
-### Key Architectural Decisions
-- **Provider Pattern**: Services like `CacheProvider`, `WebsiteApiProvider` use static methods
-- **Adapter Pattern**: Cache implementations abstracted through `CacheAdapterInterface`
-- **Configuration-Driven**: Widget behavior controlled by `widgetConfig` objects
-- **Environment Toggles**: Features switch based on env vars (`USE_REDIS`, `CACHE_TTL`)
+Requires **Node.js v22+**.
 
-## Development Workflow
-`
+There is no lint or test runner in this repo. Tests are Playwright suites exported as functions for consuming projects to call.
+
+## Architecture
+
+### Grid System
+
+Pages use a **12-column CSS grid** configured through the Websites Manager. Each page type (Home, Story, List, Topic, Author, Search) has a grid definition with **Containers**. Each Container has five widget areas (**boxes**): `box_top`, `box_left`, `box_middle`, `box_right`, `box_bottom`. Widgets are placed inside boxes. Empty/hidden boxes don't render. On mobile (<768px), columns stack vertically at 100% width.
+
+Grid configs are in `src/components/Grid/` (e.g., `GridHomeWebsitesConfig.ts`, `GridStoryWebsitesConfig.ts`).
+
+### Component Model
+
+Components live in `src/components/` and are primarily **Astro components** (`.astro`). A few use React (`.tsx`). Every component receives two standard props: `context` (`AppContext`) and `widgetConfig` (widget-specific config type).
+
+**Widget** = a component with configuration for the Websites Manager.
+**Renderless component** = does not output HTML; returns data (objects, strings, JSON). Located in `src/renderlessComponents/`, primarily SEO metadata generators.
+
+Widgets follow a consistent structure under `src/components/widgets/{category}/{WidgetName}/`:
+- `WidgetName.astro` — the component itself
+- `WidgetNameGetData.ts` — data fetching logic (GraphQL queries)
+- `WidgetNameWebsitesConfig.ts` — CMS configuration schema (defines params for the Website Manager UI)
+- `types.ts` — widget-specific TypeScript interfaces
+
+### Adding a New Widget
+
+1. Create directory `src/components/widgets/{WidgetName}/`
+2. Create `WidgetName.astro` — use `Astro.props` to destructure `{context, widgetConfig}`, use `WidgetHelper_*` functions for visibility/CSS/empty rendering
+3. Create `WidgetNameWebsitesConfig.ts` — extend `AbstractWebsitesWidgetConfigDefaultParams` and `AbstractWebsitesWidgetConfigParamsDescription`, use module key format `widgetName_wdg`
+4. Export component in `src/index.ts`
+5. Export config in `src/websitesApiConfigs.ts`
+6. Create styles in `styles/` as `WidgetName.module.scss`
+
+Extensible widgets (BasicWidget, GenericList, StoryContent, Slider) support custom item parts via `getFragment` functions for additional GraphQL data fetching at the part level.
+
+### Data Flow
+
+1. **HAT Server** (`hat-server` package) — the entry point. On each request it queries Websites API for URL routing info, detects device type, generates Ring Data Layer, and passes `HatControllerParams` to the Astro app. It uses `CacheProvider` from this repo for caching API responses with key `{domain}{pathname}{variant}`.
+
+2. **WebsiteApiProvider** (`src/providers/WebsiteApiProvider.ts`) — wraps all GraphQL calls to the RING Websites API with **stale-while-revalidate** caching. It deduplicates in-flight requests via `global.HATCacheInCallInProgress`. All data fetching in widgets goes through `WebsiteApiProvider.call(query, variables, cacheTtl)`.
+
+3. **CacheProvider / CacheHelper** — multi-layer caching with a `CacheAdapterInterface`:
+   - **Node-cache** (default) — in-memory per-instance, good for development and single-instance deployments
+   - **Redis** (when `USE_REDIS=1`) — centralized, required for multi-instance production (EKS)
+   - **In-memory config cache** — additional per-instance layer controlled by `MEM_CACHE_FOR_CONFIG_MODE` (`request` = per-request memoization, `time` = TTL-based via `MEM_CACHE_FOR_CONFIG_TTL_MS`)
+
+4. **ConfigHelper** — fetches CMS configuration (general settings, SEO, translations, developer settings) via GraphQL and provides typed accessors. Config keys: `general`, `seoSettings`, `seoLanguages`, `seoTitlesAndDescription`, `seoOpenGraph`, `rssDefault`, `metaData`, `devGeneral`, `devDetail`, `dateFormat`.
+
+5. **MonitoringProvider** — optional metrics facade. The consuming project injects a monitoring service into `global['monitoringProvider']` with `counter()`, `gauge()`, `timer()`, and `flush()` methods.
+
+### WebsitesConfig System
+
+Each widget exports a `*WebsitesConfig` object (aggregated in `src/websitesApiConfigs.ts`) that declares:
+- `modules` — widget module definitions with `defaultParams` and `paramsDescription` (field types: `textfield`, `checkbox`, `select`, `array`, `number`)
+- `sections` — where the widget can be placed in the CMS grid
+
+These configs extend `AbstractWebsitesWidgetConfigDefaultParams` and `AbstractWebsitesWidgetConfigParamsDescription` from `src/types/abstracts.ts`. Configuration is exported separately from components to allow the config merger to import without pulling in component code.
+
+### Reusable Test Suites
+
+`src/tests/suites/` exports Playwright test functions (SEO, performance, social media) that consuming projects call, passing their own `page` and `playwrightTest` instances. `src/helpers/TestsHelper.ts` provides shared test utilities (meta content extraction, structured data parsing, element assertions, DOM attachment on failures).
+
+### Deployment
+
+Consuming projects deploy via `cicd/postbuild.ts` which: extracts version from changelog, optionally creates Website Manager config versions (controlled by `hatCreateConfigurationForWebsiteManager` in package.json), and uploads built Astro files to OCDN at `https://ocdn.eu/{NEXT_PUBLIC_OCDN_BUCKET_NAME}/astro/assets/{CONFIGURATION_TEMPLATE_NAME}/`.
+
+## Key Conventions
+
+### Naming
+
+- **Exported functions** use the pattern `ModuleName_functionName` (e.g., `CacheHelper_set`, `ConfigHelper_getGeneralConfig`, `WidgetHelper_shouldHideWidget`). Always follow this convention.
+- **Classes** use PascalCase with a `Provider` or `Adapter` suffix (e.g., `CacheProvider`, `RedisCacheAdapter`).
+- **Component CSS class** must match the component name in **PascalCase**. If the name comes from the API in another format (e.g., `embedded_application`), convert to PascalCase (`EmbeddedApplication`). Do not format custom CSS class names from configuration.
+- **Property names** use camelCase (except the main component class which is PascalCase).
+- **WebsitesConfig module keys** use the format `widgetName_wdg`.
+
+### Styling
+
+- Use **CSS Modules** (SCSS) in `styles/`. Import as `import styles from ".../*.module.scss"`.
+- Components should style only **functional layout** (e.g., column count). Do not set external properties like padding, colors, or fonts unless explicitly required.
+- Wrap child class styles in `:global { }` inside the module to ensure they apply correctly.
+- Components accept a `cssModuleClass` prop for external styling by consuming projects.
+
+### AppContext
+
+`AppContext` (`src/types/types.ts`) is the primary context object threaded through **all** components. Every component must accept it and pass it to all children.
+
+The `customData` property stores globally visible data, but **components at the same DOM level render asynchronously** — a component lower in the DOM may modify `customData` before one higher up due to independent rendering execution. Be aware of this non-deterministic behavior.
+
+### Central Types
+
+- `AppContext` — `siteContentType`, `id`, `siteNodeId`, `url`, `customData`, `hatControllerParams`, `cssModules`, `websiteManagerVariant`, `domain`
+- `SiteContentType` enum — `Homepage`, `Story`, `SiteNode`, `Author`, `Topic`, `Search`, `CustomAction`, `Source`, `Error404`
+- `AbstractWidgetConfig` — base interface for all widget configurations
+- `CacheAdapterInterface` (`src/adapters/cache/types.ts`) — contract for cache backends
+- `HatControllerParams` — `gqlResponse`, `customData`, `urlWithParsedQuery`, `isMobile`, `websiteManagerVariant`, `domain`, `ringDataLayer`
 
 ### Environment Variables
 
-#### Cache Configuration
-- `CACHE_CLEAN_INTERVAL`: Interval for cleaning cache in seconds (default: 60)
-- `CACHE_TTL`: Time-To-Live for general cache in seconds, 0 disables cache (default: 60)
-- `CACHE_TTL_CONFIG`: Time-To-Live for configuration cache in seconds (default: 60)
-- `MEM_CACHE_FOR_CONFIG_MODE`: Configuration caching mode ('request', 'none', or 'time')
-- `MEM_CACHE_FOR_CONFIG_TTL_MS`: TTL for in-memory config cache in milliseconds (used with 'time' mode, default: 1000)
-- `USE_REDIS`: Cache implementation (0 for Node.js in-memory, 1 for Redis)
+**Websites API (required):**
+- `WEBSITE_API_PUBLIC`, `WEBSITE_API_SECRET`, `WEBSITE_API_NAMESPACE_ID` — API credentials
+- `NEXT_PUBLIC_WEBSITE_DOMAIN` — website domain
+- `NEXT_PUBLIC_WEBSITE_API_VARIANT` — default Website Manager variant
 
-#### API Configuration
-- `GET_KEYS_MODE`: Method for story relationships ('tags' or 'keys', default: 'tags')
+**Cache:**
+- `CACHE_TTL` — general cache TTL in seconds (default: 60, `0` disables cache)
+- `CACHE_TTL_CONFIG` — config cache TTL in seconds (default: 60)
+- `CACHE_CLEAN_INTERVAL` — cache cleanup interval in seconds (default: 60)
+- `MEM_CACHE_FOR_CONFIG_MODE` — `request` | `time` | `none` (default: `request`)
+- `MEM_CACHE_FOR_CONFIG_TTL_MS` — in-memory config TTL in ms, used with `time` mode (default: 1000)
+- `HAT_SERVER_WEBSITE_API_TTL` — HAT Server's Websites API response cache TTL (default: 60)
 
-#### Service Configuration
-- `CONFIGURATION_TEMPLATE_NAME`: Template identifier for admin interface
-- `NEXT_PUBLIC_OCDN_BUCKET_NAME`: OCDN bucket name for asset uploads
-- `WEBSITE_API_PUBLIC`: Public key for websites API authentication
-- `WEBSITE_API_SECRET`: Secret key for websites API authentication
-- `WEBSITE_API_NAMESPACE_ID`: Namespace identifier for website API
-- `NEXT_PUBLIC_WEBSITE_DOMAIN`: Website domain name
-- `NEXT_PUBLIC_ACC_IMAGES_ENDPOINT`: ACC image transformation service URL
-- `NEXT_PUBLIC_ACC_IMAGES_TRANSFORMATION_KEY`: Transformation key for ACC images
+**Redis:**
+- `USE_REDIS` — set to `1` to enable Redis
+- `REDIS_RW`, `REDIS_REPLICATION_GROUP_ID` — Redis connection config
 
-## Coding Patterns & Conventions
+**Other:**
+- `NODE_ENV` — `production` vs development
+- `GQL_CACHE_RESET_INTERVAL_SECONDS` — GraphQL client cache reset interval (default: 300)
+- `PORT` — server port (default: 4321)
 
-### Widget Components
-```typescript
-// Basic widget structure
-const {context, widgetConfig} = Astro.props;
-if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
-    return WidgetHelper_renderEmptyWidget(widgetConfig);
-}
-// Data fetching and rendering logic
-```
+### Global State
 
-### Cache Usage
-```typescript
-// Always JSON.stringify keys
-const key = JSON.stringify({type: 'story', id: storyId});
-await CacheProvider.set(key, data, TTL, ['story', 'content']);
-const cached = await CacheProvider.get(key);
-```
+Several values are stored on `global` (declared in `declaration.d.ts`): `HATcache`, `HATCacheInCallInProgress`, `websitesApiGotClient`, `monitoringProvider`. Understand these before modifying caching or API client code.
 
-### CSS Classes
-```typescript
-// Dynamic class generation
-const cssClasses = WidgetHelper_getWidgetCssClasses(
-    'StoryTitle', widgetConfig, context, ['custom-class']
-);
-```
+### Astro Version Compatibility
 
-### GraphQL Queries
-```typescript
-const query = gql`
-    query($nodeID: ID!, $variant: ID!){
-        node(id: $nodeID){
-            config(variantId: $variant){
-                sectionName:config(codeName: "sectionName"){ data }
-            }
-        }
-    }
-`;
-```
-
-## Component Categories
-
-### Widgets (`/components/widgets/`)
-- **Story Components**: `StoryTitle`, `StoryContent`, `StoryAuthors`
-- **List Components**: `GenericList`, `TopicTitle`
-- **Common Widgets**: `BasicWidget`, `Slider`, `SearchBox`
-
-### Common Components (`/components/common/`)
-- **RingImage**: Image component with transform support
-- **TextReplacer**: Content manipulation
-- **SafeHead**: Head tag management
-
-### SEO Components (`/components/seo/`)
-- **SchemaOrg**: Structured data
-- **Meta Tags**: All SEO meta tag components
-
-## Data Flow Patterns
-
-### Context Propagation
-```typescript
-interface AppContext {
-    siteContentType: SiteContentType,
-    id: string,
-    url: string,
-    customData: any,
-    hatControllerParams: any
-}
-```
-
-### Widget Configuration
-```typescript
-interface AbstractWidgetConfig {
-    platformDesktop?: boolean,
-    platformMobile?: boolean,
-    customClass?: string,
-    customWidth?: number
-}
-```
-
-## Testing & Validation
-
-### Widget Visibility Logic
-- Check `platformDesktop`/`platformMobile` flags against context
-- Use `gridLocation` query param for debugging
-- Hide widgets with `HideWhenNoSectionItems` option when no data
-
-### Cache Validation
-- TTL defaults to 60 seconds unless overridden
-- Cache disabled when `CACHE_TTL=0`
-- Keys are JSON.stringified for consistency
-
-## File Organization
-
-### Key Directories
-- `/src/components/widgets/`: Feature-specific components
-- `/src/helpers/`: Utility functions
-- `/src/providers/`: Service providers
-- `/src/adapters/cache/`: Cache implementation adapters
-- `/src/configs/`: Configuration schemas
-- `/src/types/`: TypeScript interfaces
-
-### Export Pattern
-```typescript
-// src/index.ts - Main exports
-export { default as StoryTitle } from "./components/widgets/Story/StoryTitle/StoryTitle.astro";
-export * from "./helpers/WidgetHelper";
-```
-
-## Common Pitfalls
-
-### Cache Key Consistency
-- Always use `JSON.stringify()` for cache keys
-- Include relevant identifiers (type, id, variant)
-
-### Widget Rendering
-- Check `WidgetHelper_shouldHideWidget()` before rendering
-- Return `WidgetHelper_renderEmptyWidget()` for hidden widgets
-- Use `Fragment set:html={}` for conditional HTML rendering
-
-### Environment Checks
-- Use `UtilsHelper_isDevelopmentMode()` for dev-only features
-- Check `process.env` variables before using features
-
-## Performance Considerations
-
-### Image Optimization
-- Use `RingImage` component with `transform` prop for resizing
-- Set `priority=true` for above-the-fold images
-- Automatic WebP/AVIF generation via AcceleratorImagesHelper
-
-### Cache Strategy
-- Use appropriate TTL values based on content freshness needs
-- Leverage cache tags for bulk invalidation
-- Consider cache size limits for large datasets</content>
-<parameter name="filePath">c:\Users\dpers\CSI\hat-ring-components\.github\copilot-instructions.md
+Astro.js versions must match between the consuming project's package.json and this component repository. Version mismatches cause incompatibilities.
