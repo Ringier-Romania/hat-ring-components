@@ -8,14 +8,15 @@ import {
     SeoHelper_getContactNumber,
     SeoHelper_currentDescription,
     SeoHelper_getServiceLogo,
-    SeoHelper_currentSiteName, SeoHelper_isSeoHomepage
+    SeoHelper_currentSiteName, SeoHelper_isSeoHomepage, SeoHelper_currentTitle
 } from "../../../helpers/seo/SeoHelper";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
 import {ConfigHelper_currentUrl, ConfigHelper_getHomepageUrl} from "../../../helpers/ConfigHelper";
 import {Author} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
-import {UtilsHelper_slugify} from "../../../helpers/UtilsHelper";
+
+import {Breadcrumb} from "../../widgets/common/Breadcrumbs/types";
 const isHomePage = await SeoHelper_isSeoHomepage(context);
 const isArticle = context.siteContentType === SiteContentType.Story;
 
@@ -39,45 +40,31 @@ export async function getOrganizationSchema(context): Promise<WithContext<Organi
 }
 
 export async function getBreadcrumbListSchema(context: AppContext): Promise<WithContext<BreadcrumbList>> {
-    // TODO: add seoSettings.useTaxonomyPrefixPage support for topic
-    const homepageUrl = await ConfigHelper_getHomepageUrl(context);
-    const itemListElement: Array<ListItem> = [{
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": homepageUrl
-    }];
+    const breadcrumbs: Breadcrumb[] = _.get(
+        _.get(context, "hatControllerParams.gqlResponse"),
+        "data.site.data.node.breadcrumbs"
+    , []);
+    const itemListElement: ListItem[] = [];
 
-    const splitUrl = context.url.split('/').filter(url => url);
-    const breadcrumbsPaths: Array<string> = [];
+    breadcrumbs.forEach((breadcrumb, index) => {
+        const name = index === 0 ? "Home" : breadcrumb.name;
 
-    splitUrl.reduce((prev, curr, index) => {
-        // a, a/b, a/b/c
-        const breadcrumb = `${prev}/${curr}`;
-        breadcrumbsPaths.push(breadcrumb);
-        return breadcrumb;
-    }, '');
-
-    if (context.siteContentType === SiteContentType.Story) {
-        // removing breadcrumb with only name - without id
-        breadcrumbsPaths.splice(breadcrumbsPaths.length - 2, 1);
-    }
-
-    breadcrumbsPaths.forEach((breadcrumbPath, index) => {
-        const splittedPath = breadcrumbPath.split('/');
-        if (context.siteContentType === SiteContentType.Story && index === breadcrumbsPaths.length - 1) {
-            // removing story id from path
-            splittedPath.splice(splittedPath.length - 1, 1);
-        }
-
-        const nameFromLastPathSegment = _.startCase(_.last(splittedPath));
         itemListElement.push({
             "@type": "ListItem",
-            "position": index + 2,
-            "name": nameFromLastPathSegment,
-            "item": `${homepageUrl}${breadcrumbPath}`
-        })
+            "position": index + 1,
+            "name": name,
+            "item": breadcrumb.url
+        });
     })
+
+    if ([SiteContentType.Story, SiteContentType.Author, SiteContentType.Topic, SiteContentType.Source].includes(context.siteContentType as SiteContentType)) {
+        itemListElement.push({
+            "@type": "ListItem",
+            "position": itemListElement.length + 1,
+            "name": await SeoHelper_currentTitle(context, 'meta-title'),
+            "item": await ConfigHelper_currentUrl(context),
+        })
+    }
 
     return {
         "@context": "https://schema.org",
