@@ -1,5 +1,6 @@
 ---
 import {Author_getData} from "../../../helpers/AuthorsHelper";
+import {UtilsHelper_getCurrentUrl, UtilsHelper_slugify} from "../../../helpers/UtilsHelper";
 const {context} = Astro.props as { context: AppContext };
 import React from "react"
 import {BreadcrumbList, ListItem, NewsArticle, Organization, Person, Thing, WithContext} from 'schema-dts';
