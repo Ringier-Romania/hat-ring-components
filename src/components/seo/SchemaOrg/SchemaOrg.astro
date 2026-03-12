@@ -43,8 +43,7 @@ export async function getBreadcrumbListSchema(context: AppContext): Promise<With
     const breadcrumbs: Breadcrumb[] = _.get(
         _.get(context, "hatControllerParams.gqlResponse"),
         "data.site.data.node.breadcrumbs"
-    );
-
+    , []);
     const itemListElement: ListItem[] = [];
 
     breadcrumbs.forEach((breadcrumb, index) => {
