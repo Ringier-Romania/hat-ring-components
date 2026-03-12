@@ -15,7 +15,7 @@ import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
 import {ConfigHelper_currentUrl, ConfigHelper_getHomepageUrl} from "../../../helpers/ConfigHelper";
 import {Author} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
-import {UtilsHelper_getCurrentUrl, UtilsHelper_slugify} from "../../../helpers/UtilsHelper";
+
 import {Breadcrumb} from "../../widgets/common/Breadcrumbs/types";
 const isHomePage = await SeoHelper_isSeoHomepage(context);
 const isArticle = context.siteContentType === SiteContentType.Story;
@@ -45,7 +45,7 @@ export async function getBreadcrumbListSchema(context: AppContext): Promise<With
         "data.site.data.node.breadcrumbs"
     );
 
-    const itemListElement:any = [];
+    const itemListElement: ListItem[] = [];
 
     breadcrumbs.forEach((breadcrumb, index) => {
         const name = index === 0 ? "Home" : breadcrumb.name;

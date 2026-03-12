@@ -22,9 +22,20 @@ export async function SeoMetaOpenGraph(context) {
     const defaultImageData = await SeoHelper_currentDefaultImageData(context); //format: png
     const hasImageData = imageData && imageData.src !== undefined;
     const src = hasImageData ? imageData.src : defaultImageData?.src?.png ?? null;
-    const isHttps = hasImageData && imageData.src.includes('https://');
-    const secureUrl = isHttps ? imageData.src : defaultImageData?.src?.png ?? null;
 
+    let secureUrl: string | null = null;
+    const defaultPngSrc = defaultImageData?.src?.png;
+
+    if (hasImageData) {
+        const imageSrc: string = imageData.src;
+        if (imageSrc.startsWith("https://")) {
+            secureUrl = imageSrc;
+        } else if (defaultPngSrc && defaultPngSrc.startsWith("https://")) {
+            secureUrl = defaultPngSrc;
+        }
+    } else if (defaultPngSrc && defaultPngSrc.startsWith("https://")) {
+        secureUrl = defaultPngSrc;
+    }
     return {
         openGraph: {
             basic: {
