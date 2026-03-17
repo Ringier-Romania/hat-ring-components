@@ -44,7 +44,7 @@ async function TestPerformance_visibleIframesLazyLoading({ page, playwrightTest,
         await page.evaluate(() => {
             window.scrollTo(0, document.body.scrollHeight);
         });
-        const iframes = await page.locator('iframe').all();
+        const iframes = await page.locator('iframe:visible').all();
         const filteredIframes = [];
         for (const ifr of iframes) {
             const box = await ifr.boundingBox();

@@ -49,7 +49,7 @@ export async function TestPerformance_visibleIframesLazyLoading({page, playwrigh
             window.scrollTo(0, document.body.scrollHeight);
         });
 
-        const iframes = await page.locator('iframe').all();
+        const iframes = await page.locator('iframe:visible').all();
         const filteredIframes: Locator[] = [];
 
         for (const ifr of iframes) {
