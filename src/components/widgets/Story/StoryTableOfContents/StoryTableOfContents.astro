@@ -1,0 +1,135 @@
+---
+import { AppContext } from "../../../../types/types";
+import { AbstractWidgetConfig } from "../../../../types/types";
+import {
+    WidgetHelper_getWidgetCssClasses,
+    WidgetHelper_renderEmptyWidget,
+    WidgetHelper_shouldHideWidget,
+} from "../../../../helpers/WidgetHelper";
+
+const { context, widgetConfig } = Astro.props as {
+    context: AppContext;
+    widgetConfig: AbstractWidgetConfig & {
+        contentSelector: string;
+        title: string;
+    };
+};
+
+let toRender: boolean | string | JSX.Element = false;
+
+if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
+    toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
+}
+
+const tocTitle = widgetConfig?.title || "Contents";
+const contentSelector = widgetConfig?.contentSelector || ".StoryContent";
+---
+
+{toRender ? (
+    <Fragment set:html={toRender} />
+) : (
+    <section class={WidgetHelper_getWidgetCssClasses("StoryTableOfContents", widgetConfig, context)}>
+        <h3 class="TocTitle">{tocTitle}</h3>
+        <nav role="navigation">
+            <ol class="TocList" data-content-selector={contentSelector}></ol>
+        </nav>
+    </section>
+)}
+
+<script is:inline>
+(function () {
+    function slugify(text) {
+        return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]+/g, '')
+            .replace(/--+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
+    }
+
+    function initToc(tocEl) {
+        if (tocEl.dataset.initialized) return;
+        tocEl.dataset.initialized = 'true';
+
+        var list = tocEl.querySelector('.TocList');
+        if (!list) return;
+
+        var selector = list.dataset.contentSelector;
+        var container = document.querySelector(selector);
+        if (!container) return;
+
+        var headings = Array.from(container.querySelectorAll('h2'));
+        if (!headings.length) {
+            tocEl.style.display = 'none';
+            return;
+        }
+
+        headings.forEach(function (h, i) {
+            if (!h.id) {
+                var slug = slugify(h.textContent || '');
+                h.id = slug || ('section-' + i);
+            }
+            var li = document.createElement('li');
+            li.className = 'TocItem';
+            var a = document.createElement('a');
+            a.className = 'TocLink';
+            a.href = '#' + h.id;
+            a.textContent = h.textContent;
+            li.appendChild(a);
+            list.appendChild(li);
+        });
+
+        tocEl.classList.add('js-ready');
+
+        var items = Array.from(list.querySelectorAll('.TocItem'));
+
+        items.forEach(function (item) {
+            item.querySelector('a').addEventListener('click', function (e) {
+                e.preventDefault();
+                var targetId = this.getAttribute('href').slice(1);
+                var target = document.getElementById(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        if (!('IntersectionObserver' in window)) return;
+
+        var activeItem = null;
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    if (activeItem) activeItem.classList.remove('active');
+                    activeItem = items.find(function (it) {
+                        return it.querySelector('a').getAttribute('href') === '#' + entry.target.id;
+                    }) || null;
+                    if (activeItem) activeItem.classList.add('active');
+                }
+            });
+        }, {
+            rootMargin: '-10% 0px -80% 0px',
+            threshold: 0
+        });
+
+        headings.forEach(function (h) { observer.observe(h); });
+    }
+
+    function initAll() {
+        document.querySelectorAll('.StoryTableOfContents').forEach(function (toc) {
+            initToc(toc);
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAll);
+    } else {
+        initAll();
+    }
+})();
+</script>
+
