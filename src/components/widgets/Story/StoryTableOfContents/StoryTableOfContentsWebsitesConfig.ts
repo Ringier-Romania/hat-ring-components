@@ -15,13 +15,19 @@ export let StoryTableOfContentsWebsitesConfig = {
                 ...AbstractWebsitesWidgetConfigDefaultParams,
                 "widgetType": "StoryTableOfContents",
                 "contentSelector": ".StoryContent",
+                "headingSelector": "h2",
                 "title": "Contents",
             },
             "paramsDescription": {
                 ...AbstractWebsitesWidgetConfigParamsDescription,
                 "contentSelector": {
                     "name": "Content container selector",
-                    "description": "CSS selector of the element containing article H2 headings (e.g. .StoryContent)",
+                    "description": "CSS selector of the element containing article headings (e.g. .StoryContent)",
+                    "type": "textfield",
+                },
+                "headingSelector": {
+                    "name": "Heading selector",
+                    "description": "CSS selector for headings to include in table of contents (e.g. h2, h2, h3)",
                     "type": "textfield",
                 },
                 "title": {

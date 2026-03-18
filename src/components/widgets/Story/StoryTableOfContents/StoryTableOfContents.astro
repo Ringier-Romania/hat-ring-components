@@ -11,6 +11,7 @@ const { context, widgetConfig } = Astro.props as {
     context: AppContext;
     widgetConfig: AbstractWidgetConfig & {
         contentSelector: string;
+        headingSelector: string;
         title: string;
     };
 };
@@ -23,6 +24,7 @@ if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
 
 const tocTitle = widgetConfig?.title || "Contents";
 const contentSelector = widgetConfig?.contentSelector || ".StoryContent";
+const headingSelector = widgetConfig?.headingSelector || "h2";
 ---
 
 {toRender ? (
@@ -31,23 +33,23 @@ const contentSelector = widgetConfig?.contentSelector || ".StoryContent";
     <section class={WidgetHelper_getWidgetCssClasses("StoryTableOfContents", widgetConfig, context)}>
         <h3 class="TocTitle">{tocTitle}</h3>
         <nav role="navigation">
-            <ol class="TocList" data-content-selector={contentSelector}></ol>
+            <ol class="TocList" data-content-selector={contentSelector} data-heading-selector={headingSelector}></ol>
         </nav>
     </section>
 )}
 
 <script is:inline>
 (function () {
+    // Mirrors UtilsHelper_slugify from src/helpers/UtilsHelper.ts
     function slugify(text) {
         return text
-            .toString()
-            .toLowerCase()
+            .normalize('NFKD')
+            .replace(/[\u0300-\u036f]/g, '')
             .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9 -]/g, '')
             .replace(/\s+/g, '-')
-            .replace(/[^\w-]+/g, '')
-            .replace(/--+/g, '-')
-            .replace(/^-+/, '')
-            .replace(/-+$/, '');
+            .replace(/-+/g, '-');
     }
 
     function initToc(tocEl) {
@@ -57,11 +59,12 @@ const contentSelector = widgetConfig?.contentSelector || ".StoryContent";
         var list = tocEl.querySelector('.TocList');
         if (!list) return;
 
-        var selector = list.dataset.contentSelector;
-        var container = document.querySelector(selector);
+        var contentSelector = list.dataset.contentSelector;
+        var headingSelector = list.dataset.headingSelector || 'h2';
+        var container = document.querySelector(contentSelector);
         if (!container) return;
 
-        var headings = Array.from(container.querySelectorAll('h2'));
+        var headings = Array.from(container.querySelectorAll(headingSelector));
         if (!headings.length) {
             tocEl.style.display = 'none';
             return;
