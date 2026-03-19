@@ -7,7 +7,7 @@ import {gql} from 'graphql-tag';
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {StoryTaxonomyListResponse} from "./types";
 import RingLink from "../../../common/RingLink.astro";
-import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget, WidgetHelper_shouldHideWidget} from "../../../../helpers/WidgetHelper";
 import {default as TextReplacer} from "../../../common/TextReplacer.astro";
 
 const query = gql`
@@ -39,9 +39,17 @@ const variables = {
     storyId: context.id,
 };
 
-const response = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL) as StoryTaxonomyListResponse;
+let toRender: boolean | JSX.Element | string = false;
 
-const topics = response.data.story?.topics;
+if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
+    toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
+}
+
+const response = !toRender
+    ? await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL) as StoryTaxonomyListResponse
+    : null;
+
+const topics = response?.data?.story?.topics || [];
 const taxonomyList = (widgetConfig?.taxonomyKind || '').split(',').map(kind => kind.trim());
 const excludedUuids = (widgetConfig?.excludedUuids || '').split(',').map(uuid => uuid.trim());
 const filteredTopics = topics.filter(topic => {
@@ -54,19 +62,26 @@ const filteredTopics = topics.filter(topic => {
 const sortedTopics = _.sortBy(filteredTopics, topic => {
     return taxonomyList.indexOf(topic.topic.kind.code)
 });
----
-<div class={WidgetHelper_getWidgetCssClasses('StoryTaxonomyList', widgetConfig, context)}>
-    {widgetConfig.listPrefix && sortedTopics.length > 0 && <TextReplacer context={context} config={{}} text={widgetConfig.listPrefix} tag={"span"} props={{class: 'listPrefix'}}/>}
 
-    {sortedTopics.map((topic, index) => {
-        let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
-        let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
-        return url && widgetConfig.links ?
-            <RingLink context={context} href={url}>
-                <span class={`topic kind-${topic.topic.kind.code}`}>{topic.topic.name}</span>
-            </RingLink> : <span class={`topic kind-${topic.topic.kind.code}`}>{topic.topic.name}</span>
-        }
-    )}
-</div>
+if (!toRender && sortedTopics.length === 0) {
+    toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
+}
+---
+{toRender ?
+    <Fragment set:html={toRender}/> :
+    <div class={WidgetHelper_getWidgetCssClasses('StoryTaxonomyList', widgetConfig, context)}>
+        {widgetConfig.listPrefix && <TextReplacer context={context} config={{}} text={widgetConfig.listPrefix} tag={"span"} props={{class: 'listPrefix'}}/>}
+
+        {sortedTopics.map((topic, index) => {
+            let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
+            let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
+            return url && widgetConfig.links ?
+                <RingLink context={context} href={url}>
+                    <span class={`topic kind-${topic.topic.kind.code}`}>{topic.topic.name}</span>
+                </RingLink> : <span class={`topic kind-${topic.topic.kind.code}`}>{topic.topic.name}</span>
+            }
+        )}
+    </div>
+}
 
 
