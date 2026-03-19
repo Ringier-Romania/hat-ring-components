@@ -39,3 +39,4 @@ export * from "./components/widgets/common/WrapperStartWebsitesConfig";
 export * from "./components/widgets/common/WrapperEndWebsitesConfig";
 export * from "./components/widgets/common/SimpleHeading/SimpleHeadingWebsitesConfig";
 export * from "./components/widgets/common/Popup/PopupWebsitesConfig";
+export * from "./components/widgets/Story/StoryTableOfContents/StoryTableOfContentsWebsitesConfig";

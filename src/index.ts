@@ -66,3 +66,4 @@ export * from "./helpers/WebhookHelper";
 export { default as Grid } from "./components/Grid/Grid.astro";
 export { default as Box } from "./components/Grid/Box.astro";
 export { default as Container } from "./components/Grid/Container.astro";
+export { default as StoryTableOfContents } from "./components/widgets/Story/StoryTableOfContents/StoryTableOfContents.astro";
