@@ -189,24 +189,14 @@ When the user wants to upgrade multiple packages at once:
 
 ## HAT Codebase Context
 
-This skill is used in the `hat-ring-components` repository — a shared component library for the
-HAT (Headless Application Template) ecosystem. Key things to know when assessing upgrade impact:
+Refer to the repo's copilot-instructions for full architecture. Upgrade-specific concerns:
 
-- **Astro components** (`.astro` files) are the primary UI layer — they use frontmatter for logic,
-  `Astro.props` for data, and `set:html` for rendering. Any Astro upgrade must be checked against
-  all `.astro` files in `src/components/` and `src/pages/`.
-- **GraphQL data fetching** goes through `WebsiteApiProvider` using `graphql-tag` (`gql`).
-  Changes to `graphql`, `graphql-tag`, or `@ringpublishing/graphql-api-client-got` affect data flow.
-- **Caching** uses `node-cache` and `redis` packages. The `CacheAdapterInterface` abstracts them,
-  so check `src/adapters/cache/` for impact.
-- **AWS SDK** packages are used in `RedisProvider.ts` for Signature V4 authentication to
-  ElastiCache. Note that `@aws-sdk/protocol-http` and `@aws-sdk/signature-v4` are legacy imports
-  that may need migration to `@smithy/*` equivalents.
-- **Astro version must match** between this library and consuming projects (hat-boilerplate).
-  A major Astro bump here requires coordinated upgrades across the ecosystem.
-- **Build command**: `npm run build` (TypeScript type-check, `noEmit`). There is no test runner
-  in this repo — tests are Playwright suites exported for consuming projects.
-- **lodash** is used extensively via `_` import — check for deprecated lodash methods if upgrading.
+- **Astro:** check all `.astro` files in `src/components/` and `src/pages/`. Version must match consuming projects — major bump requires coordinated ecosystem upgrades.
+- **GraphQL:** `WebsiteApiProvider` uses `@ringpublishing/graphql-api-client-got` with `gql` tag.
+- **Cache:** `node-cache` + `redis` behind `CacheAdapterInterface` in `src/adapters/cache/`.
+- **AWS SDK:** `@aws-sdk/protocol-http` + `signature-v4` in `RedisProvider.ts` — may need `@smithy/*` migration.
+- **Build:** `npm run build` (tsc, noEmit). No test runner — Playwright suites for consuming projects.
+- **lodash:** used extensively via `_` — check for deprecated methods.
 
 ## Handling Uncertainty
 

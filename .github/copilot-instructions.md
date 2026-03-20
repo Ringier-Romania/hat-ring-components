@@ -17,16 +17,9 @@ Pages use a **12-column CSS grid** configured through the Websites Manager. Each
 Components live in `src/components/` — primarily **Astro** (`.astro`), some React (`.tsx`). Every component receives `context` (`AppContext`) and `widgetConfig` props. **Renderless components** in `src/renderlessComponents/` return data instead of HTML (mainly SEO generators).
 
 Widgets follow a consistent structure under `src/components/widgets/{category}/{WidgetName}/`:
-- `WidgetName.astro`, `WidgetNameGetData.ts`, `WidgetNameWebsitesConfig.ts`, `types.ts`
+`WidgetName.astro`, `WidgetNameGetData.ts`, `WidgetNameWebsitesConfig.ts`, `types.ts`
 
-**Adding a new widget:**
-1. Create `src/components/widgets/{WidgetName}/` with the files above
-2. In `.astro`: destructure `Astro.props` for `{context, widgetConfig}`, use `WidgetHelper_*` functions
-3. In `WebsitesConfig.ts`: extend `AbstractWebsitesWidgetConfigDefaultParams` and `AbstractWebsitesWidgetConfigParamsDescription`, key format `widgetName_wdg`
-4. Export component in `src/index.ts`, config in `src/websitesApiConfigs.ts`
-5. Styles in `styles/WidgetName.module.scss`
-
-Extensible widgets (BasicWidget, GenericList, StoryContent, Slider) support custom item parts via `getFragment` functions.
+**Adding/modifying widgets** → use `widget-developer` skill for full workflow and templates. Extensible widgets (BasicWidget, GenericList, StoryContent, Slider) support custom item parts via `getFragment` functions.
 
 ### Data Flow
 
