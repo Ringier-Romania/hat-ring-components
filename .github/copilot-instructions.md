@@ -106,6 +106,10 @@ Several values stored on `global` (declared in `declaration.d.ts`): `HATcache`, 
 
 Astro versions must match between the consuming project and this repo. Mismatches cause incompatibilities.
 
+### GraphQL Schema
+
+The Websites API GraphQL schema is located at `node_modules/@ringpublishing/graphql-api-client-got/lib/schemas/websites-api.graphql`. **Always consult this schema** when creating or modifying GraphQL queries to ensure correct field names, types, and arguments. Key types include: `Query` (root), `Story`, `Topic`, `Author`, `Source`, `Section`, `SectionItem`, `StoryFilterInput`, `StorySimilarInput`.
+
 ## Working with Copilot in This Repo
 
 ### Recommended Skills
@@ -128,3 +132,4 @@ Astro versions must match between the consuming project and this repo. Mismatche
 - **Modify caching** → check `CacheProvider`, `CacheHelper`, `CacheAdapterInterface` in `src/adapters/cache/`
 - **Add a helper function** → follow `ModuleName_functionName` convention, export from `src/index.ts`
 - **Add a renderless component** → create in `src/renderlessComponents/`, return data not HTML
+- **Create/modify GraphQL query** → always check schema at `node_modules/@ringpublishing/graphql-api-client-got/lib/schemas/websites-api.graphql`

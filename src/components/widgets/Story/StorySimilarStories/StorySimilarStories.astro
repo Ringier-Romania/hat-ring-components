@@ -1,0 +1,31 @@
+---
+const {widgetConfig, context} = Astro.props;
+
+import {StorySimilarStoriesWidgetConfig} from "./types";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget} from "../../../../helpers/WidgetHelper";
+import {StorySimilarStories_getData} from "./StorySimilarStoriesGetData";
+import {Header, Items} from "../../Lists/GenericList/generalParts";
+import {GenericListWidgetConfig} from "../../Lists/GenericList/types";
+import styles from "../../../../../styles/widgets/Lists/GenericList.module.scss";
+import _ from "lodash";
+
+let toRender: boolean | string | JSX.Element = false;
+
+const data = await StorySimilarStories_getData(context, widgetConfig as StorySimilarStoriesWidgetConfig);
+const ifStoriesExists = _.get(data, 'data.stories.edges', []).filter((edge) => edge?.node);
+
+if (ifStoriesExists.length === 0) {
+    toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
+}
+
+let cssModules = styles.GenericList;
+
+---
+{toRender ? <Fragment set:html={toRender}/> :
+    <div class={WidgetHelper_getWidgetCssClasses('StorySimilarStories', widgetConfig, context, [cssModules])}>
+        <Header widgetConfig={widgetConfig as GenericListWidgetConfig} context={context} response={data}/>
+        <Items widgetConfig={widgetConfig as GenericListWidgetConfig} context={context} response={data}
+               extendableAttributes={{}}/>
+    </div>
+}
+

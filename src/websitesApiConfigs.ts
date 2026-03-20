@@ -30,6 +30,7 @@ export * from "./components/widgets/analytics/Kropka/KropkaWebsitesConfig";
 export * from "./components/widgets/analytics/RingDataLayer/RingDataLayerWebsitesConfig";
 export * from "./components/widgets/Author/Author/AuthorWebsitesConfig";
 export * from "./components/widgets/Story/StoryRelatedContent/StoryRelatedContentWebsitesConfig";
+export * from "./components/widgets/Story/StorySimilarStories/StorySimilarStoriesWebsitesConfig";
 export * from "./components/widgets/common/PhotoSwipe/PhotoSwipeWebsitesConfig";
 export * from "./components/widgets/common/Breadcrumbs/BreadcrumbsWebsitesConfig";
 export * from "./components/widgets/common/SearchBox/SearchBoxWebsitesConfig";
