@@ -6,7 +6,6 @@ import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget} from "
 import {StorySimilarStories_getData} from "./StorySimilarStoriesGetData";
 import {Header, Items} from "../../Lists/GenericList/generalParts";
 import {GenericListWidgetConfig} from "../../Lists/GenericList/types";
-import styles from "../../../../../styles/widgets/Lists/GenericList.module.scss";
 import _ from "lodash";
 
 let toRender: boolean | string | JSX.Element = false;
@@ -18,11 +17,10 @@ if (ifStoriesExists.length === 0) {
     toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 
-let cssModules = styles.GenericList;
 
 ---
 {toRender ? <Fragment set:html={toRender}/> :
-    <div class={WidgetHelper_getWidgetCssClasses('StorySimilarStories', widgetConfig, context, [cssModules])}>
+    <div class={WidgetHelper_getWidgetCssClasses('StorySimilarStories', widgetConfig, context, [])}>
         <Header widgetConfig={widgetConfig as GenericListWidgetConfig} context={context} response={data}/>
         <Items widgetConfig={widgetConfig as GenericListWidgetConfig} context={context} response={data}
                extendableAttributes={{}}/>
