@@ -86,7 +86,7 @@ export async function StorySimilarStories_getData(context: AppContext, widgetCon
 
     const query = gql`
         query StorySimilarStoriesQuery($storyId: UUID!, $limit: Int!, $excludedFlags: [String!] ${mappedDynamicVariablesTypes}){
-            stories(similar: {id: $storyId}, limit: $limit, filter: {${filterConditions}}){
+            stories(similar: {id: $storyId}, limit: $limit, filter: {${filterConditions}, canonical: true }) {
                 total
                 edges {
                     node {
@@ -104,7 +104,7 @@ export async function StorySimilarStories_getData(context: AppContext, widgetCon
         }
         ${dynamicFragments}
     `;
-
+    
     const result = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL);
 
     const res: GenericListResponse = {
