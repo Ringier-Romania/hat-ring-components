@@ -89,6 +89,11 @@ const headingSelector = widgetConfig?.headingSelector || "h2";
 
         var items = Array.from(list.querySelectorAll('.TocItem'));
 
+        // Set first item as active on page load
+        if (items.length > 0) {
+            items[0].classList.add('active');
+        }
+
         items.forEach(function (item) {
             item.querySelector('a').addEventListener('click', function (e) {
                 e.preventDefault();
@@ -102,7 +107,7 @@ const headingSelector = widgetConfig?.headingSelector || "h2";
 
         if (!('IntersectionObserver' in window)) return;
 
-        var activeItem = null;
+        var activeItem = items.length > 0 ? items[0] : null;
 
         var observer = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
