@@ -3,6 +3,7 @@ const { context, blockData }: OrderedListBlockParams =
   Astro.props as OrderedListBlockParams;
 import { WidgetHelper_renderEmptyComponent } from "../../../../../helpers/WidgetHelper";
 import {LinkReplacerHelper_replaceLinks} from '../../../../../helpers/LinkReplacerHelper';
+import { SeoLinkWhitelistHelper_processLinks } from "../../../../../helpers/seo/SeoLinkWhitelistHelper";
 import { AppContext } from "../../../../../types/types";
 
 export interface OrderedListBlockParams {
@@ -15,14 +16,16 @@ export interface OrderedListBlockParams {
     startValue: number;
   };
 }
-let toRender: boolean | JSX.Element = false;
-if (!blockData) {
+let toRender: boolean | JSX.Element | string  = false;
+if (!blockData?.entries?.length) {
   toRender = WidgetHelper_renderEmptyComponent("OrderedListBlock");
+} else {
+    blockData.entries = await Promise.all(blockData.entries.map(async (entry) => {
+      let processed = await LinkReplacerHelper_replaceLinks(context, entry);
+      return SeoLinkWhitelistHelper_processLinks(context, processed);
+    }));
 }
 
-blockData.entries = await Promise.all(blockData.entries.map(async (entry) => {
-  return LinkReplacerHelper_replaceLinks(context, entry);
-}));
 ---
 
 {

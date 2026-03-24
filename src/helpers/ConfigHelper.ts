@@ -223,3 +223,8 @@ export async function ConfigHelper_getMainCategoryUuid(context) {
     const developerSettings = await ConfigHelper_getDeveloperSettingsConfig(context);
     return developerSettings ? developerSettings.mainCategoryUuid : '';
 }
+
+export async function ConfigHelper_getContentLinksConfig(context) {
+    return ConfigHelper_getConfig(context, 'contentLinks');
+}
+

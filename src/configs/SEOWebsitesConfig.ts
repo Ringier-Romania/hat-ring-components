@@ -68,6 +68,14 @@ export let SEOWebsitesConfig
                     "fields": [
                         "metaData.customMetaTags"
                     ]
+                },
+                "contentLinks": {
+                    "type": "group",
+                    "name": "Content Link Settings",
+                    "fields": [
+                        "contentLinks.enableDomainWhitelist",
+                        "contentLinks.whitelistedDomains"
+                    ]
                 }
             },
             "keys": [
@@ -76,7 +84,8 @@ export let SEOWebsitesConfig
                 "seoLanguages",
                 "rssDefault",
                 "seoOpenGraph",
-                "metaData"
+                "metaData",
+                "contentLinks"
             ]
         }
     ],
@@ -121,6 +130,10 @@ export let SEOWebsitesConfig
         },
         "metaData": {
             "customMetaTags": []
+        },
+        "contentLinks": {
+            "enableDomainWhitelist": false,
+            "whitelistedDomains": []
         }
     },
     "paramsDescription": {
@@ -338,6 +351,29 @@ export let SEOWebsitesConfig
                    }
                ]
            }
+       },
+       "contentLinks": {
+            "enableDomainWhitelist": {
+                "name": "Enable domain whitelist for content links",
+                "type": "checkbox"
+            },
+            "whitelistedDomains": {
+                "type": "treeobject",
+                "name": "Whitelisted domains",
+                "description": "List of whitelisted domains. All links from content outside this list will have 'nofollow'.",
+                "properties": [
+                    {
+                        "name": "domain",
+                        "description": "Domain name (e.g., example.com, example.xy.com)",
+                        "type": "textfield"
+                    },
+                    {
+                        "name": "relAttribute",
+                        "description": "Rel attribute value for this domain (leave empty for default), e.g., noreferrer, noopener",
+                        "type": "textfield"
+                    }
+                ]
+            }
        }
     }
 }
