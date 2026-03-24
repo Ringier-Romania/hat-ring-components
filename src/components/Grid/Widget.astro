@@ -38,11 +38,11 @@ if (widgetConfigCopy.customPosition && widgetConfigCopy.customPosition !== 'none
     cssClasses.push(`gridPosition${_.upperFirst(widgetConfigCopy.customPosition)}`);
 }
 
-if (['wrapperStart'].includes(widgetConfig.widgetType)) {
-    widgetConfig.customClass = `${cssClasses.join(' ')} ${widgetConfig.customClass}`;
-} else if (!['wrapperEnd'].includes(widgetConfig.widgetType)) {
-    if (widgetConfig.customClass) {
-        widgetConfig.customClass.split(' ').forEach((customClass: string) => {
+if (['wrapperStart'].includes(widgetConfigCopy.widgetType)) {
+    widgetConfigCopy.customClass = `${cssClasses.join(' ')} ${widgetConfigCopy.customClass}`;
+} else if (!['wrapperEnd'].includes(widgetConfigCopy.widgetType)) {
+    if (widgetConfigCopy.customClass) {
+        widgetConfigCopy.customClass.split(' ').forEach((customClass: string) => {
             cssClasses.push(`gridParent-${customClass}`);
         })
     }
