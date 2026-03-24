@@ -86,7 +86,7 @@ export async function StorySimilarStories_getData(context: AppContext, widgetCon
 
     const query = gql`
         query StorySimilarStoriesQuery($storyId: UUID!, $limit: Int!, $excludedFlags: [String!] ${mappedDynamicVariablesTypes}){
-            stories(similarTo: $storyId, limit: $limit, filter: {${filterConditions}}){
+            stories(similar: {id: $storyId}, limit: $limit, filter: {${filterConditions}}){
                 total
                 edges {
                     node {
