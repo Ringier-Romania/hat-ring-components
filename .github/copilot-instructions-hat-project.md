@@ -232,6 +232,32 @@ export async function POST({ request }) {
 
 ---
 
+## Build & Run
+
+```bash
+npm run dev          # Start the local dev server (uses hatcli + astro dev under the hood)
+npm run build        # Production build (astro check && astro build)
+npm run localBuild   # Local build via hatcli with .env
+npm run preview      # Preview production build
+npm run lint:js      # ESLint (.js/.jsx/.ts/.tsx)
+```
+
+**Local development:** Always use `npm run dev` to start the project locally. Do **not** call `astro dev` or `hatcli` directly — `npm run dev` wraps both with the correct environment (dotenv + hatcli).
+
+---
+
+## Editing Global vs Project Instructions
+
+- **Global instructions** (shared across all HAT projects) live in `hat-ring-components`:
+  - Generic project guidelines: `node_modules/hat-ring-components/.github/copilot-instructions-hat-project.md` (this file)
+  - Topic-specific docs: files listed in `node_modules/hat-ring-components/.github/docs/instructions/index.md`
+  - Agent core prompts: `node_modules/hat-ring-components/.github/docs/agents/`
+- **Project-specific instructions** live in each project's `.github/copilot-instructions.md` — they extend or override global guidelines.
+
+When you need to add or change something that applies to **all HAT projects**, edit the files inside `hat-ring-components`. When the change is **project-specific only**, edit the project's `.github/copilot-instructions.md`.
+
+---
+
 ## Key Conventions
 
 1. **Widget registration** — All widgets in `widgets.ts`, all slots in `slots` export
