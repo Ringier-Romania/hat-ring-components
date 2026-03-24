@@ -13,35 +13,36 @@ interface GridWidgetParams {
     boxName: string,
     index: number,
 };
-let toRender: boolean | JSX.Element = false;
+let toRender: boolean | string | JSX.Element = false;
 const availableWidgets = context.customData.widgets;
-const widgetName = _.upperFirst(widgetConfig.widgetType)
+const widgetConfigCopy = structuredClone(widgetConfig);
+widgetConfigCopy.gridLocation = WidgetHelper_buildWidgetLocation(sectionName, boxName, index);
+const widgetName = _.upperFirst(widgetConfigCopy.widgetType)
 const Component = availableWidgets[widgetName] as AbstractWidget;
-widgetConfig.gridLocation = WidgetHelper_buildWidgetLocation(sectionName, boxName, index);
 
 const cssClasses: Array<string> = ['gridWidget']
 
-if(WidgetHelper_shouldHideWidget(widgetConfig, context)) {
-    toRender =  WidgetHelper_renderEmptyComponent(`gridWidget gridWidgetType${_.upperFirst(widgetConfig.widgetType)}`);
+if(WidgetHelper_shouldHideWidget(widgetConfigCopy, context)) {
+    toRender =  WidgetHelper_renderEmptyComponent(`gridWidget gridWidgetType${_.upperFirst(widgetConfigCopy.widgetType)}`);
 }
 
-if (widgetConfig.widgetType) {
-    cssClasses.push(`gridWidgetType${_.upperFirst(widgetConfig.widgetType)}`);
+if (widgetConfigCopy.widgetType) {
+    cssClasses.push(`gridWidgetType${_.upperFirst(widgetConfigCopy.widgetType)}`);
 }
 
-if (widgetConfig.customWidth && widgetConfig.customWidth !== 'none') {
-    cssClasses.push(`gridWidth${widgetConfig.customWidth}`);
+if (widgetConfigCopy.customWidth && widgetConfigCopy.customWidth !== 'none') {
+    cssClasses.push(`gridWidth${widgetConfigCopy.customWidth}`);
 }
 
-if (widgetConfig.customPosition && widgetConfig.customPosition !== 'none') {
-    cssClasses.push(`gridPosition${_.upperFirst(widgetConfig.customPosition)}`);
+if (widgetConfigCopy.customPosition && widgetConfigCopy.customPosition !== 'none') {
+    cssClasses.push(`gridPosition${_.upperFirst(widgetConfigCopy.customPosition)}`);
 }
 
-if (['wrapperStart'].includes(widgetConfig.widgetType)) {
-    widgetConfig.customClass = `${cssClasses.join(' ')} ${widgetConfig.customClass}`;
-} else if (!['wrapperEnd'].includes(widgetConfig.widgetType)) {
-    if (widgetConfig.customClass) {
-        widgetConfig.customClass.split(' ').forEach((customClass: string) => {
+if (['wrapperStart'].includes(widgetConfigCopy.widgetType)) {
+    widgetConfigCopy.customClass = `${cssClasses.join(' ')} ${widgetConfigCopy.customClass}`;
+} else if (!['wrapperEnd'].includes(widgetConfigCopy.widgetType)) {
+    if (widgetConfigCopy.customClass) {
+        widgetConfigCopy.customClass.split(' ').forEach((customClass: string) => {
             cssClasses.push(`gridParent-${customClass}`);
         })
     }
@@ -50,8 +51,8 @@ if (['wrapperStart'].includes(widgetConfig.widgetType)) {
 ---
 
 {toRender ? <Fragment set:html={toRender}/> :
-    ['wrapperStart', 'wrapperEnd'].includes(widgetConfig.widgetType) ? <Component widgetConfig={widgetConfig} context={context}/>
-    : <div id={widgetConfig.gridLocation} class={cssClasses.join(' ')}>
-        {Component && <Component widgetConfig={widgetConfig} context={context}/>}
+    ['wrapperStart', 'wrapperEnd'].includes(widgetConfigCopy.widgetType) ? <Component widgetConfig={widgetConfigCopy} context={context}/>
+    : <div id={widgetConfigCopy.gridLocation} class={cssClasses.join(' ')}>
+        {Component && <Component widgetConfig={widgetConfigCopy} context={context}/>}
     </div>
 }

@@ -1,0 +1,229 @@
+.grid-edit-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1000000000;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 999px;
+  border: none;
+  background: #0d47a1;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(13, 71, 161, 0.25);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.grid-edit-toggle:hover {
+  background: #1565c0;
+  transform: translateY(-1px);
+}
+
+.grid-edit-toggle:focus-visible {
+  outline: 2px solid #bbdefb;
+  outline-offset: 3px;
+}
+
+.grid-edit-toggle:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.grid-edit-mode .grid-edit-toggle {
+  background: #1e88e5;
+}
+
+.grid-edit-mode .gridBox.drag-over {
+  background: #e3f2fd;
+}
+
+.grid-edit-mode .gridWidget[draggable] {
+  /*margin: 5px;*/
+  /*padding: 5px;*/
+  outline: 1px black;
+  outline: 1px solid grey;
+  outline-offset: -1px;
+  position: relative;
+  box-shadow: 0 2px 8px black;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+
+.grid-edit-mode .gridWidget.dragging {
+  opacity: 0.5;
+  box-shadow: 0 4px 16px rgba(33,150,243,0.18);
+  border-color: #1976d2;
+}
+
+.grid-edit-mode .gridWidget .drag-handle {
+  width: 20px;
+  height: 20px;
+  cursor: grab;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  font-size: 20px;
+  line-height: 1;
+  user-select: none;
+  opacity: 0.85;
+  box-shadow: 0 1px 3px rgba(144, 202, 249, 0.4);
+  padding: 2px 4px;
+  background: white;
+}
+
+.grid-edit-actions {
+  position: fixed;
+  top: 68px;
+  right: 16px;
+  z-index: 100000000;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 180px;
+}
+
+.grid-edit-mode .grid-edit-actions {
+  display: flex;
+}
+
+.grid-edit-action {
+  border: 1px solid #1e88e5;
+  border-radius: 999px;
+  padding: 6px 14px;
+  background: #fff;
+  color: #1e88e5;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s, opacity 0.2s;
+}
+
+.grid-edit-action--primary {
+  background: #1e88e5;
+  color: #fff;
+}
+
+.grid-edit-action:hover:not(:disabled) {
+  background: #1565c0;
+  border-color: #1565c0;
+  color: #fff;
+}
+
+.grid-edit-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.grid-context-menu {
+  position: fixed;
+  z-index: 10001;
+  display: none;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  padding: 4px 0;
+}
+
+.grid-context-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.grid-context-menu button:hover {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.grid-context-menu button:active {
+  background: #bbdefb;
+}
+
+.grid-edit-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10002;
+}
+
+.grid-edit-popup-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  min-width: 400px;
+  max-width: 600px;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.grid-edit-popup-content h3 {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+  color: #1565c0;
+}
+
+.grid-edit-popup-content p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.grid-edit-popup-content p strong {
+  color: #1565c0;
+}
+
+.grid-edit-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f5f5f5;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.grid-edit-popup-close:hover {
+  background: #e0e0e0;
+}
+
+.grid-edit-popup-link {
+  display: block;
+  word-break: break-all;
+  color: #1565c0;
+  font-size: 12px;
+  margin-top: 8px;
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.grid-edit-popup-link:hover {
+  background: #e3f2fd;
+}

@@ -1,6 +1,6 @@
 {
     "name": "hat-ring-components",
-    "version": "4.5.0",
+    "version": "4.9.2",
     "description": "Head App Template - RING components",
     "license": "MIT",
     "repository": {},
@@ -13,34 +13,40 @@
     },
     "private": false,
     "dependencies": {
-        "@aws-sdk/credential-providers": "3.645.0",
-        "@aws-sdk/hash-node": "3.374.0",
+        "@aws-sdk/credential-providers": "3.982.0",
+        "@aws-crypto/sha256-js": "5.2.0",
         "@aws-sdk/protocol-http": "3.374.0",
         "@aws-sdk/signature-v4": "3.374.0",
-        "@aws-sdk/util-format-url": "3.609.0",
+        "@aws-sdk/util-format-url": "3.972.3",
         "@ringieraxelspringer/tsconfig": "^6.0.0",
-        "@ringpublishing/accelerator-images": "^2.1.0",
-        "@ringpublishing/graphql-api-client-got": "^2.3.1",
+        "@ringpublishing/accelerator-images": "2.1.0",
+        "@ringpublishing/graphql-api-client-got": "2.4.0",
         "@types/node": "*",
-        "astro": "5.14.5",
+        "astro": "5.17.1",
         "cheerio": "^1.0.0",
         "dayjs": "^1.11.13",
         "feed": "^5.1.0",
-        "lodash": "^4.17.21",
-        "node-cache": "^5.1.2",
-        "redis": "4.7.0",
-        "schema-dts": "^1.1.2",
+        "lodash": "4.17.23",
+        "node-cache": "5.1.2",
+        "redis": "5.10.0",
+        "schema-dts": "^1.1.5",
         "xml-js": "^1.6.11"
     },
     "devDependencies": {
         "@types/lodash": "^4.17.15",
-        "@types/node": "^12.12.21",
+        "@types/node": "^22.0.0",
         "@types/react": "^18.2.38",
         "@types/react-dom": "^18.2.17",
         "typescript": "^5.2.2"
     },
+    "peerDependencies": {
+        "@playwright/test": "^1.57.0",
+        "playwright": "^1.57.0"
+    },
     "scripts": {
         "build": "tsc --jsx react-jsx",
-        "run": "tsc -w --jsx react-jsx -p ."
+        "build:tests": "tsc --project tsconfig.tests.json",
+        "run": "tsc -w --jsx react-jsx -p .",
+        "run:tests": "tsc -w --project tsconfig.tests.json"
     }
 }

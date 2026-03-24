@@ -25,7 +25,7 @@ const lastPage = WidgetHelper_getPaginationDataForGenericList(widgetConfig, tota
 const getHref = (pageNum: number) => {
     return pageNum === 1 ? currentUrl : `${currentUrl}?page=${pageNum}`;
 };
-if (pages === 1) {
+if (!pages || pages <= 1) {
     toRender = WidgetHelper_renderEmptyComponent('Pagination', '', false);
 }
 
