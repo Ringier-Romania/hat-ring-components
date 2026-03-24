@@ -5,12 +5,17 @@ import {AppContext} from "../../../../types/types";
 import _ from "lodash";
 import {StoryRelatedContentAutocompleteFromEnum, StoryRelatedContentWidgetConfig} from "./types";
 import {GenericListResponse} from "../../Lists/GenericList/types";
-import {Story, StoryEdge} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import {Story, StoryEdge} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
 import {UtilsHelper_convertToInt, UtilsHelper_getCurrentNodeCategoryId} from "../../../../helpers/UtilsHelper";
 import {ConfigHelper_getMainCategoryUuid} from "../../../../helpers/ConfigHelper";
 import {CacheHelper_createParentChildRelation} from "../../../../helpers/CacheHelper";
 
 export async function StoryRelatedContent_getData(context: AppContext, widgetConfig: StoryRelatedContentWidgetConfig): Promise<GenericListResponse> {
+    if (!context.id) {
+        console.warn('StoryRelatedContent_getData: siteNodeId is not defined for url:', context.url);
+        return {data: {stories: {edges: [], total: 0}}};
+    }
+
     let dynamicVariablesTypes: any = {};
     let dynamicVariables: any = {};
     let dynamicFragmentsNames = '';

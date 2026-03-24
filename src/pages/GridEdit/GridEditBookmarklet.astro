@@ -1,0 +1,152 @@
+---
+// This page displays the bookmarklet for grid editing
+// No layout needed - simple standalone page
+const bookmarkletCode = "javascript:(function(){if(window.__gridEditLoaded){alert('Grid Edit already loaded!');return;}var s=document.createElement('script');s.src=location.origin+'/grid-edit/loader.js';s.onload=function(){console.log('Grid Edit loaded!')};s.onerror=function(){alert('Failed to load Grid Edit')};document.head.appendChild(s);})();";
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid Edit Bookmarklet</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f5f5f5;
+      color: #333;
+    }
+    h1 {
+      color: #0d47a1;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 32px;
+    }
+    .instructions {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .instructions h2 {
+      margin-top: 0;
+      color: #1565c0;
+    }
+    .instructions ol {
+      padding-left: 20px;
+    }
+    .instructions li {
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .bookmarklet-container {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .bookmarklet-link {
+      display: inline-block;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 999px;
+      font-size: 18px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: grab;
+    }
+    .bookmarklet-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(13, 71, 161, 0.4);
+    }
+    .bookmarklet-link:active {
+      cursor: grabbing;
+    }
+    .hint {
+      margin-top: 16px;
+      color: #666;
+      font-size: 14px;
+    }
+    .code-section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .code-section h2 {
+      margin-top: 0;
+      color: #1565c0;
+    }
+    .code-block {
+      background: #263238;
+      color: #aed581;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .warning {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
+      padding: 16px;
+      margin-top: 24px;
+      border-radius: 0 8px 8px 0;
+    }
+    .warning strong {
+      color: #e65100;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Grid Edit Bookmarklet</h1>
+  <p class="subtitle">Drag and drop widget editor for HAT Grid</p>
+
+  <div class="instructions">
+    <h2>📖 Instructions</h2>
+    <ol>
+      <li><strong>Drag</strong> the button below to your browser's bookmarks bar</li>
+      <li>Navigate to any page with HAT Grid widgets</li>
+      <li><strong>Click</strong> the bookmarklet in your bookmarks bar</li>
+      <li>Click <strong>"Enable grid edit mode"</strong> to start editing</li>
+      <li>Drag widgets to reorder them</li>
+      <li>Click <strong>"Save layout"</strong> when done</li>
+    </ol>
+  </div>
+
+  <div class="bookmarklet-container">
+    <a
+      class="bookmarklet-link"
+      href={bookmarkletCode}
+      onclick="alert('Drag this button to your bookmarks bar!'); return false;"
+    >
+      HAT Grid Edit
+    </a>
+    <p class="hint">👆 Drag this button to your bookmarks bar</p>
+  </div>
+
+  <div class="code-section">
+    <h2>🔧 Manual Installation</h2>
+    <p>If drag and drop doesn't work, create a new bookmark manually with this code:</p>
+    <pre class="code-block">{bookmarkletCode}</pre>
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Note:</strong> This bookmarklet only works on pages served from the same domain where the grid-edit scripts are hosted. Make sure you're on the correct site before using.
+  </div>
+</body>
+</html>

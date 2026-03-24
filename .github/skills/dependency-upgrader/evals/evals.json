@@ -1,0 +1,23 @@
+{
+  "skill_name": "dependency-upgrader",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Chcę podbić Astro do najnowszej wersji. Mamy teraz 5.17.1. Sprawdź co się zmieniło i czy coś nam się psuje.",
+      "expected_output": "Upgrade report for Astro showing changelog analysis, impact assessment on .astro components and helpers, categorized changes (breaking/attention/opportunity), and migration steps.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Podnieś paczki @aws-sdk/* do najnowszych wersji. Mamy kilka: @aws-sdk/credential-providers, @aws-sdk/protocol-http, @aws-sdk/signature-v4, @aws-sdk/util-format-url i @aws-crypto/sha256-js.",
+      "expected_output": "Coordinated upgrade report for AWS SDK packages, noting that @aws-sdk/protocol-http is deprecated in v3.374+ in favor of @smithy/protocol-http, identifying usage in RedisProvider.ts, and proposing migration path.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Przejrzyj package.json i powiedz które paczki warto zaktualizować. Co się zmieniło w najnowszych wersjach?",
+      "expected_output": "Prioritized list of packages worth upgrading, with brief changelog summaries and impact assessment for each, focusing on packages most behind or with important new features.",
+      "files": []
+    }
+  ]
+}

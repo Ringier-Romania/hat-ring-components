@@ -3,8 +3,8 @@ import Slider from "../../../common/Slider/Slider.astro";
 const {blockData, context, widgetConfig} = Astro.props;
 import {gql} from "graphql-tag";
 import _ from "lodash";
-import {ImageBlock, EmbedBlock} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
-import {ImageSourceReference} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+import {ImageBlock, EmbedBlock} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
+import {ImageSourceReference} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
 import {WebsiteApiProvider} from "../../../../../providers/WebsiteApiProvider";
 import {UtilsHelper_convertToInt, UtilsHelper_isMobile} from "../../../../../helpers/UtilsHelper";
 import {WidgetHelper_renderEmptyComponent} from "../../../../../helpers/WidgetHelper";
@@ -35,6 +35,7 @@ if (!toRender) {
             title
             galleryContent: content(role: "gallery") {
                 blocks {
+                    __typename
                     ... on ImageBlock {
                         title
                         url
@@ -113,8 +114,8 @@ if (!toRender) {
                 "Source type": "Image",
                 "Source url": _.get(imageBlock, "url", null),
                 "Source desktop dimensions(eg. 600x300)": imageWidth + "x" + imageHeight,
-                Title: _.get(imageBlock, "title", null),
-                Description: caption,
+                Title: caption,
+                Description: "",
                 "Source Node": imageCopyrightSources.map((source) => {
                     if (source.type === 'Copyright') {
                         return `<p class="metaData copyright">${source.name}</p>`;

@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "outDir": "./testDist",
+    "rootDir": "./src",
+    "module": "CommonJS"
+  },
+  "include": [
+    "./src/tests/**/*.ts",
+    "./src/helpers/TestsHelper.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+

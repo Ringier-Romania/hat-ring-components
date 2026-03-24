@@ -5,7 +5,7 @@ import {
     Story,
     StoryEdge,
     Topic
-} from "@ringpublishing/graphql-api-client/lib/types/websites-api";
+} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
 
 export enum GenericListGeneralShowOptions {
     Items = "items",

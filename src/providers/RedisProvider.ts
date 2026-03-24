@@ -1,7 +1,7 @@
 import {createClient, RedisClientType} from "redis";
 import {SignatureV4} from "@aws-sdk/signature-v4";
 import {fromNodeProviderChain} from '@aws-sdk/credential-providers';
-import {Hash} from '@aws-sdk/hash-node';
+import {Sha256} from "@aws-crypto/sha256-js";
 import {HttpRequest} from '@aws-sdk/protocol-http';
 import {formatUrl} from "@aws-sdk/util-format-url";
 import {MonitoringProvider} from "./MonitoringProvider";
@@ -11,6 +11,7 @@ import {ScanReply} from "@redis/client/dist/lib/commands/SCAN";
 interface RedisCacheValue {
     data: string;
     ttl: number | undefined;
+    expirationTimestamp: number | undefined;
 }
 
 export class RedisProvider {
@@ -22,15 +23,17 @@ export class RedisProvider {
     username: string;
     maxReInitialize: number;
     currentReInitialize: number;
+    isReconnecting: boolean;
 
     constructor() {
         this.url = process.env.REDIS_RW;
         this.replicationGroupId = process.env.REDIS_REPLICATION_GROUP_ID;
-        this.username = 'iam-user';
-        this.region = 'eu-central-1';
+        this.username = process.env.REDIS_USERNAME ||'iam-user';
+        this.region = process.env.REDIS_REGION || 'eu-central-1';
         this.service = 'elasticache';
         this.maxReInitialize = 10;
         this.currentReInitialize = 0;
+        this.isReconnecting = false;
 
         setInterval(async () => {
             if (!this.client) {
@@ -38,12 +41,12 @@ export class RedisProvider {
             }
             const token = await this.getToken();
             if (!token) {
-                MonitoringProvider.counter('error.redis.token.refresh');
+                MonitoringProvider.counter('error.RedisProvider.token_refresh');
                 return;
             }
 
             await this.client.auth({
-                username: 'iam-user',
+                username: process.env.REDIS_USERNAME ||'iam-user',
                 password: token,
             });
 
@@ -75,24 +78,64 @@ export class RedisProvider {
 
     attachRedisErrorsHandler() {
         this.client.on('error', async (error) => {
-            MonitoringProvider.counter(`error.redis.onError`);
+            MonitoringProvider.counter(`error.RedisProvider.onError`);
             console.error(`Redis Client Error: ${error}`);
 
-            if (error.message.toString().includes('ECONNRESET')) {
-                if (this.currentReInitialize < this.maxReInitialize) {
-                    this.currentReInitialize += 1;
-                    MonitoringProvider.counter('info.RedisProvider.reinitialize_started');
-                    await this.client.disconnect();
-                    await this.createRedisClient();
-                    this.attachRedisErrorsHandler();
-                    await this.client.connect();
-                    MonitoringProvider.counter('info.RedisProvider.reinitialize_ended');
-                } else {
-                    MonitoringProvider.counter('error.RedisProvider.reachedMaxReinitialize');
-                    process.exit(1);
-                }
+            const errorMessage = error.message?.toString() || '';
+            const shouldReconnect = errorMessage.includes('ECONNRESET') ||
+                                    errorMessage.includes('The client is closed') ||
+                                    errorMessage.includes('Socket closed unexpectedly');
+
+            if (shouldReconnect) {
+                await this.handleReconnect('error');
             }
         });
+
+        this.client.on('end', async () => {
+            MonitoringProvider.counter('info.RedisProvider.onEnd');
+            console.info('Redis connection ended');
+            await this.handleReconnect('end');
+        });
+    }
+
+    async handleReconnect(reason: string): Promise<void> {
+        if (this.isReconnecting) {
+            return;
+        }
+
+        if (this.currentReInitialize >= this.maxReInitialize) {
+            MonitoringProvider.counter('error.RedisProvider.reachedMaxReinitialize');
+            process.exit(1);
+            return;
+        }
+
+        console.info('Redis connection reconnecting...');
+        this.isReconnecting = true;
+        this.currentReInitialize += 1;
+        MonitoringProvider.counter(`info.RedisProvider.reinitialize_started_${reason}`);
+
+        try {
+            if (this.client) {
+                try {
+                    await this.client.disconnect();
+                } catch (e) {
+
+                }
+            }
+
+            await this.createRedisClient();
+            this.attachRedisErrorsHandler();
+            await this.client.connect();
+
+            this.currentReInitialize = 0;
+            MonitoringProvider.counter(`info.RedisProvider.reinitialize_ended_${reason}`);
+            console.info('Redis connection reconnected');
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.reinitialize_failed');
+            console.error('Redis reinitialize failed:', err);
+        } finally {
+            this.isReconnecting = false;
+        }
     }
 
     async initialize() {
@@ -113,7 +156,7 @@ export class RedisProvider {
             service: this.service,
             region: this.region,
             credentials: fromNodeProviderChain(),
-            sha256: Hash.bind(null, 'sha256'),
+            sha256: Sha256,
         });
 
         const request = new HttpRequest({
@@ -149,11 +192,11 @@ export class RedisProvider {
             await this.initialize();
         }
 
-        var expirationTimestamp: null | number = null;
+        let expirationTimestamp: null | number = null;
         if (ttl) {
             expirationTimestamp = Date.now() + ttl * 1000;
         }
-        const setValue = JSON.stringify({data: value, ttl: expirationTimestamp} as RedisCacheValue);
+        const setValue = JSON.stringify({data: value, ttl, expirationTimestamp} as RedisCacheValue);
         try {
             await this.client.set(key, setValue);
             if (tags && typeof tags === 'object') {
@@ -185,6 +228,28 @@ export class RedisProvider {
             return parsedData.data;
         } catch (err) {
             MonitoringProvider.counter('error.RedisProvider.get');
+            return null;
+        }
+
+    }
+
+    async getDecoratedCachedObject({key}: {
+        key: string;
+    }): Promise<RedisCacheValue | null> {
+        if (!this.client) {
+            await this.initialize();
+        }
+
+        try {
+            const data = await this.client.get(key);
+            if (!data) {
+                return null;
+            }
+            const parsedData = this._parseResponse(data, key);
+            MonitoringProvider.counter('info.RedisProvider.getDecoratedCachedObject');
+            return parsedData;
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.getDecoratedCachedObject');
             return null;
         }
 
@@ -255,21 +320,37 @@ export class RedisProvider {
 
     }
 
+    async getExpirationTimestamp(key: string): Promise<number | undefined> {
+        if (!this.client) {
+            await this.initialize();
+        }
+        MonitoringProvider.counter('info.RedisProvider.getExpirationTimestamp');
+        const data = await this.client.get(key);
+        const parsedData = this._parseResponse(data, key);
+
+        return parsedData.expirationTimestamp;
+
+    }
+
     _parseResponse(data: any, key?: string): RedisCacheValue {
-        var parsedData = data;
+        let parsedData = data;
         try {
             if (typeof data === 'string') {
                 parsedData = JSON.parse(data);
             }
-            return parsedData.ttl && parsedData.data ? parsedData : {
-                data: parsedData,
-                ttl: undefined,
-            };
+            return (parsedData && typeof parsedData === 'object' && 'data' in parsedData)
+                ? parsedData
+                : {
+                    data: parsedData,
+                    ttl: undefined,
+                    expirationTimestamp: undefined,
+                };
         } catch (e) {
             console.error('Redis Error parsing data for key: ', key, data);
             return {
                 data: data,
                 ttl: undefined,
+                expirationTimestamp: undefined,
             }
         }
     }

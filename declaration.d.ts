@@ -11,6 +11,7 @@ interface Global extends NodeJS.Global {
     lastHATCacheClean: any;
     HATcache: any;
     websitesApiApolloClient?: ApolloClient<NormalizedCacheObject>;
-    HATCacheInCallInProgress: any;
+    websitesApiGotClient?: RingGqlApiClient;
+    HATCacheInCallInProgress?: Array<Promise<any>>;
 }
 declare var global: Global;

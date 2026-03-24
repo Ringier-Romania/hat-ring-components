@@ -18,7 +18,7 @@ import {
     UtilsHelper_getCurrentNodeName,
     UtilsHelper_getQueryParam,
     UtilsHelper_getSearchQueryParamKey,
-    UtilsHelper_isHomepage
+    UtilsHelper_isHomepage, UtilsHelper_parsePositiveIntFromString
 } from "../UtilsHelper";
 import _ from "lodash";
 import {SiteContentType} from "../../types/types";
@@ -215,7 +215,7 @@ async function mapPatternVariables(context, place: string, fieldToCheck: string 
     }
 
     if (fieldToCheck.includes('{{number}}')) {
-        dynamicPatternMap['{{number}}'] = () => {return UtilsHelper_getQueryParam('page', context)}
+        dynamicPatternMap['{{number}}'] = () => {return UtilsHelper_parsePositiveIntFromString(UtilsHelper_getQueryParam('page', context)) || 1}
     }
 
     if (fieldToCheck.includes('{{searchPhrase}}')) {

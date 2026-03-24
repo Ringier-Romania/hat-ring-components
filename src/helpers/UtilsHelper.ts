@@ -1,6 +1,19 @@
 // Libraries
 import _ from 'lodash';
+import {APIContext} from "astro";
 import {AppContext, SiteContentType} from "../types/types";
+
+/**
+ * Build URL from forwarded headers (reverse proxy) or fallback to context.url
+ * Works correctly for both ringpublishing.com and www.upday.com
+ */
+export function UtilsHelper_getCurrentUrl(context: APIContext): string {
+    const forwardedProto = context.request.headers.get('x-forwarded-proto') || context.url.protocol.replace(':', '');
+    const forwardedHost = context.request.headers.get('x-forwarded-host') || context.url.host;
+    const forwardedUri = context.request.headers.get('x-forwarded-uri') || context.url.pathname;
+
+    return `${forwardedProto}://${forwardedHost}${forwardedUri}`;
+}
 
 export function UtilsHelper_convertToInt(input: string | number | undefined) {
     return input ? typeof input === "number" ? input : parseInt(input) : 0;
@@ -98,7 +111,11 @@ export function UtilsHelper_generateRandomString(length = 8) {
     return Math.random().toString(20).substr(2, length);
 }
 export function UtilsHelper_getQueryParam(param: string, context: AppContext): string | null {
-    return _.get(context, ['hatControllerParams', 'urlWithParsedQuery', 'query', param], null);
+    let val = _.get(context, ['hatControllerParams', 'urlWithParsedQuery', 'query', param], null) as string | null;
+    if (val && typeof val === 'string') {
+        val = UtilsHelper_stripHtmlTags(val);
+    }
+    return val;
 }
 
 export function UtilsHelper_getSearchQueryParamKey(): string {
