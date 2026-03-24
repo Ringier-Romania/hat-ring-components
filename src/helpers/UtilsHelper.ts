@@ -1,6 +1,19 @@
 // Libraries
 import _ from 'lodash';
+import {APIContext} from "astro";
 import {AppContext, SiteContentType} from "../types/types";
+
+/**
+ * Build URL from forwarded headers (reverse proxy) or fallback to context.url
+ * Works correctly for both ringpublishing.com and www.upday.com
+ */
+export function UtilsHelper_getCurrentUrl(context: APIContext): string {
+    const forwardedProto = context.request.headers.get('x-forwarded-proto') || context.url.protocol.replace(':', '');
+    const forwardedHost = context.request.headers.get('x-forwarded-host') || context.url.host;
+    const forwardedUri = context.request.headers.get('x-forwarded-uri') || context.url.pathname;
+
+    return `${forwardedProto}://${forwardedHost}${forwardedUri}`;
+}
 
 export function UtilsHelper_convertToInt(input: string | number | undefined) {
     return input ? typeof input === "number" ? input : parseInt(input) : 0;

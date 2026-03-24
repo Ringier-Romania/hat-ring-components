@@ -1,7 +1,7 @@
 import {createClient, RedisClientType} from "redis";
 import {SignatureV4} from "@aws-sdk/signature-v4";
 import {fromNodeProviderChain} from '@aws-sdk/credential-providers';
-import {Hash} from '@aws-sdk/hash-node';
+import {Sha256} from "@aws-crypto/sha256-js";
 import {HttpRequest} from '@aws-sdk/protocol-http';
 import {formatUrl} from "@aws-sdk/util-format-url";
 import {MonitoringProvider} from "./MonitoringProvider";
@@ -156,7 +156,7 @@ export class RedisProvider {
             service: this.service,
             region: this.region,
             credentials: fromNodeProviderChain(),
-            sha256: Hash.bind(null, 'sha256'),
+            sha256: Sha256,
         });
 
         const request = new HttpRequest({

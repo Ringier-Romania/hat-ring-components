@@ -20,7 +20,22 @@ import {
 export async function SeoMetaOpenGraph(context) {
     const imageData = await OpenGraphHelper_getMainStoryImageData(context); //format: png
     const defaultImageData = await SeoHelper_currentDefaultImageData(context); //format: png
+    const hasImageData = imageData && imageData.src !== undefined;
+    const src = hasImageData ? imageData.src : defaultImageData?.src?.png ?? null;
 
+    let secureUrl: string | null = null;
+    const defaultPngSrc = defaultImageData?.src?.png;
+
+    if (hasImageData) {
+        const imageSrc: string = imageData.src;
+        if (imageSrc.startsWith("https://")) {
+            secureUrl = imageSrc;
+        } else if (defaultPngSrc && defaultPngSrc.startsWith("https://")) {
+            secureUrl = defaultPngSrc;
+        }
+    } else if (defaultPngSrc && defaultPngSrc.startsWith("https://")) {
+        secureUrl = defaultPngSrc;
+    }
     return {
         openGraph: {
             basic: {
@@ -36,11 +51,11 @@ export async function SeoMetaOpenGraph(context) {
                 siteName: await SeoHelper_currentSiteName(context),
             },
             image: {
-                url: imageData && imageData.src !== undefined ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null,
-                secureUrl: imageData && imageData.src !== undefined && imageData.src.search('https://') ? imageData.src : defaultImageData !== null ? defaultImageData.src.png : null,
-                width: imageData && imageData.src !== undefined ? imageData.width : defaultImageData !== null ? defaultImageData.width : null,
-                height: imageData && imageData.src !== undefined ? imageData.height : defaultImageData !== null ? defaultImageData.height : null,
-                caption: imageData ? imageData.caption : '',
+                url: src,
+                secureUrl: secureUrl,
+                width: hasImageData ? imageData.width : defaultImageData?.width ?? null,
+                height: hasImageData ? imageData.height : defaultImageData?.height ?? null,
+                caption: imageData?.caption ?? '',
                 type: "image/png" // TODO: (1)
             }
         }
