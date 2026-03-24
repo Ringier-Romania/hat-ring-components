@@ -152,6 +152,9 @@ export async function SeoHelper_getSeoCurrentPageType(context) {
 
 
 export async function SeoHelper_authorName(context) {
+    const authorNameFromContext = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.name', '');
+    if (authorNameFromContext) return authorNameFromContext;
+
     const query = gql`
         query($uuid: UUID){
             author(id:$uuid){
