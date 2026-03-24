@@ -113,6 +113,11 @@ npm run test-watch              # Watch mode (may have flaky failures)
 2. Use prefix naming: `YourHelper_functionName()`
 3. Export from `src/index.ts`
 
+### GraphQL Schema
+
+The Websites API GraphQL schema is located at `node_modules/@ringpublishing/graphql-api-client-got/lib/schemas/websites-api.graphql`. **Always consult this schema** when creating or modifying GraphQL queries to ensure correct field names, types, and arguments. Key types include: `Query` (root), `Story`, `Topic`, `Author`, `Source`, `Section`, `SectionItem`, `StoryFilterInput`, `StorySimilarInput`.
+
+## Working with Copilot in This Repo
 ### New ItemPart
 1. Create in `src/components/widgets/common/BasicWidget/itemParts/`
 2. Export both `default` component and `getFragment` function
@@ -133,6 +138,13 @@ npm run test-watch              # Watch mode (may have flaky failures)
 
 ## Performance Considerations
 
+- **Create a new widget** → use `widget-developer` skill
+- **Add a config param** → update `*WebsitesConfig.ts` (defaultParams + paramsDescription) and `types.ts`
+- **Upgrade a dependency** → use `dependency-upgrader` skill
+- **Modify caching** → check `CacheProvider`, `CacheHelper`, `CacheAdapterInterface` in `src/adapters/cache/`
+- **Add a helper function** → follow `ModuleName_functionName` convention, export from `src/index.ts`
+- **Add a renderless component** → create in `src/renderlessComponents/`, return data not HTML
+- **Create/modify GraphQL query** → always check schema at `node_modules/@ringpublishing/graphql-api-client-got/lib/schemas/websites-api.graphql`
 - Use appropriate cache TTL values
 - Leverage cache tags for targeted invalidation
 - Set `priority=true` for above-fold images (enables preloading)

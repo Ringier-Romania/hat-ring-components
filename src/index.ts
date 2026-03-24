@@ -41,6 +41,7 @@ export * from "./renderlessComponents/seo/SeoMetaData/SeoMetaDecoratorRobots";
 export { default as StoryAuthors } from "./components/widgets/Story/StoryAuthors/StoryAuthors.astro";
 export { default as Author } from "./components/widgets/Author/Author/Author.astro";
 export { default as StoryRelatedContent } from "./components/widgets/Story/StoryRelatedContent/StoryRelatedContent.astro";
+export { default as StorySimilarStories } from "./components/widgets/Story/StorySimilarStories/StorySimilarStories.astro";
 export { default as HatAdmin } from "./pages/HatAdmin/HatAdmin.astro";
 export { default as Photoswipe } from "./components/widgets/common/PhotoSwipe/PhotoSwipe.astro";
 export * from "./providers/WebsiteApiProvider";
