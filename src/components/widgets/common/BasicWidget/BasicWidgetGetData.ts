@@ -2,50 +2,14 @@ import * as ItemParts from "./itemParts";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {AppContext} from "../../../../types/types";
-import _ from "lodash";
+import {ShowOptionsHelper_buildFragments} from "../../../../helpers/ShowOptionsHelper";
 
 export async function BasicWidget_getData(context: AppContext, queryNodeFragment, widgetConfig, extendableAttributes) {
-    let dynamicVariablesTypes = {};
-    let dynamicVariables = {};
-    let dynamicFragmentsNames = "";
-
-    const dynamicFragments = (widgetConfig.showOptions || [])
-        .map((showOption) => {
-            const allItemParts = (extendableAttributes ? extendableAttributes.itemParts : null) || ItemParts;
-            const ItemPart = allItemParts[_.upperFirst(showOption)];
-
-            if (ItemPart) {
-                let getFragment = ItemPart.getFragment;
-                if (!getFragment) {
-                    const ItemPart = allItemParts[_.upperFirst(showOption) + "_getFragment"];
-                    if (ItemPart) {
-                        getFragment = ItemPart;
-                    }
-                }
-                if (getFragment) {
-                    const fragment = getFragment(widgetConfig);
-                    if (fragment.variables) {
-                        dynamicVariables = {...dynamicVariables, ...fragment.variables};
-                    }
-
-                    if (fragment.variablesTypes) {
-                        dynamicVariablesTypes = {...dynamicVariablesTypes, ...fragment.variablesTypes};
-                    }
-
-                    if (fragment.query) {
-                        dynamicFragmentsNames += ` ...${fragment.query.definitions[0].name.value} \n`;
-                        return `${fragment.query.loc?.source.body}`;
-                    }
-                }
-            }
-        })
-        .join("\n");
-
-    const mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes)
-        .map((key) => {
-            return `, ${key}: ${dynamicVariablesTypes[key]}`;
-        })
-        .join(" ");
+    const customItemParts = extendableAttributes?.itemParts || ItemParts;
+    console.log('aaa');
+    process.exit();
+    const fragmentResult = ShowOptionsHelper_buildFragments({ widgetConfig, customItemParts });
+    const { dynamicFragments, dynamicFragmentsNames, dynamicVariables, mappedDynamicVariablesTypes } = fragmentResult;
 
     const sectionGroup = widgetConfig.sectionGroup || "";
     const querySectionVariablesTypes =

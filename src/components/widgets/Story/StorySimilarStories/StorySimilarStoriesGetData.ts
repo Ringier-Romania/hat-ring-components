@@ -1,4 +1,3 @@
-import * as ItemParts from "../../Lists/GenericList/itemParts";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {AppContext} from "../../../../types/types";
@@ -7,6 +6,12 @@ import {StorySimilarStoriesWidgetConfig} from "./types";
 import {GenericListResponse} from "../../Lists/GenericList/types";
 import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 import {CacheHelper_createParentChildRelation} from "../../../../helpers/CacheHelper";
+import {
+    ShowOptionsHelper_buildFragments,
+    ShowOptionsHelper_extractExcludedFlags,
+    ShowOptionsHelper_extractAllowedKinds,
+    ShowOptionsHelper_mapVariablesTypes
+} from "../../../../helpers/ShowOptionsHelper";
 
 export async function StorySimilarStories_getData(context: AppContext, widgetConfig: StorySimilarStoriesWidgetConfig): Promise<GenericListResponse> {
     if (!context.id) {
@@ -14,62 +19,21 @@ export async function StorySimilarStories_getData(context: AppContext, widgetCon
         return {data: {stories: {edges: [], total: 0}}};
     }
 
-    let dynamicVariablesTypes: any = {};
-    let dynamicVariables: any = {};
-    let dynamicFragmentsNames = '';
+    const fragmentResult = ShowOptionsHelper_buildFragments({ widgetConfig });
+    let { dynamicVariablesTypes, dynamicVariables } = fragmentResult;
+    const { dynamicFragments, dynamicFragmentsNames } = fragmentResult;
 
-    const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
-        const allItemParts = ItemParts;
-
-        const ItemPart = allItemParts[_.upperFirst(showOption)];
-
-        if (ItemPart) {
-            let getFragment = ItemPart['getFragment'];
-            if (!getFragment) {
-                const FragmentPart = allItemParts[_.upperFirst(showOption) + '_getFragment'];
-                if (FragmentPart) {
-                    getFragment = FragmentPart;
-                }
-            }
-            if (getFragment) {
-                const fragment = getFragment(widgetConfig);
-                if (fragment.variables) {
-                    dynamicVariables = {...dynamicVariables, ...fragment.variables}
-                }
-
-                if (fragment.variablesTypes) {
-                    dynamicVariablesTypes = {...dynamicVariablesTypes, ...fragment.variablesTypes}
-                }
-
-                if (fragment.query) {
-                    dynamicFragmentsNames += ` ...${fragment.query.definitions[0].name.value} \n`;
-                    return `${fragment.query.loc?.source.body}`
-                }
-            } else {
-                console.error(`ItemPart getFragment ${showOption} not found`);
-            }
-        }
-    }).join('\n');
-
-    const excludedFlags = widgetConfig.excludedFlags ? widgetConfig.excludedFlags.map(flag => {
-        return flag.excludedFlag
-    }) : [];
-
-    const allowedKinds = widgetConfig.allowedKinds ? widgetConfig.allowedKinds.map(kind => {
-        return kind.kindCode
-    }) : [];
-
+    const excludedFlags = ShowOptionsHelper_extractExcludedFlags(widgetConfig.excludedFlags);
+    const allowedKinds = ShowOptionsHelper_extractAllowedKinds(widgetConfig.allowedKinds);
     const limit = UtilsHelper_convertToInt(widgetConfig.limit) || 5;
 
     // Build kind filter
     if (allowedKinds.length > 0) {
-        dynamicVariablesTypes.$allowedKinds = '[String!]';
-        dynamicVariables.allowedKinds = allowedKinds;
+        dynamicVariablesTypes = { ...dynamicVariablesTypes, $allowedKinds: '[String!]' };
+        dynamicVariables = { ...dynamicVariables, allowedKinds };
     }
 
-    const mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
-        return `, ${key}: ${dynamicVariablesTypes[key]}`;
-    }).join(' ');
+    const mappedDynamicVariablesTypes = ShowOptionsHelper_mapVariablesTypes(dynamicVariablesTypes);
 
     const variables: any = {
         storyId: context.id,
@@ -104,7 +68,7 @@ export async function StorySimilarStories_getData(context: AppContext, widgetCon
         }
         ${dynamicFragments}
     `;
-    
+
     const result = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL);
 
     const res: GenericListResponse = {
@@ -120,4 +84,3 @@ export async function StorySimilarStories_getData(context: AppContext, widgetCon
 
     return res;
 }
-

@@ -10,47 +10,20 @@ import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {AppContext, SiteContentType} from "../../../../types/types";
 import _ from "lodash";
 import {WidgetHelper_calculateOffsetForGenericListPagination} from "../../../../helpers/GenericListHelper";
+import {
+    ShowOptionsHelper_buildFragments,
+    ShowOptionsHelper_extractExcludedFlags,
+    ShowOptionsHelper_mapVariablesTypes
+} from "../../../../helpers/ShowOptionsHelper";
 
 export async function GenericList_getData(context: AppContext, queryNodeFragment, widgetConfig, extendableAttributes, currentPage) {
     const searchPhrase = UtilsHelper_stripHtmlTags(UtilsHelper_getQueryParam(UtilsHelper_getSearchQueryParamKey(), context) || '');
     currentPage = UtilsHelper_parsePositiveIntFromString(currentPage) || 1;
-    let dynamicVariablesTypes: any = {};
-    let dynamicVariables: any = {};
-    let dynamicFragmentsNames = '';
 
-    const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
-        const allItemParts = (extendableAttributes ? extendableAttributes.itemParts : null) || ItemParts;
-
-        const ItemPart = allItemParts[_.upperFirst(showOption)];
-
-        if (ItemPart) {
-            let getFragment = ItemPart.getFragment;
-            if (!getFragment) {
-                const ItemPart = allItemParts[_.upperFirst(showOption) + '_getFragment'];
-                if (ItemPart) {
-                    getFragment = ItemPart;
-                }
-            }
-            if (getFragment) {
-                const fragment = getFragment(widgetConfig);
-                if (fragment.variables) {
-                    dynamicVariables = {...dynamicVariables, ...fragment.variables}
-                }
-
-                if (fragment.variablesTypes) {
-                    dynamicVariablesTypes = {...dynamicVariablesTypes, ...fragment.variablesTypes}
-                }
-
-                if (fragment.query) {
-                    dynamicFragmentsNames += ` ...${fragment.query.definitions[0].name.value} \n`;
-                    return `${fragment.query.loc?.source.body}`
-                }
-            } else {
-                console.error(`ItemPart getFragment ${showOption} not found`);
-            }
-
-        }
-    }).join('\n');
+    const customItemParts = extendableAttributes?.itemParts || ItemParts;
+    const fragmentResult = ShowOptionsHelper_buildFragments({ widgetConfig, customItemParts });
+    const { dynamicFragments, dynamicFragmentsNames } = fragmentResult;
+    let { dynamicVariablesTypes, dynamicVariables } = fragmentResult;
 
     let contentFilterId = widgetConfig.customListUuid || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.category.id') || _.get(context, 'hatControllerParams.gqlResponse.data.site.data.content.id') ||  _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.id');
     const nodeCategoryId = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.id');
@@ -60,22 +33,22 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
     switch (context.siteContentType) {
         case SiteContentType.Topic:
             contentTypeFilter = 'topic: {in: [$topicId]}, category: {in: [$nodeCategoryId]}';
-            dynamicVariablesTypes.$nodeCategoryId = 'UUID!';
-            dynamicVariables.nodeCategoryId = nodeCategoryId;
+            dynamicVariablesTypes = { ...dynamicVariablesTypes, $nodeCategoryId: 'UUID!' };
+            dynamicVariables = { ...dynamicVariables, nodeCategoryId };
             break;
         case SiteContentType.Author:
             if (!widgetConfig.customListUuid) {
                 contentTypeFilter = 'category: {in: [$topicId]}, author:{in:[$authorId]}';
-                dynamicVariablesTypes.$authorId = 'UUID!';
+                dynamicVariablesTypes = { ...dynamicVariablesTypes, $authorId: 'UUID!' };
                 contentFilterId = nodeCategoryId;
-                dynamicVariables.authorId = context.id;
+                dynamicVariables = { ...dynamicVariables, authorId: context.id };
             } else {
                 contentTypeFilter = 'category: {in: [$topicId]}';
             }
             break;
         case SiteContentType.Story:
-            dynamicVariablesTypes.$storyUuid = 'UUID!';
-            dynamicVariables.storyUuid = contentFilterId;
+            dynamicVariablesTypes = { ...dynamicVariablesTypes, $storyUuid: 'UUID!' };
+            dynamicVariables = { ...dynamicVariables, storyUuid: contentFilterId };
             contentFilterId = nodeCategoryId;
             contentTypeFilter = 'category: {in: [$topicId]}, id:{notIn: [$storyUuid]}';
             break;
@@ -86,16 +59,11 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
     const searchPhraseFragment = searchPhrase ? `, phrase: $searchPhrase` : '';
 
     if (searchPhrase) {
-        dynamicVariablesTypes.$searchPhrase = 'String!';
+        dynamicVariablesTypes = { ...dynamicVariablesTypes, $searchPhrase: 'String!' };
     }
-    let mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
-        return `, ${key}: ${dynamicVariablesTypes[key]}`;
-    }).join(' ');
+    const mappedDynamicVariablesTypes = ShowOptionsHelper_mapVariablesTypes(dynamicVariablesTypes);
 
-
-    const excludedFlags = widgetConfig.excludedFlags ? widgetConfig.excludedFlags.map(flag => {
-        return flag.excludedFlag
-    }) : null;
+    const excludedFlags = ShowOptionsHelper_extractExcludedFlags(widgetConfig.excludedFlags);
 
     const isAjaxCall = UtilsHelper_getQueryParam('gridLocationWidgetType', context) === 'genericList';
     const isFirstCall = UtilsHelper_getQueryParam('isFirstCall', context) === '1';

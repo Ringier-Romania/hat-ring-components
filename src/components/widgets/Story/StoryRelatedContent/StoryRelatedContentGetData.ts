@@ -1,14 +1,18 @@
-import * as ItemParts from "../../Lists/GenericList/itemParts";
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
 import {AppContext} from "../../../../types/types";
 import _ from "lodash";
 import {StoryRelatedContentAutocompleteFromEnum, StoryRelatedContentWidgetConfig} from "./types";
 import {GenericListResponse} from "../../Lists/GenericList/types";
-import {Story, StoryEdge} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
-import {UtilsHelper_convertToInt, UtilsHelper_getCurrentNodeCategoryId} from "../../../../helpers/UtilsHelper";
+import {StoryEdge} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
+import {UtilsHelper_convertToInt} from "../../../../helpers/UtilsHelper";
 import {ConfigHelper_getMainCategoryUuid} from "../../../../helpers/ConfigHelper";
 import {CacheHelper_createParentChildRelation} from "../../../../helpers/CacheHelper";
+import {
+    ShowOptionsHelper_buildFragments,
+    ShowOptionsHelper_extractExcludedFlags,
+    ShowOptionsHelper_mapVariablesTypes
+} from "../../../../helpers/ShowOptionsHelper";
 
 export async function StoryRelatedContent_getData(context: AppContext, widgetConfig: StoryRelatedContentWidgetConfig): Promise<GenericListResponse> {
     if (!context.id) {
@@ -16,51 +20,8 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
         return {data: {stories: {edges: [], total: 0}}};
     }
 
-    let dynamicVariablesTypes: any = {};
-    let dynamicVariables: any = {};
-    let dynamicFragmentsNames = '';
-
-
-    const dynamicFragments = (widgetConfig.showOptions || []).map((showOption) => {
-        const allItemParts = ItemParts;
-
-        const ItemPart = allItemParts[_.upperFirst(showOption)];
-
-        if (ItemPart) {
-            let getFragment = ItemPart.getFragment;
-            if (!getFragment) {
-                const ItemPart = allItemParts[_.upperFirst(showOption) + '_getFragment'];
-                if (ItemPart) {
-                    getFragment = ItemPart;
-                }
-            }
-            if (getFragment) {
-                const fragment = getFragment(widgetConfig);
-                if (fragment.variables) {
-                    dynamicVariables = {...dynamicVariables, ...fragment.variables}
-                }
-
-                if (fragment.variablesTypes) {
-                    dynamicVariablesTypes = {...dynamicVariablesTypes, ...fragment.variablesTypes}
-                }
-
-                if (fragment.query) {
-                    dynamicFragmentsNames += ` ...${fragment.query.definitions[0].name.value} \n`;
-                    return `${fragment.query.loc?.source.body}`
-                }
-            } else {
-                console.error(`ItemPart getFragment ${showOption} not found`);
-            }
-
-
-        }
-    }).join('\n');
-
-
-    let mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
-        return `, ${key}: ${dynamicVariablesTypes[key]}`;
-    }).join(' ');
-
+    const fragmentResult = ShowOptionsHelper_buildFragments({ widgetConfig });
+    const { dynamicFragments, dynamicFragmentsNames, dynamicVariablesTypes, dynamicVariables, mappedDynamicVariablesTypes } = fragmentResult;
 
     const query = gql`
         query($storyId: UUID, $relatedContentRole: String! ${mappedDynamicVariablesTypes}){
@@ -100,13 +61,13 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
 
     res.data.stories.edges = res.data.stories.edges.concat(_.get(result, 'data.story.stories', []).map(story => {
         return {node: story.story}
-    }));    
+    }));
     CacheHelper_createParentChildRelation(context.id, res.data.stories.edges.map((edge) => edge?.node?.id));
 
     if (widgetConfig.autocomplete && (widgetConfig.paginationElements || 0) > res.data.stories.edges.length) {
         switch (widgetConfig.autocompleteFrom) {
             case StoryRelatedContentAutocompleteFromEnum.FirstStoryTag:
-                const storiesNodes = await autocompleteByFirstStoryTag(context, widgetConfig, result, dynamicVariables, dynamicFragments, dynamicFragmentsNames, dynamicVariablesTypes);
+                const storiesNodes = await autocompleteByFirstStoryTag(context, widgetConfig, result, fragmentResult);
                 res.data.stories.edges = res.data.stories.edges.concat(storiesNodes);
                 break;
         }
@@ -118,7 +79,12 @@ export async function StoryRelatedContent_getData(context: AppContext, widgetCon
     return res;
 }
 
-async function autocompleteByFirstStoryTag(context: AppContext, widgetConfig: StoryRelatedContentWidgetConfig, result, dynamicVariables, dynamicFragments, dynamicFragmentsNames, dynamicVariablesTypes): Promise<StoryEdge[]> {
+async function autocompleteByFirstStoryTag(
+    context: AppContext,
+    widgetConfig: StoryRelatedContentWidgetConfig,
+    result: any,
+    fragmentResult: ReturnType<typeof ShowOptionsHelper_buildFragments>
+): Promise<StoryEdge[]> {
 
     const tags = _.get(result, 'data.story.topics', []).filter(topic => {
         const topicCodeName = _.get(topic, 'topic.kind.code', null);
@@ -134,9 +100,7 @@ async function autocompleteByFirstStoryTag(context: AppContext, widgetConfig: St
         return [];
     }
 
-    const excludedFlags = widgetConfig.excludedFlags ? widgetConfig.excludedFlags.map(flag => {
-        return flag.excludedFlag
-    }) : null;
+    const excludedFlags = ShowOptionsHelper_extractExcludedFlags(widgetConfig.excludedFlags);
 
     const mainCategoryUuid = await ConfigHelper_getMainCategoryUuid(context);
     if (!mainCategoryUuid) {
@@ -145,15 +109,19 @@ async function autocompleteByFirstStoryTag(context: AppContext, widgetConfig: St
     }
 
     const contentTypeFilter = 'topic: {in: [$topicId]}, category: {in: [$nodeCategoryId]}';
-    dynamicVariablesTypes.$nodeCategoryId = 'UUID!';
-    dynamicVariables.nodeCategoryId = mainCategoryUuid;
+    const localDynamicVariablesTypes = {
+        ...fragmentResult.dynamicVariablesTypes,
+        $nodeCategoryId: 'UUID!'
+    };
+    const localDynamicVariables = {
+        ...fragmentResult.dynamicVariables,
+        nodeCategoryId: mainCategoryUuid
+    };
 
-    let mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
-        return `, ${key}: ${dynamicVariablesTypes[key]}`;
-    }).join(' ');
+    const mappedDynamicVariablesTypes = ShowOptionsHelper_mapVariablesTypes(localDynamicVariablesTypes);
     const excludedIds = _.get(result, 'data.story.stories', []).map((story) => story?.story?.id);
     const variables: any = {
-        ...dynamicVariables,
+        ...localDynamicVariables,
         topicId: firstTagUuid,
         limit: UtilsHelper_convertToInt(widgetConfig.paginationElements || 0),
         excludedFlags: excludedFlags,
@@ -169,12 +137,12 @@ async function autocompleteByFirstStoryTag(context: AppContext, widgetConfig: St
                         mainPublicationPoint {
                             url
                         }
-                        ${dynamicFragmentsNames}
+                        ${fragmentResult.dynamicFragmentsNames}
                     }
                 }
             }
         }
-        ${dynamicFragments}
+        ${fragmentResult.dynamicFragments}
     `;
     //console.log(query.loc?.source.body, JSON.stringify(variables));
     const response = await WebsiteApiProvider.call(query, variables);

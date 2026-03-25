@@ -48,6 +48,7 @@ export * from "./providers/WebsiteApiProvider";
 export * from "./providers/CacheProvider";
 export * from "./helpers/CacheHelper";
 export * from "./helpers/ConfigHelper";
+export * from "./helpers/ShowOptionsHelper";
 export * from "./helpers/DateHelper";
 export * from "./helpers/StoryHelper";
 export * from "./helpers/CacheScannerHelper";
