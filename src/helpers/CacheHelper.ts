@@ -124,10 +124,10 @@ export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: numbe
         return deleteCount;
     }
 
-    keys.forEach((key) => {
-        cacheAdapter.del(key);
+    for (const key of keys) {
+        await cacheAdapter.del(key);
         deleteCount.keys++;
-    });
+    }
 
     if(cacheAdapter.removeTag) {
         await cacheAdapter.removeTag(tag);
