@@ -1,4 +1,5 @@
 import {AcceleratorImage, ImageFormat} from '@ringpublishing/accelerator-images';
+import {LogHelper_debug} from './LogHelper';
 
 export enum TransformType {
     ResizeCropAuto = 'resizeCropAuto',
@@ -37,7 +38,7 @@ export function AcceleratorImagesHelper_getUrl(src: string | any, width: number 
 
             srcToReturn = image.getUrl();
         } catch (e) {
-            console.log('Unable to transform image ' + src);
+            LogHelper_debug('Unable to transform image ' + src);
         }
     }
 

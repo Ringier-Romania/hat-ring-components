@@ -1,5 +1,6 @@
 import { AppContext } from "../../types/types";
 import { ConfigHelper_getContentLinksConfig } from "../ConfigHelper";
+import { LogHelper_error } from "../LogHelper";
 
 interface WhitelistedDomain {
     domain: string;
@@ -92,7 +93,7 @@ export async function SeoLinkWhitelistHelper_processLinks(context: AppContext, t
             return matchedLink;
         });
     } catch (error) {
-        console.error("SeoLinkWhitelistHelper: Error processing links", error);
+        LogHelper_error("SeoLinkWhitelistHelper: Error processing links", error);
         return text;
     }
 }

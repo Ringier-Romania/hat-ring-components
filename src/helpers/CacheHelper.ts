@@ -4,6 +4,7 @@ import {RedisCacheAdapter} from "../adapters/cache/RedisCacheAdapter";
 import {CacheAdapterInterface} from "../adapters/cache/types";
 import {NodeCacheAdapter} from "../adapters/cache/NodeCacheAdapter";
 import {MonitoringProvider} from "../providers/MonitoringProvider";
+import {LogHelper_error} from "./LogHelper";
 
 const stdTTL = process.env.CACHE_TTL ? UtilsHelper_convertToInt(process.env.CACHE_TTL) : 60;
 
@@ -105,7 +106,7 @@ export function CacheHelper_keys() {
 
 export async function CacheHelper_getKeysByTag(tag: string) {
     if(!cacheAdapter.getKeysByTag) {
-        console.error('CacheAdapter does not support getKeysByTag');
+        LogHelper_error('CacheAdapter does not support getKeysByTag');
         return false;
     }
     return await cacheAdapter.getKeysByTag(tag);

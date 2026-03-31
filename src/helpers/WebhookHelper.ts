@@ -2,6 +2,7 @@ import {APIContext} from "astro";
 import {MonitoringProvider} from "../providers/MonitoringProvider";
 import { UtilsHelper_generateRandomString, UtilsHelper_getCurrentUrl} from "./UtilsHelper";
 import {CacheHelper_clearByTag, CacheHelper_getKeysByTag} from "./CacheHelper";
+import {LogHelper_error, LogHelper_debug} from "./LogHelper";
 
 enum NotificationType {
     variantConfigurationChanged = "variantConfigurationChanged",
@@ -88,8 +89,8 @@ async function handleNotification(context: APIContext) {
         req = await context.request.json() as NotificationWebsiteApi & NotificationContentApi & HatDone;
     } catch (e) {
         MonitoringProvider.counter(`info.WebhookHelper.response_send_500`);
-        console.error('WebhookHelper: error parsing request', e);
-        console.info(context.request.body);
+        LogHelper_error('WebhookHelper: error parsing request', e);
+        LogHelper_debug('WebhookHelper: request body:', context.request.body);
     }
     if (timer0) {
         timer0.done();
@@ -176,7 +177,7 @@ async function handleNotification(context: APIContext) {
 
                         const url = `${publicationPoint.url}?antyCache=${UtilsHelper_generateRandomString()}`;
                         fetch(url, { method: 'HEAD', headers: { 'User-Agent': userAgent, } }).catch(err => {
-                            console.error('WebhookHelper: fetch error', err);
+                            LogHelper_error('WebhookHelper: fetch error', err);
                             MonitoringProvider.counter('info.WebhookHelper.contentApiStory_pubPoint_CacheHelper_clearByTag_fetch_error');
 
                             setTimeout(async () => {
@@ -186,7 +187,7 @@ async function handleNotification(context: APIContext) {
                                         'User-Agent': userAgent,
                                     }
                                 }).catch((err) => {
-                                    console.error('WebhookHelper: fetch error catch', err);
+                                    LogHelper_error('WebhookHelper: fetch error catch', err);
                                     MonitoringProvider.counter('info.WebhookHelper.contentApiStory_pubPoint_CacheHelper_clearByTag_fetch_error_catch');
                                 })
                             }, 1000 * 70);
@@ -209,7 +210,7 @@ async function handleNotification(context: APIContext) {
                 }
 
             } catch (e) {
-                console.error('WebhookHelper: error RING::ContentAPI ', e);
+                LogHelper_error('WebhookHelper: error RING::ContentAPI', e);
             }
         }
     }
@@ -230,18 +231,18 @@ async function repeatRequest(req: string, thisUrl: string, origin: string) {
                 }
             }
             fetch(thisUrl, options).catch(err => {
-                console.error('WebhookHelper: fetch error repeatRequest', err);
+                LogHelper_error('WebhookHelper: fetch error repeatRequest', err);
                 MonitoringProvider.counter('info.WebhookHelper.repeatRequest_fetch_error');
 
                 setTimeout(async () => {
                     fetch(thisUrl, options).catch(err => {
-                        console.error('WebhookHelper: fetch error repeatRequest catch', err);
+                        LogHelper_error('WebhookHelper: fetch error repeatRequest catch', err);
                         MonitoringProvider.counter('info.WebhookHelper.repeatRequest_fetch_error_catch');
                     });
                 }, 1000 * 70);
             })
         } catch (e) {
-            console.error('WebhookHelper: error repeatRequest ', e);
+            LogHelper_error('WebhookHelper: error repeatRequest', e);
             MonitoringProvider.counter(`info.WebhookHelper.repeatRequest_error`);
         }
         MonitoringProvider.counter('info.WebhookHelper.repeat_done');
@@ -263,7 +264,7 @@ async function clearStoryParentsByTag(tag: string) {
                     const res = await CacheHelper_clearByTag('story_' + `${splitKey[1]}`);
                     deleteCount.keys += res.keys;
                 } catch (e) {
-                    console.error('WebhookHelper: clearStoryParentsByTag error parent', e);
+                    LogHelper_error('WebhookHelper: clearStoryParentsByTag error parent', e);
                 }
             }
         }

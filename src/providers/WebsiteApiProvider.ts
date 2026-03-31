@@ -5,7 +5,7 @@ import {
     CacheHelper_set, CacheHelper_getDecoratedCachedObject, CacheHelper_isExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
-import {UtilsHelper_getErrorMessage} from "../helpers/UtilsHelper";
+import {LogHelper_error, LogHelper_info} from "../helpers/LogHelper";
 
 if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 let gqlResetCachesTimestamp = new Date().getTime();
@@ -75,7 +75,7 @@ export class WebsiteApiProvider {
 
         } catch (e) {
             MonitoringProvider.counter('error.WebsitesApiProvider.call.catch');
-            console.error('WebsitesApiProvider.call error:', UtilsHelper_getErrorMessage(e));
+            LogHelper_error('WebsitesApiProvider.call error:', e);
             return null;
         }
     }
@@ -176,7 +176,7 @@ export class WebsiteApiProvider {
 
             if (response.errors || response.error) {
                 const errorMsg = response.errors?.[0]?.message || response.error?.message || 'Unknown API error';
-                console.error('Websites Api _call error:', errorMsg);
+                LogHelper_error('Websites Api _call error:', errorMsg);
                 MonitoringProvider.counter('error.WebsitesApiProvider.call.apiCallError');
 
                 if (response.data) {
@@ -192,13 +192,13 @@ export class WebsiteApiProvider {
             }
             const timeDifference = new Date().getTime() - currentTime;
             if (timeDifference > 4000) {
-                console.info('Websites Api long query ', query.loc?.source.body, variables);
+                LogHelper_info('Websites Api long query ', query.loc?.source.body, variables);
             }
             MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime', timeDifference);
             return response;
 
         } catch (e) {
-            console.error('Websites Api _call catch error:', UtilsHelper_getErrorMessage(e));
+            LogHelper_error('Websites Api _call catch error:', e);
             MonitoringProvider.counter('error.WebsitesApiProvider.call.apiCallCatchError');
             return null;
         }

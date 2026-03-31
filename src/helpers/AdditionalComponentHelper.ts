@@ -1,4 +1,5 @@
 import _ from "lodash";
+import {LogHelper_error} from './LogHelper';
 
 const NTH_CHILD_PATTERN_REGEX = /(\d*)n([+-]?\d+)?/;
 const SIMPLE_NUMBER_PATTERN_REGEX = /^-?\d+$/;
@@ -8,7 +9,7 @@ function parseWidgetConfig(config: string | object): any {
         try {
             return JSON.parse(config);
         } catch (error) {
-            console.error("Failed to parse widget config:", error);
+            LogHelper_error("Failed to parse widget config:", error);
             return {};
         }
     }
@@ -49,7 +50,7 @@ function getSimplePatternPositions(pattern: string, sourceLength: number): numbe
         const insertPosition = targetPositionAbs - 1;
         return insertPosition >= 0 ? [insertPosition] : [];
     }
-    
+
     return [];
 }
 
@@ -60,7 +61,7 @@ function getNthChildPatternPositions(pattern: string, sourceLength: number, limi
     const patternMultiplier = Number(nthChildMatch[1]) || 1;
     const nthChildOffset = Number(nthChildMatch[2]) || 0;
     const maxComponentsToInsert = limit ? Number(limit) : sourceLength;
-    
+
     if (patternMultiplier <= 0 || maxComponentsToInsert <= 0) return [];
 
     return calculateInsertPositions(sourceLength, patternMultiplier, nthChildOffset, maxComponentsToInsert);

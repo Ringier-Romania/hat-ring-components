@@ -6,6 +6,7 @@ import {HttpRequest} from '@aws-sdk/protocol-http';
 import {formatUrl} from "@aws-sdk/util-format-url";
 import {MonitoringProvider} from "./MonitoringProvider";
 import {ScanReply} from "@redis/client/dist/lib/commands/SCAN";
+import {LogHelper_error, LogHelper_info} from "../helpers/LogHelper";
 
 
 interface RedisCacheValue {
@@ -65,7 +66,7 @@ export class RedisProvider {
                 tls: true,
                 reconnectStrategy: function (retries) {
                     if (retries > 20) {
-                        console.error("Too many attempts to reconnect. Redis connection was terminated");
+                        LogHelper_error("Too many attempts to reconnect. Redis connection was terminated");
                         return new Error("Too many retries.");
                     } else {
                         MonitoringProvider.counter('error.RedisProvider.reconnectStrategy');
@@ -79,7 +80,7 @@ export class RedisProvider {
     attachRedisErrorsHandler() {
         this.client.on('error', async (error) => {
             MonitoringProvider.counter(`error.RedisProvider.onError`);
-            console.error(`Redis Client Error: ${error}`);
+            LogHelper_error(`Redis Client Error:`, error);
 
             const errorMessage = error.message?.toString() || '';
             const shouldReconnect = errorMessage.includes('ECONNRESET') ||
@@ -93,7 +94,7 @@ export class RedisProvider {
 
         this.client.on('end', async () => {
             MonitoringProvider.counter('info.RedisProvider.onEnd');
-            console.info('Redis connection ended');
+            LogHelper_info('Redis connection ended');
             await this.handleReconnect('end');
         });
     }
@@ -109,7 +110,7 @@ export class RedisProvider {
             return;
         }
 
-        console.info('Redis connection reconnecting...');
+        LogHelper_info('Redis connection reconnecting...');
         this.isReconnecting = true;
         this.currentReInitialize += 1;
         MonitoringProvider.counter(`info.RedisProvider.reinitialize_started_${reason}`);
@@ -129,10 +130,10 @@ export class RedisProvider {
 
             this.currentReInitialize = 0;
             MonitoringProvider.counter(`info.RedisProvider.reinitialize_ended_${reason}`);
-            console.info('Redis connection reconnected');
+            LogHelper_info('Redis connection reconnected');
         } catch (err) {
             MonitoringProvider.counter('error.RedisProvider.reinitialize_failed');
-            console.error('Redis reinitialize failed:', err);
+            LogHelper_error('Redis reinitialize failed:', err);
         } finally {
             this.isReconnecting = false;
         }
@@ -346,7 +347,7 @@ export class RedisProvider {
                     expirationTimestamp: undefined,
                 };
         } catch (e) {
-            console.error('Redis Error parsing data for key: ', key, data);
+            LogHelper_error('Redis Error parsing data for key:', key);
             return {
                 data: data,
                 ttl: undefined,

@@ -86,7 +86,10 @@ export function UtilsHelper_getCurrentNodeName(context) {
             }
         }
     } catch (e) {
-        console.error('Error when getting current node name', e);
+        // Using inline console to avoid circular dependency with LogHelper
+        if ((process.env.LOG_LEVEL || 'info') !== 'silent') {
+            console.error('Error when getting current node name', e instanceof Error ? e.message : e);
+        }
     }
 
     return '';
