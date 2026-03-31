@@ -5,6 +5,7 @@ import {
     CacheHelper_set, CacheHelper_getDecoratedCachedObject, CacheHelper_isExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
+
 if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 let gqlResetCachesTimestamp = new Date().getTime();
 const GQL_CACHE_RESET_INTERVAL_SECONDS = Number(process.env.GQL_CACHE_RESET_INTERVAL_SECONDS) || 300;
@@ -151,12 +152,15 @@ export class WebsiteApiProvider {
             const accessKey = process.env.WEBSITE_API_PUBLIC!;
             const secretKey = process.env.WEBSITE_API_SECRET!;
             const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
+            const timeout = process.env.WEBSITE_API_TIMEOUT ? Number(process.env.WEBSITE_API_TIMEOUT) : 10000;
 
             if (!global.websitesApiGotClient) {
                 global.websitesApiGotClient = new WebsitesApiClient({
                     accessKey,
                     secretKey,
-                    spaceUuid
+                    spaceUuid,
+                    timeout: timeout,
+                    connectTimeout: timeout
                 });
             }
 
@@ -170,7 +174,7 @@ export class WebsiteApiProvider {
             const response = await global.websitesApiGotClient.query(query, variables);
 
             if (response.errors || response.error) {
-                console.error('Websites Api _call error:',  query.loc?.source.body, variables, response.errors, response.error);
+                console.error('Websites Api _call error:', query.loc?.source.body, variables, response.errors, response.error);
                 MonitoringProvider.counter('error.WebsitesApiProvider.call.apiCallError');
 
                 if (response.data) {
