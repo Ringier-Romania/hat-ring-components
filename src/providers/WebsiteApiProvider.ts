@@ -5,6 +5,7 @@ import {
     CacheHelper_set, CacheHelper_getDecoratedCachedObject, CacheHelper_isExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
+import {UtilsHelper_getErrorMessage} from "../helpers/UtilsHelper";
 
 if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 let gqlResetCachesTimestamp = new Date().getTime();
@@ -74,7 +75,7 @@ export class WebsiteApiProvider {
 
         } catch (e) {
             MonitoringProvider.counter('error.WebsitesApiProvider.call.catch');
-            console.error(query.loc?.source.body, variables, e);
+            console.error('WebsitesApiProvider.call error:', UtilsHelper_getErrorMessage(e));
             return null;
         }
     }
@@ -174,7 +175,8 @@ export class WebsiteApiProvider {
             const response = await global.websitesApiGotClient.query(query, variables);
 
             if (response.errors || response.error) {
-                console.error('Websites Api _call error:', query.loc?.source.body, variables, response.errors, response.error);
+                const errorMsg = response.errors?.[0]?.message || response.error?.message || 'Unknown API error';
+                console.error('Websites Api _call error:', errorMsg);
                 MonitoringProvider.counter('error.WebsitesApiProvider.call.apiCallError');
 
                 if (response.data) {
@@ -196,7 +198,7 @@ export class WebsiteApiProvider {
             return response;
 
         } catch (e) {
-            console.error('Websites Api _call error:', variables, e);
+            console.error('Websites Api _call catch error:', UtilsHelper_getErrorMessage(e));
             MonitoringProvider.counter('error.WebsitesApiProvider.call.apiCallCatchError');
             return null;
         }

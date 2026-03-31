@@ -69,7 +69,7 @@ export function UtilsHelper_getCurrentNodeName(context) {
     try {
         const content = context?.hatControllerParams?.gqlResponse?.data?.site?.data?.content;
         if (content) {
-            const pageType = UtilsHelper_getCurrentPageType(context);            
+            const pageType = UtilsHelper_getCurrentPageType(context);
             if (pageType === SiteContentType.SiteNode) {
                 const categoryName = _.get(context, 'hatControllerParams.gqlResponse.data.site.data.node.category.data.name', '');
                 if (categoryName) return categoryName;
@@ -136,3 +136,17 @@ export function UtilsHelper_slugify(slug: string): string {
       .replace(/\s+/g, '-') // replace spaces with hyphens
       .replace(/-+/g, '-') // remove consecutive hyphens
   }
+
+export function UtilsHelper_getErrorMessage(error: unknown): string {
+    if (error instanceof Error) {
+        return error.message;
+    }
+    if (typeof error === 'string') {
+        return error;
+    }
+    if (error && typeof error === 'object' && 'message' in error) {
+        return String((error as { message: unknown }).message);
+    }
+    return 'Unknown error';
+}
+
