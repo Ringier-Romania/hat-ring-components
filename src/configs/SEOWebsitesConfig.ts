@@ -124,7 +124,7 @@ export let SEOWebsitesConfig
             "rssType": "RSS 2.0 feed",
             "limit": 10,
             "excludedFlags": [],
-            "excludedCategoriesId": [],
+            "excludedCategoryIds": [],
         },
         "seoOpenGraph": {
             "imageSizesDesktop": "1200x630",
