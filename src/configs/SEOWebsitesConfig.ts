@@ -52,7 +52,7 @@ export let SEOWebsitesConfig
                         "rssDefault.rssType",
                         "rssDefault.limit",
                         "rssDefault.excludedFlags",
-                        "rssDefault.excludedCategoriesId",
+                        "rssDefault.excludedCategoryIds",
                     ]
                 },
                 "seoOpenGraph": {
@@ -315,7 +315,7 @@ export let SEOWebsitesConfig
                     }
                 ]
             },
-            "excludedCategoriesId": {
+            "excludedCategoryIds": {
                 "type": "treeobject",
                 "name": "Excluded categories id",
                 "description": "Categories excluded from rss",

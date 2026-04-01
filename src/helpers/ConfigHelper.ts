@@ -101,7 +101,7 @@ export async function ConfigHelper_getSeoRssDefaultConfig(context): Promise<{
     rssType: string,
     limit: number,
     excludedFlags?: Array<{excludedFlag: string}>
-    excludedCategoriesId?: Array<{excludedCategoryId: string}>
+    excludedCategoryIds?: Array<{excludedCategoryId: string}>
 }> {
     return ConfigHelper_getConfig(context, 'rssDefault');
 }

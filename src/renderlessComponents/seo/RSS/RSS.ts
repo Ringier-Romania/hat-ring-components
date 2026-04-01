@@ -46,7 +46,7 @@ export async function RSS({context, feedDecorator, blockDecorator}: { context: A
     const excludedFlags = seoRssConfig.excludedFlags ? seoRssConfig.excludedFlags.map(flag => {
         return flag.excludedFlag
     }) : null;
-    const excludedCategoriesId = seoRssConfig.excludedCategoriesId ? seoRssConfig.excludedCategoriesId.map(category => {
+    const excludedCategoryIds = seoRssConfig.excludedCategoryIds ? seoRssConfig.excludedCategoryIds.map(category => {
         return category.excludedCategoryId
     }) : null;
 
@@ -55,7 +55,7 @@ export async function RSS({context, feedDecorator, blockDecorator}: { context: A
         limit: limit,
         offset,
         excludedFlags,
-        excludedCategoriesId: excludedCategoriesId
+        excludedCategoryIds: excludedCategoryIds
     };
 
     const response = await WebsiteApiProvider.call(query, variables, 60 * 10) as {
