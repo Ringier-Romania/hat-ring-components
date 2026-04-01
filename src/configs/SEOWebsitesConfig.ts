@@ -317,8 +317,8 @@ export let SEOWebsitesConfig
             },
             "excludedCategoriesId": {
                 "type": "treeobject",
-                "name": "Excluded categories id",
-                "description": "Categories excluded from rss",
+                "name": "Excluded category IDs",
+                "description": "Categories excluded from RSS",
                 "properties": [
                     {
                         "name": "excludedCategoryId",
