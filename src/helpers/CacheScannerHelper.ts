@@ -1,4 +1,5 @@
 import _ from "lodash";
+import {LogHelper_error, LogHelper_info} from "./LogHelper";
 
 interface ScannerState {
     status: 'running' | 'stopping' | 'done' | 'stopped' | null;
@@ -118,7 +119,7 @@ async function scanKeys(
         } while (cursor !== 0);
 
     } catch (e: any) {
-        console.error(e);
+        LogHelper_error('CacheScannerHelper scan error:', e);
         state.error = { stack: e?.stack };
     } finally {
         const currentStatus = CacheScannerHelper_getStatus(match);
@@ -131,7 +132,7 @@ async function scanKeys(
 }
 
 export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCursor, match, getValue, count, timeout, sleep) {
-    console.info('CacheScannerHelper_getAllKeysByScan_start', match);
+    LogHelper_info('CacheScannerHelper_getAllKeysByScan_start', match);
     await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, async (keys: string[]) => {
         if (getValue) {
             const scannerState = global['_scanners'].get(match);
@@ -140,11 +141,11 @@ export async function CacheScannerHelper_getAllKeysByScan(cacheAdapter, startCur
             }
         }
     });
-    console.info('CacheScannerHelper_getAllKeysByScan_end', match);
+    LogHelper_info('CacheScannerHelper_getAllKeysByScan_end', match);
 }
 
 export async function CacheScannerHelper_clearKeysByScan(cacheAdapter, startCursor, match, count, timeout, sleep) {
-    console.info('CacheScannerHelper_clearKeysByScan_start', match);
+    LogHelper_info('CacheScannerHelper_clearKeysByScan_start', match);
 
     await scanKeys(cacheAdapter, startCursor, match, count, timeout, sleep, async (keys: string[]) => {
         keys.forEach((key) => {
@@ -155,5 +156,5 @@ export async function CacheScannerHelper_clearKeysByScan(cacheAdapter, startCurs
             }
         });
     });
-    console.info('CacheScannerHelper_clearKeysByScan_end', match);
+    LogHelper_info('CacheScannerHelper_clearKeysByScan_end', match);
 }

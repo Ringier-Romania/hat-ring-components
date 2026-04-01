@@ -6,6 +6,7 @@ import { WebsiteApiProvider } from "../providers/WebsiteApiProvider";
 import { gql } from "@ringpublishing/graphql-api-client-got";
 import { AppContext } from "../types/types";
 import {ImageHelper_getImageMetaData} from "./ImageHelper";
+import {LogHelper_debug} from "./LogHelper";
 
 export async function StoryHelper_generateContentHtml({story, blockDecorator}: {story: Story, blockDecorator?: Function}): Promise<string> {
     let base: any = {}
@@ -156,7 +157,7 @@ function processBlock(block: ContentBlock) {
 
             return {type: "element", elements: tableElements, name: "table"}
         default:
-            console.log(`${block.type} not supported`);
+            LogHelper_debug(`${block.type} not supported`);
             return false;
     }
 }

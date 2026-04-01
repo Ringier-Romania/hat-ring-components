@@ -5,6 +5,8 @@ import {
     CacheHelper_set, CacheHelper_getDecoratedCachedObject, CacheHelper_isExpired
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
+import {LogHelper_error, LogHelper_info} from "../helpers/LogHelper";
+
 if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 let gqlResetCachesTimestamp = new Date().getTime();
 const GQL_CACHE_RESET_INTERVAL_SECONDS = Number(process.env.GQL_CACHE_RESET_INTERVAL_SECONDS) || 300;
@@ -73,7 +75,7 @@ export class WebsiteApiProvider {
 
         } catch (e) {
             MonitoringProvider.counter('error.WebsitesApiProvider.call.catch');
-            console.error(query.loc?.source.body, variables, e);
+            LogHelper_error('WebsitesApiProvider.call error:', e);
             return null;
         }
     }
@@ -151,12 +153,15 @@ export class WebsiteApiProvider {
             const accessKey = process.env.WEBSITE_API_PUBLIC!;
             const secretKey = process.env.WEBSITE_API_SECRET!;
             const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
+            const timeout = process.env.WEBSITE_API_TIMEOUT ? Number(process.env.WEBSITE_API_TIMEOUT) : 10000;
 
             if (!global.websitesApiGotClient) {
                 global.websitesApiGotClient = new WebsitesApiClient({
                     accessKey,
                     secretKey,
-                    spaceUuid
+                    spaceUuid,
+                    timeout: timeout,
+                    connectTimeout: timeout
                 });
             }
 
@@ -170,7 +175,8 @@ export class WebsiteApiProvider {
             const response = await global.websitesApiGotClient.query(query, variables);
 
             if (response.errors || response.error) {
-                console.error('Websites Api _call error:',  query.loc?.source.body, variables, response.errors, response.error);
+                const errorMsg = response.errors?.[0]?.message || response.error?.message || 'Unknown API error';
+                LogHelper_error('Websites Api _call error:', errorMsg);
                 MonitoringProvider.counter('error.WebsitesApiProvider.call.apiCallError');
 
                 if (response.data) {
@@ -186,13 +192,13 @@ export class WebsiteApiProvider {
             }
             const timeDifference = new Date().getTime() - currentTime;
             if (timeDifference > 4000) {
-                console.info('Websites Api long query ', query.loc?.source.body, variables);
+                LogHelper_info('Websites Api long query ', query.loc?.source.body, variables);
             }
             MonitoringProvider.gauge('info.WebsitesApiProvider.call.hitApiTime', timeDifference);
             return response;
 
         } catch (e) {
-            console.error('Websites Api _call error:', variables, e);
+            LogHelper_error('Websites Api _call catch error:', e);
             MonitoringProvider.counter('error.WebsitesApiProvider.call.apiCallCatchError');
             return null;
         }

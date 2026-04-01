@@ -14,6 +14,7 @@ import {
 import {RSSGqlQuery} from "./RSSGqlQuery";
 import {StoryHelper_generateContentHtml, StoryHelper_getLeadBlock} from "../../../helpers/StoryHelper";
 import {Feed, Item} from "feed";
+import {LogHelper_warn} from "../../../helpers/LogHelper";
 
 type BlockDecoratorFn = (params: {
     additionalData: { story?: Story };
@@ -25,7 +26,7 @@ type FeedDecoratorFn = (feed: Feed) => Promise<void>;
 
 export async function RSS({context, feedDecorator, blockDecorator}: { context: AppContext, feedDecorator?: FeedDecoratorFn, blockDecorator?: BlockDecoratorFn }) {
     if(!context.id) {
-        console.warn('RSS: siteNodeId is not defined for url:', context.url);
+        LogHelper_warn('RSS: siteNodeId is not defined for url:', context.url);
         return {
             feed: null,
             type: null
@@ -45,12 +46,16 @@ export async function RSS({context, feedDecorator, blockDecorator}: { context: A
     const excludedFlags = seoRssConfig.excludedFlags ? seoRssConfig.excludedFlags.map(flag => {
         return flag.excludedFlag
     }) : null;
+    const excludedCategoryIds = seoRssConfig.excludedCategoryIds ? seoRssConfig.excludedCategoryIds.map(category => {
+        return category.excludedCategoryId
+    }) : null;
 
     const variables = {
         categoryId: categoryId,
         limit: limit,
         offset,
-        excludedFlags
+        excludedFlags,
+        excludedCategoryIds: excludedCategoryIds
     };
 
     const response = await WebsiteApiProvider.call(query, variables, 60 * 10) as {

@@ -52,6 +52,7 @@ export let SEOWebsitesConfig
                         "rssDefault.rssType",
                         "rssDefault.limit",
                         "rssDefault.excludedFlags",
+                        "rssDefault.excludedCategoryIds",
                     ]
                 },
                 "seoOpenGraph": {
@@ -123,6 +124,7 @@ export let SEOWebsitesConfig
             "rssType": "RSS 2.0 feed",
             "limit": 10,
             "excludedFlags": [],
+            "excludedCategoryIds": [],
         },
         "seoOpenGraph": {
             "imageSizesDesktop": "1200x630",
@@ -309,6 +311,17 @@ export let SEOWebsitesConfig
                 "properties": [
                     {
                         "name": "excludedFlag",
+                        "type": "textfield"
+                    }
+                ]
+            },
+            "excludedCategoryIds": {
+                "type": "treeobject",
+                "name": "Excluded category IDs",
+                "description": "Categories excluded from RSS",
+                "properties": [
+                    {
+                        "name": "excludedCategoryId",
                         "type": "textfield"
                     }
                 ]

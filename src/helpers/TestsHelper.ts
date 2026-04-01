@@ -1,5 +1,6 @@
 import {Page, Locator, TestType} from 'playwright/test';
 import {PlaywrightTest} from "../tests/types.js";
+import {LogHelper_warn} from "./LogHelper";
 
 export async function TestsHelper_getMetaContent(page: Page, selector: string): Promise<string | null> {
     return await page.locator(selector).getAttribute('content');
@@ -14,7 +15,7 @@ export async function TestsHelper_getStructuredData(page: Page): Promise<any[]> 
             try {
                 data.push(JSON.parse(content));
             } catch (e) {
-                console.warn('Failed to parse JSON-LD:', e);
+                LogHelper_warn('Failed to parse JSON-LD:', e);
             }
         }
     }
