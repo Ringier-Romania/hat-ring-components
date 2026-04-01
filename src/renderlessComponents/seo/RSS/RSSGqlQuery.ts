@@ -2,8 +2,8 @@ import {gql} from "graphql-tag";
 import {StoryHelper_getGqlContentFragment} from "../../../helpers/StoryHelper";
 
 export const RSSGqlQuery = gql`
-    query($categoryId: UUID!, $limit: Int!, $offset: Int!, $excludedFlags: [String!]){
-        stories(filter:{category: {in: [$categoryId]}, flag:{notIn:$excludedFlags}}, limit: $limit, offset: $offset ){
+    query($categoryId: UUID!, $limit: Int!, $offset: Int!, $excludedFlags: [String!], $excludedCategoriesId: [UUID!]){
+        stories(filter:{category: {in: [$categoryId], notIn: $excludedCategoriesId}, flag:{notIn:$excludedFlags}}, limit: $limit, offset: $offset ){
             total
             edges {
                 node {
