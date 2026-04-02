@@ -14,7 +14,11 @@ import {
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
-import {ConfigHelper_currentUrl, ConfigHelper_getHomepageUrl} from "../../../helpers/ConfigHelper";
+import {
+    ConfigHelper_currentUrl,
+    ConfigHelper_getHomepageUrl,
+    ConfigHelper_getSeoGeneralConfig
+} from "../../../helpers/ConfigHelper";
 import {Author} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
 
 import {Breadcrumb} from "../../widgets/common/Breadcrumbs/types";
@@ -120,7 +124,21 @@ export async function getNewsArticleSchema(context: AppContext): Promise<WithCon
             "@type": "Person",
             "name": authorObj.author.name
         }
-    })
+    });
+
+    if (authors.length <= 0) {
+        const seoGeneralConfig = await ConfigHelper_getSeoGeneralConfig(context);
+        if (seoGeneralConfig.defaultArticleAuthor) {
+            const defaultAuthor:{name:string, email?: string} = {
+                name: seoGeneralConfig.defaultArticleAuthor
+            };
+
+            if (seoGeneralConfig.defaultArticleAuthorEmail) {
+                defaultAuthor.email = seoGeneralConfig.defaultArticleAuthorEmail;
+            }
+        }
+    }
+
 
     const dateModified = _.get(response, 'data.story.date.modificationTime') || _.get(response, 'data.story.date.creationTime');
     const datePublished = _.get(response, 'data.story.date.creationTime');
@@ -143,7 +161,7 @@ export async function getNewsArticleSchema(context: AppContext): Promise<WithCon
         "image": [_.get(response, 'data.story.image.url', '')],
         "datePublished": datePublished,
         "dateModified": dateModified,
-        "author": authors,
+        "author": authors.length <= 0 ? null : authors,
         "publisher": {
             "@type": "Organization",
             "name": await SeoHelper_currentSiteName(context),
