@@ -128,16 +128,16 @@ export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: numbe
     const results = await Promise.allSettled(keys.map((key) => cacheAdapter.del!(key)));
     for (const [index, result] of results.entries()) {
         if (result.status === 'rejected') {
-            const reason: Error = result.reason;
+            const reason = result.reason;
             LogHelper_error('CacheHelper_clearByTag.del_failed', {
                 tag,
                 key: keys[index],
-                errorMessage: reason.message,
-                errorStack: reason.stack,
+                errorMessage: reason instanceof Error ? reason.message : String(reason),
+                errorStack: reason instanceof Error ? reason.stack : undefined,
             });
             MonitoringProvider.counter('error.CacheHelper_clearByTag.del_failed');
         } else {
-            deleteCount.keys++;
+            deleteCount.keys += result.value ?? 0;
         }
     }
 
