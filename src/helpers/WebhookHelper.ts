@@ -156,8 +156,7 @@ async function handleNotification(context: APIContext) {
                     }
 
                     const timer = MonitoringProvider.timer(`info.WebhookHelper.contentApiStory_CacheHelper_clearByTag`);
-                    const storyTag = 'story_' + resourceId;
-                    let cacheCleaner = await CacheHelper_clearByTag(storyTag);
+                    let cacheCleaner = await CacheHelper_clearByTag('story_' + resourceId);
                     deleteCount.keys += cacheCleaner.keys;
 
                     if (timer) {
