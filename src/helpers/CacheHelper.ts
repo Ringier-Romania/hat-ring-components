@@ -125,16 +125,17 @@ export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: numbe
         return deleteCount;
     }
 
-    const results = await Promise.allSettled(keys.map((key) => cacheAdapter.unlink!(key)));
+    const results = await Promise.allSettled(keys.map((key) => cacheAdapter.del!(key)));
     for (const [index, result] of results.entries()) {
         if (result.status === 'rejected') {
             const reason: Error = result.reason;
-            LogHelper_error('CacheHelper_clearByTag.unlink_failed', {
+            LogHelper_error('CacheHelper_clearByTag.del_failed', {
                 tag,
                 key: keys[index],
                 errorMessage: reason.message,
                 errorStack: reason.stack,
             });
+            MonitoringProvider.counter('error.CacheHelper_clearByTag.del_failed');
         } else {
             deleteCount.keys++;
         }

@@ -113,7 +113,13 @@ export class WebsiteApiProvider {
                     tags.push(`story_${storyUuid}`);
                 }
             }
-
+            // Works only for parent-child relation (parent story -> related child stories) used by cache invalidation
+            if (queryType === 'Stories') {
+                const storyUuid = this._findStoryUuidInQuery(query, variables);
+                if (storyUuid) {
+                    tags.push(`story_${storyUuid}`);
+                }
+            }           
             if (queryType === 'Config' && variables.variant) {
                 tags.push(`config_${variables.variant}`);
             }

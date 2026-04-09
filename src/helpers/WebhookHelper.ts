@@ -195,18 +195,15 @@ async function handleNotification(context: APIContext) {
                         })
                     }
                     MonitoringProvider.gauge('info.WebhookHelper.contentApiStory', deleteCount.keys);
-                    console.info(`WebhookHelper: cleared ${deleteCount.keys} keys for ${objectType} ${resourceId}`);
 
                     if (!req.hatDone) {
                         req.hatDone = true;
                         const stringifiedReq = JSON.stringify(req);
                         req.hatDone = false;
                         setTimeout(async () => {
-                            console.info(`WebhookHelper: repeat 70s ${resourceId}`);
                             repeatRequest(stringifiedReq, thisUrl, origin);
                         }, 1000 * 70);
                         setTimeout(async () => {
-                            console.info(`WebhookHelper: repeat 305s ${resourceId}`);
                             repeatRequest(stringifiedReq, thisUrl, origin);
                         }, 1000 * 305);
                     }
