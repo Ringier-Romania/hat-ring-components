@@ -17,12 +17,6 @@ let src = props.src;
 let transform = props.transform || TransformType.None;
 
 let toRender: boolean | string | JSX.Element = false;
-const ext = UtilsHelper_getExtension(src);
-const isResizeable = ext != 'svg';
-
-if (isResizeable && transform !== TransformType.None) {
-    src = AcceleratorImagesHelper_getUrl(src, props.width, props.height, props.transform);
-}
 
 if (!src) {
     toRender = WidgetHelper_renderEmptyComponent('RingImage', 'Missing `src` value');
@@ -30,6 +24,15 @@ if (!src) {
 
 if (!props.width || !props.height) {
     toRender = WidgetHelper_renderEmptyComponent('RingImage', 'Missing `width` or `height` value');
+}
+
+if (!toRender) {
+    const ext = UtilsHelper_getExtension(src);
+    const isResizeable = ext != 'svg';
+
+    if (isResizeable && transform !== TransformType.None) {
+        src = AcceleratorImagesHelper_getUrl(src, props.width, props.height, props.transform);
+    }
 }
 
 ---
