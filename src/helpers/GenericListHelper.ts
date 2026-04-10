@@ -18,7 +18,7 @@ export function WidgetHelper_calculateOffsetForGenericListPagination(widgetConfi
         offset = totalItemsBefore + postShiftValue;
     }
 
-    return Math.min(MAX_OFFSET, Math.max(0, offset));
+    return Math.min(MAX_OFFSET - perPageAllItems, Math.max(0, offset));
 }
 
 export function WidgetHelper_getPaginationDataForGenericList(widgetConfig: GenericListWidgetConfig, totalItems: number) {
