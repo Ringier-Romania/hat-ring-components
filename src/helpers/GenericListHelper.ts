@@ -1,6 +1,6 @@
 import {UtilsHelper_convertToInt, UtilsHelper_parsePositiveIntFromString} from "./UtilsHelper";
 import {GenericListWidgetConfig} from "../components/widgets/Lists/GenericList/types";
-
+const MAX_OFFSET = 1000;
 export function WidgetHelper_calculateOffsetForGenericListPagination(widgetConfig: GenericListWidgetConfig, currentPage: number, isAjaxCall: boolean, isFirstCall: boolean) {
     const perPageAllItems = UtilsHelper_convertToInt(widgetConfig?.perPageAllItems) || UtilsHelper_convertToInt(widgetConfig?.paginationElements);
     const postShiftValue = UtilsHelper_convertToInt(widgetConfig?.postShift) || 0;
@@ -18,11 +18,10 @@ export function WidgetHelper_calculateOffsetForGenericListPagination(widgetConfi
         offset = totalItemsBefore + postShiftValue;
     }
 
-    return Math.max(0, offset);
+    return Math.min(MAX_OFFSET, Math.max(0, offset));
 }
 
 export function WidgetHelper_getPaginationDataForGenericList(widgetConfig: GenericListWidgetConfig, totalItems: number) {
-    const MAX_OFFSET = 1000;
     const perPageAllItems = UtilsHelper_convertToInt(widgetConfig?.perPageAllItems) || UtilsHelper_convertToInt(widgetConfig?.paginationElements);
 
     const pages = Math.ceil(totalItems / perPageAllItems);
