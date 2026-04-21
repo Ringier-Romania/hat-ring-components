@@ -1,4 +1,4 @@
-import { PlaywrightTest } from "../types";
+import { PlaywrightTest } from "../types.js";
 import type { Page } from "playwright/test";
 export declare function TestLightbox_openCloseViaPswp({ page, playwrightTest, gallerySelector, slideSelector, openTimeout, closeTimeout }: {
     page: Page;
@@ -8,4 +8,3 @@ export declare function TestLightbox_openCloseViaPswp({ page, playwrightTest, ga
     openTimeout?: number;
     closeTimeout?: number;
 }): Promise<void>;
-
