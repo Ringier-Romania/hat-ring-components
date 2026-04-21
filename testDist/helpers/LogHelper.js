@@ -15,8 +15,8 @@ const LOG_LEVEL_VALUES = {
     debug: 4,
 };
 function getConfiguredLogLevel() {
-    const envLevel = (process.env.LOG_LEVEL || 'info').toLowerCase();
     var _a;
+    const envLevel = (process.env.LOG_LEVEL || 'info').toLowerCase();
     return (_a = LOG_LEVEL_VALUES[envLevel]) !== null && _a !== void 0 ? _a : LOG_LEVEL_VALUES.info;
 }
 function shouldLog(level) {
@@ -57,4 +57,4 @@ function LogHelper_getLevel() {
 function LogHelper_isLevelEnabled(level) {
     return shouldLog(level);
 }
-
+//# sourceMappingURL=LogHelper.js.map
