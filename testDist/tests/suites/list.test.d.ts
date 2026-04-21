@@ -1,4 +1,4 @@
-import { PlaywrightTest } from "../types";
+import { PlaywrightTest } from "../types.js";
 import type { Page } from "playwright/test";
 export declare function TestList_infiniteScrollPagination({ page, playwrightTest, listSelector, itemSelector, buttonSelector, loadTimeout }: {
     page: Page;
@@ -8,4 +8,3 @@ export declare function TestList_infiniteScrollPagination({ page, playwrightTest
     buttonSelector?: string;
     loadTimeout?: number;
 }): Promise<void>;
-

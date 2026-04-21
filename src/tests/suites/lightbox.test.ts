@@ -1,7 +1,7 @@
 import {PlaywrightTest} from "../types.js";
 import type {Page} from "playwright/test";
 
-export async function TestLightbox_openCloseViaPswp({page, playwrightTest, gallerySelector = '.Gallery', slideSelector = 'swiper-slide', openTimeout = 15000, closeTimeout = 15000}: {
+export async function TestLightbox_openCloseViaPswp({page, playwrightTest, gallerySelector = '.Gallery', slideSelector = 'swiper-slide', openTimeout = 5000, closeTimeout = 10000}: {
     page: Page,
     playwrightTest: PlaywrightTest,
     gallerySelector?: string,
@@ -14,20 +14,7 @@ export async function TestLightbox_openCloseViaPswp({page, playwrightTest, galle
     await playwrightTest.test.step('lightbox should open on slide click', async () => {
         const activeSlide = page.locator(`${gallerySelector} ${slideSelector}`).first();
         await activeSlide.scrollIntoViewIfNeeded();
-
-        // Wait for PhotoSwipe lightbox to be initialized (scripts loaded from CDN)
-        await page.waitForFunction(() => {
-            return window['photoswipeInstances'] && window['photoswipeInstances'].length > 0;
-        }, {timeout: openTimeout});
-
-        // Click the <a> element inside the slide (PhotoSwipe listens on anchors with data-pswp-width)
-        const clickTarget = activeSlide.locator('a[data-pswp-width]').first();
-        if (await clickTarget.count() > 0) {
-            await clickTarget.click();
-        } else {
-            await activeSlide.click();
-        }
-
+        await activeSlide.click();
         await page.waitForSelector('.pswp--open', {state: 'visible', timeout: openTimeout});
     });
 

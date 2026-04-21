@@ -7,6 +7,7 @@ exports.TestsHelper_elementExists = TestsHelper_elementExists;
 exports.TestsHelper_elementNotEmpty = TestsHelper_elementNotEmpty;
 exports.TestsHelper_elementContainsText = TestsHelper_elementContainsText;
 exports.TestsHelper_attachDOMAtFailedTests = TestsHelper_attachDOMAtFailedTests;
+const LogHelper_1 = require("./LogHelper");
 async function TestsHelper_getMetaContent(page, selector) {
     return await page.locator(selector).getAttribute('content');
 }
@@ -20,7 +21,7 @@ async function TestsHelper_getStructuredData(page) {
                 data.push(JSON.parse(content));
             }
             catch (e) {
-                console.warn('Failed to parse JSON-LD:', e);
+                (0, LogHelper_1.LogHelper_warn)('Failed to parse JSON-LD:', e);
             }
         }
     }

@@ -1,21 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TestLightbox_openCloseViaPswp = TestLightbox_openCloseViaPswp;
-async function TestLightbox_openCloseViaPswp({ page, playwrightTest, gallerySelector = '.Gallery', slideSelector = 'swiper-slide', openTimeout = 15000, closeTimeout = 15000 }) {
+async function TestLightbox_openCloseViaPswp({ page, playwrightTest, gallerySelector = '.Gallery', slideSelector = 'swiper-slide', openTimeout = 5000, closeTimeout = 10000 }) {
     const { expect } = playwrightTest;
     await playwrightTest.test.step('lightbox should open on slide click', async () => {
         const activeSlide = page.locator(`${gallerySelector} ${slideSelector}`).first();
         await activeSlide.scrollIntoViewIfNeeded();
-        await page.waitForFunction(() => {
-            return window['photoswipeInstances'] && window['photoswipeInstances'].length > 0;
-        }, { timeout: openTimeout });
-        const clickTarget = activeSlide.locator('a[data-pswp-width]').first();
-        if (await clickTarget.count() > 0) {
-            await clickTarget.click();
-        }
-        else {
-            await activeSlide.click();
-        }
+        await activeSlide.click();
         await page.waitForSelector('.pswp--open', { state: 'visible', timeout: openTimeout });
     });
     await playwrightTest.test.step('lightbox should be open and visible', async () => {
