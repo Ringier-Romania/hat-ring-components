@@ -1,6 +1,6 @@
 {
     "name": "hat-ring-components",
-    "version": "4.13.13",
+    "version": "4.13.14",
     "description": "Head App Template - RING components",
     "license": "MIT",
     "repository": {},
@@ -19,7 +19,7 @@
         "@aws-sdk/signature-v4": "3.374.0",
         "@aws-sdk/util-format-url": "3.972.3",
         "@ringieraxelspringer/tsconfig": "^6.0.0",
-        "@ringpublishing/accelerator-images": "2.1.0",
+        "@ringpublishing/accelerator-images": "^2.3.1",
         "@ringpublishing/graphql-api-client-got": "2.4.0",
         "@types/node": "*",
         "astro": "5.17.1",
