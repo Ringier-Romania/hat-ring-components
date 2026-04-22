@@ -7,6 +7,7 @@ exports.TestsHelper_elementExists = TestsHelper_elementExists;
 exports.TestsHelper_elementNotEmpty = TestsHelper_elementNotEmpty;
 exports.TestsHelper_elementContainsText = TestsHelper_elementContainsText;
 exports.TestsHelper_attachDOMAtFailedTests = TestsHelper_attachDOMAtFailedTests;
+exports.TestsHelper_setupPageRoutes = TestsHelper_setupPageRoutes;
 const LogHelper_1 = require("./LogHelper");
 async function TestsHelper_getMetaContent(page, selector) {
     return await page.locator(selector).getAttribute('content');
@@ -59,5 +60,22 @@ function TestsHelper_attachDOMAtFailedTests({ playwrightTest }) {
             await playwrightTest.test.info().attach("DOM", { body: await page.content(), contentType: "text/html" });
         }
     });
+}
+async function TestsHelper_setupPageRoutes(page, { domains = ['ocdn.eu'] } = {}) {
+    for (const domain of domains) {
+        await page.route(`**://${domain}/**`, async (route) => {
+            try {
+                const url = route.request().url();
+                const response = await fetch(url);
+                const body = Buffer.from(await response.arrayBuffer());
+                const headers = {};
+                response.headers.forEach((value, key) => { headers[key] = value; });
+                await route.fulfill({ status: response.status, headers, body });
+            }
+            catch {
+                await route.abort('connectionfailed');
+            }
+        });
+    }
 }
 //# sourceMappingURL=TestsHelper.js.map

@@ -46,3 +46,6 @@ export declare function TestsHelper_elementContainsText({ page, playwrightTest, 
 export declare function TestsHelper_attachDOMAtFailedTests({ playwrightTest }: {
     playwrightTest: PlaywrightTest;
 }): void;
+export declare function TestsHelper_setupPageRoutes(page: Page, { domains }?: {
+    domains?: string[];
+}): Promise<void>;
