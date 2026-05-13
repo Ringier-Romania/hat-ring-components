@@ -143,8 +143,10 @@ export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: numbe
         }
     }
 
-    if (cacheAdapter.removeKeysFromTag && processedKeys.length > 0) {
-        await cacheAdapter.removeKeysFromTag(tag, processedKeys);
+    if (cacheAdapter.removeKeysFromTag) {
+        if (processedKeys.length > 0) {
+            await cacheAdapter.removeKeysFromTag(tag, processedKeys);
+        }
     } else if (cacheAdapter.removeTag) {
         await cacheAdapter.removeTag(tag);
     }
