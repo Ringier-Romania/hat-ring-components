@@ -138,8 +138,11 @@ export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: numbe
             });
             MonitoringProvider.counter('error.CacheHelper_clearByTag.del_failed');
         } else {
-            deleteCount.keys += result.value ?? 0;
-            successfullyDeletedKeys.push(keys[index]);
+            const deletedCount = result.value ?? 0;
+            deleteCount.keys += deletedCount;
+            if (deletedCount > 0) {
+                successfullyDeletedKeys.push(keys[index]);
+            }
         }
     }
 
