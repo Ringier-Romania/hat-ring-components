@@ -126,6 +126,7 @@ export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: numbe
     }
 
     const results = await Promise.allSettled(keys.map((key) => cacheAdapter.del!(key)));
+    const successfullyDeletedKeys: string[] = [];
     for (const [index, result] of results.entries()) {
         if (result.status === 'rejected') {
             const reason = result.reason;
@@ -138,11 +139,12 @@ export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: numbe
             MonitoringProvider.counter('error.CacheHelper_clearByTag.del_failed');
         } else {
             deleteCount.keys += result.value ?? 0;
+            successfullyDeletedKeys.push(keys[index]);
         }
     }
 
-    if (cacheAdapter.removeKeysFromTag) {
-        await cacheAdapter.removeKeysFromTag(tag, keys);
+    if (cacheAdapter.removeKeysFromTag && successfullyDeletedKeys.length > 0) {
+        await cacheAdapter.removeKeysFromTag(tag, successfullyDeletedKeys);
     }
 
     return deleteCount;

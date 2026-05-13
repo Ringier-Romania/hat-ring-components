@@ -207,7 +207,7 @@ export class RedisProvider {
             return;
         }
 
-        if (tags && typeof tags === 'object') {
+        if (Array.isArray(tags)) {
             for (const tag of tags) {
                 try {
                     await this.client.sAdd('tag:' + tag, key);
