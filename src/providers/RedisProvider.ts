@@ -435,10 +435,12 @@ export class RedisProvider {
             return keys;
         }
 
-        // Lazy cleanup: check which keys still exist in Redis
-        const existsResults = await Promise.all(
-            keys.map((key) => this.client.exists(key))
-        );
+        // Lazy cleanup: check which keys still exist in Redis (single pipeline round-trip)
+        const pipeline = this.client.multi();
+        for (const key of keys) {
+            pipeline.exists(key);
+        }
+        const existsResults = (await pipeline.exec()) as unknown as number[];
 
         const aliveKeys: string[] = [];
         const deadKeys: string[] = [];
