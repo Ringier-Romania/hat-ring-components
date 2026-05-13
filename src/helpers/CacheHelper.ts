@@ -141,14 +141,8 @@ export async function CacheHelper_clearByTag(tag: string): Promise<{ keys: numbe
         }
     }
 
-    // Race-safe tag cleanup: remove ONLY the keys we actually deleted.
-    // Using removeTag() (DEL tag:T) here would clobber entries added concurrently
-    // by parallel SSR requests, orphaning them in Redis until TTL expiry.
-    // Falls back to removeTag() for adapters without granular support (NodeCache).
     if (cacheAdapter.removeKeysFromTag) {
         await cacheAdapter.removeKeysFromTag(tag, keys);
-    } else if (cacheAdapter.removeTag) {
-        await cacheAdapter.removeTag(tag);
     }
 
     return deleteCount;
