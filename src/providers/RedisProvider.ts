@@ -16,6 +16,9 @@ interface RedisCacheValue {
     tags?: string[];
 }
 
+const DEFAULT_TAG_TTL_SECONDS = 60;
+const DEFAULT_TAG_REFRESH_INTERVAL_SECONDS = 3600;
+
 export class RedisProvider {
     client: RedisClientType;
     url: string;
@@ -39,8 +42,14 @@ export class RedisProvider {
         this.maxReInitialize = 10;
         this.currentReInitialize = 0;
         this.isReconnecting = false;
-        this.tagTTL = Number(process.env.CACHE_TAG_TTL || process.env.CACHE_TTL || 65000);
-        this.tagRefreshInterval = Number(process.env.CACHE_TAG_REFRESH_INTERVAL || 3600) * 1000; // default 1h in ms
+        this.tagTTL = this._parsePositiveIntOrDefault(
+            process.env.CACHE_TAG_TTL ?? process.env.CACHE_TTL,
+            DEFAULT_TAG_TTL_SECONDS
+        );
+        this.tagRefreshInterval = this._parsePositiveIntOrDefault(
+            process.env.CACHE_TAG_REFRESH_INTERVAL,
+            DEFAULT_TAG_REFRESH_INTERVAL_SECONDS
+        ) * 1000; // ms
         this.lastTagRefresh = new Map();
 
         setInterval(async () => {
@@ -365,6 +374,11 @@ export class RedisProvider {
                 expirationTimestamp: undefined,
             }
         }
+    }
+
+    _parsePositiveIntOrDefault(value: string | undefined, fallback: number): number {
+        const parsedValue = Number.parseInt(value || '', 10);
+        return Number.isFinite(parsedValue) && parsedValue > 0 ? parsedValue : fallback;
     }
 
     /**
