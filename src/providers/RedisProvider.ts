@@ -414,7 +414,9 @@ export class RedisProvider {
      * Removes only specified keys from a tag set (uses SREM, not DEL).
      * Safer than removeTag(): does NOT clobber entries added concurrently
      * (e.g. by an SSR request running in parallel with cache invalidation).
-     * Use this in tag-based invalidation flows to avoid orphaning keys.
+     * Greatly reduces the risk of orphaning keys compared to removeTag(),
+     * but does not fully eliminate it — a key repopulated between DEL and
+     * SREM can still lose its tag reference. Webhook retries mitigate this.
      */
     async removeKeysFromTag(tag: string, keys: string[]) {
         if (!this.client) {
