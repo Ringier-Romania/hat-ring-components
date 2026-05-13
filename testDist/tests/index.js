@@ -17,4 +17,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./suites/seo.test"), exports);
 __exportStar(require("./suites/performance.test"), exports);
 __exportStar(require("./suites/socialMedia.test"), exports);
+__exportStar(require("./suites/lightbox.test"), exports);
+__exportStar(require("./suites/list.test"), exports);
 //# sourceMappingURL=index.js.map

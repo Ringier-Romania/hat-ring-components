@@ -9,7 +9,10 @@
   },
   "include": [
     "./src/tests/**/*.ts",
-    "./src/helpers/TestsHelper.ts"
+    "./src/helpers/TestsHelper.ts",
+    "./src/helpers/LogHelper.ts",
+    "./src/helpers/UtilsHelper.ts",
+    "./src/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

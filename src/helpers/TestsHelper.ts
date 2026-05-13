@@ -76,3 +76,34 @@ export function TestsHelper_attachDOMAtFailedTests({playwrightTest}: { playwrigh
         }
     })
 }
+
+/**
+ * In K8s / CI environments, ocdn.eu may resolve to a private/local IP address.
+ * Chromium's Private Network Access (PNA) blocks requests from a public origin
+ * to local address space. This route handler intercepts matching requests and
+ * fulfills them via Node.js fetch (which is not subject to CORS/PNA).
+ *
+ * Call this before page.goto() so that routes are registered before navigation.
+ *
+ * @param page      Playwright Page instance
+ * @param domains   Glob patterns for domains to proxy (default: ['ocdn.eu'])
+ */
+export async function TestsHelper_setupPageRoutes(
+    page: Page,
+    {domains = ['ocdn.eu']}: { domains?: string[] } = {}
+): Promise<void> {
+    for (const domain of domains) {
+        await page.route(`**://${domain}/**`, async (route) => {
+            try {
+                const url = route.request().url();
+                const response = await fetch(url);
+                const body = Buffer.from(await response.arrayBuffer());
+                const headers: Record<string, string> = {};
+                response.headers.forEach((value, key) => { headers[key] = value; });
+                await route.fulfill({status: response.status, headers, body});
+            } catch {
+                await route.abort('connectionfailed');
+            }
+        });
+    }
+}

@@ -291,6 +291,55 @@ When you need to add or change something that applies to **all HAT projects**, e
 
 ---
 
+## Monitoring
+
+Use `MonitoringProvider` from `hat-ring-components` for all application metrics (counters, gauges, timers).
+
+### Metric naming convention
+
+Metric names follow a **dot-separated 3-segment** pattern:
+
+```
+{level}.{Source_methodName}.{metricDescription}
+```
+
+| Segment | Description | Examples |
+|---------|-------------|----------|
+| `level` | `info` for normal events, `error` for failures | `info`, `error` |
+| `Source_methodName` | PascalCase class/module + underscore + camelCase method | `MyProvider_fetchData`, `HatServer_callToWebsitesApi` |
+| `metricDescription` | camelCase short description of the event | `apiCall`, `success`, `httpError`, `networkError`, `cacheHit` |
+
+### Examples
+
+```ts
+import { MonitoringProvider } from "hat-ring-components";
+
+// Counter — track occurrences
+MonitoringProvider.counter('info.MyProvider_fetchData.apiCall');
+MonitoringProvider.counter('info.MyProvider_fetchData.success');
+MonitoringProvider.counter('error.MyProvider_fetchData.httpError');
+MonitoringProvider.counter('error.MyProvider_fetchData.networkError');
+
+// Timer — measure duration (always null-check before calling .done())
+const timer = MonitoringProvider.timer('info.MyProvider_fetchData.responseTime');
+// ... perform operation ...
+if (timer) {
+    timer.done();
+}
+
+// Gauge — track current value
+MonitoringProvider.gauge('info.CacheProvider_getStats.cacheSize', 42);
+```
+
+### Rules
+
+- Always start with `info.` or `error.` depending on severity.
+- Use PascalCase for the source class/module, underscore separator, then camelCase for the method.
+- Always guard `timer.done()` with a null check (`if (timer) { timer.done(); }`).
+- Place the timer start **before** the operation and call `done()` in both success and error paths.
+
+---
+
 ## Project Identity
 
 Each HAT project defines its own identity in `.github/copilot-instructions.md`:
