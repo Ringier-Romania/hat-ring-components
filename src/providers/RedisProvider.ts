@@ -200,14 +200,22 @@ export class RedisProvider {
         const setValue = JSON.stringify({data: value, ttl, expirationTimestamp} as RedisCacheValue);
         try {
             await this.client.set(key, setValue);
-            if (tags && typeof tags === 'object') {
-                for (const tag of tags) {
-                    await this.client.sAdd('tag:' + tag, key);
-                }
-            }
             MonitoringProvider.counter('info.RedisProvider.set');
         } catch (err) {
             MonitoringProvider.counter('error.RedisProvider.set');
+            LogHelper_error('RedisProvider.set error (key not saved):', { key, err });
+            return;
+        }
+
+        if (tags && typeof tags === 'object') {
+            for (const tag of tags) {
+                try {
+                    await this.client.sAdd('tag:' + tag, key);
+                } catch (err) {
+                    MonitoringProvider.counter('error.RedisProvider.sAdd');
+                    LogHelper_error('RedisProvider.sAdd error (tag not saved, key will be uncleanable):', { key, tag, err });
+                }
+            }
         }
     }
 
@@ -400,6 +408,27 @@ export class RedisProvider {
 
     async removeTag(tag) {
         await this.client.del(`tag:${tag}`);
+    }
+
+    /**
+     * Removes only specified keys from a tag set (uses SREM, not DEL).
+     * Safer than removeTag(): does NOT clobber entries added concurrently
+     * (e.g. by an SSR request running in parallel with cache invalidation).
+     * Use this in tag-based invalidation flows to avoid orphaning keys.
+     */
+    async removeKeysFromTag(tag: string, keys: string[]) {
+        if (!this.client) {
+            await this.initialize();
+        }
+        if (!keys || keys.length === 0) {
+            return;
+        }
+        try {
+            await this.client.sRem(`tag:${tag}`, keys);
+        } catch (err) {
+            MonitoringProvider.counter('error.RedisProvider.sRem');
+            LogHelper_error('RedisProvider.removeKeysFromTag error:', { tag, keysCount: keys.length, err });
+        }
     }
 
 
