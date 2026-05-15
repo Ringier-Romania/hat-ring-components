@@ -5,6 +5,7 @@ import _ from "lodash"
 import {gql} from "graphql-tag";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import {SeoHelper_isSeoHomepage} from "../../../helpers/seo/SeoHelper";
+import {StoryPrefetch_getResponse} from "../../../helpers/StoryPrefetchHelper";
 
 type StoryDataResponse = {
     "data": {
@@ -35,24 +36,26 @@ export async function SeoMetaCustomMetaTags(context: AppContext) {
     let topicsOfStory: Array<string> = [];
 
     if (actualPageType === SiteContentType.Story && isDynamicTypeInCustomTags) {
-        const query = gql`
-            query($storyId: UUID){
-                story(id:$storyId){
-                    topics {
-                        topic {
-                            id
+        // Prioritate: prefetch din context
+        let response: any = StoryPrefetch_getResponse(context);
+
+        if (!response) {
+            const query = gql`
+                query($storyId: UUID){
+                    story(id:$storyId){
+                        topics {
+                            topic {
+                                id
+                            }
                         }
                     }
                 }
-            }
-        `;
+            `;
+            const variables = { storyId: context.id };
+            response = await WebsiteApiProvider.call(query, variables) as StoryDataResponse;
+        }
 
-        const variables = {
-            storyId: context.id,
-        };
-
-        const response = await WebsiteApiProvider.call(query, variables) as StoryDataResponse;
-        topicsOfStory = response.data.story?.topics?.map(topic => topic.topic?.id) || [];
+        topicsOfStory = response?.data?.story?.topics?.map((topic: any) => topic.topic?.id) || [];
     }
 
     config.customMetaTags.forEach(tagObject => {

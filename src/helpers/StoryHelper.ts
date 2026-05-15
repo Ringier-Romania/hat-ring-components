@@ -7,6 +7,7 @@ import { gql } from "@ringpublishing/graphql-api-client-got";
 import { AppContext } from "../types/types";
 import {ImageHelper_getImageMetaData} from "./ImageHelper";
 import {LogHelper_debug} from "./LogHelper";
+import {StoryPrefetch_getResponse} from "./StoryPrefetchHelper";
 
 export async function StoryHelper_generateContentHtml({story, blockDecorator}: {story: Story, blockDecorator?: Function}): Promise<string> {
     let base: any = {}
@@ -298,20 +299,22 @@ export function StoryHelper_getGroupContent(storyContentBlocks, groupType: strin
 
 }
 export async function SeoHelper_checkStoryHiddenFlag(context) {
-    const query = gql`
-        query ($storyId: UUID) {
-            story(id: $storyId) {
-                flags {
-                    code
+    // Prioritate: prefetch din context
+    let response: any = StoryPrefetch_getResponse(context);
+
+    if (!response) {
+        const query = gql`
+            query ($storyId: UUID) {
+                story(id: $storyId) {
+                    flags {
+                        code
+                    }
                 }
             }
-        }
-    `
-
-    const variables = {
-        storyId: context.id,
+        `
+        const variables = { storyId: context.id }
+        response = await WebsiteApiProvider.call(query, variables)
     }
-    const response = await WebsiteApiProvider.call(query, variables)
 
     let isHiddenFlag =
         response?.data?.story?.flags?.some((flag: {code: string}) => {

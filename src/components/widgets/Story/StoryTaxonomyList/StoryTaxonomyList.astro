@@ -2,13 +2,13 @@
 const {context, widgetConfig} = Astro.props;
 
 import _ from "lodash";
-import React from 'react';
 import {gql} from 'graphql-tag';
-import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {StoryTaxonomyListResponse} from "./types";
-import RingLink from "../../../common/RingLink.astro";
-import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget, WidgetHelper_shouldHideWidget} from "../../../../helpers/WidgetHelper";
-import {default as TextReplacer} from "../../../common/TextReplacer.astro";
+import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider";
+import {StoryTaxonomyListResponse} from "hat-ring-components/src/components/widgets/Story/StoryTaxonomyList/types";
+import RingLink from "hat-ring-components/src/components/common/RingLink.astro";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget, WidgetHelper_shouldHideWidget} from "hat-ring-components/src/helpers/WidgetHelper";
+import {default as TextReplacer} from "hat-ring-components/src/components/common/TextReplacer.astro";
+import {StoryPrefetch_getResponse} from "../../../../helpers/StoryPrefetchHelper";
 
 const query = gql`
         query($storyId: UUID){
@@ -39,20 +39,21 @@ const variables = {
     storyId: context.id,
 };
 
-let toRender: boolean | JSX.Element | string = false;
+let toRender: boolean | React.JSX.Element | string = false;
 
 if (WidgetHelper_shouldHideWidget(widgetConfig, context)) {
     toRender = WidgetHelper_renderEmptyWidget(widgetConfig);
 }
 
+// Prioritate: 1) prefetch din context, 2) query individual
 const response = !toRender
-    ? await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL) as StoryTaxonomyListResponse
+    ? (StoryPrefetch_getResponse(context) ?? await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL) as StoryTaxonomyListResponse)
     : null;
 
 const topics = response?.data?.story?.topics || [];
-const taxonomyList = (widgetConfig?.taxonomyKind || '').split(',').map(kind => kind.trim());
-const excludedUuids = (widgetConfig?.excludedUuids || '').split(',').map(uuid => uuid.trim());
-const filteredTopics = topics.filter(topic => {
+const taxonomyList = (widgetConfig?.taxonomyKind || '').split(',').map((kind: string) => kind.trim());
+const excludedUuids = (widgetConfig?.excludedUuids || '').split(',').map((uuid: string) => uuid.trim());
+const filteredTopics = topics.filter((topic: any) => {
     if (!taxonomyList.includes(topic.topic.kind.code) || excludedUuids.includes(topic.topic.id)) {
         return false;
     }
@@ -72,9 +73,9 @@ if (!toRender && sortedTopics.length === 0) {
     <div class={WidgetHelper_getWidgetCssClasses('StoryTaxonomyList', widgetConfig, context)}>
         {widgetConfig.listPrefix && <TextReplacer context={context} config={{}} text={widgetConfig.listPrefix} tag={"span"} props={{class: 'listPrefix'}}/>}
 
-        {sortedTopics.map((topic, index) => {
+        {sortedTopics.map((topic: any) => {
             let breadcrumbUrl = topic.topic?.nodeReference?.node.breadcrumbs[topic.topic?.nodeReference?.node.breadcrumbs.length - 1];
-            let url = breadcrumbUrl ? breadcrumbUrl.url : null || topic.topic?.publicationPoint?.url;
+            let url = (breadcrumbUrl ? breadcrumbUrl.url : null) || topic.topic?.publicationPoint?.url;
             return url && widgetConfig.links ?
                 <RingLink context={context} href={url}>
                     <span class={`topic kind-${topic.topic.kind.code}`}>{topic.topic.name}</span>
@@ -83,5 +84,4 @@ if (!toRender && sortedTopics.length === 0) {
         )}
     </div>
 }
-
 

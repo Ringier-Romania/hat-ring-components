@@ -11,6 +11,7 @@ import {AppContext} from "../../../types/types";
 import {AlternateLinksResponse} from "./types";
 import { AlternateLinksObject } from './AlternateLinks';
 import {CacheHelper_createParentChildRelation} from "../../../helpers/CacheHelper";
+import {StoryPrefetch_getResponse} from "../../../helpers/StoryPrefetchHelper";
 
 /**
  * Alternate links from Story publication data/package
@@ -23,23 +24,28 @@ export async function AlternateLinksFromStory(context: AppContext, seoConfig: ob
     let xDefault: string | null = null;
     let alternateStories: any = [];
 
-    const response = await WebsiteApiProvider.call(gql`
-        query($storyId: UUID){
-            story(id:$storyId){
-                stories {
-                    story {
-                        id
-                        publicationPoint {
-                            url
+    // Prioritate: prefetch din context
+    let response: any = StoryPrefetch_getResponse(context);
+
+    if (!response) {
+        response = await WebsiteApiProvider.call(gql`
+            query($storyId: UUID){
+                story(id:$storyId){
+                    stories {
+                        story {
+                            id
+                            publicationPoint {
+                                url
+                            }
                         }
-                    }
-                    role {
-                        code
+                        role {
+                            code
+                        }
                     }
                 }
             }
-        }
-    `, {storyId: context.id,}) as AlternateLinksResponse;
+        `, {storyId: context.id,}) as AlternateLinksResponse;
+    }
     const supportedLanguages = _.get(seoConfig, 'supportedLanguages', []) || [];
     const storiesFromApi: any = _.get(response, 'data.story.stories', []) || [];
 

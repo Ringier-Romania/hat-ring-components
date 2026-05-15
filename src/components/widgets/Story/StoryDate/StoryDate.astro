@@ -2,13 +2,15 @@
 const {context, widgetConfig} = Astro.props;
 import _ from "lodash"
 import {gql} from 'graphql-tag';
-import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {StoryDateResponse} from "./types";
-import {DateHelper_convertDate} from "../../../../helpers/DateHelper";
+import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider";
+import {StoryDateResponse} from "hat-ring-components/src/components/widgets/Story/StoryDate/types";
+import {DateHelper_convertDate} from "hat-ring-components/src/helpers/DateHelper";
 import {
     WidgetHelper_getWidgetCssClasses,
     WidgetHelper_renderEmptyWidget
-} from "../../../../helpers/WidgetHelper";
+} from "hat-ring-components/src/helpers/WidgetHelper";
+import {StoryPrefetch_getResponse} from "../../../../helpers/StoryPrefetchHelper";
+
 const query = gql`
         query($storyId: UUID){
             story(id:$storyId){
@@ -26,9 +28,12 @@ const variables = {
     storyId: context.id,
 };
 const dateFormat = widgetConfig.dateFormat;
-const response = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL) as StoryDateResponse;
+
+// Prioritate: 1) prefetch din context, 2) query individual
+const response = (StoryPrefetch_getResponse(context) ?? await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL)) as StoryDateResponse;
+
 let date: string | null | undefined;
-let toRender: boolean | JSX.Element | string = false;
+let toRender: boolean | React.JSX.Element | string = false;
 let displayDate = '';
 switch (widgetConfig.dateType) {
     case 'lastPublicationDate':
@@ -55,6 +60,4 @@ if (!date) {
         <time datetime={date}>{displayDate}</time>
     </div>
 }
-
-
 
