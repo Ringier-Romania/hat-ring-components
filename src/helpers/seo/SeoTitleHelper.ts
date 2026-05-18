@@ -118,7 +118,7 @@ export async function SeoTitleHelper_pageTitle(context: any, place: string) {
         const nodeResponse = await WebsiteApiProvider.call(nodeQuery, {
             url: UtilsHelper_getDomain(context, true) + context.url,
             variant: context.websiteManagerVariant,
-        });
+        }, 60);
 
         const categoryName = _.get(nodeResponse, 'data.site.data.node.category.data.name', '');
         if (categoryName) return categoryName;
