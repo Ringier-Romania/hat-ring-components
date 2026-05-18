@@ -1,24 +1,20 @@
 // Helpers
-import {ConfigHelper_getSiteName} from "../ConfigHelper";
+import {ConfigHelper_getSiteName} from "hat-ring-components/src/helpers/ConfigHelper";
 
 // Providers
-import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
+import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider";
 
 // Libraries
 import {gql} from "graphql-tag";
 import _ from "lodash";
-import {SeoHelper_getSeoCurrentPageType} from "./SeoHelper";
-import {UtilsHelper_getDomain, UtilsHelper_slugify} from "../UtilsHelper";
+import {SeoHelper_getSeoCurrentPageType} from "hat-ring-components/src/helpers/seo/SeoHelper";
+import {UtilsHelper_getDomain, UtilsHelper_slugify} from "hat-ring-components/src/helpers/UtilsHelper";
+import {StoryPrefetch_getResponse} from "../../helpers/StoryPrefetchHelper";
 
 /**
  * Helper for handling titles according to the SEO requirements based on the placement of the usage
- * TODO: (1) Add support for seo & social_media_teaser (and other custom teasers) to the WM configuration
- * TODO: (2) Possibility to support fallback names based on the node slug/path
- * @param {object} context > Current page context
- * @param {string} place > Supported place types: default | meta-title | og-title | twitter-title | schema-title
- * @constructor
  */
-export async function SeoTitleHelper_pageTitle(context, place: string) {
+export async function SeoTitleHelper_pageTitle(context: any, place: string) {
     const defaultPageTitle = await ConfigHelper_getSiteName(context);
     const pageType = await SeoHelper_getSeoCurrentPageType(context);
 
@@ -35,6 +31,15 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
     }
 
     async function getStoryTitles() {
+        // Prioritate: prefetch din context
+        const prefetchedResponse = StoryPrefetch_getResponse(context);
+        if (prefetchedResponse?.data?.story) {
+            return {
+                title: _.get(prefetchedResponse, 'data.story.title', '') || '',
+                leads: _.get(prefetchedResponse, 'data.story.leads', []) || [],
+            };
+        }
+
         const storyQuery = gql`
             query($storyId: UUID){
                 story(id:$storyId){
@@ -61,8 +66,8 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
     async function prepareStoryTitle() {
         const storyTitles = await getStoryTitles();
         const title = _.get(storyTitles, 'title', '');
-        const seoTitle = _.get(_.get(storyTitles, 'leads', []).find(lead => {return lead.role.code === 'seo'}), 'title'); // TODO: (1)
-        const socialMediaTitle = _.get(_.get(storyTitles, 'leads', []).find(lead => {return lead.role.code === 'social_media_teaser'}), 'title'); // TODO: (1)
+        const seoTitle = _.get(_.get(storyTitles, 'leads', []).find((lead: any) => {return lead.role.code === 'seo'}), 'title');
+        const socialMediaTitle = _.get(_.get(storyTitles, 'leads', []).find((lead: any) => {return lead.role.code === 'social_media_teaser'}), 'title');
 
         switch (place) {
             case 'default':
@@ -140,3 +145,4 @@ export async function SeoTitleHelper_pageTitle(context, place: string) {
         }
     }
 }
+

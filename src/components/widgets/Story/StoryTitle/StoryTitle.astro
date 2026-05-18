@@ -1,17 +1,17 @@
 ---
-import {StoryTitleWidgetConfig} from "./types";
-import {AppContext, SiteContentType} from "../../../../types/types";
+import {StoryTitleWidgetConfig} from "hat-ring-components/src/components/widgets/Story/StoryTitle/types";
+import {AppContext} from "hat-ring-components/src/types/types";
 const {context, widgetConfig} = Astro.props as {context: AppContext, widgetConfig: StoryTitleWidgetConfig};
 
 import _ from 'lodash';
 import {gql} from 'graphql-tag';
-import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
-import {StoryTitleResponse} from "./types";
-import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper";
-import {ConfigHelper_getDeveloperSettingsConfig} from "../../../../helpers/ConfigHelper";
-import {UtilsHelper_getCurrentPageType} from "../../../../helpers/UtilsHelper";
+import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider";
+import {StoryTitleResponse} from "hat-ring-components/src/components/widgets/Story/StoryTitle/types";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "hat-ring-components/src/helpers/WidgetHelper";
+import {ConfigHelper_getDeveloperSettingsConfig} from "hat-ring-components/src/helpers/ConfigHelper";
+import {StoryPrefetch_getResponse} from "../../../../helpers/StoryPrefetchHelper";
 
-let toRender: boolean | JSX.Element | string = false;
+let toRender: boolean | React.JSX.Element | string = false;
 
 let title: string | null | undefined = null;
 
@@ -35,13 +35,14 @@ const variables = {
     storyId: context.id,
 };
 
-let response = widgetConfig?.response;
+// Prioritate: 1) widgetConfig.response (injection extern), 2) prefetch din context, 3) query individual
+let response = widgetConfig?.response ?? StoryPrefetch_getResponse(context);
 if (!response) {
     response = await WebsiteApiProvider.call(query, variables, widgetConfig?.cacheTTL) as StoryTitleResponse;
 }
 
 if (displayTitleCodeName && displayTitleCodeName !== '') {
-    const displayTitleFound = response?.data?.story?.titles?.find((title) => title?.role?.code === displayTitleCodeName);
+    const displayTitleFound = response?.data?.story?.titles?.find((title: any) => title?.role?.code === displayTitleCodeName);
     title = displayTitleFound ? displayTitleFound.text : _.get(response, 'data.story.title');
 } else {
     title = _.get(response, 'data.story.title');
@@ -65,3 +66,4 @@ if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(tagName)) {
         <Tag>{title}</Tag>
     </div>
 }
+

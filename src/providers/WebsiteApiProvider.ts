@@ -154,8 +154,6 @@ export class WebsiteApiProvider {
                 gql.resetCaches();
                 gqlResetCachesTimestamp = new Date().getTime() + GQL_CACHE_RESET_INTERVAL_SECONDS * 1000;
             }
-            //console.log('call', JSON.stringify(query.loc?.source.body).replace(/\s/g, ''), variables);
-            // console.log('call');
             const accessKey = process.env.WEBSITE_API_PUBLIC!;
             const secretKey = process.env.WEBSITE_API_SECRET!;
             const spaceUuid = process.env.WEBSITE_API_NAMESPACE_ID!;
@@ -183,6 +181,10 @@ export class WebsiteApiProvider {
             if (response.errors || response.error) {
                 const errorMsg = response.errors?.[0]?.message || response.error?.message || 'Unknown API error';
                 LogHelper_error('Websites Api _call error:', errorMsg);
+                // Log explicit pentru query prea mare
+                if (errorMsg.toLowerCase().includes('weight') || errorMsg.toLowerCase().includes('complexity') || errorMsg.toLowerCase().includes('too large')) {
+                    console.error('[ring-api] ❌ QUERY TOO LARGE/COMPLEX:', errorMsg, '| query:', (query.loc?.source.body || '').substring(0, 200));
+                }
                 MonitoringProvider.counter('error.WebsitesApiProvider.call.apiCallError');
 
                 if (response.data) {
