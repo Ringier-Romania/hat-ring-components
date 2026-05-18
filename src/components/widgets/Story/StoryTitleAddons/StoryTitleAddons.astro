@@ -2,11 +2,11 @@
 const {context, widgetConfig} = Astro.props as {context: AppContext; widgetConfig: StoryTitleAddonsWidgetConfig}
 import _ from "lodash"
 import {gql} from "graphql-tag"
-import {AppContext} from "hat-ring-components/src/types/types"
-import {StoryTitleAddonsWidgetConfig} from "hat-ring-components/src/components/widgets/Story/StoryTitleAddons/types"
-import {StoryTitleAddonsResponse} from "hat-ring-components/src/components/widgets/Story/StoryTitleAddons/types"
-import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider"
-import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "hat-ring-components/src/helpers/WidgetHelper"
+import {AppContext} from "../../../../types/types"
+import {StoryTitleAddonsWidgetConfig} from "./types"
+import {StoryTitleAddonsResponse} from "./types"
+import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider"
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper"
 import {StoryPrefetch_getResponse} from "../../../../helpers/StoryPrefetchHelper"
 
 let toRender: boolean | React.JSX.Element | string = false

@@ -1,14 +1,14 @@
 // Helpers
-import {ConfigHelper_getSiteName} from "hat-ring-components/src/helpers/ConfigHelper";
+import {ConfigHelper_getSiteName} from "../ConfigHelper";
 
 // Providers
-import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider";
+import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 
 // Libraries
 import {gql} from "graphql-tag";
 import _ from "lodash";
-import {SeoHelper_getSeoCurrentPageType} from "hat-ring-components/src/helpers/seo/SeoHelper";
-import {UtilsHelper_getDomain, UtilsHelper_slugify} from "hat-ring-components/src/helpers/UtilsHelper";
+import {SeoHelper_getSeoCurrentPageType} from "./SeoHelper";
+import {UtilsHelper_getDomain, UtilsHelper_slugify} from "../UtilsHelper";
 import {StoryPrefetch_getResponse} from "../../helpers/StoryPrefetchHelper";
 
 /**

@@ -2,18 +2,18 @@ import {gql} from "graphql-tag";
 import _ from "lodash";
 
 // Helpers
-import {ConfigHelper_currentUrl,} from "hat-ring-components/src/helpers/ConfigHelper";
+import {ConfigHelper_currentUrl,} from "../../../helpers/ConfigHelper";
 import {
     UtilsHelper_getCurrentPageType,
     UtilsHelper_getQueryParam,
     UtilsHelper_parsePositiveIntFromString
-} from "hat-ring-components/src/helpers/UtilsHelper";
+} from "../../../helpers/UtilsHelper";
 
 // Types
-import {AppContext, SiteContentType} from "hat-ring-components/src/types/types";
+import {AppContext, SiteContentType} from "../../../types/types";
 
 // Providers
-import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider";
+import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import {StoryPrefetch_getResponse} from "../../../helpers/StoryPrefetchHelper";
 
 /**

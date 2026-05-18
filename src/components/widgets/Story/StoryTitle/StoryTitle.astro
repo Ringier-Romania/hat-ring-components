@@ -1,14 +1,14 @@
 ---
-import {StoryTitleWidgetConfig} from "hat-ring-components/src/components/widgets/Story/StoryTitle/types";
-import {AppContext} from "hat-ring-components/src/types/types";
+import {StoryTitleWidgetConfig} from "./types";
+import {AppContext} from "../../../../types/types";
 const {context, widgetConfig} = Astro.props as {context: AppContext, widgetConfig: StoryTitleWidgetConfig};
 
 import _ from 'lodash';
 import {gql} from 'graphql-tag';
-import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider";
-import {StoryTitleResponse} from "hat-ring-components/src/components/widgets/Story/StoryTitle/types";
-import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "hat-ring-components/src/helpers/WidgetHelper";
-import {ConfigHelper_getDeveloperSettingsConfig} from "hat-ring-components/src/helpers/ConfigHelper";
+import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
+import {StoryTitleResponse} from "./types";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyComponent} from "../../../../helpers/WidgetHelper";
+import {ConfigHelper_getDeveloperSettingsConfig} from "../../../../helpers/ConfigHelper";
 import {StoryPrefetch_getResponse} from "../../../../helpers/StoryPrefetchHelper";
 
 let toRender: boolean | React.JSX.Element | string = false;
