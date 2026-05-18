@@ -3,11 +3,11 @@ const {context, widgetConfig} = Astro.props;
 
 import _ from "lodash";
 import {gql} from 'graphql-tag';
-import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider";
-import {StoryTaxonomyListResponse} from "hat-ring-components/src/components/widgets/Story/StoryTaxonomyList/types";
-import RingLink from "hat-ring-components/src/components/common/RingLink.astro";
-import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget, WidgetHelper_shouldHideWidget} from "hat-ring-components/src/helpers/WidgetHelper";
-import {default as TextReplacer} from "hat-ring-components/src/components/common/TextReplacer.astro";
+import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
+import {StoryTaxonomyListResponse} from "./types";
+import RingLink from "../../../common/RingLink.astro";
+import {WidgetHelper_getWidgetCssClasses, WidgetHelper_renderEmptyWidget, WidgetHelper_shouldHideWidget} from "../../../../helpers/WidgetHelper";
+import {default as TextReplacer} from "../../../common/TextReplacer.astro";
 import {StoryPrefetch_getResponse} from "../../../../helpers/StoryPrefetchHelper";
 
 const query = gql`

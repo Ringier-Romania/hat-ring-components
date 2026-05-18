@@ -1,8 +1,8 @@
 import {gql} from "graphql-tag";
-import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider";
-import type {AppContext} from "hat-ring-components/src/types/types";
+import {WebsiteApiProvider} from "../providers/WebsiteApiProvider";
+import type {AppContext} from "../types/types";
 import _ from "lodash";
-import {StoryHelper_getGqlContentFragment} from "hat-ring-components/src/helpers/StoryHelper";
+import {StoryHelper_getGqlContentFragment} from "./StoryHelper";
 
 export type StoryPrefetchModule =
     | 'title'        // title + titles

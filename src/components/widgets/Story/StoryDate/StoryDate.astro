@@ -2,13 +2,13 @@
 const {context, widgetConfig} = Astro.props;
 import _ from "lodash"
 import {gql} from 'graphql-tag';
-import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider";
-import {StoryDateResponse} from "hat-ring-components/src/components/widgets/Story/StoryDate/types";
-import {DateHelper_convertDate} from "hat-ring-components/src/helpers/DateHelper";
+import {WebsiteApiProvider} from "../../../../providers/WebsiteApiProvider";
+import {StoryDateResponse} from "./types";
+import {DateHelper_convertDate} from "../../../../helpers/DateHelper";
 import {
     WidgetHelper_getWidgetCssClasses,
     WidgetHelper_renderEmptyWidget
-} from "hat-ring-components/src/helpers/WidgetHelper";
+} from "../../../../helpers/WidgetHelper";
 import {StoryPrefetch_getResponse} from "../../../../helpers/StoryPrefetchHelper";
 
 const query = gql`

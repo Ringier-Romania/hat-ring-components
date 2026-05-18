@@ -1,10 +1,10 @@
 ---
 const {context, widgetConfig, extendableAttributes} = Astro.props;
-import {default as StoryContentSwitcher} from "hat-ring-components/src/components/widgets/Story/StoryContent/StoryContentSwitcher.astro";
-import {WidgetHelper_getWidgetCssClasses} from "hat-ring-components/src/helpers/WidgetHelper";
+import {default as StoryContentSwitcher} from "./StoryContentSwitcher.astro";
+import {WidgetHelper_getWidgetCssClasses} from "../../../../helpers/WidgetHelper";
 import {StoryContent_getData} from "./StoryContentGetData";
 import _ from 'lodash';
-import styles from "hat-ring-components/styles/widgets/Story/StoryContent.module.scss";
+import styles from "../../../../../styles/widgets/Story/StoryContent.module.scss";
 
 const response = await StoryContent_getData(context, widgetConfig);
 const content = _.get(response, 'data.story.content[0].blocks');

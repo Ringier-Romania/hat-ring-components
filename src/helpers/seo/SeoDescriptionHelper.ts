@@ -1,15 +1,15 @@
 // Helpers
-import {ConfigHelper_getSiteDescription} from "hat-ring-components/src/helpers/ConfigHelper";
-import {StoryHelper_getLeadBlock} from "hat-ring-components/src/helpers/StoryHelper";
+import {ConfigHelper_getSiteDescription} from "../ConfigHelper";
+import {StoryHelper_getLeadBlock} from "../StoryHelper";
 
 // Providers
-import {WebsiteApiProvider} from "hat-ring-components/src/providers/WebsiteApiProvider";
+import {WebsiteApiProvider} from "../../providers/WebsiteApiProvider";
 
 // Libraries
 import {Story} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
 import {gql} from "graphql-tag";
 import _ from "lodash";
-import {SeoHelper_getSeoCurrentPageType} from "hat-ring-components/src/helpers/seo/SeoHelper";
+import {SeoHelper_getSeoCurrentPageType} from "./SeoHelper";
 import {StoryPrefetch_getResponse} from "../../helpers/StoryPrefetchHelper";
 
 /**
