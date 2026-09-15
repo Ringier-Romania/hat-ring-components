@@ -10,7 +10,7 @@ export interface CacheAdapterInterface {
     flushAll(): Promise<any>;
     keys(): Promise<string[]>;
     keysByGlob?(globKey: string): Promise<string[]>;
-    scan?(cursor:number, match: string, count?:number): Promise<{keys: Array<any>, cursor: number}>;
+    scan?(cursor: number | string, match: string, count?: number): Promise<{keys: Array<any>, cursor: string}>;
     mget(keys: string[]): Promise<{ [p: string]: unknown }>;
     getKeysByTag?(tag: string): Promise<string[]>;
     removeTag?(tag: string): Promise<void>;
