@@ -310,13 +310,17 @@ export class RedisProvider {
     }
 
 
-    async scan(cursor: number, match: string, count: number = 1000): Promise<ScanReply> {
+    /**
+     * redis v5 expects the SCAN cursor as a string and returns it as a string
+     * (v4 used numbers). Normalize both directions so callers can pass either.
+     */
+    async scan(cursor: number | string, match: string, count: number = 1000): Promise<ScanReply> {
         if (!this.client) {
             await this.initialize();
         }
         MonitoringProvider.counter('info.RedisProvider.scan');
-        const keysFromRedis = await this.client.scan(cursor, {MATCH: match, COUNT: count});
-        return keysFromRedis;
+        const keysFromRedis = await this.client.scan(String(cursor), {MATCH: match, COUNT: count});
+        return {...keysFromRedis, cursor: String(keysFromRedis.cursor)} as ScanReply;
     }
 
     async keysByGlob(globKey: string): Promise<string[]> {
