@@ -6,7 +6,7 @@ import {
 } from "../../../helpers/ConfigHelper";
 import {WebsiteApiProvider} from "../../../providers/WebsiteApiProvider";
 import _ from "lodash";
-import {ImageBlock, Story, StoryEdge} from "@ringpublishing/graphql-api-client-got/lib/types/websites-api";
+import {ImageBlock, Story, StoryEdge} from "@ringpublishing/graphql-api-client-got/dist/types/websites-api";
 import {
     UtilsHelper_convertToInt, UtilsHelper_getDomain, UtilsHelper_getQueryParam,
     UtilsHelper_parsePositiveIntFromString
@@ -46,7 +46,7 @@ export async function RSS({context, feedDecorator, blockDecorator}: { context: A
     const excludedFlags = seoRssConfig.excludedFlags ? seoRssConfig.excludedFlags.map(flag => {
         return flag.excludedFlag
     }) : null;
-    const excludedCategoryIds = seoRssConfig.excludedCategoryIds ? seoRssConfig.excludedCategoryIds.map(category => {
+    const excludedCategoryIds = seoRssConfig.excludedCategoryIds && seoRssConfig.excludedCategoryIds.length > 0 ? seoRssConfig.excludedCategoryIds.map(category => {
         return category.excludedCategoryId
     }) : null;
 
@@ -55,7 +55,7 @@ export async function RSS({context, feedDecorator, blockDecorator}: { context: A
         limit: limit,
         offset,
         excludedFlags,
-        excludedCategoryIds: excludedCategoryIds
+        excludedCategoryIds: excludedCategoryIds,
     };
 
     const response = await WebsiteApiProvider.call(query, variables, 60 * 10) as {
