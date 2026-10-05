@@ -32,11 +32,23 @@ export class RedisProvider {
     tagTTL: number;
     tagRefreshInterval: number;
     lastTagRefresh: Map<string, number>;
+    isDev: boolean;
 
     constructor() {
-        this.url = process.env.REDIS_RW;
+        this.isDev = process.env.NODE_ENV !== 'production';
+
+        this.url = this.isDev
+            ? (import.meta.env.REDIS_URL_DEV ?? "")
+            : (process.env.REDIS_RW ?? "");
+
+        /* --- DEBUG --- */
+        console.log('[RedisProvider] isDev:', this.isDev);
+        console.log('[RedisProvider] PUBLIC_NODE_ENV:', this.isDev);
+        console.log('[RedisProvider] used url:', this.url);
+        /* -------------- */
+
         this.replicationGroupId = process.env.REDIS_REPLICATION_GROUP_ID;
-        this.username = process.env.REDIS_USERNAME ||'iam-user';
+        this.username = process.env.REDIS_USERNAME || 'iam-user';
         this.region = process.env.REDIS_REGION || 'eu-central-1';
         this.service = 'elasticache';
         this.maxReInitialize = 10;
@@ -49,30 +61,48 @@ export class RedisProvider {
         this.tagRefreshInterval = this._parsePositiveIntOrDefault(
             process.env.CACHE_TAG_REFRESH_INTERVAL,
             DEFAULT_TAG_REFRESH_INTERVAL_SECONDS
-        ) * 1000; // ms
+        ) * 1000;
         this.lastTagRefresh = new Map();
 
-        setInterval(async () => {
-            if (!this.client) {
-                return;
-            }
-            const token = await this.getToken();
-            if (!token) {
-                MonitoringProvider.counter('error.RedisProvider.token_refresh');
-                return;
-            }
+        /* token interval only on AWS */
+        if (!this.isDev) {
+            setInterval(async () => {
+                if (!this.client) {
+                    return;
+                }
+                const token = await this.getToken();
+                if (!token) {
+                    MonitoringProvider.counter('error.RedisProvider.token_refresh');
+                    return;
+                }
 
-            await this.client.auth({
-                username: process.env.REDIS_USERNAME ||'iam-user',
-                password: token,
-            });
-
-
-        }, 10 * 1000);
+                await this.client.auth({
+                    username: process.env.REDIS_USERNAME || 'iam-user',
+                    password: token,
+                });
+            }, 10 * 1000);
+        }
     }
 
-    async createRedisClient() {
+    async createLocalRedisClient() {
+
+        console.log('[RedisProvider] Connectiong to local Redis, url:', this.url);
+
+        this.client = createClient({
+            url: this.url,
+            database: 1,
+            socket: {
+                reconnectStrategy: (retries) => Math.min(retries * 50, 1000)
+            }
+        }) as RedisClientType;
+    }
+
+    async createAWSRedisClient() {
         const token = await this.getToken();
+
+        console.log('[RedisProvider] Connectiong to AWS Redis, host:', this.url);
+        console.log('[RedisProvider] Token AWS acquired:', token ? 'YES (length ' + token.length + ')' : 'NO / undefined');
+
         this.client = createClient({
             username: this.username,
             password: token,
@@ -93,8 +123,20 @@ export class RedisProvider {
         }) as RedisClientType;
     }
 
+    async createRedisClient() {
+        console.log('[RedisProvider] createRedisClient() called, isDev =', this.isDev);
+        if (this.isDev) {
+            await this.createLocalRedisClient();
+        } else {
+            await this.createAWSRedisClient();
+        }
+    }
+
     attachRedisErrorsHandler() {
         this.client.on('error', async (error) => {
+
+            console.error('[RedisProvider] Redis Client Error (event "error"):', error);
+
             MonitoringProvider.counter(`error.RedisProvider.onError`);
             LogHelper_error(`Redis Client Error:`, error);
 
@@ -108,7 +150,18 @@ export class RedisProvider {
             }
         });
 
+        this.client.on('connect', () => {
+            console.log('[RedisProvider] Event "connect" — socket opened.');
+        });
+
+        this.client.on('ready', () => {
+            console.log('[RedisProvider] Event "ready" — client is ready to receive commands.');
+        });
+
         this.client.on('end', async () => {
+
+            console.log('[RedisProvider] Event "end" — connection closed.');
+
             MonitoringProvider.counter('info.RedisProvider.onEnd');
             LogHelper_info('Redis connection ended');
             await this.handleReconnect('end');
@@ -160,8 +213,14 @@ export class RedisProvider {
             await this.createRedisClient();
             this.attachRedisErrorsHandler();
             await this.client.connect();
+
+            console.log('[RedisProvider] Successfully connected to Redis.');
+
             MonitoringProvider.counter('info.RedisProvider.initialize');
         } catch (err) {
+
+            console.error('[RedisProvider] Error during initialize:', err);
+
             MonitoringProvider.counter('error.RedisProvider.initialize');
         }
 
@@ -310,13 +369,17 @@ export class RedisProvider {
     }
 
 
-    async scan(cursor: number, match: string, count: number = 1000): Promise<ScanReply> {
+    /**
+     * redis v5 expects the SCAN cursor as a string and returns it as a string
+     * (v4 used numbers). Normalize both directions so callers can pass either.
+     */
+    async scan(cursor: number | string, match: string, count: number = 1000): Promise<ScanReply> {
         if (!this.client) {
             await this.initialize();
         }
         MonitoringProvider.counter('info.RedisProvider.scan');
-        const keysFromRedis = await this.client.scan(cursor, {MATCH: match, COUNT: count});
-        return keysFromRedis;
+        const keysFromRedis = await this.client.scan(String(cursor), {MATCH: match, COUNT: count});
+        return {...keysFromRedis, cursor: String(keysFromRedis.cursor)} as ScanReply;
     }
 
     async keysByGlob(globKey: string): Promise<string[]> {
