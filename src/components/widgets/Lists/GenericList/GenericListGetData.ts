@@ -57,30 +57,42 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
 
     let contentTypeFilter = '';
 
+    // Liczymy dynamicName przed switchem, aby w odpowiednim case'ie zarejestrować potrzebne zmienne.
+    const queryForDynamicName = getQueryForDynamicName(context, widgetConfig);
+
     switch (context.siteContentType) {
         case SiteContentType.Topic:
-            contentTypeFilter = 'topic: {in: [$topicId]}, category: {in: [$nodeCategoryId]}';
-            dynamicVariablesTypes.$nodeCategoryId = 'UUID!';
-            dynamicVariables.nodeCategoryId = nodeCategoryId;
+            contentTypeFilter = 'topic: {in: [$topicId]}, canonical: true';
+            dynamicVariablesTypes.$topicId = 'UUID!';
+            dynamicVariables.topicId = contentFilterId;
             break;
         case SiteContentType.Author:
             if (!widgetConfig.customListUuid) {
-                contentTypeFilter = 'category: {in: [$topicId]}, author:{in:[$authorId]}';
+                contentTypeFilter = 'author:{in:[$authorId]}, canonical: true';
                 dynamicVariablesTypes.$authorId = 'UUID!';
                 contentFilterId = nodeCategoryId;
                 dynamicVariables.authorId = context.id;
             } else {
-                contentTypeFilter = 'category: {in: [$topicId]}';
+                contentTypeFilter = 'category: {in: [$topicId]}, canonical: true';
+                dynamicVariablesTypes.$topicId = 'UUID!';
+                dynamicVariables.topicId = contentFilterId;
             }
             break;
         case SiteContentType.Story:
             dynamicVariablesTypes.$storyUuid = 'UUID!';
             dynamicVariables.storyUuid = contentFilterId;
             contentFilterId = nodeCategoryId;
-            contentTypeFilter = 'category: {in: [$topicId]}, id:{notIn: [$storyUuid]}';
+            contentTypeFilter = 'id:{notIn: [$storyUuid]}, canonical: true';
+            // $topicId potrzebny tylko gdy dynamicName (nagłówek) z niego korzysta.
+            if (queryForDynamicName.includes('$topicId')) {
+                dynamicVariablesTypes.$topicId = 'UUID!';
+                dynamicVariables.topicId = contentFilterId;
+            }
             break;
         default:
-            contentTypeFilter = 'category: {in: [$topicId]}';
+            contentTypeFilter = 'category: {in: [$topicId]}, canonical: true';
+            dynamicVariablesTypes.$topicId = 'UUID!';
+            dynamicVariables.topicId = contentFilterId;
             break;
     }
     const searchPhraseFragment = searchPhrase ? `, phrase: $searchPhrase` : '';
@@ -88,10 +100,6 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
     if (searchPhrase) {
         dynamicVariablesTypes.$searchPhrase = 'String!';
     }
-    let mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
-        return `, ${key}: ${dynamicVariablesTypes[key]}`;
-    }).join(' ');
-
 
     const excludedFlags = widgetConfig.excludedFlags ? widgetConfig.excludedFlags.map(flag => {
         return flag.excludedFlag
@@ -100,11 +108,13 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
     const isAjaxCall = UtilsHelper_getQueryParam('gridLocationWidgetType', context) === 'genericList';
     const isFirstCall = UtilsHelper_getQueryParam('isFirstCall', context) === '1';
     const offset = WidgetHelper_calculateOffsetForGenericListPagination(widgetConfig, currentPage, isAjaxCall, isFirstCall);
-    const queryForDynamicName = getQueryForDynamicName(context, widgetConfig);
+
+    let mappedDynamicVariablesTypes = Object.keys(dynamicVariablesTypes).map((key) => {
+        return `, ${key}: ${dynamicVariablesTypes[key]}`;
+    }).join(' ');
 
     const variables: any = {
         ...dynamicVariables,
-        topicId: contentFilterId,
         limit: UtilsHelper_convertToInt(widgetConfig.paginationElements),
         offset: offset,
         excludedFlags: excludedFlags,
@@ -116,7 +126,7 @@ export async function GenericList_getData(context: AppContext, queryNodeFragment
 
 
     const query = gql`
-        query($topicId: UUID!, $limit: Int!, $excludedFlags: [String!], $offset: Int! ${mappedDynamicVariablesTypes}){
+        query($limit: Int!, $excludedFlags: [String!], $offset: Int! ${mappedDynamicVariablesTypes}){
             stories: stories(filter:{${contentTypeFilter}, flag: {notIn:$excludedFlags}},limit: $limit, offset: $offset ${searchPhraseFragment} ){
                 total
                 genericListReqTotal: total
