@@ -38,7 +38,7 @@ export class RedisProvider {
         this.isDev = process.env.NODE_ENV !== 'production';
 
         this.url = this.isDev
-            ? (import.meta.env.REDIS_URL_DEV ?? "")
+            ? (import.meta.env.REDIS_URL ?? "")
             : (process.env.REDIS_RW ?? "");
 
         /* --- DEBUG --- */
