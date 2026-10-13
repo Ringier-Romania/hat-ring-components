@@ -41,12 +41,6 @@ export class RedisProvider {
             ? (import.meta.env.REDIS_URL ?? "")
             : (process.env.REDIS_RW ?? "");
 
-        /* --- DEBUG --- */
-        console.log('[RedisProvider] isDev:', this.isDev);
-        console.log('[RedisProvider] PUBLIC_NODE_ENV:', this.isDev);
-        console.log('[RedisProvider] used url:', this.url);
-        /* -------------- */
-
         this.replicationGroupId = process.env.REDIS_REPLICATION_GROUP_ID;
         this.username = process.env.REDIS_USERNAME || 'iam-user';
         this.region = process.env.REDIS_REGION || 'eu-central-1';
@@ -86,8 +80,6 @@ export class RedisProvider {
 
     async createLocalRedisClient() {
 
-        console.log('[RedisProvider] Connectiong to local Redis, url:', this.url);
-
         this.client = createClient({
             url: this.url,
             database: 1,
@@ -99,9 +91,6 @@ export class RedisProvider {
 
     async createAWSRedisClient() {
         const token = await this.getToken();
-
-        console.log('[RedisProvider] Connectiong to AWS Redis, host:', this.url);
-        console.log('[RedisProvider] Token AWS acquired:', token ? 'YES (length ' + token.length + ')' : 'NO / undefined');
 
         this.client = createClient({
             username: this.username,
@@ -124,7 +113,6 @@ export class RedisProvider {
     }
 
     async createRedisClient() {
-        console.log('[RedisProvider] createRedisClient() called, isDev =', this.isDev);
         if (this.isDev) {
             await this.createLocalRedisClient();
         } else {
@@ -134,8 +122,6 @@ export class RedisProvider {
 
     attachRedisErrorsHandler() {
         this.client.on('error', async (error) => {
-
-            console.error('[RedisProvider] Redis Client Error (event "error"):', error);
 
             MonitoringProvider.counter(`error.RedisProvider.onError`);
             LogHelper_error(`Redis Client Error:`, error);
@@ -151,17 +137,14 @@ export class RedisProvider {
         });
 
         this.client.on('connect', () => {
-            console.log('[RedisProvider] Event "connect" — socket opened.');
+            /*console.log('[RedisProvider] Event "connect" — socket opened.');*/
         });
 
         this.client.on('ready', () => {
-            console.log('[RedisProvider] Event "ready" — client is ready to receive commands.');
+            /*console.log('[RedisProvider] Event "ready" — client is ready to receive commands.');*/
         });
 
         this.client.on('end', async () => {
-
-            console.log('[RedisProvider] Event "end" — connection closed.');
-
             MonitoringProvider.counter('info.RedisProvider.onEnd');
             LogHelper_info('Redis connection ended');
             await this.handleReconnect('end');
@@ -213,14 +196,8 @@ export class RedisProvider {
             await this.createRedisClient();
             this.attachRedisErrorsHandler();
             await this.client.connect();
-
-            console.log('[RedisProvider] Successfully connected to Redis.');
-
             MonitoringProvider.counter('info.RedisProvider.initialize');
         } catch (err) {
-
-            console.error('[RedisProvider] Error during initialize:', err);
-
             MonitoringProvider.counter('error.RedisProvider.initialize');
         }
 

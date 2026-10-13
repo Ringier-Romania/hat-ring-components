@@ -6,6 +6,7 @@ import {
 } from "../helpers/CacheHelper";
 import {MonitoringProvider} from "./MonitoringProvider";
 import {LogHelper_error, LogHelper_info} from "../helpers/LogHelper";
+import {CacheHelper_normalizeQuery} from "../helpers/CacheHelper";
 
 if (!global.HATCacheInCallInProgress) global.HATCacheInCallInProgress = {};
 let gqlResetCachesTimestamp = new Date().getTime();
@@ -13,7 +14,22 @@ const GQL_CACHE_RESET_INTERVAL_SECONDS = Number(process.env.GQL_CACHE_RESET_INTE
 
 export class WebsiteApiProvider {
     static async call(query: DocumentNode, variables, cacheTtl: null | number = null): Promise<any> {
-        const cacheKeyString = JSON.stringify({query: query.loc?.source.body, variables});
+        let cacheKeyString: string;
+        try {
+            cacheKeyString = process.env.RRO_NORMALIZE_REDIS_KEYS === '1'
+                ? JSON.stringify({query: CacheHelper_normalizeQuery(query.loc?.source.body), variables})
+                : JSON.stringify({query: query.loc?.source.body, variables});
+        } catch (e) {
+            console.error('WebsitesApiProvider.call key build failed', {
+                query: query.loc?.source.body?.slice(0, 200),
+                variableKeys: variables ? Object.keys(variables) : null,
+                errorMessage: (e as Error).message,
+            });
+            MonitoringProvider.counter('error.WebsitesApiProvider.call.keyBuild');
+            return null;
+        }
+
+        //const cacheKeyString = JSON.stringify({query: query.loc?.source.body, variables});
         const queryType = this._determineQueryType(query);
         const tags = this.determineQueryTags(query, variables, queryType);
 
@@ -82,6 +98,7 @@ export class WebsiteApiProvider {
 
     static _determineQueryType(query: DocumentNode): string {
         const queryTypeDef = {
+            'topic(': 'Topic',
             'story(': 'Story',
             'config(': 'Config',
             'node(': 'Node',
@@ -107,6 +124,12 @@ export class WebsiteApiProvider {
     static determineQueryTags(query: DocumentNode, variables: any, queryType): string[] {
         let tags: any = [];
         if (variables) {
+            if (queryType === 'Topic') {
+                const topicId = variables.id ?? variables.ID;
+                if (topicId) {
+                    tags.push(`topic_${topicId}`);
+                }
+            }
             if (queryType === 'Story') {
                 const storyUuid = this._findStoryUuidInQuery(query, variables);
                 if (storyUuid) {

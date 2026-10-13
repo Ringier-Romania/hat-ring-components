@@ -185,3 +185,18 @@ export function CacheHelper_createParentChildRelation(parentId, childrenIds) {
             break;
     }
 }
+
+/**
+ * Normalizes a GraphQL query string for use in the cache key.
+ * - commas are replaced with spaces (commas are insignificant in GraphQL)
+ * - any sequence of spaces / tabs / newlines is collapsed into a single space
+ * - spaces around ( ) { } [ ] : ! = are removed
+ * Must be applied to the query text BEFORE JSON.stringify.
+ */
+export function CacheHelper_normalizeQuery(query: string | undefined | null): string {
+    return (query ?? '')
+        .replace(/,/g, ' ')
+        .replace(/\s+/g, ' ')
+        .replace(/\s*([(){}\[\]:!=])\s*/g, '$1')
+        .trim();
+}
